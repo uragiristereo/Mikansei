@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.data.database.DatabaseRepository
+import com.uragiristereo.mejiboard.data.database.filters.FiltersDao
 import com.uragiristereo.mejiboard.data.database.filters.toFilterItemList
 import com.uragiristereo.mejiboard.data.database.filters.toFilterTableItem
 import com.uragiristereo.mejiboard.data.database.filters.toFilterTableItemList
@@ -22,11 +22,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class FiltersViewModel(
-    databaseRepository: DatabaseRepository,
+    private val filtersDao: FiltersDao,
     private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
-    private val dao = databaseRepository.filtersDao()
-    private val itemsFromDb by lazy { dao.getAll() }
+    private val itemsFromDb by lazy { filtersDao.getAll() }
 
     private val preferences: Preferences
         get() = preferencesRepository.data
@@ -54,7 +53,7 @@ class FiltersViewModel(
         context: Context,
         tags: String,
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val split = tags
                 .strip(splitter = "")
                 .split(' ')
@@ -65,7 +64,7 @@ class FiltersViewModel(
                 newItem.tag !in items.map { it.tag }
             }
 
-            dao.insert(newItems.toFilterTableItemList())
+            filtersDao.insert(newItems.toFilterTableItemList())
 
             val toastMessage = when {
                 newItems.size == 1 -> "1 tag added successfully!"
@@ -114,13 +113,13 @@ class FiltersViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             updateSelectedItem(item)
 
-            dao.update(item.toFilterTableItem())
+            filtersDao.update(item.toFilterTableItem())
         }
     }
 
     fun deleteSelectedItems() {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.deleteItems(selectedItems.toFilterTableItemList())
+            filtersDao.deleteItems(selectedItems.toFilterTableItemList())
         }
     }
 

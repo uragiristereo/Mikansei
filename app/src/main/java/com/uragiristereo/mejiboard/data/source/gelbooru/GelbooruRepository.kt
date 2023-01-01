@@ -1,5 +1,6 @@
 package com.uragiristereo.mejiboard.data.source.gelbooru
 
+import android.content.Context
 import com.google.gson.GsonBuilder
 import com.uragiristereo.mejiboard.common.Constants
 import com.uragiristereo.mejiboard.common.RatingFilter
@@ -19,13 +20,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class GelbooruRepository(okHttpClient: OkHttpClient) : BooruSourceRepository, KoinComponent {
+class GelbooruRepository(
+    private val context: Context,
+    okHttpClient: OkHttpClient,
+) : BooruSourceRepository {
     override val source = BooruSources.Gelbooru
 
     private val gson = GsonBuilder()
@@ -37,12 +39,12 @@ class GelbooruRepository(okHttpClient: OkHttpClient) : BooruSourceRepository, Ko
         .addConverterFactory(GsonConverterFactory.create(gson))
 
     private val client = retrofitBuilder
-        .baseUrl(source.baseUrl(get()))
+        .baseUrl(source.baseUrl(context))
         .build()
         .create(GelbooruApi::class.java)
 
     private val clientSafe = retrofitBuilder
-        .baseUrl(BooruSources.SafebooruOrg.baseUrl(get()))
+        .baseUrl(BooruSources.SafebooruOrg.baseUrl(context))
         .build()
         .create(SafebooruOrgApi::class.java)
 
@@ -63,7 +65,7 @@ class GelbooruRepository(okHttpClient: OkHttpClient) : BooruSourceRepository, Ko
         )
 
         if (response.isSuccessful) {
-            val posts = response.body()!!.toPostList(get())
+            val posts = response.body()!!.toPostList(context)
 
             return PostsResult(
                 data = posts,

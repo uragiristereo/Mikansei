@@ -7,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.common.Constants
-import com.uragiristereo.mejiboard.data.database.DatabaseRepository
+import com.uragiristereo.mejiboard.data.database.session.SessionDao
 import com.uragiristereo.mejiboard.data.preferences.Preferences
 import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     savedStateHandle: SavedStateHandle,
-    databaseRepository: DatabaseRepository,
     preferencesRepository: PreferencesRepository,
+    sessionDao: SessionDao,
 ) : ViewModel() {
     var preferences by mutableStateOf(Preferences(theme = preferencesRepository.getInitialTheme()))
         private set
@@ -34,7 +34,7 @@ class MainViewModel(
             savedStateHandle[Constants.STATE_KEY_INITIALIZED] = true
 
             viewModelScope.launch(Dispatchers.IO) {
-                databaseRepository.sessionDao().deleteAllSession()
+                sessionDao.deleteAllSession()
             }
         }
 

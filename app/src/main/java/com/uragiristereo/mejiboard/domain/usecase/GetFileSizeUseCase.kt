@@ -2,12 +2,10 @@ package com.uragiristereo.mejiboard.domain.usecase
 
 import com.uragiristereo.mejiboard.domain.repository.NetworkRepository
 import kotlinx.coroutines.CancellationException
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
-class GetFileSizeUseCase : KoinComponent {
-    private val networkRepository: NetworkRepository = get()
-
+class GetFileSizeUseCase(
+    private val networkRepository: NetworkRepository,
+) {
     suspend operator fun invoke(
         url: String,
         onLoading: (loading: Boolean) -> Unit,

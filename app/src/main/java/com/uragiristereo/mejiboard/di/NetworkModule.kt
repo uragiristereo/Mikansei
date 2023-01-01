@@ -13,12 +13,12 @@ import org.koin.dsl.module
 
 object NetworkModule {
     val module = module {
-        single<NetworkRepository> { NetworkRepositoryImpl(androidContext()) }
-        single<BoorusRepository> { BoorusRepositoryImpl() }
+        single<NetworkRepository> { NetworkRepositoryImpl(androidContext(), get()) }
+        single<BoorusRepository> { BoorusRepositoryImpl(androidContext(), get(), get()) }
 
-        factory { GetPostsUseCase() }
-        factory { SearchTermUseCase() }
-        factory { GetTagsUseCase() }
-        factory { GetFileSizeUseCase() }
+        factory { GetPostsUseCase(get(), get(), get()) }
+        factory { SearchTermUseCase(get(), get()) }
+        factory { GetTagsUseCase(get()) }
+        factory { GetFileSizeUseCase(get()) }
     }
 }

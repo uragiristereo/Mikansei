@@ -1,5 +1,6 @@
 package com.uragiristereo.mejiboard.data.source.danbooru
 
+import android.content.Context
 import com.google.gson.GsonBuilder
 import com.uragiristereo.mejiboard.common.Constants
 import com.uragiristereo.mejiboard.data.source.BooruSources
@@ -10,12 +11,13 @@ import com.uragiristereo.mejiboard.domain.entity.source.post.Rating
 import com.uragiristereo.mejiboard.domain.entity.source.tag.TagsResult
 import com.uragiristereo.mejiboard.domain.repository.BooruSourceRepository
 import okhttp3.OkHttpClient
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class DanbooruRepository(okHttpClient: OkHttpClient) : BooruSourceRepository, KoinComponent {
+class DanbooruRepository(
+    context: Context,
+    okHttpClient: OkHttpClient,
+) : BooruSourceRepository {
     override val source = BooruSources.Danbooru
 
     private val gson = GsonBuilder()
@@ -23,7 +25,7 @@ class DanbooruRepository(okHttpClient: OkHttpClient) : BooruSourceRepository, Ko
         .create()
 
     private val client = Retrofit.Builder()
-        .baseUrl(source.baseUrl(get()))
+        .baseUrl(source.baseUrl(context))
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()

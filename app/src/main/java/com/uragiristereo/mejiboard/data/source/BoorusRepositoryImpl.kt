@@ -1,5 +1,6 @@
 package com.uragiristereo.mejiboard.data.source
 
+import android.content.Context
 import com.uragiristereo.mejiboard.data.source.danbooru.DanbooruRepository
 import com.uragiristereo.mejiboard.data.source.gelbooru.GelbooruRepository
 import com.uragiristereo.mejiboard.data.source.safebooruorg.SafebooruOrgRepository
@@ -14,13 +15,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
-class BoorusRepositoryImpl : BoorusRepository, KoinComponent {
-    private val networkRepository: NetworkRepository = get()
-    private val preferencesRepository: PreferencesRepository = get()
-
+class BoorusRepositoryImpl(
+    private val context: Context,
+    private val networkRepository: NetworkRepository,
+    private val preferencesRepository: PreferencesRepository,
+) : BoorusRepository {
     private var preferences = preferencesRepository.data
 
     private var dohEnabled = preferences.dohEnabled
@@ -55,9 +55,9 @@ class BoorusRepositoryImpl : BoorusRepository, KoinComponent {
 
     private fun initializeBoorus(): Map<BooruSource, BooruSourceRepository> {
         return mapOf(
-            BooruSources.Gelbooru to GelbooruRepository(preferredOkHttpClient),
-            BooruSources.Danbooru to DanbooruRepository(preferredOkHttpClient),
-            BooruSources.SafebooruOrg to SafebooruOrgRepository(preferredOkHttpClient),
+            BooruSources.Gelbooru to GelbooruRepository(context, preferredOkHttpClient),
+            BooruSources.Danbooru to DanbooruRepository(context, preferredOkHttpClient),
+            BooruSources.SafebooruOrg to SafebooruOrgRepository(context, preferredOkHttpClient),
         )
     }
 

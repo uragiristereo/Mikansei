@@ -11,7 +11,6 @@ import com.uragiristereo.mejiboard.domain.entity.source.tag.Tag
 import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase
 import com.uragiristereo.mejiboard.presentation.search.state.SearchWordIndex
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -84,7 +83,7 @@ class SearchViewModel(
     private fun getTags(term: String) {
         job?.cancel()
 
-        job = viewModelScope.launch(Dispatchers.IO) {
+        job = viewModelScope.launch {
             searchTermUseCase(
                 term = term,
                 onLoading = { loading = it },

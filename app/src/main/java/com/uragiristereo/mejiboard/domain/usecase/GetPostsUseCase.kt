@@ -1,23 +1,20 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
-import com.uragiristereo.mejiboard.data.database.DatabaseRepository
-import com.uragiristereo.mejiboard.data.preferences.Preferences
+import com.uragiristereo.mejiboard.data.database.filters.FiltersDao
 import com.uragiristereo.mejiboard.domain.entity.source.BooruSource
 import com.uragiristereo.mejiboard.domain.entity.source.post.Post
 import com.uragiristereo.mejiboard.domain.repository.BoorusRepository
 import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import kotlinx.coroutines.CancellationException
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 
-class GetPostsUseCase : KoinComponent {
-    private val boorusRepository: BoorusRepository = get()
-    private val preferencesRepository: PreferencesRepository = get()
-    private val databaseRepository: DatabaseRepository = get()
-
-    private val preferences: Preferences
-        get() = preferencesRepository.data
-
+class GetPostsUseCase(
+    private val boorusRepository: BoorusRepository,
+    private val preferencesRepository: PreferencesRepository,
+    private val filtersDao: FiltersDao,
+) {
     suspend operator fun invoke(
         tags: String,
         page: Int,
@@ -46,11 +43,16 @@ class GetPostsUseCase : KoinComponent {
                         else -> currentPosts
                     }
 
+                    val filtersEnabled = preferencesRepository.flowData.first().filtersEnabled
                     var filtered = result.data
 
-                    if (preferences.filtersEnabled) {
+                    if (filtersEnabled) {
                         // filter by tags
-                        val filters = databaseRepository.filtersDao().getEnabledFilters()
+                        lateinit var filters: List<String>
+
+                        withContext(Dispatchers.IO) {
+                            filters = filtersDao.getEnabledFilters()
+                        }
 
                         filtered = result.data.filter { post ->
                             val tagsAsList = post.tags

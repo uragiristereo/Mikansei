@@ -2,13 +2,11 @@ package com.uragiristereo.mejiboard.domain.usecase
 
 import com.uragiristereo.mejiboard.domain.entity.source.tag.Tag
 import com.uragiristereo.mejiboard.domain.repository.BoorusRepository
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import kotlin.coroutines.cancellation.CancellationException
 
-class GetTagsUseCase : KoinComponent {
-    private val boorusRepository: BoorusRepository = get()
-
+class GetTagsUseCase(
+    private val boorusRepository: BoorusRepository,
+) {
     suspend operator fun invoke(
         tags: List<String>,
         onLoading: (loading: Boolean) -> Unit,

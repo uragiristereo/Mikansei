@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.data.database.DatabaseRepository
+import com.uragiristereo.mejiboard.data.database.filters.FiltersDao
 import com.uragiristereo.mejiboard.data.source.BooruSources
 import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 
 class MoreViewModel(
     preferencesRepository: PreferencesRepository,
-    databaseRepository: DatabaseRepository,
+    filtersDao: FiltersDao,
 ) : ViewModel() {
     var preferences by mutableStateOf(preferencesRepository.data)
         private set
@@ -35,7 +35,7 @@ class MoreViewModel(
             .launchIn(viewModelScope)
 
         viewModelScope.launch(Dispatchers.IO) {
-            databaseRepository.filtersDao().getEnabledFiltersCount()
+            filtersDao.getEnabledFiltersCount()
                 .collect {
                     withContext(Dispatchers.Main) {
                         enabledFiltersCount = it

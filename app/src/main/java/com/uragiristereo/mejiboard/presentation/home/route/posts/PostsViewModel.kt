@@ -10,7 +10,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.common.Constants
-import com.uragiristereo.mejiboard.data.database.DatabaseRepository
+import com.uragiristereo.mejiboard.data.database.session.SessionDao
 import com.uragiristereo.mejiboard.data.database.session.toPostList
 import com.uragiristereo.mejiboard.data.database.session.toPostSessionList
 import com.uragiristereo.mejiboard.domain.entity.source.BooruSource
@@ -27,10 +27,9 @@ import java.util.UUID
 
 class PostsViewModel(
     private val savedStateHandle: SavedStateHandle,
-    databaseRepository: DatabaseRepository,
     private val getPostsUseCase: GetPostsUseCase,
+    private val sessionDao: SessionDao,
 ) : ViewModel() {
-    private val dao = databaseRepository.sessionDao()
 
     var topAppBarHeight by mutableStateOf(0.dp)
     val offsetY = Animatable(initialValue = 0f)
@@ -100,7 +99,7 @@ class PostsViewModel(
     ) {
         postsJob?.cancel()
 
-        postsJob = viewModelScope.launch(Dispatchers.IO) {
+        postsJob = viewModelScope.launch {
             when {
                 refresh -> page = 0
                 else -> page += 1
@@ -156,7 +155,7 @@ class PostsViewModel(
             loading = PostsLoadingState.FROM_LOAD
             savedState = savedState.copy(loadFromSession = false)
 
-            val postsSession = dao.getPosts(sessionId = sessionId).toPostList()
+            val postsSession = sessionDao.getPosts(sessionId = sessionId).toPostList()
 
             posts = postsSession
 
@@ -172,9 +171,9 @@ class PostsViewModel(
             if (postsAsList != postsSession) {
                 postsSession = postsAsList
 
-                dao.deleteSession(sessionId)
+                sessionDao.deleteSession(sessionId)
 
-                dao.insertSession(postsAsList.toPostSessionList(sessionId))
+                sessionDao.insertSession(postsAsList.toPostSessionList(sessionId))
             }
         }
     }

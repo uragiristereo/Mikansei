@@ -1,18 +1,18 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
 import com.uragiristereo.mejiboard.common.Constants
-import com.uragiristereo.mejiboard.data.database.DatabaseRepository
+import com.uragiristereo.mejiboard.data.database.filters.FiltersDao
 import com.uragiristereo.mejiboard.domain.entity.source.tag.Tag
 import com.uragiristereo.mejiboard.domain.repository.BoorusRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
+import kotlinx.coroutines.withContext
 import java.util.concurrent.CancellationException
 
-class SearchTermUseCase : KoinComponent {
-    private val boorusRepository: BoorusRepository = get()
-    private val databaseRepository: DatabaseRepository = get()
-
+class SearchTermUseCase(
+    private val boorusRepository: BoorusRepository,
+    private val filtersDao: FiltersDao,
+) {
     suspend operator fun invoke(
         term: String,
         onLoading: (loading: Boolean) -> Unit,
@@ -29,7 +29,11 @@ class SearchTermUseCase : KoinComponent {
 
             when (result.errorMessage) {
                 null -> {
-                    val filters = databaseRepository.filtersDao().getEnabledFilters()
+                    lateinit var filters: List<String>
+
+                    withContext(Dispatchers.IO) {
+                        filters = filtersDao.getEnabledFilters()
+                    }
 
                     val filtered = result.data.filter { tag ->
                         !filters.any { filterTag ->

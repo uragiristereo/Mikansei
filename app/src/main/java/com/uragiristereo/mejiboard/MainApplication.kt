@@ -4,6 +4,7 @@ import android.app.Application
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.uragiristereo.mejiboard.di.AppModule
+import com.uragiristereo.mejiboard.di.DatabaseModule
 import com.uragiristereo.mejiboard.di.NetworkModule
 import com.uragiristereo.mejiboard.domain.repository.NetworkRepository
 import org.koin.android.ext.koin.androidContext
@@ -28,6 +29,7 @@ class MainApplication : Application(), ImageLoaderFactory, KoinComponent {
                 listOf(
                     AppModule.module,
                     NetworkModule.module,
+                    DatabaseModule.module,
                 )
             )
         }

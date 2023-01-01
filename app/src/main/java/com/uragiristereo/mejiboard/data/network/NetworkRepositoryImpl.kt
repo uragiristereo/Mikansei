@@ -11,13 +11,13 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.dnsoverhttps.DnsOverHttps
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class NetworkRepositoryImpl(context: Context) : NetworkRepository, KoinComponent {
-    private val preferencesRepository: PreferencesRepository = get()
+class NetworkRepositoryImpl(
+    context: Context,
+    private val preferencesRepository: PreferencesRepository,
+) : NetworkRepository {
 
     private var dohEnabled = preferencesRepository.data.dohEnabled
 
