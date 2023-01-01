@@ -34,7 +34,7 @@ class MainViewModel(
             savedStateHandle[Constants.STATE_KEY_INITIALIZED] = true
 
             viewModelScope.launch(Dispatchers.IO) {
-                sessionDao.deleteAllSession()
+                sessionDao.deleteAllSessions()
             }
         }
 

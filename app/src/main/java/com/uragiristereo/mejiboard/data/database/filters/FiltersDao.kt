@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FiltersDao {
     @Query(value = "SELECT * FROM filters")
-    fun getAll(): Flow<List<FilterTableItem>>
+    suspend fun getAll(): Flow<List<FilterTableItem>>
 
     @Query(value = "SELECT tag FROM filters WHERE enabled = 1")
-    fun getEnabledFilters(): List<String>
+    suspend fun getEnabledFilters(): List<String>
 
     @Query(value = "SELECT COUNT(tag) FROM filters WHERE enabled = 1")
-    fun getEnabledFiltersCount(): Flow<Int>
+    suspend fun getEnabledFiltersCount(): Flow<Int>
 
     @Insert
     suspend fun insert(items: List<FilterTableItem>)
