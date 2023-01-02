@@ -1,5 +1,8 @@
 package com.uragiristereo.mejiboard.presentation.image.more
 
+import android.content.Context
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +31,8 @@ class MoreBottomSheetViewModel(
 
     var scaledImageFileSizeStr by mutableStateOf("")
     var originalImageFileSizeStr by mutableStateOf("")
+
+    private val customTabsIntentBuilder = CustomTabsIntent.Builder()
 
     fun collapseAll() {
         infoExpanded = false
@@ -100,6 +105,31 @@ class MoreBottomSheetViewModel(
                     }
                 )
             }
+        }
+    }
+
+    fun launchUrl(context: Context, url: String) {
+        val parsed = when {
+            url.isAHttpUrl() -> url
+            else -> "https://www.google.com/search?q=$url"
+        }
+
+        customTabsIntentBuilder
+            .setStartAnimations(context, android.R.anim.fade_in, android.R.anim.fade_out)
+            .setExitAnimations(context, android.R.anim.fade_in, android.R.anim.fade_out)
+            .build()
+            .launchUrl(context, Uri.parse(parsed))
+    }
+
+    private fun String.isAHttpUrl(): Boolean {
+        val http = "http://"
+        val https = "https://"
+
+        return when {
+            length <= https.length -> false
+            substring(startIndex = 0, endIndex = https.length) == https -> true
+            substring(startIndex = 0, endIndex = http.length) == http -> true
+            else -> false
         }
     }
 }

@@ -78,6 +78,7 @@ dependencies {
     implementation "androidx.savedstate:savedstate-ktx:1.2.0"
     implementation "androidx.core:core-splashscreen:1.0.0"
     implementation "androidx.datastore:datastore:1.0.0"
+    implementation "androidx.browser:browser:1.4.0"
 
     // Compose UI
     implementation "androidx.activity:activity-compose:1.6.1"

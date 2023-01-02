@@ -27,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -56,6 +57,8 @@ fun MoreBottomSheet(
     viewModel: MoreBottomSheetViewModel = koinViewModel(),
 ) {
     val configuration = LocalConfiguration.current
+    val context = LocalContext.current
+
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
 
@@ -101,7 +104,14 @@ fun MoreBottomSheet(
                                     onExpandClick()
                                 }
                             },
-                            onOpenInExternalClick = { /*TODO*/ },
+                            onOpenInExternalClick = remember {
+                                {
+                                    viewModel.launchUrl(
+                                        context = context,
+                                        url = post.source.parseWebUrl(post.id),
+                                    )
+                                }
+                            },
                             modifier = Modifier.padding(vertical = 8.dp),
                         )
                     }
@@ -150,7 +160,7 @@ fun MoreBottomSheet(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable(
-                                    onClick = { },
+                                    onClick = remember { { viewModel.launchUrl(context = context, url = post.imageSource) } },
                                 )
                                 .padding(
                                     horizontal = 16.dp,
