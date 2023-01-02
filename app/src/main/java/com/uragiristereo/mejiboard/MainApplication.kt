@@ -27,9 +27,9 @@ class MainApplication : Application(), ImageLoaderFactory, KoinComponent {
             androidContext(this@MainApplication)
             modules(
                 listOf(
-                    AppModule.module,
-                    NetworkModule.module,
-                    DatabaseModule.module,
+                    AppModule(),
+                    NetworkModule(),
+                    DatabaseModule(),
                 )
             )
         }

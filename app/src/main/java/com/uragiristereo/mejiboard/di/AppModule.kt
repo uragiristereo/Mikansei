@@ -12,12 +12,13 @@ import com.uragiristereo.mejiboard.presentation.image.more.MoreBottomSheetViewMo
 import com.uragiristereo.mejiboard.presentation.search.SearchViewModel
 import com.uragiristereo.mejiboard.presentation.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 object AppModule {
-    val module = module {
+    operator fun invoke(): Module = module {
         singleOf(::PreferencesRepositoryImpl) { bind<PreferencesRepository>() }
 
         viewModelOf(::MainViewModel)
