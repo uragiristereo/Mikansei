@@ -146,7 +146,7 @@ fun SettingsColumn(
         item {
             RegularPreference(
                 title = stringResource(id = R.string.settings_default_booru_source),
-                subtitle = viewModel.booruSources.selectedItem?.subtitleResId
+                subtitle = viewModel.booruSources.selectedItem?.titleResId
                     ?.let { stringResource(id = it) } ?: stringResource(id = R.string.none),
                 icon = painterResource(id = R.drawable.public_globe),
                 onClick = {
@@ -160,7 +160,7 @@ fun SettingsColumn(
         item {
             RegularPreference(
                 title = stringResource(id = R.string.settings_booru_listing_mode),
-                subtitle = viewModel.ratingFilters.selectedItem?.subtitleResId
+                subtitle = viewModel.ratingFilters.selectedItem?.titleResId
                     ?.let { stringResource(id = it) } ?: stringResource(id = R.string.none),
                 onClick = {
                     scope.launch {
