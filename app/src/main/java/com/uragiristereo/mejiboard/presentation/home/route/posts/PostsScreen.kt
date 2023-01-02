@@ -326,10 +326,7 @@ fun PostsScreen(
 
             PostsTopAppBar(
                 searchTags = tags,
-                booruSource = when {
-                    viewModel.selectedBooru?.nameResId != null -> stringResource(id = viewModel.selectedBooru?.nameResId!!)
-                    else -> ""
-                },
+                booruSource = viewModel.selectedBooru?.nameResId?.let { stringResource(id = it) }.orEmpty(),
                 dropdownExpanded = viewModel.topAppBarDropdownExpanded,
                 onDropdownDismiss = remember { { viewModel.topAppBarDropdownExpanded = false } },
                 currentHeight = viewModel.topAppBarHeight,

@@ -86,9 +86,9 @@ fun Chips(
             else -> MaterialTheme.colors.primary.copy(alpha = ContentAlpha.high)
         }
 
-        if (icon != null) {
+        icon?.let {
             Icon(
-                painter = icon,
+                painter = it,
                 contentDescription = null,
                 tint = contentColor,
                 modifier = Modifier

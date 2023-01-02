@@ -146,10 +146,8 @@ fun SettingsColumn(
         item {
             RegularPreference(
                 title = stringResource(id = R.string.settings_default_booru_source),
-                subtitle = when {
-                    viewModel.booruSources.selectedItem?.titleResId != null -> stringResource(id = viewModel.booruSources.selectedItem?.titleResId!!)
-                    else -> stringResource(id = R.string.none)
-                },
+                subtitle = viewModel.booruSources.selectedItem?.subtitleResId
+                    ?.let { stringResource(id = it) } ?: stringResource(id = R.string.none),
                 icon = painterResource(id = R.drawable.public_globe),
                 onClick = {
                     scope.launch {
@@ -162,10 +160,8 @@ fun SettingsColumn(
         item {
             RegularPreference(
                 title = stringResource(id = R.string.settings_booru_listing_mode),
-                subtitle = when {
-                    viewModel.ratingFilters.selectedItem?.titleResId != null -> stringResource(id = viewModel.ratingFilters.selectedItem?.titleResId!!)
-                    else -> stringResource(id = R.string.none)
-                },
+                subtitle = viewModel.ratingFilters.selectedItem?.subtitleResId
+                    ?.let { stringResource(id = it) } ?: stringResource(id = R.string.none),
                 onClick = {
                     scope.launch {
                         bottomSheetPreferenceState.navigate(data = viewModel.ratingFilters)

@@ -38,10 +38,7 @@ fun DropDownPreference(
 
     RegularPreference(
         title = title,
-        subtitle = when {
-            state.selectedItem?.titleResId != null -> stringResource(id = state.selectedItem.titleResId)
-            else -> ""
-        },
+        subtitle = state.selectedItem?.titleResId?.let { stringResource(id = it) }.orEmpty(),
         icon = icon,
         onClick = {
             dropDownExpanded = true
