@@ -11,21 +11,23 @@ import com.uragiristereo.mejiboard.presentation.image.ImageViewModel
 import com.uragiristereo.mejiboard.presentation.image.more.MoreBottomSheetViewModel
 import com.uragiristereo.mejiboard.presentation.search.SearchViewModel
 import com.uragiristereo.mejiboard.presentation.settings.SettingsViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 object AppModule {
     val module = module {
-        single<PreferencesRepository> { PreferencesRepositoryImpl(get()) }
+        singleOf(::PreferencesRepositoryImpl) { bind<PreferencesRepository>() }
 
-        viewModel { MainViewModel(get(), get(), get()) }
-        viewModel { PostsViewModel(get(), get(), get()) }
-        viewModel { SearchViewModel(get(), get()) }
-        viewModel { MoreViewModel(get(), get()) }
-        viewModel { FiltersViewModel(get(), get()) }
-        viewModel { HomeViewModel() }
-        viewModel { ImageViewModel(get()) }
-        viewModel { MoreBottomSheetViewModel(get(), get()) }
-        viewModel { SettingsViewModel(get()) }
+        viewModelOf(::MainViewModel)
+        viewModelOf(::PostsViewModel)
+        viewModelOf(::SearchViewModel)
+        viewModelOf(::MoreViewModel)
+        viewModelOf(::FiltersViewModel)
+        viewModelOf(::HomeViewModel)
+        viewModelOf(::ImageViewModel)
+        viewModelOf(::MoreBottomSheetViewModel)
+        viewModelOf(::SettingsViewModel)
     }
 }

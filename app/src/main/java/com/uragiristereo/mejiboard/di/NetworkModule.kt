@@ -8,17 +8,19 @@ import com.uragiristereo.mejiboard.domain.usecase.GetFileSizeUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetTagsUseCase
 import com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase
-import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 object NetworkModule {
     val module = module {
-        single<NetworkRepository> { NetworkRepositoryImpl(androidContext(), get()) }
-        single<BoorusRepository> { BoorusRepositoryImpl(androidContext(), get(), get()) }
+        singleOf(::NetworkRepositoryImpl) { bind<NetworkRepository>() }
+        singleOf(::BoorusRepositoryImpl) { bind<BoorusRepository>() }
 
-        factory { GetPostsUseCase(get(), get(), get()) }
-        factory { SearchTermUseCase(get(), get()) }
-        factory { GetTagsUseCase(get()) }
-        factory { GetFileSizeUseCase(get()) }
+        factoryOf(::GetPostsUseCase)
+        factoryOf(::SearchTermUseCase)
+        factoryOf(::GetTagsUseCase)
+        factoryOf(::GetFileSizeUseCase)
     }
 }
