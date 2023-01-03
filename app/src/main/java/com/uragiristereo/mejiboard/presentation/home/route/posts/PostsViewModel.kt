@@ -23,6 +23,7 @@ import com.uragiristereo.mejiboard.presentation.home.route.posts.state.PostsSave
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.UUID
 
@@ -153,13 +154,15 @@ class PostsViewModel(
     }
 
     private fun getPostsFromSession() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             loading = PostsLoadingState.FROM_LOAD
             savedState = savedState.copy(loadFromSession = false)
 
-            val postsSession = sessionDao.getPosts(sessionId = sessionId).toPostList()
+            withContext(Dispatchers.IO) {
+                val postsSession = sessionDao.getPosts(sessionId = sessionId).toPostList()
 
-            posts = postsSession
+                posts = postsSession
+            }
 
             jumpToPosition = true
             loading = PostsLoadingState.DISABLED
