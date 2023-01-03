@@ -2,8 +2,8 @@ package com.uragiristereo.mejiboard.domain.usecase
 
 import com.uragiristereo.mejiboard.common.Constants
 import com.uragiristereo.mejiboard.data.database.filters.FiltersDao
+import com.uragiristereo.mejiboard.data.source.BoorusRepository
 import com.uragiristereo.mejiboard.domain.entity.source.tag.Tag
-import com.uragiristereo.mejiboard.domain.repository.BoorusRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext

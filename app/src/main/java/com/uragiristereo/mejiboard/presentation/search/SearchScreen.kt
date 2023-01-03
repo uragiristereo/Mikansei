@@ -52,7 +52,6 @@ import timber.log.Timber
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchScreen(
-    tags: String,
     onNavigate: (MainRoute) -> Unit,
     onNavigateBack: () -> Unit,
     onSearchSubmit: (String) -> Unit,
@@ -72,10 +71,10 @@ fun SearchScreen(
         when {
             query.text.isEmpty() -> {
                 query = TextFieldValue(
-                    text = tags,
-                    selection = TextRange(tags.length),
+                    text = viewModel.tags,
+                    selection = TextRange(viewModel.tags.length),
                 )
-                viewModel.parsedQuery = tags
+                viewModel.parsedQuery = viewModel.tags
             }
 
             else -> viewModel.searchTerm(

@@ -4,12 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.data.source.BooruSources
 import com.uragiristereo.mejiboard.domain.entity.source.tag.Tag
-import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase
+import com.uragiristereo.mejiboard.presentation.common.navigation.getData
 import com.uragiristereo.mejiboard.presentation.search.state.SearchWordIndex
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -18,9 +20,12 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class SearchViewModel(
+    savedStateHandle: SavedStateHandle,
     preferencesRepository: PreferencesRepository,
     private val searchTermUseCase: SearchTermUseCase,
 ) : ViewModel() {
+    val tags = savedStateHandle.getData(key = "tags", defaultValue = "")
+
     var preferences by mutableStateOf(preferencesRepository.data)
         private set
 

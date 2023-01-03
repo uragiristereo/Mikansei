@@ -3,6 +3,7 @@ package com.uragiristereo.mejiboard.presentation.image
 import android.app.Activity
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
@@ -23,7 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.common.Constants
-import com.uragiristereo.mejiboard.domain.entity.source.post.Post
+import com.uragiristereo.mejiboard.presentation.common.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.presentation.common.composable.SetSystemBarsColors
 import com.uragiristereo.mejiboard.presentation.common.extension.hideSystemBars
 import com.uragiristereo.mejiboard.presentation.common.extension.showSystemBars
@@ -38,7 +39,6 @@ import kotlin.math.abs
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ImageScreen(
-    post: Post,
     onNavigateBack: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ImageViewModel = koinViewModel(),
@@ -47,12 +47,13 @@ fun ImageScreen(
     val window = (context as Activity).window
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
+    val lambdaOnDownload = LocalLambdaOnDownload.current
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
 
     val maxOffset = remember { with(density) { 100.dp.toPx() } }
-    val showExpandButton = !viewModel.showOriginalImage && !viewModel.originalImageShown && post.scaled
+    val showExpandButton = !viewModel.showOriginalImage && !viewModel.originalImageShown && viewModel.post.scaled
 
     val lambdaOnMoreClick: () -> Unit = {
         scope.launch {
@@ -103,11 +104,13 @@ fun ImageScreen(
     )
 
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Black),
     ) {
-        if (post.originalImage.fileType in Constants.SUPPORTED_TYPES_IMAGE) {
+        if (viewModel.post.originalImage.fileType in Constants.SUPPORTED_TYPES_IMAGE) {
             ImagePost(
-                post = post,
+                post = viewModel.post,
                 maxOffset = maxOffset,
                 onNavigateBack = onNavigateBack,
                 onMoreClick = lambdaOnMoreClick,
@@ -115,7 +118,7 @@ fun ImageScreen(
         }
 
         ImageTopAppBar(
-            postId = post.id,
+            postId = viewModel.post.id,
             visible = viewModel.appBarsVisible,
             originalImageShown = viewModel.originalImageShown,
             loading = viewModel.loading,
@@ -123,7 +126,7 @@ fun ImageScreen(
                 onNavigateBack(false)
             },
             onExpandClick = lambdaOnExpandClick,
-            onDownloadClick = { /*TODO*/ },
+            onDownloadClick = remember { { lambdaOnDownload(viewModel.post) } },
             onShareClick = { /*TODO*/ },
             onMoreClick = lambdaOnMoreClick,
             modifier = Modifier
@@ -146,7 +149,7 @@ fun ImageScreen(
                 loading = viewModel.loading,
                 showExpandButton = showExpandButton,
                 onExpandClick = lambdaOnExpandClick,
-                onDownloadClick = { /*TODO*/ },
+                onDownloadClick = remember { { lambdaOnDownload(viewModel.post) } },
                 onShareClick = { /*TODO*/ },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -164,7 +167,7 @@ fun ImageScreen(
         }
 
         MoreBottomSheet(
-            post = post,
+            post = viewModel.post,
             sheetState = sheetState,
             showExpandButton = showExpandButton,
             onExpandClick = lambdaOnExpandClick,

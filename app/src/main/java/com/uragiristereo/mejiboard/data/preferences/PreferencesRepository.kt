@@ -1,8 +1,7 @@
-package com.uragiristereo.mejiboard.domain.repository
+package com.uragiristereo.mejiboard.data.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import com.uragiristereo.mejiboard.data.preferences.Preferences
 import kotlinx.coroutines.flow.Flow
 
 interface PreferencesRepository {

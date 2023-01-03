@@ -1,16 +1,14 @@
 package com.uragiristereo.mejiboard.data.source
 
 import android.content.Context
+import com.uragiristereo.mejiboard.data.network.NetworkRepository
+import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.data.source.danbooru.DanbooruRepository
 import com.uragiristereo.mejiboard.data.source.gelbooru.GelbooruRepository
 import com.uragiristereo.mejiboard.data.source.safebooruorg.SafebooruOrgRepository
 import com.uragiristereo.mejiboard.domain.entity.source.BooruSource
 import com.uragiristereo.mejiboard.domain.entity.source.post.PostsResult
 import com.uragiristereo.mejiboard.domain.entity.source.tag.TagsResult
-import com.uragiristereo.mejiboard.domain.repository.BooruSourceRepository
-import com.uragiristereo.mejiboard.domain.repository.BoorusRepository
-import com.uragiristereo.mejiboard.domain.repository.NetworkRepository
-import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.data.database.filters.FiltersDao
+import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.data.source.BooruSources
-import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

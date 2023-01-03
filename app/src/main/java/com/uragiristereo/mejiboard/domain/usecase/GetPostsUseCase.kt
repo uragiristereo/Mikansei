@@ -1,10 +1,10 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
 import com.uragiristereo.mejiboard.data.database.filters.FiltersDao
+import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
+import com.uragiristereo.mejiboard.data.source.BoorusRepository
 import com.uragiristereo.mejiboard.domain.entity.source.BooruSource
 import com.uragiristereo.mejiboard.domain.entity.source.post.Post
-import com.uragiristereo.mejiboard.domain.repository.BoorusRepository
-import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

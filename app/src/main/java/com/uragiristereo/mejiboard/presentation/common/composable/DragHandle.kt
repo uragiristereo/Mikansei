@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,7 +19,7 @@ fun DragHandle(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(
                 top = 10.dp,
@@ -26,11 +27,11 @@ fun DragHandle(
             ),
     ) {
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .align(Alignment.Center)
                 .size(width = 48.dp, height = 4.dp)
                 .clip(RoundedCornerShape(percent = 50))
-                .background(MaterialTheme.colors.onSurface.copy(alpha = 0.74f)),
+                .background(MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)),
         )
     }
 }

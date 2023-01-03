@@ -4,17 +4,23 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.data.preferences.entity.DetailSizePreference
-import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
+import com.uragiristereo.mejiboard.domain.entity.source.post.Post
+import com.uragiristereo.mejiboard.presentation.common.navigation.getData
 import com.uragiristereo.mejiboard.presentation.image.core.ImageLoadingState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class ImageViewModel(
+    savedStateHandle: SavedStateHandle,
     preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
+    val post = savedStateHandle.getData<Post>(key = "post")!!
+
     var appBarsVisible by mutableStateOf(true)
     val offsetY = Animatable(initialValue = 0f)
 

@@ -40,7 +40,10 @@ fun PostDialogHeaderResponsive(
             model = ImageRequest.Builder(context)
                 .data(post.previewImage.url)
                 .crossfade(durationMillis = 170)
-                .size(width = post.previewImage.width, height = post.previewImage.height)
+                .size(
+                    width = post.previewImage.width,
+                    height = post.previewImage.height,
+                )
                 .build(),
             contentDescription = "#${post.id}",
             contentScale = ContentScale.FillWidth,
@@ -67,7 +70,10 @@ fun PostDialogHeaderResponsive(
                 modifier = Modifier
                     .clip(RoundedCornerShape(size = 4.dp))
                     .width(72.dp)
-                    .heightIn(max = 72.dp * 2.5f),
+                    .heightIn(
+                        min = 32.dp,
+                        max = 72.dp * 2.5f,
+                    ),
             )
         }
     } else {
@@ -86,7 +92,10 @@ fun PostDialogHeaderResponsive(
                     .padding(end = 16.dp)
                     .clip(RoundedCornerShape(size = 4.dp))
                     .width(48.dp)
-                    .heightIn(max = 48.dp * 2.5f),
+                    .heightIn(
+                        min = 32.dp,
+                        max = 48.dp * 2.5f,
+                    ),
             )
 
             Text(

@@ -16,7 +16,6 @@
     <string name="safebooruorg_label" translatable="false">Safebooru.org</string>
     <string name="safebooruorg_domain" translatable="false">safebooru.org</string>
 
-
     <!-- Screens label -->
     <string name="filters_label">Filters</string>
     <string name="posts_label">Posts</string>
@@ -51,6 +50,16 @@
     <string name="delete_confirm">Confirm deletion</string>
     <string name="enabled_action">On</string>
     <string name="disabled_action">Off</string>
+
+    <!-- Downloads -->
+    <string name="download_added">Downloading…</string>
+    <string name="download_already_running">Post is already being downloaded!</string>
+    <string name="download_permission_denied">Notification permission is denied!</string>
+    <string name="download_in_progress">Downloading post %1$d</string>
+    <string name="download_post_id">Post %1$d</string>
+    <string name="download_complete">Download complete</string>
+    <string name="download_failed">Download failed</string>
+    <string name="download_cancel">Cancel</string>
 
     <!-- Filters -->
     <string name="filters_tip">Prevent tags from appearing in your search result.\nRefresh your posts to takes effect.</string>

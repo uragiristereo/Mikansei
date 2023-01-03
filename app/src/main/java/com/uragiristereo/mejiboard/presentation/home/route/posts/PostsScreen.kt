@@ -47,6 +47,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mejiboard.common.Constants
 import com.uragiristereo.mejiboard.domain.entity.source.post.Post
 import com.uragiristereo.mejiboard.presentation.MainRoute
+import com.uragiristereo.mejiboard.presentation.common.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.presentation.common.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.presentation.home.route.posts.core.PostsFab
 import com.uragiristereo.mejiboard.presentation.home.route.posts.core.PostsTopAppBar
@@ -65,7 +66,6 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun PostsScreen(
-    tags: String,
     onNavigate: (NavigationRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
@@ -76,6 +76,7 @@ fun PostsScreen(
     val hapticFeedback = LocalHapticFeedback.current
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val lambdaOnDownload = LocalLambdaOnDownload.current
 
     val scope = rememberCoroutineScope()
     val gridState = rememberLazyStaggeredGridState()
@@ -125,8 +126,7 @@ fun PostsScreen(
     }
 
     LaunchedEffect(key1 = viewModel) {
-        viewModel.initGetPosts(tags)
-        onCurrentTagsChange(tags)
+        onCurrentTagsChange(viewModel.tags)
     }
 
     LaunchedEffect(key1 = viewModel.loading) {
@@ -144,7 +144,7 @@ fun PostsScreen(
 
     LaunchedEffect(key1 = isMoreLoadingVisible) {
         if (isMoreLoadingVisible) {
-            viewModel.getPosts(tags = tags, refresh = false)
+            viewModel.getPosts(tags = viewModel.tags, refresh = false)
         }
     }
 
@@ -214,17 +214,26 @@ fun PostsScreen(
         }
     }
 
-    viewModel.selectedPost?.let { post ->
-        if (viewModel.dialogShown) {
+
+    if (viewModel.dialogShown) {
+        viewModel.selectedPost?.let { post ->
             PostDialog(
                 post = post,
                 onDismiss = remember { { viewModel.dialogShown = false } },
-                onPostClick = {
-                    viewModel.dialogShown = false
+                onPostClick = remember {
+                    {
+                        viewModel.dialogShown = false
 
-                    onNavigateImage(post)
+                        onNavigateImage(post)
+                    }
                 },
-                onDowloadClick = { /*TODO*/ },
+                onDowloadClick = remember {
+                    {
+                        viewModel.dialogShown = false
+
+                        lambdaOnDownload(post)
+                    }
+                },
                 onAddToClick = { /*TODO*/ },
                 onShareClick = { /*TODO*/ },
                 onBlockTagsClick = { /*TODO*/ },
@@ -325,7 +334,7 @@ fun PostsScreen(
             }
 
             PostsTopAppBar(
-                searchTags = tags,
+                searchTags = viewModel.tags,
                 booruSource = viewModel.selectedBooru?.nameResId?.let { stringResource(id = it) }.orEmpty(),
                 dropdownExpanded = viewModel.topAppBarDropdownExpanded,
                 onDropdownDismiss = remember { { viewModel.topAppBarDropdownExpanded = false } },

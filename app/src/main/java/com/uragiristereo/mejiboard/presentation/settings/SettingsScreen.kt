@@ -2,6 +2,7 @@ package com.uragiristereo.mejiboard.presentation.settings
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
@@ -29,6 +30,13 @@ fun SettingsScreen(
     val bottomSheetPreferenceState = rememberBottomSheetPreferenceState(
         onItemSelected = viewModel::setBottomSheetPreferenceState,
     )
+    val columnState = rememberLazyListState()
+
+//    LaunchedEffect(key1 = jumpToKey) {
+//        delay(timeMillis = 500L)
+//
+//        columnState.layoutInfo.
+//    }
 
     BackHandler(
         enabled = bottomSheetPreferenceState.sheetState.isVisible,
@@ -61,6 +69,7 @@ fun SettingsScreen(
             ),
             content = {
                 SettingsColumn(
+                    columnState = columnState,
                     bottomSheetPreferenceState = bottomSheetPreferenceState,
                     contentPadding = innerPadding,
                     viewModel = viewModel,

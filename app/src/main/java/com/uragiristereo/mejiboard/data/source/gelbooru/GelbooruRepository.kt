@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.gson.GsonBuilder
 import com.uragiristereo.mejiboard.common.Constants
 import com.uragiristereo.mejiboard.common.RatingFilter
+import com.uragiristereo.mejiboard.data.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.data.source.BooruSources
 import com.uragiristereo.mejiboard.data.source.gelbooru.model.search.GelbooruSearch
 import com.uragiristereo.mejiboard.data.source.gelbooru.model.toPostList
@@ -14,7 +15,6 @@ import com.uragiristereo.mejiboard.data.source.safebooruorg.model.toTagList
 import com.uragiristereo.mejiboard.domain.entity.source.post.PostsResult
 import com.uragiristereo.mejiboard.domain.entity.source.post.Rating
 import com.uragiristereo.mejiboard.domain.entity.source.tag.TagsResult
-import com.uragiristereo.mejiboard.domain.repository.BooruSourceRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

@@ -1,7 +1,7 @@
 package com.uragiristereo.mejiboard.di
 
+import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.data.preferences.PreferencesRepositoryImpl
-import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import com.uragiristereo.mejiboard.presentation.MainViewModel
 import com.uragiristereo.mejiboard.presentation.filters.FiltersViewModel
 import com.uragiristereo.mejiboard.presentation.home.HomeViewModel

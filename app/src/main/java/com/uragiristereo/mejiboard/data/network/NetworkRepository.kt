@@ -1,6 +1,5 @@
-package com.uragiristereo.mejiboard.domain.repository
+package com.uragiristereo.mejiboard.data.network
 
-import com.uragiristereo.mejiboard.data.network.GeneralApi
 import okhttp3.OkHttpClient
 
 interface NetworkRepository {

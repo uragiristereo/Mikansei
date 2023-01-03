@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.domain.repository
+package com.uragiristereo.mejiboard.data.source
 
 import com.uragiristereo.mejiboard.domain.entity.source.BooruSource
 import com.uragiristereo.mejiboard.domain.entity.source.post.PostsResult

@@ -41,14 +41,17 @@ fun MoreCloseButton(
                 }
             }
             .padding(horizontal = 8.dp)
-            .padding(bottom = 8.dp),
+            .padding(
+                top = 18.dp,
+                bottom = 8.dp,
+            ),
         content = { state ->
             if (state) {
                 IconButton(
                     onClick = onClick,
                     modifier = Modifier
                         .clip(CircleShape)
-                        .background(MaterialTheme.colors.background.copy(alpha = ContentAlpha.high)),
+                        .background(MaterialTheme.colors.background.copy(alpha = ContentAlpha.medium)),
                     content = {
                         Icon(
                             painter = painterResource(id = R.drawable.close),

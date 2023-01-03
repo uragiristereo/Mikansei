@@ -1,9 +1,11 @@
 package com.uragiristereo.mejiboard.di
 
+import com.uragiristereo.mejiboard.data.download.DownloadRepository
+import com.uragiristereo.mejiboard.data.download.DownloadRepositoryImpl
+import com.uragiristereo.mejiboard.data.network.NetworkRepository
 import com.uragiristereo.mejiboard.data.network.NetworkRepositoryImpl
+import com.uragiristereo.mejiboard.data.source.BoorusRepository
 import com.uragiristereo.mejiboard.data.source.BoorusRepositoryImpl
-import com.uragiristereo.mejiboard.domain.repository.BoorusRepository
-import com.uragiristereo.mejiboard.domain.repository.NetworkRepository
 import com.uragiristereo.mejiboard.domain.usecase.GetFileSizeUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetTagsUseCase
@@ -18,6 +20,7 @@ object NetworkModule {
     operator fun invoke(): Module = module {
         singleOf(::NetworkRepositoryImpl) { bind<NetworkRepository>() }
         singleOf(::BoorusRepositoryImpl) { bind<BoorusRepository>() }
+        singleOf(::DownloadRepositoryImpl) { bind<DownloadRepository>() }
 
         factoryOf(::GetPostsUseCase)
         factoryOf(::SearchTermUseCase)

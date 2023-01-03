@@ -16,6 +16,7 @@ import com.uragiristereo.mejiboard.data.database.session.toPostSessionList
 import com.uragiristereo.mejiboard.domain.entity.source.BooruSource
 import com.uragiristereo.mejiboard.domain.entity.source.post.Post
 import com.uragiristereo.mejiboard.domain.usecase.GetPostsUseCase
+import com.uragiristereo.mejiboard.presentation.common.navigation.getData
 import com.uragiristereo.mejiboard.presentation.home.route.posts.state.PostsContentState
 import com.uragiristereo.mejiboard.presentation.home.route.posts.state.PostsLoadingState
 import com.uragiristereo.mejiboard.presentation.home.route.posts.state.PostsSavedState
@@ -30,6 +31,7 @@ class PostsViewModel(
     private val getPostsUseCase: GetPostsUseCase,
     private val sessionDao: SessionDao,
 ) : ViewModel() {
+    val tags = savedStateHandle.getData(key = "tags", defaultValue = "")
 
     var topAppBarHeight by mutableStateOf(0.dp)
     val offsetY = Animatable(initialValue = 0f)
@@ -79,7 +81,7 @@ class PostsViewModel(
     private var sessionId = savedStateHandle[Constants.STATE_KEY_POSTS_SESSION_ID] ?: UUID.randomUUID().toString()
     private var postsJob: Job? = null
 
-    fun initGetPosts(tags: String) {
+    init {
         if (!initialized) {
             initialized = true
             savedStateHandle[Constants.STATE_KEY_POSTS_SESSION_ID] = sessionId

@@ -1,7 +1,7 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
+import com.uragiristereo.mejiboard.data.source.BoorusRepository
 import com.uragiristereo.mejiboard.domain.entity.source.tag.Tag
-import com.uragiristereo.mejiboard.domain.repository.BoorusRepository
 import kotlin.coroutines.cancellation.CancellationException
 
 class GetTagsUseCase(

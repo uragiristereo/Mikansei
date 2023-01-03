@@ -1,12 +1,16 @@
 package com.uragiristereo.mejiboard
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import com.uragiristereo.mejiboard.data.network.NetworkRepository
 import com.uragiristereo.mejiboard.di.AppModule
 import com.uragiristereo.mejiboard.di.DatabaseModule
 import com.uragiristereo.mejiboard.di.NetworkModule
-import com.uragiristereo.mejiboard.domain.repository.NetworkRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.component.KoinComponent
@@ -21,6 +25,12 @@ class MainApplication : Application(), ImageLoaderFactory, KoinComponent {
         super.onCreate()
 
         Timber.plant(Timber.DebugTree())
+
+        if (SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("downloads", "Downloads", NotificationManager.IMPORTANCE_LOW)
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
+        }
 
         startKoin {
             androidLogger()

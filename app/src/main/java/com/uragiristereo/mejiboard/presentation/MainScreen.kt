@@ -1,6 +1,8 @@
 package com.uragiristereo.mejiboard.presentation
 
 import android.app.Activity
+import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
@@ -27,11 +29,16 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.uragiristereo.mejiboard.R
 import com.uragiristereo.mejiboard.data.preferences.entity.ThemePreference
 import com.uragiristereo.mejiboard.domain.entity.source.post.Post
 import com.uragiristereo.mejiboard.presentation.about.AboutScreen
 import com.uragiristereo.mejiboard.presentation.common.LocalHomeNavController
+import com.uragiristereo.mejiboard.presentation.common.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.presentation.common.LocalMainNavController
 import com.uragiristereo.mejiboard.presentation.common.LocalPostsNavController
 import com.uragiristereo.mejiboard.presentation.common.animation.holdIn
@@ -56,8 +63,7 @@ import com.uragiristereo.mejiboard.presentation.settings.SettingsScreen
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = koinViewModel(),
@@ -72,6 +78,41 @@ fun MainScreen(
 
     val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    val lambdaOnNavigateBack: () -> Unit = {
+        mainNavController.navigateUp()
+    }
+
+    val notificationPermissionState = rememberPermissionState(
+        permission = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> android.Manifest.permission.POST_NOTIFICATIONS
+            else -> android.Manifest.permission.INTERNET
+        },
+        onPermissionResult = { isGranted ->
+            if (!isGranted) {
+                Toast.makeText(
+                    /* context = */ context,
+                    /* text = */ context.getText(R.string.download_permission_denied),
+                    /* duration = */ Toast.LENGTH_LONG,
+                ).show()
+            }
+
+            viewModel.selectedPost?.let {
+                viewModel.downloadPost(context, it)
+            }
+        }
+    )
+
+    val lambdaOnDownload: (Post) -> Unit = remember {
+        { post ->
+            if (!notificationPermissionState.status.isGranted || notificationPermissionState.status.shouldShowRationale) {
+                viewModel.selectedPost = post
+                notificationPermissionState.launchPermissionRequest()
+            } else {
+                viewModel.downloadPost(context, post)
+            }
+        }
+    }
 
     BackHandler(
         enabled = viewModel.confirmExit && currentRoute == MainRoute.Home.route,
@@ -97,10 +138,6 @@ fun MainScreen(
         },
     )
 
-    val lambdaOnNavigateBack: () -> Unit = {
-        mainNavController.navigateUp()
-    }
-
     MejiboardTheme(
         theme = when (viewModel.preferences.theme) {
             ThemePreference.KEY_LIGHT -> Theme.LIGHT
@@ -115,6 +152,7 @@ fun MainScreen(
                 LocalMainNavController provides mainNavController,
                 LocalHomeNavController provides homeNavController,
                 LocalPostsNavController provides postsNavController,
+                LocalLambdaOnDownload provides lambdaOnDownload,
             ),
         ) {
             ProductSetSystemBarsColor()
@@ -236,10 +274,7 @@ fun MainScreen(
                                 }
                             },
                             content = {
-                                val tags = rememberGetData(key = "tags", defaultValue = "")
-
                                 SearchScreen(
-                                    tags = tags,
                                     onNavigate = { route ->
                                         mainNavController.navigate(route)
                                     },
@@ -290,17 +325,12 @@ fun MainScreen(
 
                             },
                             content = {
-                                val post = rememberGetData<Post>(key = "post")
-
-                                if (post != null) {
-                                    ImageScreen(
-                                        post = post,
-                                        onNavigateBack = {
-                                            viewModel.navigatedBackByGesture = it
-                                            mainNavController.navigateUp()
-                                        },
-                                    )
-                                }
+                                ImageScreen(
+                                    onNavigateBack = {
+                                        viewModel.navigatedBackByGesture = it
+                                        mainNavController.navigateUp()
+                                    },
+                                )
                             },
                         )
 

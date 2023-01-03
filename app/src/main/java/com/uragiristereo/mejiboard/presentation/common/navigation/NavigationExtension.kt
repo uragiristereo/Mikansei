@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.core.net.toUri
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavDeepLinkRequest
@@ -56,6 +57,14 @@ fun NavHostController.navigate(
         data = data,
         navOptions = navOptions(builder),
     )
+}
+
+inline fun <reified T> SavedStateHandle.getData(key: String): T? {
+    return this.get<String>(key)?.fromJsonBase64Encoded()
+}
+
+inline fun <reified T> SavedStateHandle.getData(key: String, defaultValue: T): T {
+    return this.get<String>(key)?.fromJsonBase64Encoded() ?: defaultValue
 }
 
 //fun NavGraphBuilder.composable(

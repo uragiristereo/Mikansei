@@ -3,7 +3,6 @@ package com.uragiristereo.mejiboard.presentation.image.more
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uragiristereo.mejiboard.R
 import com.uragiristereo.mejiboard.domain.entity.source.post.Post
+import com.uragiristereo.mejiboard.presentation.common.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.presentation.common.composable.DragHandle
 import com.uragiristereo.mejiboard.presentation.common.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.presentation.common.composable.product.ProductModalBottomSheet
@@ -58,6 +58,7 @@ fun MoreBottomSheet(
 ) {
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
+    val lambdaOnDownload = LocalLambdaOnDownload.current
 
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
@@ -77,14 +78,8 @@ fun MoreBottomSheet(
         sheetState = sheetState,
         modifier = modifier,
         content = {
-            Column {
-                DragHandle()
-            }
-
             Box {
-                LazyColumn(
-                    state = columnState,
-                ) {
+                LazyColumn(state = columnState) {
                     if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
                         item {
                             Spacer(
@@ -96,7 +91,13 @@ fun MoreBottomSheet(
                     item {
                         MoreActionsRow(
                             showExpandButton = showExpandButton,
-                            onDownloadClick = { /*TODO*/ },
+                            onDownloadClick = {
+                                scope.launch {
+                                    sheetState.hide()
+
+                                    lambdaOnDownload(post)
+                                }
+                            },
                             onShareClick = { /*TODO*/ },
                             onExpandClick = {
                                 scope.launch {
@@ -112,7 +113,7 @@ fun MoreBottomSheet(
                                     )
                                 }
                             },
-                            modifier = Modifier.padding(vertical = 8.dp),
+                            modifier = Modifier.padding(bottom = 8.dp),
                         )
                     }
 
@@ -272,6 +273,8 @@ fun MoreBottomSheet(
                         }
                     },
                 )
+
+                DragHandle()
             }
         },
     )

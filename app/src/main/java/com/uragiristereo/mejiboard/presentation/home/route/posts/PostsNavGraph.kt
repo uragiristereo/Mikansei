@@ -51,10 +51,7 @@ fun PostsNavGraph(
         composable(
             route = PostsRoute.Index,
             content = {
-                val tags = rememberGetData(key = "tags", defaultValue = "")
-
                 PostsScreen(
-                    tags = tags,
                     onNavigate = onNavigate,
                     onNavigateImage = onNavigateImage,
                     onCurrentTagsChange = onCurrentTagsChange,

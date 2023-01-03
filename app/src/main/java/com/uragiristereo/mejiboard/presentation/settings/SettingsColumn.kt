@@ -4,7 +4,7 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,13 +32,13 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SettingsColumn(
+    columnState: LazyListState,
     bottomSheetPreferenceState: BottomSheetPreferenceState,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
-    val columnState = rememberLazyListState()
 
 //    val languageState = rememberDropDownPreferenceState(
 //        items = PreferenceLanguage.items,

@@ -2,8 +2,7 @@ package com.uragiristereo.mejiboard.data.network
 
 import android.content.Context
 import com.uragiristereo.mejiboard.common.util.CacheUtil
-import com.uragiristereo.mejiboard.domain.repository.NetworkRepository
-import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
+import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

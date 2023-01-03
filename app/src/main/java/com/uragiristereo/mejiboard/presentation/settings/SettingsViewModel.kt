@@ -8,10 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.R
 import com.uragiristereo.mejiboard.common.RatingFilter
 import com.uragiristereo.mejiboard.data.preferences.Preferences
+import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.data.preferences.entity.PreferenceItem
 import com.uragiristereo.mejiboard.data.preferences.entity.RatingPreference
 import com.uragiristereo.mejiboard.data.source.BooruSources
-import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
 import com.uragiristereo.mejiboard.presentation.settings.preference.BottomSheetPreferenceData
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

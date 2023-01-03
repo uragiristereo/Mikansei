@@ -13,7 +13,7 @@ import com.uragiristereo.mejiboard.data.database.filters.toFilterItemList
 import com.uragiristereo.mejiboard.data.database.filters.toFilterTableItem
 import com.uragiristereo.mejiboard.data.database.filters.toFilterTableItemList
 import com.uragiristereo.mejiboard.data.preferences.Preferences
-import com.uragiristereo.mejiboard.domain.repository.PreferencesRepository
+import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.presentation.common.entity.FilterItem
 import com.uragiristereo.mejiboard.presentation.common.extension.strip
 import kotlinx.coroutines.Dispatchers
