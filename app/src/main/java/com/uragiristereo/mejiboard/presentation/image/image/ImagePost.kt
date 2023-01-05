@@ -90,7 +90,7 @@ fun ImagePost(
             setOnLongClickListener {
                 onMoreClick()
 
-                true
+                false
             }
 
             setOnTouchImageViewListener(

@@ -56,7 +56,7 @@ fun MoreScreen(
                 Icon(
                     painter = painterResource(id = R.drawable.meji),
                     contentDescription = null,
-                    tint = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+                    tint = MaterialTheme.colors.primary.copy(alpha = ContentAlpha.high),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 16.dp),
@@ -150,7 +150,7 @@ fun MoreScreen(
 
             item {
                 Text(
-                    text = "v2.0.0-alpha".uppercase(Locale.getDefault()),
+                    text = "v2.0.0".uppercase(Locale.getDefault()),
                     style = MaterialTheme.typography.overline,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,

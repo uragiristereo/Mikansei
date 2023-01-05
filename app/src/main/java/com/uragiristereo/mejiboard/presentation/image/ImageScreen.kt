@@ -19,9 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.common.Constants
 import com.uragiristereo.mejiboard.presentation.common.LocalLambdaOnDownload
@@ -47,6 +49,7 @@ fun ImageScreen(
     val window = (context as Activity).window
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
+    val hapticFeedback = LocalHapticFeedback.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
 
     val scope = rememberCoroutineScope()
@@ -57,6 +60,7 @@ fun ImageScreen(
 
     val lambdaOnMoreClick: () -> Unit = {
         scope.launch {
+            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
             sheetState.animateTo(ModalBottomSheetValue.Expanded)
         }
     }

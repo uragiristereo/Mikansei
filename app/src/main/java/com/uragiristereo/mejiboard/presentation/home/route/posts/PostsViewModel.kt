@@ -41,8 +41,6 @@ class PostsViewModel(
     var topAppBarDropdownExpanded by mutableStateOf(false)
 
     // posts
-    private var currentTags by mutableStateOf("")
-
     var posts by mutableStateOf<List<Post>>(listOf())
         private set
 
@@ -63,6 +61,7 @@ class PostsViewModel(
             loadingDisabled && posts.isEmpty() && errorMessage == null -> PostsContentState.SHOW_EMPTY
             loadingDisabled && errorMessage != null -> PostsContentState.SHOW_ERROR
             loading == PostsLoadingState.FROM_LOAD -> PostsContentState.SHOW_MAIN_LOADING
+            loading == PostsLoadingState.FROM_RESTORE_SESSION -> PostsContentState.SHOW_NOTHING
             else -> PostsContentState.SHOW_POSTS
         }
     }
@@ -87,19 +86,14 @@ class PostsViewModel(
             initialized = true
             savedStateHandle[Constants.STATE_KEY_POSTS_SESSION_ID] = sessionId
 
-            currentTags = tags
-
             when {
                 savedState.loadFromSession -> getPostsFromSession()
-                else -> getPosts(tags)
+                else -> getPosts()
             }
         }
     }
 
-    fun getPosts(
-        tags: String,
-        refresh: Boolean = true,
-    ) {
+    fun getPosts(refresh: Boolean = true) {
         postsJob?.cancel()
 
         postsJob = viewModelScope.launch {
@@ -108,7 +102,6 @@ class PostsViewModel(
                 else -> page += 1
             }
 
-            currentTags = tags
             savedStateHandle[Constants.STATE_KEY_POSTS_CURRENT_PAGE] = page
             errorMessage = null
 
@@ -150,22 +143,28 @@ class PostsViewModel(
     }
 
     fun retryGetPosts() {
-        getPosts(tags = currentTags, refresh = true)
+        getPosts(refresh = true)
     }
 
     private fun getPostsFromSession() {
         viewModelScope.launch {
-            loading = PostsLoadingState.FROM_LOAD
+            loading = PostsLoadingState.FROM_RESTORE_SESSION
             savedState = savedState.copy(loadFromSession = false)
 
-            withContext(Dispatchers.IO) {
-                val postsSession = sessionDao.getPosts(sessionId = sessionId).toPostList()
+            val postsSession: List<Post>
 
-                posts = postsSession
+            withContext(Dispatchers.IO) {
+                postsSession = sessionDao.getPosts(sessionId = sessionId).toPostList()
             }
 
-            jumpToPosition = true
-            loading = PostsLoadingState.DISABLED
+            if (postsSession.isNotEmpty()) {
+                posts = postsSession
+
+                jumpToPosition = true
+                loading = PostsLoadingState.DISABLED
+            } else {
+                getPosts(refresh = true)
+            }
         }
     }
 

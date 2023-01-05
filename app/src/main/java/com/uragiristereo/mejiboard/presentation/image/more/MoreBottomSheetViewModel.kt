@@ -115,8 +115,6 @@ class MoreBottomSheetViewModel(
         }
 
         customTabsIntentBuilder
-            .setStartAnimations(context, android.R.anim.fade_in, android.R.anim.fade_out)
-            .setExitAnimations(context, android.R.anim.fade_in, android.R.anim.fade_out)
             .build()
             .launchUrl(context, Uri.parse(parsed))
     }

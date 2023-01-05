@@ -6,6 +6,7 @@ import com.uragiristereo.mejiboard.data.network.NetworkRepository
 import com.uragiristereo.mejiboard.data.network.NetworkRepositoryImpl
 import com.uragiristereo.mejiboard.data.source.BoorusRepository
 import com.uragiristereo.mejiboard.data.source.BoorusRepositoryImpl
+import com.uragiristereo.mejiboard.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetFileSizeUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetTagsUseCase
@@ -26,5 +27,6 @@ object NetworkModule {
         factoryOf(::SearchTermUseCase)
         factoryOf(::GetTagsUseCase)
         factoryOf(::GetFileSizeUseCase)
+        factoryOf(::DownloadPostUseCase)
     }
 }

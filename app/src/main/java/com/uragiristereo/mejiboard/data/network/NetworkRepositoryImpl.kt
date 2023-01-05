@@ -48,6 +48,7 @@ class NetworkRepositoryImpl(
 
     override val api: GeneralApi = Retrofit.Builder()
         .baseUrl("https://github.com")
+        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(GeneralApi::class.java)

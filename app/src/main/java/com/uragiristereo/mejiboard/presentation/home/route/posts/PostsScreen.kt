@@ -118,10 +118,8 @@ fun PostsScreen(
     }
 
     LaunchedEffect(key1 = Unit) {
-        if (gridState.firstVisibleItemIndex == 0 && gridState.firstVisibleItemScrollOffset == 0) {
-            scope.launch {
-                viewModel.offsetY.snapTo(targetValue = 0f)
-            }
+        scope.launch {
+            viewModel.offsetY.animateTo(targetValue = 0f)
         }
     }
 
@@ -144,7 +142,7 @@ fun PostsScreen(
 
     LaunchedEffect(key1 = isMoreLoadingVisible) {
         if (isMoreLoadingVisible) {
-            viewModel.getPosts(tags = viewModel.tags, refresh = false)
+            viewModel.getPosts(refresh = false)
         }
     }
 
@@ -329,6 +327,14 @@ fun PostsScreen(
                                 onRetryClick = viewModel::retryGetPosts,
                             )
                         }
+                    }
+
+                    PostsContentState.SHOW_NOTHING -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.background),
+                        )
                     }
                 }
             }

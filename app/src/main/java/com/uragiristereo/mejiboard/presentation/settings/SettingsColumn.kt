@@ -266,16 +266,16 @@ fun SettingsColumn(
             RegularPreference(
                 title = stringResource(id = R.string.settings_check_for_update),
                 subtitle = buildAnnotatedString {
-                    append(text = "${stringResource(id = R.string.settings_check_for_update)} ")
+                    append(text = "${stringResource(id = R.string.settings_current_version)} ")
 
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(text = "v2.0.0-alpha")
+                        append(text = "v2.0.0")
                     }
 
                     append(text = "\n${stringResource(id = R.string.settings_latest_version)} ")
 
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(text = "v2.0.0-alpha")
+                        append(text = "v2.0.0")
                         append(text = "\n\n${stringResource(id = R.string.settings_using_latest_version)}")
                     }
                 },

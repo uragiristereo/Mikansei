@@ -86,7 +86,7 @@ class DownloadRepositoryImpl(
         return notificationIdCounter
     }
 
-    private fun download(url: String): Flow<DownloadResource> {
+    override fun download(url: String): Flow<DownloadResource> {
         return flow {
             try {
                 emit(DownloadResource.Starting)
