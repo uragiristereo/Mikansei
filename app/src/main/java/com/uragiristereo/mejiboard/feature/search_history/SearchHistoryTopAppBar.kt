@@ -5,7 +5,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import com.uragiristereo.mejiboard.R
+import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
 fun SearchHistoryTopAppBar(

@@ -25,11 +25,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mejiboard.R
 import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.core.common.ui.composable.SettingTip
 import com.uragiristereo.mejiboard.core.common.ui.composable.SettingToggle
 import com.uragiristereo.mejiboard.core.common.ui.entity.FilterItem
+import com.uragiristereo.mejiboard.core.resources.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

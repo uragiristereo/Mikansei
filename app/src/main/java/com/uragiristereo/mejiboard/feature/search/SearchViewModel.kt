@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.common.ui.navigation.getData
+import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.feature.search.state.SearchWordIndex
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -25,7 +26,7 @@ class SearchViewModel(
     var preferences by mutableStateOf(preferencesRepository.data)
         private set
 
-    var selectedBooru by mutableStateOf(com.uragiristereo.mejiboard.core.model.booru.BooruSources.getBooruByKey(preferences.booru) ?: com.uragiristereo.mejiboard.core.model.booru.BooruSources.Gelbooru)
+    var selectedBooru by mutableStateOf(BooruSources.getBooruByKey(preferences.booru) ?: BooruSources.Gelbooru)
         private set
 
     var actionsRowExpanded by mutableStateOf(true)
@@ -54,7 +55,7 @@ class SearchViewModel(
         preferencesRepository.flowData
             .onEach {
                 preferences = it
-                selectedBooru = com.uragiristereo.mejiboard.core.model.booru.BooruSources.getBooruByKey(it.booru) ?: com.uragiristereo.mejiboard.core.model.booru.BooruSources.Gelbooru
+                selectedBooru = BooruSources.getBooruByKey(it.booru) ?: BooruSources.Gelbooru
             }
             .launchIn(viewModelScope)
     }

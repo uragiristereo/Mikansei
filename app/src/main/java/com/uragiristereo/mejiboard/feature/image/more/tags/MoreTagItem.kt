@@ -18,10 +18,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
+import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
 
 @Composable
 fun MoreTagItem(
-    tag: com.uragiristereo.mejiboard.core.model.booru.tag.Tag,
+    tag: Tag,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -37,7 +38,7 @@ fun MoreTagItem(
 
 @Composable
 fun MoreTagItem(
-    tag: com.uragiristereo.mejiboard.core.model.booru.tag.Tag,
+    tag: Tag,
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,

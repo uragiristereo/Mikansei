@@ -1,12 +1,13 @@
 package com.uragiristereo.mejiboard.core.database.dao.session
 
+import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import java.util.UUID
 
 fun List<PostSession>.toPostList(): List<Post> {
     return map {
         Post(
-            source = com.uragiristereo.mejiboard.core.model.booru.BooruSources.getBooruByKey(key = it.source) ?: com.uragiristereo.mejiboard.core.model.booru.BooruSources.Gelbooru,
+            source = BooruSources.getBooruByKey(key = it.source) ?: BooruSources.Gelbooru,
             id = it.id,
             scaled = it.scaled,
             rating = it.rating,

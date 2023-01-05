@@ -19,7 +19,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.R
+import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
 fun SearchBrowseButton(

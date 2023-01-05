@@ -13,12 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.R
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
+import com.uragiristereo.mejiboard.core.resources.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MoreInfoColumn(
-    post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
+    post: Post,
     scaledImageFileSizeStr: String,
     originalImageFileSizeStr: String,
     expanded: Boolean,

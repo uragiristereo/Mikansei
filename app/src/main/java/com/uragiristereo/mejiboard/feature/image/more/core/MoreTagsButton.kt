@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mejiboard.R
+import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
 fun MoreTagsButton(

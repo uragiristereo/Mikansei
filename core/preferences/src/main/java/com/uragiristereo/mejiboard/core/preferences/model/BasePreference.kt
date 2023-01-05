@@ -1,9 +1,11 @@
 package com.uragiristereo.mejiboard.core.preferences.model
 
-interface BasePreference {
-    val items: List<com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem>
+import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
 
-    fun getItemByKey(key: String): com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem? {
+interface BasePreference {
+    val items: List<PreferenceItem>
+
+    fun getItemByKey(key: String): PreferenceItem? {
         return items.firstOrNull { it.key == key }
     }
 }

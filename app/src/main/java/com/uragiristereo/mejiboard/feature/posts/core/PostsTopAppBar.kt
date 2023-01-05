@@ -26,7 +26,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mejiboard.R
+import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 
 @Composable

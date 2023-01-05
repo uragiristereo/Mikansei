@@ -14,9 +14,11 @@ import com.uragiristereo.mejiboard.core.common.ui.entity.DownloadState
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
+import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.core.preferences.model.Preferences
+import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -66,7 +68,7 @@ class MainViewModel(
 
     fun downloadPost(
         context: Context,
-        post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
+        post: Post,
     ) {
         if (downloadRepository.isPostAlreadyAdded(postId = post.id)) {
             Toast.makeText(
@@ -91,8 +93,8 @@ class MainViewModel(
     }
 
     fun sharePost(
-        post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
-        shareOption: com.uragiristereo.mejiboard.core.model.ShareOption,
+        post: Post,
+        shareOption: ShareOption,
         onDownloadCompleted: () -> Unit,
         onDownloadFailed: (String) -> Unit,
     ) {

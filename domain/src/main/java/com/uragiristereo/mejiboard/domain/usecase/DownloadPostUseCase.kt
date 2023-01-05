@@ -2,6 +2,8 @@ package com.uragiristereo.mejiboard.domain.usecase
 
 import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
+import com.uragiristereo.mejiboard.core.model.ShareOption
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -13,12 +15,12 @@ class DownloadPostUseCase(
 ) {
     @OptIn(FlowPreview::class)
     operator fun invoke(
-        post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
-        shareOption: com.uragiristereo.mejiboard.core.model.ShareOption,
+        post: Post,
+        shareOption: ShareOption,
     ): Flow<DownloadResource> {
         return flow {
             val url = when {
-                shareOption == com.uragiristereo.mejiboard.core.model.ShareOption.COMPRESSED && post.scaled -> post.scaledImage.url
+                shareOption == ShareOption.COMPRESSED && post.scaled -> post.scaledImage.url
                 else -> post.originalImage.url
             }
 

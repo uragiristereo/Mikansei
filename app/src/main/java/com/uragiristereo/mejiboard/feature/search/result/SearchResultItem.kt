@@ -21,12 +21,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.R
+import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
+import com.uragiristereo.mejiboard.core.resources.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SearchResultItem(
-    tag: com.uragiristereo.mejiboard.core.model.booru.tag.Tag,
+    tag: Tag,
     delimiter: String,
     boldWord: String,
     onClick: () -> Unit,

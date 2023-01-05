@@ -36,7 +36,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.MainRoute
-import com.uragiristereo.mejiboard.R
+import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.feature.search.core.SearchActionRow
 import com.uragiristereo.mejiboard.feature.search.core.SearchBar

@@ -31,10 +31,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mejiboard.R
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.common.ui.composable.DragHandle
 import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
+import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.image.more.core.MoreActionsRow
 import com.uragiristereo.mejiboard.feature.image.more.core.MoreCloseButton
 import com.uragiristereo.mejiboard.feature.image.more.core.MoreTagsButton
@@ -47,7 +48,7 @@ import java.text.DateFormat
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MoreBottomSheet(
-    post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
+    post: Post,
     sheetState: ModalBottomSheetState,
     showExpandButton: Boolean,
     onExpandClick: () -> Unit,

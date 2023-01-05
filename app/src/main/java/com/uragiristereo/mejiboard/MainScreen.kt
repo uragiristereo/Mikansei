@@ -46,6 +46,7 @@ import com.uragiristereo.mejiboard.core.common.ui.animation.translateYFadeOut
 import com.uragiristereo.mejiboard.core.common.ui.navigation.composable
 import com.uragiristereo.mejiboard.core.common.ui.navigation.navigate
 import com.uragiristereo.mejiboard.core.preferences.model.ThemePreference
+import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.about.AboutScreen
 import com.uragiristereo.mejiboard.feature.filters.FiltersScreen
 import com.uragiristereo.mejiboard.feature.image.ImageScreen

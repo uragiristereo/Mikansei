@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import kotlinx.coroutines.launch
 
 class MoreBottomSheetViewModel(
@@ -58,7 +59,7 @@ class MoreBottomSheetViewModel(
         }
     }
 
-    fun getImagesFileSize(post: com.uragiristereo.mejiboard.core.model.booru.post.Post) {
+    fun getImagesFileSize(post: Post) {
         viewModelScope.launch {
             launch {
                 if (post.scaled) {
