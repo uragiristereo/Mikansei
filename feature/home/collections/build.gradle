@@ -1,11 +1,10 @@
 plugins {
     id "com.android.library"
     id "org.jetbrains.kotlin.android"
-    id "kotlin-parcelize"
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard.core.model"
+    namespace "com.uragiristereo.mejiboard.feature.collections"
     compileSdk 33
 
     defaultConfig {
@@ -22,17 +21,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":core:product"))
     implementation(project(":core:resources"))
 
-    // Koin Dependency Injection & Timber Logger
-    implementation(libs.bundles.core)
-
     // Compose UI
-    implementation(libs.compose)
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.androidx.compose)
 
-    // Accompanist Compose Extensions
-    implementation(libs.accompanist.navigation.animation)
-
-    // Gson JSON Serialization
-    implementation(libs.gson)
+    // Timber Logger
+    implementation(libs.timber)
 }

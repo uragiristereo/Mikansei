@@ -77,37 +77,39 @@ dependencies {
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":domain"))
+    implementation(project(":feature:about"))
+    implementation(project(":feature:filters"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:home:collections"))
+    implementation(project(":feature:home:more"))
+    implementation(project(":feature:home:posts"))
+    implementation(project(":feature:image"))
+    implementation(project(":feature:search"))
+    implementation(project(":feature:search_history"))
+    implementation(project(":feature:settings"))
 
     // AndroidX
     implementation(libs.bundles.androidx)
     implementation(libs.androidx.splashscreen)
-    implementation(libs.androidx.browser)
 
     // Compose UI
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
-    implementation(libs.androidx.constraintlayout.compose)
     debugImplementation(libs.bundles.compose.debug)
 
     // Koin Dependency Injection
     implementation(libs.bundles.koin)
 
     // Accompanist Compose Extensions
-    implementation(libs.accompanist.flowlayout)
     implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.permissions)
 
     // Coil Image Loader
     implementation(libs.bundles.coil)
-    implementation(libs.coil.gif)
-
-    // TouchImageView
-    implementation(libs.touchimageview)
 
     // Timber Logger
     implementation(libs.timber)
 
     // Gson JSON Serialization
     implementation(libs.gson)
-
 }
