@@ -32,9 +32,9 @@
 -dontwarn org.openjsse.net.ssl.OpenJSSE
 
 # Data Transfer Objects
--keepclassmembers class com.uragiristereo.mejiboard.data.source.** { <fields>; }
+-keepclassmembers class com.uragiristereo.mejiboard.core.booru.source.** { <fields>; }
 
 # Preferences
--keepclassmembers class com.uragiristereo.mejiboard.data.preferences.Preferences { <fields>; }
+-keepclassmembers class com.uragiristereo.mejiboard.core.preferences.model.Preferences { <fields>; }
 
 # -keepnames class **

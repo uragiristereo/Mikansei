@@ -1,17 +1,17 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
-import com.uragiristereo.mejiboard.data.database.filters.FiltersDao
-import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
-import com.uragiristereo.mejiboard.data.source.BoorusRepository
-import com.uragiristereo.mejiboard.domain.entity.source.BooruSource
-import com.uragiristereo.mejiboard.domain.entity.source.post.Post
+import com.uragiristereo.mejiboard.core.booru.BooruRepository
+import com.uragiristereo.mejiboard.core.booru.source.BooruSource
+import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
+import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 
 class GetPostsUseCase(
-    private val boorusRepository: BoorusRepository,
+    private val booruRepository: BooruRepository,
     private val preferencesRepository: PreferencesRepository,
     private val filtersDao: FiltersDao,
 ) {
@@ -28,9 +28,9 @@ class GetPostsUseCase(
         try {
             onLoading(true)
 
-            onStart(boorusRepository.currentBooru)
+            onStart(booruRepository.currentBooru)
 
-            val result = boorusRepository.getPosts(
+            val result = booruRepository.getPosts(
                 tags = tags,
                 page = page,
             )

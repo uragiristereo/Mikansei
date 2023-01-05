@@ -1,11 +1,11 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
-import com.uragiristereo.mejiboard.data.source.BoorusRepository
-import com.uragiristereo.mejiboard.domain.entity.source.tag.Tag
+import com.uragiristereo.mejiboard.core.booru.BooruRepository
+import com.uragiristereo.mejiboard.domain.entity.booru.tag.Tag
 import kotlin.coroutines.cancellation.CancellationException
 
 class GetTagsUseCase(
-    private val boorusRepository: BoorusRepository,
+    private val booruRepository: BooruRepository,
 ) {
     suspend operator fun invoke(
         tags: List<String>,
@@ -17,7 +17,7 @@ class GetTagsUseCase(
         try {
             onLoading(true)
 
-            val result = boorusRepository.getTags(tags = tags)
+            val result = booruRepository.getTags(tags = tags)
 
             when (result.errorMessage) {
                 null -> {

@@ -1,9 +1,9 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
-import com.uragiristereo.mejiboard.data.download.DownloadRepository
-import com.uragiristereo.mejiboard.data.download.model.DownloadResource
+import com.uragiristereo.mejiboard.core.download.DownloadRepository
+import com.uragiristereo.mejiboard.core.download.model.DownloadResource
 import com.uragiristereo.mejiboard.domain.entity.ShareOption
-import com.uragiristereo.mejiboard.domain.entity.source.post.Post
+import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

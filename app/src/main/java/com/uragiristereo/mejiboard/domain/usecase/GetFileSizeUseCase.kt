@@ -1,6 +1,6 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
-import com.uragiristereo.mejiboard.data.network.NetworkRepository
+import com.uragiristereo.mejiboard.core.network.NetworkRepository
 import kotlinx.coroutines.CancellationException
 
 class GetFileSizeUseCase(

@@ -1,16 +1,16 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
-import com.uragiristereo.mejiboard.common.Constants
-import com.uragiristereo.mejiboard.data.database.filters.FiltersDao
-import com.uragiristereo.mejiboard.data.source.BoorusRepository
-import com.uragiristereo.mejiboard.domain.entity.source.tag.Tag
+import com.uragiristereo.mejiboard.core.booru.BooruRepository
+import com.uragiristereo.mejiboard.core.common.data.Constants
+import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
+import com.uragiristereo.mejiboard.domain.entity.booru.tag.Tag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.util.concurrent.CancellationException
 
 class SearchTermUseCase(
-    private val boorusRepository: BoorusRepository,
+    private val booruRepository: BooruRepository,
     private val filtersDao: FiltersDao,
 ) {
     suspend operator fun invoke(
@@ -25,7 +25,7 @@ class SearchTermUseCase(
 
             delay(Constants.API_DELAY)
 
-            val result = boorusRepository.searchTerm(term)
+            val result = booruRepository.searchTerm(term)
 
             when (result.errorMessage) {
                 null -> {
