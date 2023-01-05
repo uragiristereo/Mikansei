@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.navigation.getData
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
+import com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase
 import com.uragiristereo.mejiboard.feature.search.state.SearchWordIndex
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -18,8 +20,8 @@ import timber.log.Timber
 
 class SearchViewModel(
     savedStateHandle: SavedStateHandle,
-    preferencesRepository: com.uragiristereo.mejiboard.core.preferences.PreferencesRepository,
-    private val searchTermUseCase: com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase,
+    preferencesRepository: PreferencesRepository,
+    private val searchTermUseCase: SearchTermUseCase,
 ) : ViewModel() {
     val tags = savedStateHandle.getData(key = "tags", defaultValue = "")
 

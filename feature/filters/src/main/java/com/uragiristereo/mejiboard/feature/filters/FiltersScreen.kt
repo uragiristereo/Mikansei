@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.filters.appbars.FiltersSelectionTopAppBar
 import com.uragiristereo.mejiboard.feature.filters.appbars.FiltersTopAppBar
@@ -36,7 +37,7 @@ fun FiltersScreen(
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
 
-    com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor()
+    ProductSetSystemBarsColor()
 
     BackHandler(
         enabled = viewModel.selectedItems.isNotEmpty() && !sheetState.isVisible,

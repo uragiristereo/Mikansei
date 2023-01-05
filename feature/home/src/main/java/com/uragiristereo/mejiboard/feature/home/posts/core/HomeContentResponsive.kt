@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.feature.home.posts.HomeNavGraph
 import com.uragiristereo.mejiboard.feature.home.posts.appbars.HomeBottomNavigationBar
@@ -24,7 +25,7 @@ fun HomeContentResponsive(
     scaffoldState: ScaffoldState,
     onNavigate: (NavigationRoute) -> Unit,
     onHomeNavigate: (NavigationRoute) -> Unit,
-    onNavigateImage: (com.uragiristereo.mejiboard.core.model.booru.post.Post) -> Unit,
+    onNavigateImage: (Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {

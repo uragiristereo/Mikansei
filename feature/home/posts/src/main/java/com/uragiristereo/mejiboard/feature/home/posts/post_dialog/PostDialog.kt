@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.common.ui.composable.ClickableSection
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
+import com.uragiristereo.mejiboard.core.product.component.ProductDialog
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
@@ -42,7 +43,7 @@ fun PostDialog(
 
     var columnHeight by remember { mutableStateOf(0.dp) }
 
-    com.uragiristereo.mejiboard.core.product.component.ProductDialog(
+    ProductDialog(
         onDismissRequest = onDismiss,
         modifier = modifier.widthIn(max = 540.dp),
         content = {

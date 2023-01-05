@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
@@ -93,7 +94,7 @@ fun PostsError(
 @Preview
 @Composable
 private fun PostsErrorPreview() {
-    com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme {
+    MejiboardTheme {
         Surface {
             PostsError(
                 message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut",

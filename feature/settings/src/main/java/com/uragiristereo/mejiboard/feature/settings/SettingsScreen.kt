@@ -12,6 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.feature.settings.preference.BottomSheetPreference
 import com.uragiristereo.mejiboard.feature.settings.preference.LocalIconPadding
 import com.uragiristereo.mejiboard.feature.settings.preference.rememberBottomSheetPreferenceState
@@ -46,7 +47,7 @@ fun SettingsScreen(
         },
     )
 
-    com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor(
+    ProductSetSystemBarsColor(
         navigationBarColor = when (bottomSheetPreferenceState.sheetState.targetValue) {
             ModalBottomSheetValue.Expanded -> Color.Transparent
             else -> MaterialTheme.colors.background.copy(alpha = 0.4f)

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
+import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
@@ -56,7 +57,7 @@ fun PostsTopAppBar(
                 }
             },
     ) {
-        com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar(
+        ProductTopAppBar(
             title = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

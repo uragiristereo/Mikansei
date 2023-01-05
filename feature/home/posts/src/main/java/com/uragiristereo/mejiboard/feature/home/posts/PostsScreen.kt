@@ -46,6 +46,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.feature.home.posts.core.PostsFab
@@ -66,7 +67,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun PostsScreen(
     onNavigate: (NavigationRoute) -> Unit,
-    onNavigateImage: (com.uragiristereo.mejiboard.core.model.booru.post.Post) -> Unit,
+    onNavigateImage: (Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = koinViewModel(),

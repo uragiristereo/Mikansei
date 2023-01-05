@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.uragiristereo.mejiboard.core.common.ui.LocalHomeNavController
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.core.model.navigation.composable
 import com.uragiristereo.mejiboard.feature.home.collections.CollectionsScreen
@@ -17,7 +18,7 @@ import com.uragiristereo.mejiboard.feature.home.more.MoreScreen
 @Composable
 fun HomeNavGraph(
     onNavigate: (NavigationRoute) -> Unit,
-    onNavigateImage: (com.uragiristereo.mejiboard.core.model.booru.post.Post) -> Unit,
+    onNavigateImage: (Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {

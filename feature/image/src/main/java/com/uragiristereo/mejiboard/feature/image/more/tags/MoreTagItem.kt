@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
+import com.uragiristereo.mejiboard.core.model.booru.tag.TagType
 
 @Composable
 fun MoreTagItem(
@@ -45,12 +46,12 @@ fun MoreTagItem(
 ) {
     val tagColor = remember(tag) {
         when (tag.type) {
-            com.uragiristereo.mejiboard.core.model.booru.tag.TagType.GENERAL -> Color(0xFF47A4FD)
-            com.uragiristereo.mejiboard.core.model.booru.tag.TagType.CHARACTER -> Color(0xFF8052FF)
-            com.uragiristereo.mejiboard.core.model.booru.tag.TagType.COPYRIGHT -> Color(0xFF00B26F)
-            com.uragiristereo.mejiboard.core.model.booru.tag.TagType.ARTIST -> Color(0xFFFF6C6D)
-            com.uragiristereo.mejiboard.core.model.booru.tag.TagType.METADATA -> Color(0xFFFF9E53)
-            com.uragiristereo.mejiboard.core.model.booru.tag.TagType.NONE -> Color(0xFF47A4FD)
+            TagType.GENERAL -> Color(0xFF47A4FD)
+            TagType.CHARACTER -> Color(0xFF8052FF)
+            TagType.COPYRIGHT -> Color(0xFF00B26F)
+            TagType.ARTIST -> Color(0xFFFF6C6D)
+            TagType.METADATA -> Color(0xFFFF9E53)
+            TagType.NONE -> Color(0xFF47A4FD)
         }
     }
 

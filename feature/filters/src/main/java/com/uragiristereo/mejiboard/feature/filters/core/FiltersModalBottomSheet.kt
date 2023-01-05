@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uragiristereo.mejiboard.core.common.ui.composable.ClickableSection
+import com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mejiboard.core.resources.R
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -27,7 +28,7 @@ fun FiltersModalBottomSheet(
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet(
+    ProductModalBottomSheet(
         sheetState = sheetState,
         content = {
             Text(

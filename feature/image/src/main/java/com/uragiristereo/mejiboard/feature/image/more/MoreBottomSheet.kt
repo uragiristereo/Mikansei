@@ -35,6 +35,7 @@ import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.common.ui.composable.DragHandle
 import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
+import com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.image.more.core.MoreActionsRow
 import com.uragiristereo.mejiboard.feature.image.more.core.MoreCloseButton
@@ -73,7 +74,7 @@ fun MoreBottomSheet(
         }
     }
 
-    com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet(
+    ProductModalBottomSheet(
         sheetState = sheetState,
         modifier = modifier,
         content = {

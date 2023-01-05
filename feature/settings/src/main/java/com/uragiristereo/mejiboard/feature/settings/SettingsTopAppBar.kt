@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
@@ -14,7 +15,7 @@ fun SettingsTopAppBar(
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar(
+    ProductTopAppBar(
         title = {
             Text(text = "Settings")
         },

@@ -14,9 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.uragiristereo.mejiboard.core.common.ui.LocalHomeNavController
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.core.model.navigation.navigate
+import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.feature.home.posts.core.HomeContentResponsive
 import org.koin.androidx.compose.koinViewModel
 
@@ -25,7 +27,7 @@ fun HomeScreen(
     scaffoldState: ScaffoldState,
     onNavigate: (route: NavigationRoute) -> Unit,
     onNavigateSearch: (tags: String) -> Unit,
-    onNavigateImage: (com.uragiristereo.mejiboard.core.model.booru.post.Post) -> Unit,
+    onNavigateImage: (Post) -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val homeNavController = LocalHomeNavController.current
@@ -56,7 +58,7 @@ fun HomeScreen(
         }
     }
 
-    com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor(
+    ProductSetSystemBarsColor(
         navigationBarColor = Color.Transparent,
     )
 

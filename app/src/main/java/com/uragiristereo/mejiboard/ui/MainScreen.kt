@@ -43,10 +43,12 @@ import com.uragiristereo.mejiboard.core.common.ui.animation.translateXFadeIn
 import com.uragiristereo.mejiboard.core.common.ui.animation.translateXFadeOut
 import com.uragiristereo.mejiboard.core.common.ui.animation.translateYFadeIn
 import com.uragiristereo.mejiboard.core.common.ui.animation.translateYFadeOut
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.model.navigation.composable
 import com.uragiristereo.mejiboard.core.model.navigation.navigate
 import com.uragiristereo.mejiboard.core.preferences.model.ThemePreference
+import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.about.AboutScreen
 import com.uragiristereo.mejiboard.feature.filters.FiltersScreen
@@ -100,7 +102,7 @@ fun MainScreen(
         }
     )
 
-    val lambdaOnDownload: (com.uragiristereo.mejiboard.core.model.booru.post.Post) -> Unit = remember {
+    val lambdaOnDownload: (Post) -> Unit = remember {
         { post ->
             if (!notificationPermissionState.status.isGranted || notificationPermissionState.status.shouldShowRationale) {
                 viewModel.selectedPost = post
@@ -152,7 +154,7 @@ fun MainScreen(
                 LocalLambdaOnDownload provides lambdaOnDownload,
             ),
         ) {
-            com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor()
+            ProductSetSystemBarsColor()
 
             Surface(
                 modifier = Modifier.fillMaxSize(),

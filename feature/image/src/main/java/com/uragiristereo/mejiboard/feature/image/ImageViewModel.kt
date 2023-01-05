@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.model.navigation.getData
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.core.preferences.model.DetailSizePreference
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoadingState
 import kotlinx.coroutines.flow.launchIn
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.onEach
 
 class ImageViewModel(
     savedStateHandle: SavedStateHandle,
-    preferencesRepository: com.uragiristereo.mejiboard.core.preferences.PreferencesRepository,
+    preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
     val post = savedStateHandle.getData<com.uragiristereo.mejiboard.core.model.booru.post.Post>(key = "post")!!
 

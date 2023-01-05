@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.common.ui.composable.DragHandle
 import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
+import com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mejiboard.core.resources.R
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -38,7 +39,7 @@ fun BottomSheetPreference(
 ) {
     val scope = rememberCoroutineScope()
 
-    com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet(
+    ProductModalBottomSheet(
         sheetState = state.sheetState,
         modifier = modifier,
         content = {

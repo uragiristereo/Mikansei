@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.common.data.RatingFilter
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import com.uragiristereo.mejiboard.core.preferences.model.RatingPreference
 import com.uragiristereo.mejiboard.core.resources.R
@@ -17,7 +18,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val preferencesRepository: com.uragiristereo.mejiboard.core.preferences.PreferencesRepository,
+    private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
     var preferences by mutableStateOf(Preferences())
         private set
