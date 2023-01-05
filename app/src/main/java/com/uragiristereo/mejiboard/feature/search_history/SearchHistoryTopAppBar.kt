@@ -6,14 +6,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.uragiristereo.mejiboard.R
-import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 
 @Composable
 fun SearchHistoryTopAppBar(
     onNavigateBack: () -> Unit,
     onMoreClick: () -> Unit,
 ) {
-    ProductTopAppBar(
+    com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar(
         title = {
             Text(text = "Search history")
         },

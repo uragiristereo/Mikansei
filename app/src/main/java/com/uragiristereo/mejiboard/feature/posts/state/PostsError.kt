@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.R
-import com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme
 
 @Composable
 fun PostsError(
@@ -94,7 +93,7 @@ fun PostsError(
 @Preview
 @Composable
 private fun PostsErrorPreview() {
-    MejiboardTheme {
+    com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme {
         Surface {
             PostsError(
                 message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut",

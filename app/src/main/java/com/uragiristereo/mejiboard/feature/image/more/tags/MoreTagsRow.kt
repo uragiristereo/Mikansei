@@ -7,11 +7,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
-import com.uragiristereo.mejiboard.domain.entity.booru.tag.Tag
 
 @Composable
 fun MoreTagsRow(
-    tags: SnapshotStateList<Tag>,
+    tags: SnapshotStateList<com.uragiristereo.mejiboard.core.model.booru.tag.Tag>,
     modifier: Modifier = Modifier,
 ) {
     FlowRow(

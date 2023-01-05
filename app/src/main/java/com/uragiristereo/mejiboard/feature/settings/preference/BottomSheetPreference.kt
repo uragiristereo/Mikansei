@@ -26,8 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.R
 import com.uragiristereo.mejiboard.core.common.ui.composable.DragHandle
 import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
-import com.uragiristereo.mejiboard.core.preferences.model.PreferenceItem
-import com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -39,7 +37,7 @@ fun BottomSheetPreference(
 ) {
     val scope = rememberCoroutineScope()
 
-    ProductModalBottomSheet(
+    com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet(
         sheetState = state.sheetState,
         modifier = modifier,
         content = {
@@ -62,10 +60,7 @@ fun BottomSheetPreference(
                 items(state.data.items) { item ->
                     RadioPreferenceItem(
                         title = stringResource(id = item.titleResId),
-                        subtitle = when {
-                            item.subtitleResId != null -> stringResource(id = item.subtitleResId)
-                            else -> null
-                        },
+                        subtitle = item.subtitleResId?.let { stringResource(id = it) },
                         selected = state.data.selectedItem == item,
                         onClick = {
                             scope.launch {
@@ -87,15 +82,15 @@ fun BottomSheetPreference(
 data class BottomSheetPreferenceData(
     val preferenceKey: String = "",
     @StringRes val preferenceTextResId: Int = R.string.app_name,
-    val items: List<PreferenceItem> = listOf(),
-    val selectedItem: PreferenceItem? = null,
+    val items: List<com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem> = listOf(),
+    val selectedItem: com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem? = null,
 ) : Parcelable
 
 @OptIn(ExperimentalMaterialApi::class)
 @Stable
 class BottomSheetPreferenceState(
     val sheetState: ModalBottomSheetState,
-    val onItemSelected: (preferenceKey: String, selectedItem: PreferenceItem?) -> Unit,
+    val onItemSelected: (preferenceKey: String, selectedItem: com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem?) -> Unit,
 ) {
     var data by mutableStateOf(BottomSheetPreferenceData())
 
@@ -105,7 +100,7 @@ class BottomSheetPreferenceState(
         sheetState.animateTo(targetValue = ModalBottomSheetValue.Expanded)
     }
 
-    suspend fun set(item: PreferenceItem) {
+    suspend fun set(item: com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem) {
         data = data.copy(selectedItem = item)
 
         onItemSelected(data.preferenceKey, data.selectedItem)
@@ -116,7 +111,7 @@ class BottomSheetPreferenceState(
     companion object {
         fun saver(
             sheetState: ModalBottomSheetState,
-            onItemSelected: (preferenceKey: String, selectedItem: PreferenceItem?) -> Unit,
+            onItemSelected: (preferenceKey: String, selectedItem: com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem?) -> Unit,
         ): Saver<BottomSheetPreferenceState, *> {
             return Saver(
                 save = {
@@ -141,7 +136,7 @@ class BottomSheetPreferenceState(
 @Composable
 fun rememberBottomSheetPreferenceState(
     sheetState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
-    onItemSelected: (preferenceKey: String, selectedItem: PreferenceItem?) -> Unit,
+    onItemSelected: (preferenceKey: String, selectedItem: com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem?) -> Unit,
 ): BottomSheetPreferenceState {
     return rememberSaveable(
         inputs = arrayOf(

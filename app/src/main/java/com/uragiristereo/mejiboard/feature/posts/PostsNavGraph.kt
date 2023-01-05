@@ -9,13 +9,12 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.uragiristereo.mejiboard.core.common.ui.LocalPostsNavController
 import com.uragiristereo.mejiboard.core.common.ui.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.core.common.ui.navigation.composable
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PostsNavGraph(
     onNavigate: (NavigationRoute) -> Unit,
-    onNavigateImage: (Post) -> Unit,
+    onNavigateImage: (com.uragiristereo.mejiboard.core.model.booru.post.Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {

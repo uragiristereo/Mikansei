@@ -1,0 +1,154 @@
+<resources>
+    <!-- Global -->
+    <string name="app_name" translatable="false">Mejiboard2</string>
+    <string name="app_name_alt" translatable="false">Mejiboard</string>
+    <string name="field_placeholder_example">Example: 1girl blue_sky</string>
+    <string name="feature_under_development">Feature is under development</string>
+    <string name="none">None</string>
+
+    <!-- Boorus -->
+    <string name="gelbooru_label" translatable="false">Gelbooru</string>
+    <string name="gelbooru_domain" translatable="false">gelbooru.com</string>
+
+    <string name="danbooru_label" translatable="false">Danbooru</string>
+    <string name="danbooru_domain" translatable="false">danbooru.donmai.us</string>
+
+    <string name="safebooruorg_label" translatable="false">Safebooru.org</string>
+    <string name="safebooruorg_domain" translatable="false">safebooru.org</string>
+
+    <!-- Screens label -->
+    <string name="filters_label">Filters</string>
+    <string name="posts_label">Posts</string>
+    <string name="search_label">Search</string>
+    <string name="collections_label">Collections</string>
+    <string name="more_label">More</string>
+    <string name="search_history_label">Search history</string>
+    <string name="search_history_short_label">History</string>
+    <string name="saved_searches_label">Saved searches</string>
+    <string name="settings_label">Settings</string>
+    <string name="about_label">About</string>
+
+    <!-- Home > Posts and Search -->
+    <string name="browse">Browse:</string>
+    <string name="all_posts">All posts</string>
+
+    <!-- Global Actions -->
+    <string name="download_action">Download</string>
+    <string name="share_action">Share</string>
+    <string name="add_to_action">Add to…</string>
+    <string name="add_action">Add</string>
+    <string name="cancel_action">Cancel</string>
+    <string name="clear_action">Clear</string>
+
+    <!-- CRUD based screens-->
+    <string name="n_selected">%1$d selected</string>
+    <string name="selected_all">Selected all</string>
+    <string name="delete">Delete…</string>
+    <string name="select_all">Select all</string>
+    <string name="select_inverse">Select inverse</string>
+    <string name="delete_confirmation_message">Are you sure want to delete these items</string>
+    <string name="delete_confirm">Confirm deletion</string>
+    <string name="enabled_action">On</string>
+    <string name="disabled_action">Off</string>
+
+    <!-- Downloads -->
+    <string name="download_added">Downloading…</string>
+    <string name="download_already_running">Post is already being downloaded!</string>
+    <string name="download_permission_denied">Notification permission is denied!</string>
+    <string name="download_in_progress">Downloading post %1$d</string>
+    <string name="download_post_id">Post %1$d</string>
+    <string name="download_complete">Download complete</string>
+    <string name="download_failed">Download failed</string>
+    <string name="download_cancel">Cancel</string>
+
+    <!-- Filters -->
+    <string name="filters_tip">Prevent tags from appearing in your search result.\nRefresh your posts to takes effect.</string>
+    <string name="filters_no_tags">No tags have been added!</string>
+    <string name="filters_add_new_tags">Add new tags</string>
+    <string name="filters_separate_tags">Separate tags using space</string>
+    <string name="filters_n_tags_enabled">%1$d tags enabled</string>
+
+    <!-- Home > Posts -->
+    <string name="refresh">Refresh</string>
+    <string name="exit_app">Exit app</string>
+    <string name="block_tags_post_action">Block tags from this post</string>
+    <string name="hide_post_action">Hide post</string>
+    <string name="press_back_again_to_exit">Press BACK again to exit Mejiboard</string>
+
+    <!-- Home > More -->
+    <string name="selected_booru">Selected Booru</string>
+
+    <!-- Image > More Bottom Sheet -->
+    <string name="show_original_action">Show original</string>
+    <string name="open_externally_action">Open externally</string>
+    <string name="image_show_n_tags">Show %1$d tags</string>
+    <string name="image_source">Source</string>
+    <string name="image_rating">Rating</string>
+    <string name="image_rating_general">General</string>
+    <string name="image_rating_sensitive">Sensitive</string>
+    <string name="image_rating_questionable">Questionable</string>
+    <string name="image_rating_explicit">Explicit</string>
+    <string name="image_uploaded_by">Uploaded by</string>
+    <string name="image_compressed">Compressed (sample)</string>
+    <string name="image_original">Full size (original)</string>
+    <string name="image_details">Details</string>
+    <string name="image_n_tags">%1$d tags</string>
+
+    <!-- Search -->
+    <string name="search_space">Space</string>
+
+    <!-- Settings -->
+    <string name="settings_category_interface">Interface</string>
+    <string name="settings_category_behavior">Behavior</string>
+    <string name="settings_category_advanced">Advanced</string>
+    <string name="settings_category_miscellaneous">Miscellaneous</string>
+
+    <string name="settings_language">Language</string>
+    <string name="settings_language_item_default">System default</string>
+    <string name="settings_language_item_en_US" translatable="false">English (US)</string>
+    <string name="settings_language_item_id_ID" translatable="false">Bahasa Indonesia</string>
+    <string name="settings_language_item_ja_JP" translatable="false">日本語</string>
+
+    <string name="settings_theme">Theme</string>
+    <string name="settings_black_dark_theme">Black dark theme</string>
+    <string name="settings_theme_item_system_default">System default</string>
+    <string name="settings_theme_item_light">Light</string>
+    <string name="settings_theme_item_dark">Dark</string>
+
+    <string name="settings_dynamic_accent_colors">Dynamic accent colors</string>
+    <string name="settings_dynamic_accent_colors_desc">Use accents colors from system introduced in Android 12 and above</string>
+
+    <string name="settings_default_booru_source">Default Booru source</string>
+    <string name="settings_default_booru_source_select">Select Booru source</string>
+
+    <string name="settings_booru_listing_mode">Booru listing mode</string>
+    <string name="settings_booru_listing_mode_select">Select Booru listing mode</string>
+    <string name="settings_booru_listing_mode_item_general">General only (SFW)</string>
+    <string name="settings_booru_listing_mode_item_safe">General &amp; Sensitive (default)</string>
+    <string name="settings_booru_listing_mode_item_no_explicit">Filter Explicit</string>
+    <string name="settings_booru_listing_mode_item_unfiltered">Unfiltered</string>
+
+    <string name="settings_manage_booru_api_keys">Manage Booru API keys</string>
+    <string name="settings_manage_booru_api_keys_desc">API keys are used for authentication</string>
+
+    <string name="settings_image_detail_size">Image detail size</string>
+    <string name="settings_image_detail_size_item_compressed">@string/image_compressed</string>
+    <string name="settings_image_detail_size_item_original">@string/image_original</string>
+
+    <string name="settings_doh" translatable="false">DNS over HTTPS</string>
+    <string name="settings_doh_desc">Workaround for DNS poisoning in some countries</string>
+    <string name="settings_doh_desc_recommended">recommended</string>
+
+    <string name="settings_block_content_from_recent_apps">Block content from Recent Apps</string>
+
+    <string name="settings_auto_clean_cache">Auto clean cache</string>
+    <string name="settings_auto_clean_cache_desc">Automatically clean cache that older than 12 hours at startup</string>
+    <string name="settings_clear_cache_now">Clear cache now</string>
+    <string name="settings_clear_cache_now_desc">Remove all cached memory and files\nCache size:</string>
+    <string name="settings_clear_cache_now_desc_estimated">estimated</string>
+
+    <string name="settings_check_for_update">Check for update</string>
+    <string name="settings_current_version">Current version:</string>
+    <string name="settings_latest_version">Latest version:</string>
+    <string name="settings_using_latest_version">You\'re using the latest version!</string>
+</resources>

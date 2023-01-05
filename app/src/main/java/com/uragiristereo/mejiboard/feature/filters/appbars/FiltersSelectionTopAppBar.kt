@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.R
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
-import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 
 @Composable
 fun FiltersSelectionTopAppBar(
@@ -28,7 +27,7 @@ fun FiltersSelectionTopAppBar(
 ) {
     var dropdownExpanded by remember { mutableStateOf(false) }
 
-    ProductTopAppBar(
+    com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar(
         backgroundColor = MaterialTheme.colors.background.backgroundElevation(5.dp),
         title = {
             Text(text = title)

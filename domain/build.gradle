@@ -1,0 +1,45 @@
+plugins {
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.domain"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "1.4.0-alpha02"
+    }
+}
+
+dependencies {
+    implementation(project(":core:booru"))
+    implementation(project(":core:common"))
+    implementation(project(":core:database"))
+    implementation(project(":core:download"))
+    implementation(project(":core:model"))
+    implementation(project(":core:network"))
+    implementation(project(":core:preferences"))
+
+    // Compose UI
+    implementation "androidx.compose.ui:ui:$compose_version"
+
+    def accompanist_version = "0.28.0"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
+
+    // Koin Dependency Injection
+    def koin_version = "3.3.2"
+    implementation "io.insert-koin:koin-android:$koin_version"
+
+    // Retrofit HTTP Client
+    def retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+}

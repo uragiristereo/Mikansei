@@ -35,10 +35,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mejiboard.MainRoute
 import com.uragiristereo.mejiboard.R
-import com.uragiristereo.mejiboard.app.MainRoute
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
-import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.feature.search.core.SearchActionRow
 import com.uragiristereo.mejiboard.feature.search.core.SearchBar
 import com.uragiristereo.mejiboard.feature.search.core.SearchBrowseButton
@@ -123,7 +122,7 @@ fun SearchScreen(
         }
     }
 
-    ProductSetSystemBarsColor(
+    com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor(
         navigationBarColor = MaterialTheme.colors.background.backgroundElevation(),
     )
 

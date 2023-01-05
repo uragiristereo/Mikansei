@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.preferences.model.BasePreference
-import com.uragiristereo.mejiboard.core.preferences.model.PreferenceItem
 
 @Composable
 fun DropDownPreference(
@@ -94,18 +93,18 @@ fun DropDownPreference(
 
 @Stable
 class DropDownPreferenceState(
-    val items: List<PreferenceItem>,
-    val selectedItem: PreferenceItem?,
-    val onItemSelected: (PreferenceItem) -> Unit,
+    val items: List<com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem>,
+    val selectedItem: com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem?,
+    val onItemSelected: (com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem) -> Unit,
 ) {
-    fun set(item: PreferenceItem) {
+    fun set(item: com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem) {
         onItemSelected(item)
     }
 
     companion object {
         fun saver(
-            items: List<PreferenceItem>,
-            onItemSelected: (PreferenceItem) -> Unit,
+            items: List<com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem>,
+            onItemSelected: (com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem) -> Unit,
         ): Saver<DropDownPreferenceState, *> {
             return Saver(
                 save = {
@@ -125,9 +124,9 @@ class DropDownPreferenceState(
 
 @Composable
 fun rememberDropDownPreferenceState(
-    items: List<PreferenceItem>,
-    selectedItem: PreferenceItem?,
-    onItemSelected: (PreferenceItem) -> Unit,
+    items: List<com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem>,
+    selectedItem: com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem?,
+    onItemSelected: (com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem) -> Unit,
 ): DropDownPreferenceState {
     return rememberSaveable(
         inputs = arrayOf(
@@ -152,7 +151,7 @@ fun rememberDropDownPreferenceState(
 fun rememberDropDownPreferenceState(
     preference: BasePreference,
     selectedItemKey: String,
-    onItemSelected: (PreferenceItem) -> Unit,
+    onItemSelected: (com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem) -> Unit,
 ): DropDownPreferenceState {
     val selectedItem by remember(key1 = selectedItemKey) {
         mutableStateOf(preference.getItemByKey(selectedItemKey))

@@ -23,11 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
 
 @Composable
 fun PostDialogHeaderResponsive(
-    post: Post,
+    post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

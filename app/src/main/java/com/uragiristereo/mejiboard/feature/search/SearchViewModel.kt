@@ -7,11 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.core.booru.source.BooruSources
 import com.uragiristereo.mejiboard.core.common.ui.navigation.getData
-import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
-import com.uragiristereo.mejiboard.domain.entity.booru.tag.Tag
-import com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase
 import com.uragiristereo.mejiboard.feature.search.state.SearchWordIndex
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -21,15 +17,15 @@ import timber.log.Timber
 
 class SearchViewModel(
     savedStateHandle: SavedStateHandle,
-    preferencesRepository: PreferencesRepository,
-    private val searchTermUseCase: SearchTermUseCase,
+    preferencesRepository: com.uragiristereo.mejiboard.core.preferences.PreferencesRepository,
+    private val searchTermUseCase: com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase,
 ) : ViewModel() {
     val tags = savedStateHandle.getData(key = "tags", defaultValue = "")
 
     var preferences by mutableStateOf(preferencesRepository.data)
         private set
 
-    var selectedBooru by mutableStateOf(BooruSources.getBooruByKey(preferences.booru) ?: BooruSources.Gelbooru)
+    var selectedBooru by mutableStateOf(com.uragiristereo.mejiboard.core.model.booru.BooruSources.getBooruByKey(preferences.booru) ?: com.uragiristereo.mejiboard.core.model.booru.BooruSources.Gelbooru)
         private set
 
     var actionsRowExpanded by mutableStateOf(true)
@@ -38,7 +34,7 @@ class SearchViewModel(
 
     var parsedQuery by mutableStateOf("")
 
-    val searches = mutableStateListOf<Tag>()
+    val searches = mutableStateListOf<com.uragiristereo.mejiboard.core.model.booru.tag.Tag>()
 
     var loading by mutableStateOf(false)
         private set
@@ -58,7 +54,7 @@ class SearchViewModel(
         preferencesRepository.flowData
             .onEach {
                 preferences = it
-                selectedBooru = BooruSources.getBooruByKey(it.booru) ?: BooruSources.Gelbooru
+                selectedBooru = com.uragiristereo.mejiboard.core.model.booru.BooruSources.getBooruByKey(it.booru) ?: com.uragiristereo.mejiboard.core.model.booru.BooruSources.Gelbooru
             }
             .launchIn(viewModelScope)
     }

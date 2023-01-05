@@ -35,8 +35,6 @@ import com.uragiristereo.mejiboard.R
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.common.ui.composable.DragHandle
 import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
-import com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
 import com.uragiristereo.mejiboard.feature.image.more.core.MoreActionsRow
 import com.uragiristereo.mejiboard.feature.image.more.core.MoreCloseButton
 import com.uragiristereo.mejiboard.feature.image.more.core.MoreTagsButton
@@ -49,7 +47,7 @@ import java.text.DateFormat
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MoreBottomSheet(
-    post: Post,
+    post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
     sheetState: ModalBottomSheetState,
     showExpandButton: Boolean,
     onExpandClick: () -> Unit,
@@ -74,7 +72,7 @@ fun MoreBottomSheet(
         }
     }
 
-    ProductModalBottomSheet(
+    com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet(
         sheetState = sheetState,
         modifier = modifier,
         content = {

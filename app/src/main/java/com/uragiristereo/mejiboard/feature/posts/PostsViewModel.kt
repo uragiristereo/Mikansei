@@ -9,13 +9,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.core.booru.source.BooruSource
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.common.ui.navigation.getData
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.database.dao.session.toPostList
 import com.uragiristereo.mejiboard.core.database.dao.session.toPostSessionList
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mejiboard.feature.posts.state.PostsContentState
 import com.uragiristereo.mejiboard.feature.posts.state.PostsLoadingState

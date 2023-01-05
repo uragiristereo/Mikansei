@@ -15,13 +15,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.R
-import com.uragiristereo.mejiboard.core.booru.source.BooruSource
 import com.uragiristereo.mejiboard.core.common.ui.composable.Chips
 import com.uragiristereo.mejiboard.core.common.ui.composable.SidesGradient
 
 @Composable
 fun SearchActionRow(
-    selectedBooru: BooruSource,
+    selectedBooru: com.uragiristereo.mejiboard.core.model.booru.BooruSource,
     filtersEnabled: Boolean,
     historyEnabled: Boolean,
     onSelectedBooruClick: () -> Unit,

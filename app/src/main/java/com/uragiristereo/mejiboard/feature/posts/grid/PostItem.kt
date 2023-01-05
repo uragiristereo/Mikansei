@@ -17,12 +17,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.uragiristereo.mejiboard.core.common.data.Constants
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PostItem(
-    post: Post,
+    post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
     onClick: () -> Unit,
     onLongPress: () -> Unit,
     modifier: Modifier = Modifier,

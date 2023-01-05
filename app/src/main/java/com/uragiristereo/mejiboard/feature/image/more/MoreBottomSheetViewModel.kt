@@ -11,22 +11,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
-import com.uragiristereo.mejiboard.domain.entity.booru.tag.Tag
-import com.uragiristereo.mejiboard.domain.usecase.GetFileSizeUseCase
-import com.uragiristereo.mejiboard.domain.usecase.GetTagsUseCase
 import kotlinx.coroutines.launch
 
 class MoreBottomSheetViewModel(
-    private val getTagsUseCase: GetTagsUseCase,
-    private val getFileSizeUseCase: GetFileSizeUseCase,
+    private val getTagsUseCase: com.uragiristereo.mejiboard.domain.usecase.GetTagsUseCase,
+    private val getFileSizeUseCase: com.uragiristereo.mejiboard.domain.usecase.GetFileSizeUseCase,
 ) : ViewModel() {
     var infoExpanded by mutableStateOf(false)
     var tagsExpanded by mutableStateOf(false)
     var closeButtonHeight by mutableStateOf(0.dp)
 
     var loading by mutableStateOf(false)
-    val tags = mutableStateListOf<Tag>()
+    val tags = mutableStateListOf<com.uragiristereo.mejiboard.core.model.booru.tag.Tag>()
     var errorMessage by mutableStateOf<String?>(null)
 
     var scaledImageFileSizeStr by mutableStateOf("")
@@ -62,7 +58,7 @@ class MoreBottomSheetViewModel(
         }
     }
 
-    fun getImagesFileSize(post: Post) {
+    fun getImagesFileSize(post: com.uragiristereo.mejiboard.core.model.booru.post.Post) {
         viewModelScope.launch {
             launch {
                 if (post.scaled) {

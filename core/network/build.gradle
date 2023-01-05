@@ -1,0 +1,32 @@
+plugins {
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.core.network"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+}
+
+dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":core:preferences"))
+
+    // Koin Dependency Injection
+    def koin_version = "3.3.2"
+    implementation "io.insert-koin:koin-android:$koin_version"
+
+    // OkHttp HTTP Client
+    def okhttp_version = "4.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+    implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:5.0.0-alpha.2"
+
+    // Retrofit HTTP Client
+    def retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+}

@@ -19,7 +19,6 @@ import com.ortiz.touchview.OnTouchImageViewListener
 import com.ortiz.touchview.TouchImageView
 import com.uragiristereo.mejiboard.core.common.data.util.ImageUtil
 import com.uragiristereo.mejiboard.core.preferences.model.DetailSizePreference
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
 import com.uragiristereo.mejiboard.feature.image.ImageViewModel
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoadingState
 import kotlinx.coroutines.currentCoroutineContext
@@ -31,7 +30,7 @@ import kotlin.math.abs
 
 @Composable
 fun ImagePost(
-    post: Post,
+    post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
     maxOffset: Float,
     onNavigateBack: (Boolean) -> Unit,
     onMoreClick: () -> Unit,

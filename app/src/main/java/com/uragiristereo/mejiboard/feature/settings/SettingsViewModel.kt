@@ -6,10 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.R
-import com.uragiristereo.mejiboard.core.booru.source.BooruSources
 import com.uragiristereo.mejiboard.core.common.data.RatingFilter
-import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
-import com.uragiristereo.mejiboard.core.preferences.model.PreferenceItem
 import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import com.uragiristereo.mejiboard.core.preferences.model.RatingPreference
 import com.uragiristereo.mejiboard.feature.settings.preference.BottomSheetPreferenceData
@@ -18,7 +15,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val preferencesRepository: PreferencesRepository,
+    private val preferencesRepository: com.uragiristereo.mejiboard.core.preferences.PreferencesRepository,
 ) : ViewModel() {
     var preferences by mutableStateOf(Preferences())
         private set
@@ -39,8 +36,8 @@ class SettingsViewModel(
         value = BottomSheetPreferenceData(
             preferenceKey = "booru_sources",
             preferenceTextResId = R.string.settings_default_booru_source_select,
-            items = BooruSources.toPreferenceItemList(),
-            selectedItem = BooruSources.getBooruByKey(preferences.booru)?.toPreferenceItem() ?: BooruSources.Gelbooru.toPreferenceItem(),
+            items = com.uragiristereo.mejiboard.core.model.booru.BooruSources.toPreferenceItemList(),
+            selectedItem = com.uragiristereo.mejiboard.core.model.booru.BooruSources.getBooruByKey(preferences.booru)?.toPreferenceItem() ?: com.uragiristereo.mejiboard.core.model.booru.BooruSources.Gelbooru.toPreferenceItem(),
         ),
     )
         private set
@@ -62,7 +59,7 @@ class SettingsViewModel(
 
     fun setBottomSheetPreferenceState(
         preferenceKey: String,
-        selectedItem: PreferenceItem?,
+        selectedItem: com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem?,
     ) {
         when (preferenceKey) {
             booruSources.preferenceKey -> {
@@ -70,7 +67,7 @@ class SettingsViewModel(
 
                 updatePreferences {
                     it.copy(
-                        booru = booruSources.selectedItem?.key ?: BooruSources.Gelbooru.key,
+                        booru = booruSources.selectedItem?.key ?: com.uragiristereo.mejiboard.core.model.booru.BooruSources.Gelbooru.key,
                     )
                 }
             }

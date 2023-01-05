@@ -10,10 +10,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.common.ui.entity.FilterItem
 import com.uragiristereo.mejiboard.core.common.ui.extension.strip
-import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
 import com.uragiristereo.mejiboard.core.database.dao.filters.toFilterItemList
 import com.uragiristereo.mejiboard.core.database.dao.filters.toFilterTableItem
 import com.uragiristereo.mejiboard.core.database.dao.filters.toFilterTableItemList
+import com.uragiristereo.mejiboard.core.database.database.dao.filters.FiltersDao
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import kotlinx.coroutines.Dispatchers

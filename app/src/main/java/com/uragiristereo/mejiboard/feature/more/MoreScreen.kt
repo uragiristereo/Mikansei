@@ -28,8 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.uragiristereo.mejiboard.MainRoute
 import com.uragiristereo.mejiboard.R
-import com.uragiristereo.mejiboard.app.MainRoute
 import com.uragiristereo.mejiboard.core.common.ui.composable.ClickableSection
 import com.uragiristereo.mejiboard.core.common.ui.navigation.NavigationRoute
 import org.koin.androidx.compose.koinViewModel

@@ -11,7 +11,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.uragiristereo.mejiboard.R
 import com.uragiristereo.mejiboard.core.common.ui.composable.Banner
-import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 
 @Composable
 fun CollectionsScreen(
@@ -19,7 +18,7 @@ fun CollectionsScreen(
 ) {
     Scaffold(
         topBar = {
-            ProductTopAppBar(
+            com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar(
                 title = {
                     Text(text = stringResource(id = R.string.collections_label))
                 },

@@ -29,20 +29,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
 import com.uragiristereo.mejiboard.feature.posts.state.PostsLoadingState
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun PostGrid(
-    posts: List<Post>,
+    posts: List<com.uragiristereo.mejiboard.core.model.booru.post.Post>,
     gridState: LazyStaggeredGridState,
     pullRefreshState: PullRefreshState,
     loading: PostsLoadingState,
     canLoadMore: Boolean,
     topAppBarHeight: Dp,
-    onItemClick: (Post) -> Unit,
-    onItemLongPress: (Post) -> Unit,
+    onItemClick: (com.uragiristereo.mejiboard.core.model.booru.post.Post) -> Unit,
+    onItemLongPress: (com.uragiristereo.mejiboard.core.model.booru.post.Post) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE

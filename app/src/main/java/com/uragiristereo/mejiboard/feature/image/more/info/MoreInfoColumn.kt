@@ -14,13 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.R
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Rating
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MoreInfoColumn(
-    post: Post,
+    post: com.uragiristereo.mejiboard.core.model.booru.post.Post,
     scaledImageFileSizeStr: String,
     originalImageFileSizeStr: String,
     expanded: Boolean,
@@ -43,10 +41,10 @@ fun MoreInfoColumn(
         MoreInfo(
             title = stringResource(id = R.string.image_rating),
             subtitle = when (post.rating) {
-                Rating.GENERAL -> stringResource(id = R.string.image_rating_general)
-                Rating.SENSITIVE -> stringResource(id = R.string.image_rating_sensitive)
-                Rating.QUESTIONABLE -> stringResource(id = R.string.image_rating_questionable)
-                Rating.EXPLICIT -> stringResource(id = R.string.image_rating_explicit)
+                com.uragiristereo.mejiboard.core.model.booru.post.Rating.GENERAL -> stringResource(id = R.string.image_rating_general)
+                com.uragiristereo.mejiboard.core.model.booru.post.Rating.SENSITIVE -> stringResource(id = R.string.image_rating_sensitive)
+                com.uragiristereo.mejiboard.core.model.booru.post.Rating.QUESTIONABLE -> stringResource(id = R.string.image_rating_questionable)
+                com.uragiristereo.mejiboard.core.model.booru.post.Rating.EXPLICIT -> stringResource(id = R.string.image_rating_explicit)
             },
             modifier = Modifier.padding(bottom = 8.dp),
         )

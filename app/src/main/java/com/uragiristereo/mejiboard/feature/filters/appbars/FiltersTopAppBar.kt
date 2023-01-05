@@ -13,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.uragiristereo.mejiboard.R
-import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 
 @Composable
 fun FiltersTopAppBar(
@@ -22,7 +21,7 @@ fun FiltersTopAppBar(
 ) {
     var dropdownExpanded by remember { mutableStateOf(false) }
 
-    ProductTopAppBar(
+    com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar(
         title = {
             Text(text = stringResource(id = R.string.filters_label))
         },

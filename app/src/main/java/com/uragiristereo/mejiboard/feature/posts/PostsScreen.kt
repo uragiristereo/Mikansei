@@ -44,11 +44,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.uragiristereo.mejiboard.app.MainRoute
+import com.uragiristereo.mejiboard.MainRoute
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.common.ui.navigation.NavigationRoute
-import com.uragiristereo.mejiboard.domain.entity.booru.post.Post
 import com.uragiristereo.mejiboard.feature.posts.core.PostsFab
 import com.uragiristereo.mejiboard.feature.posts.core.PostsTopAppBar
 import com.uragiristereo.mejiboard.feature.posts.grid.PostGrid
@@ -67,7 +66,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun PostsScreen(
     onNavigate: (NavigationRoute) -> Unit,
-    onNavigateImage: (Post) -> Unit,
+    onNavigateImage: (com.uragiristereo.mejiboard.core.model.booru.post.Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = koinViewModel(),

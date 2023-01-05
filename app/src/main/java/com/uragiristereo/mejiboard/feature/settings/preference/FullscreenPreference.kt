@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme
 
 @Composable
 fun FullscreenPreference(
@@ -151,7 +150,7 @@ fun RadioPreferenceItem(
 private fun RadioPreferenceItemPreview() {
     var selectedItem by remember { mutableStateOf(0) }
 
-    MejiboardTheme {
+    com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme {
         Surface(color = MaterialTheme.colors.background) {
             Column {
                 RadioPreferenceItem(
@@ -190,7 +189,7 @@ private fun RadioPreferenceItemPreview() {
 private fun FullScreenPreferencePreview() {
     var selectedItem by remember { mutableStateOf("lorem") }
 
-    MejiboardTheme {
+    com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme {
         Surface(color = MaterialTheme.colors.background) {
             FullscreenPreference(
                 title = "Lorem ipsum setting",

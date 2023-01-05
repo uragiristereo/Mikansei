@@ -9,3 +9,13 @@ dependencyResolutionManagement {
 
 rootProject.name = "Mejiboard 2"
 include(":app")
+include(":core:network")
+include(":core:common")
+include ':domain'
+include ':core:database'
+include ':core:booru'
+include ':core:preferences'
+include ':core:download'
+include ':core:product'
+include ':core:model'
+include ':core:resources'

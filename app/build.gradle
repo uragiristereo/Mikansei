@@ -67,11 +67,18 @@ android {
     }
 }
 
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
-}
-
 dependencies {
+    implementation(project(":core:booru"))
+    implementation(project(":core:common"))
+    implementation(project(":core:database"))
+    implementation(project(":core:download"))
+    implementation(project(":core:model"))
+    implementation(project(":core:network"))
+    implementation(project(":core:preferences"))
+    implementation(project(":core:product"))
+    implementation(project(":core:resources"))
+    implementation(project(":domain"))
+
     // AndroidX
     implementation "androidx.core:core-ktx:1.9.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
