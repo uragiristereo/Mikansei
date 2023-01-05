@@ -2,7 +2,6 @@ plugins {
     id "com.android.application"
     id "org.jetbrains.kotlin.android"
     id "kotlin-parcelize"
-    id "com.google.devtools.ksp" version "1.7.21-1.0.8"
 }
 
 android {
@@ -11,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.uragiristereo.mejiboard"
-        minSdk 28
+        minSdk 21
         targetSdk 33
         versionName "1.0"
         versionCode 1
@@ -57,7 +56,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.0-alpha02"
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 
     packagingOptions {
@@ -80,64 +79,35 @@ dependencies {
     implementation(project(":domain"))
 
     // AndroidX
-    implementation "androidx.core:core-ktx:1.9.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
-    implementation "androidx.savedstate:savedstate-ktx:1.2.0"
-    implementation "androidx.core:core-splashscreen:1.0.0"
-    implementation "androidx.datastore:datastore:1.0.0"
-    implementation "androidx.browser:browser:1.4.0"
+    implementation(libs.bundles.androidx)
+    implementation(libs.androidx.splashscreen)
+    implementation(libs.androidx.browser)
 
     // Compose UI
-    implementation "androidx.activity:activity-compose:1.6.1"
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-
-    // Room Database
-    def room_version = "2.4.3"
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    ksp "androidx.room:room-compiler:$room_version"
-
-    // Accompanist Compose Extensions
-    def accompanist_version = "0.28.0"
-    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
-
-    // Coil Image Loader
-    def coil_version = "2.2.2"
-    implementation "io.coil-kt:coil:$coil_version"
-    implementation "io.coil-kt:coil-compose:$coil_version"
-    implementation "io.coil-kt:coil-gif:$coil_version"
-
-    // OkHttp HTTP Client
-    def okhttp_version = "4.10.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
-    implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:5.0.0-alpha.2"
-
-    // Retrofit HTTP Client
-    def retrofit_version = "2.9.0"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-
-    // Timber Logger
-    implementation "com.jakewharton.timber:timber:5.0.1"
-
-    // Gson JSON Serialization
-    implementation "com.google.code.gson:gson:2.10"
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.androidx.compose)
+    implementation(libs.androidx.constraintlayout.compose)
+    debugImplementation(libs.bundles.compose.debug)
 
     // Koin Dependency Injection
-    def koin_version = "3.3.2"
-    implementation "io.insert-koin:koin-android:$koin_version"
-    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
-    implementation "io.insert-koin:koin-androidx-compose:3.4.1"
+    implementation(libs.bundles.koin)
+
+    // Accompanist Compose Extensions
+    implementation(libs.accompanist.flowlayout)
+    implementation(libs.accompanist.navigation.animation)
+    implementation(libs.accompanist.permissions)
+
+    // Coil Image Loader
+    implementation(libs.bundles.coil)
+    implementation(libs.coil.gif)
 
     // TouchImageView
-    implementation "com.github.MikeOrtiz:TouchImageView:3.2.1"
+    implementation(libs.touchimageview)
+
+    // Timber Logger
+    implementation(libs.timber)
+
+    // Gson JSON Serialization
+    implementation(libs.gson)
+
 }

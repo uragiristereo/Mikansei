@@ -16,7 +16,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.0-alpha02"
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 }
 
@@ -24,6 +24,9 @@ dependencies {
     implementation(project(":core:common"))
 
     // Compose UI
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
+    implementation(libs.compose)
+    implementation(libs.compose.material)
+
+    // Timber Logger
+    implementation(libs.timber)
 }

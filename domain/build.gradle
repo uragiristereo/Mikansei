@@ -16,7 +16,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.4.0-alpha02"
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 }
 
@@ -29,17 +29,15 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:preferences"))
 
+    // Koin Dependency Injection & Timber Logger
+    implementation(libs.bundles.core)
+
     // Compose UI
-    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation(libs.compose)
 
-    def accompanist_version = "0.28.0"
-    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
-
-    // Koin Dependency Injection
-    def koin_version = "3.3.2"
-    implementation "io.insert-koin:koin-android:$koin_version"
+    // Accompanist Compose Extensions - Navigation Animation
+    implementation(libs.accompanist.navigation.animation)
 
     // Retrofit HTTP Client
-    def retrofit_version = "2.9.0"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation(libs.retrofit)
 }

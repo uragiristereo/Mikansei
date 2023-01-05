@@ -18,20 +18,13 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:preferences"))
 
-    // Koin Dependency Injection
-    def koin_version = "3.3.2"
-    implementation "io.insert-koin:koin-android:$koin_version"
-
-    // OkHttp HTTP Client
-    def okhttp_version = "4.10.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
-    implementation "com.squareup.okhttp3:okhttp-dnsoverhttps:5.0.0-alpha.2"
+    // Koin Dependency Injection & Timber Logger
+    implementation(libs.bundles.core)
 
     // Retrofit HTTP Client
-    def retrofit_version = "2.9.0"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
 
     // Gson JSON Serialization
-    implementation "com.google.code.gson:gson:2.10"
+    implementation(libs.gson)
 }

@@ -18,17 +18,15 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:resources"))
 
-    implementation "androidx.core:core-ktx:1.9.0"
-    implementation "androidx.datastore:datastore:1.0.0"
+    // Koin Dependency Injection & Timber Logger
+    implementation(libs.bundles.core)
 
-    // Koin Dependency Injection
-    def koin_version = "3.3.2"
-    implementation "io.insert-koin:koin-android:$koin_version"
+    // AndroidX
+    implementation(libs.androidx.datastore)
 
     // Gson JSON Serialization
-    implementation "com.google.code.gson:gson:2.10"
+    implementation(libs.gson)
 
     // OkHttp HTTP Client
-    def okhttp_version = "4.10.0"
-    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+    implementation(libs.okhttp)
 }
