@@ -19,6 +19,8 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -47,6 +49,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnShare
+import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
@@ -120,9 +123,15 @@ fun PostsScreen(
         }
     }
 
+    val isScrollIndexZero by remember {
+        derivedStateOf {
+            gridState.firstVisibleItemIndex == 0 && gridState.firstVisibleItemScrollOffset == 0
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         scope.launch {
-            viewModel.offsetY.animateTo(targetValue = 0f)
+            viewModel.offsetY.snapTo(targetValue = 0f)
         }
     }
 
@@ -291,23 +300,37 @@ fun PostsScreen(
             Crossfade(targetState = viewModel.contentState) { target ->
                 when (target) {
                     PostsContentState.SHOW_POSTS -> {
-                        PostGrid(
-                            posts = viewModel.posts,
-                            gridState = gridState,
-                            pullRefreshState = pullRefreshState,
-                            loading = viewModel.loading,
-                            canLoadMore = viewModel.canLoadMore,
-                            topAppBarHeight = viewModel.topAppBarHeight,
-                            onItemClick = onNavigateImage,
-                            onItemLongPress = remember {
-                                { post ->
-                                    viewModel.selectedPost = post
-                                    viewModel.dialogShown = true
+                        Box(
+                            modifier = Modifier.pullRefresh(pullRefreshState),
+                        ) {
+                            PostGrid(
+                                posts = viewModel.posts,
+                                gridState = gridState,
+                                canLoadMore = viewModel.canLoadMore,
+                                topAppBarHeight = viewModel.topAppBarHeight,
+                                onItemClick = onNavigateImage,
+                                onItemLongPress = remember {
+                                    { post ->
+                                        viewModel.selectedPost = post
+                                        viewModel.dialogShown = true
 
-                                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                }
-                            },
-                        )
+                                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    }
+                                },
+                            )
+
+                            if (isScrollIndexZero) {
+                                PullRefreshIndicator(
+                                    refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
+                                    state = pullRefreshState,
+                                    backgroundColor = MaterialTheme.colors.background.backgroundElevation(),
+                                    contentColor = MaterialTheme.colors.primary,
+                                    modifier = Modifier
+                                        .padding(top = viewModel.topAppBarHeight)
+                                        .align(Alignment.TopCenter),
+                                )
+                            }
+                        }
                     }
 
                     PostsContentState.SHOW_MAIN_LOADING -> {
