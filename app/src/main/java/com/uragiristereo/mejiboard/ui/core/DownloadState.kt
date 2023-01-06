@@ -1,8 +1,8 @@
-package com.uragiristereo.mejiboard.core.common.ui.entity
+package com.uragiristereo.mejiboard.ui.core
 
 data class DownloadState(
     val downloaded: String = "0 B",
     val fileSize: String = "0 B",
-    val progress: String = "0%",
+    val progress: Float = 0f,
     val downloadSpeed: String = "0B/s",
 )

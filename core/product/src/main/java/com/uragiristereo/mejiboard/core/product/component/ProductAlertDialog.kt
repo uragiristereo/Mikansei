@@ -24,6 +24,7 @@ fun ProductAlertDialog(
     AlertDialog(
         shape = RoundedCornerShape(size = 12.dp),
         backgroundColor = MaterialTheme.colors.background.backgroundElevation(),
+        contentColor = MaterialTheme.colors.onBackground,
         onDismissRequest = onDismissRequest,
         buttons = {
             Row(

@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
-import com.uragiristereo.mejiboard.core.common.ui.entity.DownloadState
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
@@ -21,8 +20,10 @@ import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostWithNotificationUseCase
+import com.uragiristereo.mejiboard.ui.core.DownloadState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -96,21 +97,29 @@ class MainViewModel(
         onDownloadCompleted: () -> Unit,
         onDownloadFailed: (String) -> Unit,
     ) {
-        shareJob = downloadPostUseCase(post, shareOption)
+        selectedPost = post
+
+        downloadPostUseCase(post, shareOption)
             .onEach { resource ->
                 when (resource) {
-                    DownloadResource.Starting -> DownloadState()
+                    DownloadResource.Starting -> {
+                        downloadState = DownloadState()
+
+                        // delay to avoid share dialog flashing if the image is already cached
+                        delay(timeMillis = 500L)
+
+                        shareDialogVisible = true
+                    }
 
                     is DownloadResource.Downloading -> {
                         val lengthFmt = NumberUtil.convertFileSize(resource.length)
-                        val progressPercentage = (resource.progress * 100).toInt()
-                        val downloadSpeedFmt = NumberUtil.convertFileSize(resource.speed)
+                        val downloadSpeedFmt = "${NumberUtil.convertFileSize(resource.speed)}/s"
                         val downloadedFmt = NumberUtil.convertFileSize(resource.downloaded)
 
                         downloadState = DownloadState(
                             downloaded = downloadedFmt,
                             fileSize = lengthFmt,
-                            progress = "$progressPercentage%",
+                            progress = resource.progress,
                             downloadSpeed = downloadSpeedFmt,
                         )
                     }
@@ -132,6 +141,7 @@ class MainViewModel(
     }
 
     fun cancelShare() {
-        shareJob?.cancel()
+        shareDialogVisible = false
+        selectedPost?.let { downloadRepository.remove(it.id) }
     }
 }

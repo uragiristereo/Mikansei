@@ -46,6 +46,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
+import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnShare
+import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
@@ -77,6 +79,7 @@ fun PostsScreen(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
+    val lambdaOnShare = LocalLambdaOnShare.current
 
     val scope = rememberCoroutineScope()
     val gridState = rememberLazyStaggeredGridState()
@@ -233,7 +236,13 @@ fun PostsScreen(
                     }
                 },
                 onAddToClick = { /*TODO*/ },
-                onShareClick = { /*TODO*/ },
+                onShareClick = remember {
+                    {
+                        viewModel.dialogShown = false
+
+                        lambdaOnShare(post, ShareOption.COMPRESSED)
+                    }
+                },
                 onBlockTagsClick = { /*TODO*/ },
                 onHidePostClick = { /*TODO*/ },
             )

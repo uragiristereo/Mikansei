@@ -35,6 +35,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.uragiristereo.mejiboard.core.common.ui.LocalHomeNavController
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
+import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnShare
 import com.uragiristereo.mejiboard.core.common.ui.LocalMainNavController
 import com.uragiristereo.mejiboard.core.common.ui.LocalPostsNavController
 import com.uragiristereo.mejiboard.core.common.ui.animation.holdIn
@@ -43,12 +44,15 @@ import com.uragiristereo.mejiboard.core.common.ui.animation.translateXFadeIn
 import com.uragiristereo.mejiboard.core.common.ui.animation.translateXFadeOut
 import com.uragiristereo.mejiboard.core.common.ui.animation.translateYFadeIn
 import com.uragiristereo.mejiboard.core.common.ui.animation.translateYFadeOut
+import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.model.navigation.composable
 import com.uragiristereo.mejiboard.core.model.navigation.navigate
 import com.uragiristereo.mejiboard.core.preferences.model.ThemePreference
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
+import com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme
+import com.uragiristereo.mejiboard.core.product.theme.Theme
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.about.AboutScreen
 import com.uragiristereo.mejiboard.feature.filters.FiltersScreen
@@ -59,8 +63,10 @@ import com.uragiristereo.mejiboard.feature.image.ImageScreen
 import com.uragiristereo.mejiboard.feature.search.SearchScreen
 import com.uragiristereo.mejiboard.feature.search_history.SearchHistoryScreen
 import com.uragiristereo.mejiboard.feature.settings.SettingsScreen
+import com.uragiristereo.mejiboard.ui.core.ShareDownloadDialog
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -113,6 +119,21 @@ fun MainScreen(
         }
     }
 
+    val lambdaOnShare: (Post, ShareOption) -> Unit = remember {
+        { post, shareOption ->
+            viewModel.sharePost(
+                post = post,
+                shareOption = shareOption,
+                onDownloadCompleted = {
+                    Timber.d("download completed")
+                },
+                onDownloadFailed = {
+                    Timber.d("download failed = $it")
+                },
+            )
+        }
+    }
+
     BackHandler(
         enabled = viewModel.confirmExit && currentRoute == MainRoute.Home.route,
         onBack = remember {
@@ -137,11 +158,11 @@ fun MainScreen(
         },
     )
 
-    com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme(
+    MejiboardTheme(
         theme = when (viewModel.preferences.theme) {
-            ThemePreference.KEY_LIGHT -> com.uragiristereo.mejiboard.core.product.theme.Theme.LIGHT
-            ThemePreference.KEY_DARK -> com.uragiristereo.mejiboard.core.product.theme.Theme.DARK
-            else -> com.uragiristereo.mejiboard.core.product.theme.Theme.SYSTEM
+            ThemePreference.KEY_LIGHT -> Theme.LIGHT
+            ThemePreference.KEY_DARK -> Theme.DARK
+            else -> Theme.SYSTEM
         },
         blackTheme = viewModel.preferences.blackTheme,
         monetEnabled = viewModel.preferences.monetEnabled,
@@ -152,9 +173,17 @@ fun MainScreen(
                 LocalHomeNavController provides homeNavController,
                 LocalPostsNavController provides postsNavController,
                 LocalLambdaOnDownload provides lambdaOnDownload,
+                LocalLambdaOnShare provides lambdaOnShare,
             ),
         ) {
             ProductSetSystemBarsColor()
+
+            if (viewModel.shareDialogVisible) {
+                ShareDownloadDialog(
+                    downloadState = viewModel.downloadState,
+                    onCancelClick = viewModel::cancelShare,
+                )
+            }
 
             Surface(
                 modifier = Modifier.fillMaxSize(),
