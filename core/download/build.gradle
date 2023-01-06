@@ -1,0 +1,32 @@
+plugins {
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+    id "kotlin-parcelize"
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.core.download"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+}
+
+dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":core:network"))
+    implementation(project(":core:resources"))
+
+    // Koin Dependency Injection & Timber Logger
+    implementation(libs.bundles.core)
+
+    // AndroidX
+    implementation(libs.androidx.datastore)
+
+    // Gson JSON Serialization
+    implementation(libs.gson)
+
+    // OkHttp HTTP Client
+    implementation(libs.okhttp)
+}

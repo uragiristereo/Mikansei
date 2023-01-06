@@ -1,0 +1,44 @@
+plugins {
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.domain"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+dependencies {
+    implementation(project(":core:booru"))
+    implementation(project(":core:common"))
+    implementation(project(":core:database"))
+    implementation(project(":core:download"))
+    implementation(project(":core:model"))
+    implementation(project(":core:network"))
+    implementation(project(":core:preferences"))
+    implementation(project(":core:resources"))
+
+    // Koin Dependency Injection & Timber Logger
+    implementation(libs.bundles.core)
+
+    // Compose UI
+    implementation(libs.compose)
+
+    // Accompanist Compose Extensions - Navigation Animation
+    implementation(libs.accompanist.navigation.animation)
+
+    // Retrofit HTTP Client
+    implementation(libs.retrofit)
+}

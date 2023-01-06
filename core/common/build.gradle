@@ -1,0 +1,44 @@
+plugins {
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.core.common"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+dependencies {
+    implementation(project(":core:model"))
+    implementation(project(":core:resources"))
+
+    // Compose UI
+    implementation(libs.compose)
+    implementation(libs.compose.material)
+    implementation(libs.androidx.constraintlayout.compose)
+
+    // Accompanist Compose Extensions
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.navigation.animation)
+
+    // Retrofit HTTP Client
+    implementation(libs.retrofit)
+
+    // Gson JSON Serialization
+    implementation(libs.gson)
+
+    // Timber Logger
+    implementation(libs.timber)
+}

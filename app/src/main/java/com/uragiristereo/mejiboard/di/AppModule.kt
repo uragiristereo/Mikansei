@@ -1,26 +1,20 @@
 package com.uragiristereo.mejiboard.di
 
-import com.uragiristereo.mejiboard.data.preferences.PreferencesRepository
-import com.uragiristereo.mejiboard.data.preferences.PreferencesRepositoryImpl
-import com.uragiristereo.mejiboard.presentation.MainViewModel
-import com.uragiristereo.mejiboard.presentation.filters.FiltersViewModel
-import com.uragiristereo.mejiboard.presentation.home.HomeViewModel
-import com.uragiristereo.mejiboard.presentation.home.route.more.MoreViewModel
-import com.uragiristereo.mejiboard.presentation.home.route.posts.PostsViewModel
-import com.uragiristereo.mejiboard.presentation.image.ImageViewModel
-import com.uragiristereo.mejiboard.presentation.image.more.MoreBottomSheetViewModel
-import com.uragiristereo.mejiboard.presentation.search.SearchViewModel
-import com.uragiristereo.mejiboard.presentation.settings.SettingsViewModel
+import com.uragiristereo.mejiboard.feature.filters.FiltersViewModel
+import com.uragiristereo.mejiboard.feature.home.more.MoreViewModel
+import com.uragiristereo.mejiboard.feature.home.posts.HomeViewModel
+import com.uragiristereo.mejiboard.feature.home.posts.PostsViewModel
+import com.uragiristereo.mejiboard.feature.image.ImageViewModel
+import com.uragiristereo.mejiboard.feature.image.more.MoreBottomSheetViewModel
+import com.uragiristereo.mejiboard.feature.search.SearchViewModel
+import com.uragiristereo.mejiboard.feature.settings.SettingsViewModel
+import com.uragiristereo.mejiboard.ui.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 object AppModule {
     operator fun invoke(): Module = module {
-        singleOf(::PreferencesRepositoryImpl) { bind<PreferencesRepository>() }
-
         viewModelOf(::MainViewModel)
         viewModelOf(::PostsViewModel)
         viewModelOf(::SearchViewModel)

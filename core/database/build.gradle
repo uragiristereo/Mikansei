@@ -1,0 +1,35 @@
+plugins {
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+    alias(libs.plugins.ksp)
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.core.database"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+}
+
+dependencies {
+    implementation(project(":core:booru"))
+    implementation(project(":core:common"))
+    implementation(project(":core:model"))
+
+    // Koin Dependency Injection & Timber Logger
+    implementation(libs.bundles.core)
+
+    // Androidx Room Database
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    // Gson JSON Serialization
+    implementation(libs.gson)
+}

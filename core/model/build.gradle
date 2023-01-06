@@ -1,0 +1,38 @@
+plugins {
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+    id "kotlin-parcelize"
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.core.model"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+dependencies {
+    implementation(project(":core:resources"))
+
+    // Koin Dependency Injection & Timber Logger
+    implementation(libs.bundles.core)
+
+    // Compose UI
+    implementation(libs.compose)
+
+    // Accompanist Compose Extensions
+    implementation(libs.accompanist.navigation.animation)
+
+    // Gson JSON Serialization
+    implementation(libs.gson)
+}

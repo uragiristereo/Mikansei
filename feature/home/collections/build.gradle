@@ -1,0 +1,34 @@
+plugins {
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.feature.collections"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":core:product"))
+    implementation(project(":core:resources"))
+
+    // Compose UI
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.androidx.compose)
+
+    // Timber Logger
+    implementation(libs.timber)
+}

@@ -3,7 +3,7 @@
 
     <style name="Theme.Mejiboard.Starting" parent="Theme.SplashScreen">
         <!-- Set the splash screen background, and icon. -->
-        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenBackground">@android:color/white</item>
 
         <!-- Set the theme of the Activity that directly follows your splash screen. -->
         <!-- Required -->

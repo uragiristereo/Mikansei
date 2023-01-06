@@ -1,0 +1,32 @@
+plugins {
+    id "com.android.library"
+    id "org.jetbrains.kotlin.android"
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.core.network"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+}
+
+dependencies {
+    implementation(project(":core:common"))
+    implementation(project(":core:preferences"))
+
+    // Koin Dependency Injection & Timber Logger
+    implementation(libs.bundles.core)
+
+    // OkHttp HTTP Client
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.okhttp.dnsoverhttps)
+
+    // Retrofit HTTP Client
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+
+    // Gson JSON Serialization
+    implementation(libs.gson)
+}
