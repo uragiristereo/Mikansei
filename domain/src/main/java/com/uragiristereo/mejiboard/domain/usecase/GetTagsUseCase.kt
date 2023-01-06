@@ -1,6 +1,7 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
 import com.uragiristereo.mejiboard.core.booru.BooruRepository
+import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
 import kotlin.coroutines.cancellation.CancellationException
 
 class GetTagsUseCase(
@@ -9,7 +10,7 @@ class GetTagsUseCase(
     suspend operator fun invoke(
         tags: List<String>,
         onLoading: (loading: Boolean) -> Unit,
-        onSuccess: (tags: List<com.uragiristereo.mejiboard.core.model.booru.tag.Tag>) -> Unit,
+        onSuccess: (tags: List<Tag>) -> Unit,
         onFailed: (message: String) -> Unit,
         onError: (t: Throwable) -> Unit,
     ) {

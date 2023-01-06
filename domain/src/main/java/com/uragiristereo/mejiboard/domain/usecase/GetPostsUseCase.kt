@@ -3,6 +3,7 @@ package com.uragiristereo.mejiboard.domain.usecase
 import com.uragiristereo.mejiboard.core.booru.BooruRepository
 import com.uragiristereo.mejiboard.core.database.database.dao.filters.FiltersDao
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
+import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -17,10 +18,10 @@ class GetPostsUseCase(
     suspend operator fun invoke(
         tags: String,
         page: Int,
-        currentPosts: List<com.uragiristereo.mejiboard.core.model.booru.post.Post>,
+        currentPosts: List<Post>,
         onStart: (BooruSource) -> Unit,
         onLoading: (loading: Boolean) -> Unit,
-        onSuccess: (posts: List<com.uragiristereo.mejiboard.core.model.booru.post.Post>, canLoadMore: Boolean) -> Unit,
+        onSuccess: (posts: List<Post>, canLoadMore: Boolean) -> Unit,
         onFailed: (message: String) -> Unit,
         onError: (t: Throwable) -> Unit,
     ) {

@@ -116,7 +116,7 @@ class GelbooruRepository(
         lateinit var response: Response<List<GelbooruSearch>>
         lateinit var responseFromSafebooruOrg: Response<List<SafebooruOrgSearch>>
 
-        withContext(Dispatchers.Default) {
+        withContext(Dispatchers.IO) {
             val tasks = listOf(
                 async {
                     // we ONLY need to get tag's post count from Gelbooru

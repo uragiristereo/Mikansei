@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
 import com.uragiristereo.mejiboard.core.model.navigation.getData
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase
@@ -37,7 +38,7 @@ class SearchViewModel(
 
     var parsedQuery by mutableStateOf("")
 
-    val searches = mutableStateListOf<com.uragiristereo.mejiboard.core.model.booru.tag.Tag>()
+    val searches = mutableStateListOf<Tag>()
 
     var loading by mutableStateOf(false)
         private set
