@@ -20,6 +20,7 @@ import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostUseCase
+import com.uragiristereo.mejiboard.domain.usecase.DownloadPostWithNotificationUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -32,6 +33,7 @@ class MainViewModel(
     sessionDao: SessionDao,
     private val downloadRepository: DownloadRepository,
     private val downloadPostUseCase: DownloadPostUseCase,
+    private val downloadPostWithNotificationUseCase: DownloadPostWithNotificationUseCase,
 ) : ViewModel() {
     var preferences by mutableStateOf(Preferences(theme = preferencesRepository.getInitialTheme()))
         private set
@@ -46,7 +48,6 @@ class MainViewModel(
 
     // share
     private var shareJob: Job? = null
-    private var lastDownloaded = 0L
     var shareDialogVisible by mutableStateOf(false)
 
     var downloadState by mutableStateOf(DownloadState())
@@ -78,10 +79,7 @@ class MainViewModel(
             ).show()
         } else {
             viewModelScope.launch {
-                downloadRepository.add(
-                    postId = post.id,
-                    url = post.originalImage.url,
-                )
+                downloadPostWithNotificationUseCase(post)
             }
 
             Toast.makeText(
@@ -98,20 +96,16 @@ class MainViewModel(
         onDownloadCompleted: () -> Unit,
         onDownloadFailed: (String) -> Unit,
     ) {
-        lastDownloaded = 0L
-
         shareJob = downloadPostUseCase(post, shareOption)
             .onEach { resource ->
                 when (resource) {
                     DownloadResource.Starting -> DownloadState()
+
                     is DownloadResource.Downloading -> {
                         val lengthFmt = NumberUtil.convertFileSize(resource.length)
                         val progressPercentage = (resource.progress * 100).toInt()
-                        val downloadSpeed = resource.downloaded - lastDownloaded
-                        val downloadSpeedFmt = NumberUtil.convertFileSize(downloadSpeed)
+                        val downloadSpeedFmt = NumberUtil.convertFileSize(resource.speed)
                         val downloadedFmt = NumberUtil.convertFileSize(resource.downloaded)
-
-                        lastDownloaded = resource.downloaded
 
                         downloadState = DownloadState(
                             downloaded = downloadedFmt,

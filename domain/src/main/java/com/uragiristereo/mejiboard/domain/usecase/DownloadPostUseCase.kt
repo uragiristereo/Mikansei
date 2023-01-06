@@ -4,39 +4,37 @@ import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
 
 class DownloadPostUseCase(
     private val downloadRepository: DownloadRepository,
 ) {
-    @OptIn(FlowPreview::class)
     operator fun invoke(
         post: Post,
         shareOption: ShareOption,
     ): Flow<DownloadResource> {
-        return flow {
-            val url = when {
-                shareOption == ShareOption.COMPRESSED && post.scaled -> post.scaledImage.url
-                else -> post.originalImage.url
-            }
+        val url = when {
+            post.scaled && shareOption == ShareOption.COMPRESSED -> post.scaledImage.url
+            else -> post.originalImage.url
+        }
 
-            downloadRepository.download(url)
+        return channelFlow {
+            val job = downloadRepository.download(
+                postId = post.id,
+                url = url,
+                sample = 1000L
+            )
                 .onEach { resource ->
-                    when (resource) {
-                        is DownloadResource.Downloading -> {}
-                        else -> emit(resource)
-                    }
+                    send(resource)
                 }
-                .sample(periodMillis = 1000L)
-                .onEach { resource ->
-                    if (resource is DownloadResource.Downloading) {
-                        emit(resource)
-                    }
-                }
+                .launchIn(CoroutineScope(Dispatchers.Default))
+
+            job.join()
         }
     }
 }

@@ -4,11 +4,11 @@ import com.uragiristereo.mejiboard.core.download.model.DownloadResource
 import kotlinx.coroutines.flow.Flow
 
 interface DownloadRepository {
-    suspend fun add(postId: Int, url: String)
+    fun incrementNotificationCounter(): Int
 
     fun isPostAlreadyAdded(postId: Int): Boolean
 
     fun remove(id: Int)
 
-    fun download(url: String): Flow<DownloadResource>
+    fun download(postId: Int, url: String, sample: Long = 1000L): Flow<DownloadResource>
 }

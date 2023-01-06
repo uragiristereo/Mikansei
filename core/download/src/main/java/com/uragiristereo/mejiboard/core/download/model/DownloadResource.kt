@@ -7,6 +7,7 @@ sealed class DownloadResource {
         val downloaded: Long = 0L,
         val length: Long = 0L,
         val progress: Float = 0f,
+        val speed: Long = 0L,
     ) : DownloadResource()
 
     data class Completed(val length: Long) : DownloadResource()
