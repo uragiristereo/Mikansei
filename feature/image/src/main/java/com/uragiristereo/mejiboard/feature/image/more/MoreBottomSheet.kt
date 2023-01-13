@@ -3,6 +3,7 @@ package com.uragiristereo.mejiboard.feature.image.more
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -68,6 +69,12 @@ fun MoreBottomSheet(
     }
     val tagsCount = remember(post) { tags.size }
 
+    val closeButtonVisible by remember {
+        derivedStateOf {
+            viewModel.tagsExpanded && configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && viewModel.tags.isNotEmpty()
+        }
+    }
+
     LaunchedEffect(key1 = sheetState.currentValue) {
         if (sheetState.currentValue == ModalBottomSheetValue.Hidden) {
             viewModel.collapseAll()
@@ -79,8 +86,16 @@ fun MoreBottomSheet(
         modifier = modifier,
         content = {
             Box {
-                LazyColumn(state = columnState) {
-                    if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                LazyColumn(
+                    state = columnState,
+                    contentPadding = PaddingValues(
+                        top = when {
+                            !closeButtonVisible -> 24.dp
+                            else -> 0.dp
+                        },
+                    ),
+                ) {
+                    if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && closeButtonVisible) {
                         item {
                             Spacer(
                                 modifier = Modifier.height(viewModel.closeButtonHeight),
@@ -254,12 +269,6 @@ fun MoreBottomSheet(
 
                     item {
                         NavigationBarSpacer()
-                    }
-                }
-
-                val closeButtonVisible by remember {
-                    derivedStateOf {
-                        viewModel.tagsExpanded && configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && viewModel.tags.isNotEmpty()
                     }
                 }
 
