@@ -1,6 +1,6 @@
 plugins {
-    id "com.android.library"
-    id "org.jetbrains.kotlin.android"
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -19,7 +19,8 @@ dependencies {
     // Koin Dependency Injection & Timber Logger
     implementation(libs.bundles.core)
 
-    // OkHttp HTTP Client
+    // Okhttp HTTP Client
+    implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.okhttp.dnsoverhttps)
 

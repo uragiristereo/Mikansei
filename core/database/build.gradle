@@ -1,6 +1,6 @@
 plugins {
-    id "com.android.library"
-    id "org.jetbrains.kotlin.android"
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
 }
 
@@ -26,9 +26,8 @@ dependencies {
     implementation(libs.bundles.core)
 
     // Androidx Room Database
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
+    implementation(libs.bundles.room)
+    ksp(libs.room.compiler)
 
     // Gson JSON Serialization
     implementation(libs.gson)

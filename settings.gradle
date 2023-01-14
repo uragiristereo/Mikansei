@@ -1,3 +1,11 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
@@ -6,114 +14,21 @@ dependencyResolutionManagement {
         mavenCentral()
         maven { url "https://www.jitpack.io" }
     }
-
-    versionCatalogs {
-        libs {
-            plugin("ksp", "com.google.devtools.ksp").version("1.7.21-1.0.8")
-
-            // Compose
-            version("compose", "1.4.0-alpha03")
-            version("compose_compiler", "1.4.0-alpha02")
-
-            library("compose", "androidx.compose.ui", "ui").versionRef("compose")
-            library("compose-material", "androidx.compose.material", "material").versionRef("compose")
-            library("compose-tooling-preview", "androidx.compose.ui", "ui-tooling-preview").versionRef("compose")
-            library("compose-ui-tooling", "androidx.compose.ui", "ui-tooling").versionRef("compose")
-            library("compose-ui-test-manifest", "androidx.compose.ui", "ui-test-manifest").versionRef("compose")
-
-            bundle("compose", ["compose", "compose-material", "compose-tooling-preview"])
-            bundle("compose-debug", ["compose-ui-tooling", "compose-ui-test-manifest"])
-
-            // AndroidX
-            version("lifecycle", "2.5.1")
-
-            library("androidx-core", "androidx.core", "core-ktx").version("1.9.0")
-            library("androidx-lifecycle-runtime", "androidx.lifecycle", "lifecycle-runtime-ktx").versionRef("lifecycle")
-            library("androidx-savedstate", "androidx.savedstate", "savedstate-ktx").version("1.2.0")
-            library("androidx-splashscreen", "androidx.core", "core-splashscreen").version("1.0.0")
-            library("androidx-datastore", "androidx.datastore", "datastore").version("1.0.0")
-            library("androidx-browser", "androidx.browser", "browser").version("1.4.0")
-            library("androidx-activity-compose", "androidx.activity", "activity-compose").version("1.6.1")
-            library("androidx-lifecycle-viewmodel-compose", "androidx.lifecycle", "lifecycle-viewmodel-compose").versionRef("lifecycle")
-            library("androidx-constraintlayout-compose", "androidx.constraintlayout", "constraintlayout-compose").version("1.0.1")
-
-            bundle("androidx", ["androidx-core", "androidx-lifecycle-runtime", "androidx-savedstate"])
-            bundle("androidx-compose", ["androidx-activity-compose", "androidx-lifecycle-viewmodel-compose"])
-
-            // AndroidX Room Database
-            version("room", "2.4.3")
-
-            library("androidx-room-runtime", "androidx.room", "room-runtime").versionRef("room")
-            library("androidx-room-ktx", "androidx.room", "room-ktx").versionRef("room")
-            library("androidx-room-compiler", "androidx.room", "room-compiler").versionRef("room")
-
-            // Accompanist Compose Extensions
-            version("accompanist", "0.28.0")
-
-            library("accompanist-systemuicontroller", "com.google.accompanist", "accompanist-systemuicontroller").versionRef("accompanist")
-            library("accompanist-flowlayout", "com.google.accompanist", "accompanist-flowlayout").versionRef("accompanist")
-            library("accompanist-navigation-animation", "com.google.accompanist", "accompanist-navigation-animation").versionRef("accompanist")
-            library("accompanist-permissions", "com.google.accompanist", "accompanist-permissions").versionRef("accompanist")
-
-            // Koin Dependency Injection
-            version("koin", "3.3.2")
-
-            library("koin", "io.insert-koin", "koin-android").versionRef("koin")
-            library("koin-androidx-navigation", "io.insert-koin", "koin-androidx-navigation").versionRef("koin")
-            library("koin-androidx-compose", "io.insert-koin", "koin-androidx-compose").version("3.4.1")
-
-            bundle("koin", ["koin", "koin-androidx-navigation", "koin-androidx-compose"])
-
-            // Coil Image Loader
-            version("coil", "2.2.2")
-
-            library("coil", "io.coil-kt", "coil").versionRef("coil")
-            library("coil-compose", "io.coil-kt", "coil-compose").versionRef("coil")
-            library("coil-gif", "io.coil-kt", "coil-gif").versionRef("coil")
-
-            bundle("coil", ["coil", "coil-compose"])
-
-            // TouchImageView
-            library("touchimageview", "com.github.MikeOrtiz", "TouchImageView").version("3.2.1")
-
-            // OkHttp HTTP Client
-            version("okhttp", "4.10.0")
-
-            library("okhttp", "com.squareup.okhttp3", "okhttp").versionRef("okhttp")
-            library("okhttp-logging-interceptor", "com.squareup.okhttp3", "logging-interceptor").versionRef("okhttp")
-            library("okhttp-dnsoverhttps", "com.squareup.okhttp3", "okhttp-dnsoverhttps").versionRef("okhttp")
-
-            // Retrofit HTTP Client
-            version("retrofit", "2.9.0")
-
-            library("retrofit", "com.squareup.retrofit2", "retrofit").versionRef("retrofit")
-            library("retrofit-converter-gson", "com.squareup.retrofit2", "converter-gson").versionRef("retrofit")
-
-            // Gson JSON Serialization
-            library("gson", "com.google.code.gson", "gson").version("2.10")
-
-            // Timber Logger
-            library("timber", "com.jakewharton.timber", "timber").version("5.0.1")
-
-            // Koin Dependency Injection & Timber Logger
-            bundle("core", ["koin", "timber"])
-        }
-    }
 }
 
 rootProject.name = "Mejiboard 2"
 
 include(":app")
-include(":core:network")
-include(":core:common")
-include(":domain")
-include(":core:database")
 include(":core:booru")
-include(":core:preferences")
+include(":core:common")
+include(":core:database")
 include(":core:download")
-include(":core:product")
 include(":core:model")
+include(":core:network")
+include(":core:preferences")
+include(":core:product")
 include(":core:resources")
+include(":domain")
 include(":feature:about")
 include(":feature:filters")
 include(":feature:home")
@@ -121,6 +36,6 @@ include(":feature:home:collections")
 include(":feature:home:more")
 include(":feature:home:posts")
 include(":feature:image")
-include(":feature:settings")
 include(":feature:search")
 include(":feature:search_history")
+include(":feature:settings")
