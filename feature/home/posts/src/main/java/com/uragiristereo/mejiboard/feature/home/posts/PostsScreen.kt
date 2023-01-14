@@ -67,6 +67,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -205,7 +206,7 @@ fun PostsScreen(
         if (!gridState.isScrollInProgress) {
             val topAppBarHeightPx = with(density) { viewModel.topAppBarHeight.toPx() }
 
-            if (viewModel.offsetY.value != -topAppBarHeightPx && viewModel.offsetY.value != 0f) {
+            if (viewModel.offsetY.value.roundToInt() != -topAppBarHeightPx.roundToInt() && viewModel.offsetY.value != 0f) {
                 val half = topAppBarHeightPx / 2
                 val oldOffsetY = viewModel.offsetY.value
                 val targetOffsetY = when {
@@ -376,7 +377,6 @@ fun PostsScreen(
                 booruSource = viewModel.selectedBooru?.nameResId?.let { stringResource(id = it) }.orEmpty(),
                 dropdownExpanded = viewModel.topAppBarDropdownExpanded,
                 onDropdownDismiss = remember { { viewModel.topAppBarDropdownExpanded = false } },
-                currentHeight = viewModel.topAppBarHeight,
                 onHeightChange = remember { { viewModel.topAppBarHeight = it } },
                 onSearchClick = {
                     onNavigate(MainRoute.Search)
