@@ -86,9 +86,9 @@ fun List<DanbooruSearch>.toTagList(): List<Tag> {
 
 @JvmName("toTagListDanbooruTag")
 fun List<DanbooruTag>.toTagList(): List<Tag> {
-    return this.mapIndexed { index, it ->
+    return this.map {
         Tag(
-            id = index,
+            id = it.id,
             name = it.name,
             count = it.postCount,
             countFmt = NumberUtil.convertToUnit(it.postCount),

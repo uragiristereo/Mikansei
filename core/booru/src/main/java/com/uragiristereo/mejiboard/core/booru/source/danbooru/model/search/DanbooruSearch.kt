@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DanbooruSearch(
-    val type: String,
-    val label: String,
     val value: String,
     val category: Int,
 

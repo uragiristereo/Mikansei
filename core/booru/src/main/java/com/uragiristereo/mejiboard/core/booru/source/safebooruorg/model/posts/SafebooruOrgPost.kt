@@ -6,15 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SafebooruOrgPost(
     val directory: String,
-    val hash: String,
     val height: Int,
     val id: Int,
     val image: String,
     val change: Int,
     val owner: String,
-
-    @SerialName(value = "parent_id")
-    val parentId: Int,
 
     val rating: String,
     val sample: Boolean,
