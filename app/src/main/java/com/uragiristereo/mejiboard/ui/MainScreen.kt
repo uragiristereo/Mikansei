@@ -122,6 +122,7 @@ fun MainScreen(
     val lambdaOnShare: (Post, ShareOption) -> Unit = remember {
         { post, shareOption ->
             viewModel.sharePost(
+                context = context,
                 post = post,
                 shareOption = shareOption,
                 onDownloadCompleted = {

@@ -3,6 +3,7 @@ package com.uragiristereo.mejiboard.domain.usecase
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Environment
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
@@ -11,6 +12,7 @@ import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.resources.R
+import java.io.File
 
 class DownloadPostWithNotificationUseCase(
     private val context: Context,
@@ -45,7 +47,8 @@ class DownloadPostWithNotificationUseCase(
         downloadRepository.download(
             postId = post.id,
             url = post.originalImage.url,
-            sample = 1200L
+            path = Environment.DIRECTORY_PICTURES + File.separator + context.getString(R.string.app_name_alt),
+            sample = 1200L,
         )
             .collect { resource ->
                 when (resource) {
@@ -117,6 +120,8 @@ class DownloadPostWithNotificationUseCase(
                     }
 
                     is DownloadResource.Failed -> {
+                        resource.t?.printStackTrace()
+
                         notificationManager.apply {
                             notificationBuilder
                                 .setSmallIcon(R.drawable.error)

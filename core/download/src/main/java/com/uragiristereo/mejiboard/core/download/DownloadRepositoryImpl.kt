@@ -1,7 +1,10 @@
 package com.uragiristereo.mejiboard.core.download
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
+import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
 import com.uragiristereo.mejiboard.core.preferences.NetworkRepository
 import kotlinx.coroutines.CoroutineScope
@@ -17,11 +20,13 @@ import java.io.File
 
 @SuppressLint("MissingPermission")
 class DownloadRepositoryImpl(
-    private val context: Context,
+    context: Context,
     private val networkRepository: NetworkRepository,
 ) : DownloadRepository {
     private val downloads: MutableMap<Int, Job> = mutableMapOf()
     private var notificationIdCounter = 0
+
+    private val resolver = context.contentResolver
 
     private fun add(postId: Int, job: Job) {
         downloads[postId] = job
@@ -45,20 +50,28 @@ class DownloadRepositoryImpl(
     override fun download(
         postId: Int,
         url: String,
+        path: String,
         sample: Long,
     ): Flow<DownloadResource> {
         return channelFlow {
             var progress = DownloadResource.Downloading()
             var lastDownloaded = 0L
 
-            val job = downloadFile(url)
+            val job = downloadFile(url, path)
                 .onEach { resource ->
                     when (resource) {
+                        DownloadResource.Starting -> {
+                            send(resource)
+                        }
+
                         is DownloadResource.Downloading -> {
                             progress = resource
                         }
 
-                        else -> send(resource)
+                        is DownloadResource.Completed, is DownloadResource.Failed -> {
+                            remove(postId)
+                            send(resource)
+                        }
                     }
                 }
                 .launchIn(CoroutineScope(Dispatchers.IO))
@@ -79,19 +92,29 @@ class DownloadRepositoryImpl(
         }
     }
 
-    private fun downloadFile(url: String): Flow<DownloadResource> {
+    private fun downloadFile(
+        url: String,
+        path: String,
+    ): Flow<DownloadResource> {
         return flow {
             emit(DownloadResource.Starting)
 
             try {
-                val fileName = File(url).name
-                val destination = File(context.cacheDir, fileName)
+                val file = File(url)
                 var length: Long
+
+                val values = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
+                    put(MediaStore.MediaColumns.MIME_TYPE, MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension))
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, path)
+                }
+
+                val uri = resolver.insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, values)!!
 
                 val result = networkRepository.api.downloadFile(url)
 
                 result.byteStream().use { inputStream ->
-                    destination.outputStream().use { outputStream ->
+                    resolver.openOutputStream(uri)!!.use { outputStream ->
                         length = result.contentLength()
 
                         val buffer = ByteArray(DEFAULT_BUFFER_SIZE)

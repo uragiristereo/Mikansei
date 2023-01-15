@@ -27,6 +27,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.File
 
 class MainViewModel(
     savedStateHandle: SavedStateHandle,
@@ -92,6 +94,7 @@ class MainViewModel(
     }
 
     fun sharePost(
+        context: Context,
         post: Post,
         shareOption: ShareOption,
         onDownloadCompleted: () -> Unit,
@@ -99,7 +102,20 @@ class MainViewModel(
     ) {
         selectedPost = post
 
-        downloadPostUseCase(post, shareOption)
+        val tempDir = File(context.cacheDir, "temp")
+            .also { dir ->
+                if (dir.isDirectory) {
+                    dir.mkdir()
+                }
+            }
+
+        Timber.d(tempDir.absolutePath)
+
+        downloadPostUseCase(
+            post = post,
+            path = tempDir.absolutePath,
+            shareOption = shareOption,
+        )
             .onEach { resource ->
                 when (resource) {
                     DownloadResource.Starting -> {

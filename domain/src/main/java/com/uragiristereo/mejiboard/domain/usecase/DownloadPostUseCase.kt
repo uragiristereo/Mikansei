@@ -16,6 +16,7 @@ class DownloadPostUseCase(
 ) {
     operator fun invoke(
         post: Post,
+        path: String,
         shareOption: ShareOption,
     ): Flow<DownloadResource> {
         val url = when {
@@ -27,7 +28,8 @@ class DownloadPostUseCase(
             val job = downloadRepository.download(
                 postId = post.id,
                 url = url,
-                sample = 1000L
+                path = path,
+                sample = 1000L,
             )
                 .onEach { resource ->
                     send(resource)

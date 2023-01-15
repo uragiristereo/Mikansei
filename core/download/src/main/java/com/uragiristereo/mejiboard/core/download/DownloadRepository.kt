@@ -10,5 +10,5 @@ interface DownloadRepository {
 
     fun remove(id: Int)
 
-    fun download(postId: Int, url: String, sample: Long = 1000L): Flow<DownloadResource>
+    fun download(postId: Int, url: String, path: String, sample: Long = 1000L): Flow<DownloadResource>
 }
