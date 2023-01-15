@@ -1,29 +1,34 @@
 package com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.post
 
-import com.google.gson.annotations.SerializedName
+import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.serializer.GelbooruAnySerializer
+import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.serializer.GelbooruDateSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.util.Date
 
+@Serializable
 data class GelbooruPost(
     val change: Int,
 
-    @SerializedName(value = "created_at")
+    @SerialName(value = "created_at")
+    @Serializable(with = GelbooruDateSerializer::class)
     val createdAt: Date,
 
-    @SerializedName(value = "creator_id")
+    @SerialName(value = "creator_id")
     val creatorId: Int,
 
     val directory: String,
 
-    @SerializedName(value = "file_url")
+    @SerialName(value = "file_url")
     val fileUrl: String,
 
-    @SerializedName(value = "has_children")
+    @SerialName(value = "has_children")
     val hasChildren: String,
 
-    @SerializedName(value = "has_comments")
+    @SerialName(value = "has_comments")
     val hasComments: String,
 
-    @SerializedName(value = "has_notes")
+    @SerialName(value = "has_notes")
     val hasNotes: String,
 
     val height: Int,
@@ -32,33 +37,36 @@ data class GelbooruPost(
     val md5: String,
     val owner: String,
 
-    @SerializedName(value = "parent_id")
+    @SerialName(value = "parent_id")
     val parentId: Int,
 
-    @SerializedName(value = "post_locked")
+    @SerialName(value = "post_locked")
     val postLocked: Int,
 
-    @SerializedName(value = "preview_height")
+    @SerialName(value = "preview_height")
     val previewHeight: Int,
 
-    @SerializedName(value = "preview_url")
-    val previewUrl: String,
-
-    @SerializedName(value = "preview_width")
+    @SerialName(value = "preview_width")
     val previewWidth: Int,
 
     val rating: String,
     val sample: Int,
 
-    @SerializedName(value = "sample_height")
+    @SerialName(value = "sample_height")
     val sampleHeight: Int,
 
-    @SerializedName(value = "sample_width")
+    @SerialName(value = "sample_width")
     val sampleWidth: Int,
 
     val score: Int,
+
+    @Serializable(with = GelbooruAnySerializer::class)
     val source: Any,
+
     val tags: String,
+
+    @Serializable(with = GelbooruAnySerializer::class)
     val title: Any,
+
     val width: Int,
 )

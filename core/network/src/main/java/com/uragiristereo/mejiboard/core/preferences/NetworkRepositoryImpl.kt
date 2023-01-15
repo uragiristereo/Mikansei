@@ -1,18 +1,22 @@
 package com.uragiristereo.mejiboard.core.preferences
 
 import android.content.Context
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mejiboard.core.common.data.util.CacheUtil
 import com.uragiristereo.mejiboard.core.preferences.api.MejiboardApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.dnsoverhttps.DnsOverHttps
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
+@OptIn(ExperimentalSerializationApi::class)
 class NetworkRepositoryImpl(
     context: Context,
     private val preferencesRepository: PreferencesRepository,
@@ -49,7 +53,7 @@ class NetworkRepositoryImpl(
     override val api: MejiboardApi = Retrofit.Builder()
         .baseUrl("https://github.com")
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create(MejiboardApi::class.java)
 

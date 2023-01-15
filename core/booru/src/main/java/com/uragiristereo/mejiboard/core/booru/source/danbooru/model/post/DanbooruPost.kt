@@ -1,132 +1,137 @@
 package com.uragiristereo.mejiboard.core.booru.source.danbooru.model.post
 
-import com.google.gson.annotations.SerializedName
+import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.DanbooruDateSerializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.util.Date
 
+@Serializable
 data class DanbooruPost(
     val id: Int?,
 
-    @SerializedName(value = "created_at")
+    @SerialName(value = "created_at")
+    @Serializable(with = DanbooruDateSerializer::class)
     val createdAt: Date,
 
-    @SerializedName(value = "uploader_id")
+    @SerialName(value = "uploader_id")
     val uploaderId: Int,
     val score: Int,
     val source: String,
-    val md5: String?,
+    val md5: String? = null,
 
-    @SerializedName(value = "last_comment_bumped_at")
+    @SerialName(value = "last_comment_bumped_at")
     val lastCommentBumpedAt: String?,
     val rating: String,
 
-    @SerializedName(value = "image_width")
+    @SerialName(value = "image_width")
     val imageWidth: Int,
 
-    @SerializedName(value = "image_height")
+    @SerialName(value = "image_height")
     val imageHeight: Int,
 
-    @SerializedName(value = "tag_string")
+    @SerialName(value = "tag_string")
     val tagString: String,
 
-    @SerializedName(value = "fav_count")
+    @SerialName(value = "fav_count")
     val favCount: Int,
 
-    @SerializedName(value = "file_ext")
+    @SerialName(value = "file_ext")
     val fileExt: String,
 
-    @SerializedName(value = "last_noted_at")
+    @SerialName(value = "last_noted_at")
+    @Serializable(with = DanbooruDateSerializer::class)
     val lastNotedAt: Date?,
 
-    @SerializedName(value = "parent_id")
-    val parentId: String?,
+    @SerialName(value = "parent_id")
+    val parentId: Int?,
 
-    @SerializedName(value = "has_children")
+    @SerialName(value = "has_children")
     val hasChildren: Boolean,
 
-    @SerializedName(value = "approver_id")
-    val approverId: String?,
+    @SerialName(value = "approver_id")
+    val approverId: Int?,
 
-    @SerializedName(value = "tag_count_general")
+    @SerialName(value = "tag_count_general")
     val tagCountGeneral: Int,
 
-    @SerializedName(value = "tag_count_artist")
+    @SerialName(value = "tag_count_artist")
     val tagCountArtist: Int,
 
-    @SerializedName(value = "tag_count_character")
+    @SerialName(value = "tag_count_character")
     val tagCountCharacter: Int,
 
-    @SerializedName(value = "tag_count_copyright")
+    @SerialName(value = "tag_count_copyright")
     val tagCountCopyright: Int,
 
-    @SerializedName(value = "file_size")
+    @SerialName(value = "file_size")
     val fileSize: Int,
 
-    @SerializedName(value = "up_score")
+    @SerialName(value = "up_score")
     val upScore: Int,
 
-    @SerializedName(value = "down_score")
+    @SerialName(value = "down_score")
     val downScore: Int,
 
-    @SerializedName(value = "is_pending")
+    @SerialName(value = "is_pending")
     val isPending: Boolean,
 
-    @SerializedName(value = "is_flagged")
+    @SerialName(value = "is_flagged")
     val isFlagged: Boolean,
 
-    @SerializedName(value = "is_deleted")
+    @SerialName(value = "is_deleted")
     val isDeleted: Boolean,
 
-    @SerializedName(value = "tag_count")
+    @SerialName(value = "tag_count")
     val tagCount: Int,
 
-    @SerializedName(value = "updated_at")
+    @SerialName(value = "updated_at")
     val updatedAt: String,
 
-    @SerializedName(value = "is_banned")
+    @SerialName(value = "is_banned")
     val isBanned: Boolean,
 
-    @SerializedName(value = "pixiv_id")
+    @SerialName(value = "pixiv_id")
     val pixivId: Int?,
 
-    @SerializedName(value = "last_commented_at")
+    @SerialName(value = "last_commented_at")
     val lastCommentedAt: String?,
 
-    @SerializedName(value = "has_active_children")
+    @SerialName(value = "has_active_children")
     val hasActiveChildren: Boolean,
 
-    @SerializedName(value = "bit_flags")
+    @SerialName(value = "bit_flags")
     val bitFlags: Int,
 
-    @SerializedName(value = "tag_count_meta")
+    @SerialName(value = "tag_count_meta")
     val tagCountMeta: Int,
 
-    @SerializedName(value = "has_large")
+    @SerialName(value = "has_large")
     val hasLarge: Boolean?,
 
-    @SerializedName(value = "has_visible_children")
+    @SerialName(value = "has_visible_children")
     val hasVisibleChildren: Boolean,
 
-    @SerializedName(value = "tag_string_general")
+    @SerialName(value = "tag_string_general")
     val tagStringGeneral: String,
 
-    @SerializedName(value = "tag_string_character")
+    @SerialName(value = "tag_string_character")
     val tagStringCharacter: String,
 
-    @SerializedName(value = "tag_string_copyright")
+    @SerialName(value = "tag_string_copyright")
     val tagStringCopyright: String,
 
-    @SerializedName(value = "tag_string_artist")
+    @SerialName(value = "tag_string_artist")
     val tagStringArtist: String,
 
-    @SerializedName(value = "tag_string_meta")
+    @SerialName(value = "tag_string_meta")
     val tagStringMeta: String,
 
-    @SerializedName(value = "file_url")
-    val fileUrl: String?,
+    @SerialName(value = "file_url")
+    val fileUrl: String? = null,
 
-    @SerializedName(value = "large_file_url")
-    val largeFileUrl: String?,
+    @SerialName(value = "large_file_url")
+    val largeFileUrl: String? = null,
 
-    @SerializedName(value = "preview_file_url")
-    val previewFileUrl: String?,
+    @SerialName(value = "preview_file_url")
+    val previewFileUrl: String? = null,
 )

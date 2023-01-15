@@ -1,12 +1,14 @@
 package com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.search
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class GelbooruSearch(
     val category: String,
     val label: String,
 
-    @SerializedName(value = "post_count")
+    @SerialName(value = "post_count")
     val postCount: Int,
 
     val type: String,

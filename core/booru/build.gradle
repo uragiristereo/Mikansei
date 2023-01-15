@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -26,8 +27,8 @@ dependencies {
 
     // Retrofit HTTP Client
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
 
-    // Gson JSON Serialization
-    implementation(libs.gson)
+    // Kotlinx.Serialization JSON Serialization
+    implementation(libs.kotlinx.serialization.json)
 }

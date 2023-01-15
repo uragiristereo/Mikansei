@@ -21,3 +21,23 @@ inline fun <reified T> String.fromJsonBase64Encoded(gson: Gson = Gson()): T? {
         null
     }
 }
+
+//object AnySerializer : SerializationStrategy<Any> {
+//    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(serialName = "Any", kind = PrimitiveKind.STRING)
+//
+//    override fun serialize(encoder: Encoder, value: Any) {
+//        encoder.encodeString(value.toString())
+//    }
+//}
+
+//inline fun <reified T> String.fromJsonBase64Encoded(): T? {
+//    return try {
+//        val decoded = Base64.decode(this, Base64.DEFAULT)
+//            .toString(charset("UTF-8"))
+//
+//        Json.decodeFromString<T>(string = decoded)
+//    } catch (e: IllegalArgumentException) {
+//        e.printStackTrace()
+//        null
+//    }
+//}

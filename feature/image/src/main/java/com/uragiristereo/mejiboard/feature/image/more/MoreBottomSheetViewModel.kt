@@ -16,6 +16,7 @@ import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
 import com.uragiristereo.mejiboard.domain.usecase.GetFileSizeUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetTagsUseCase
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class MoreBottomSheetViewModel(
     private val getTagsUseCase: GetTagsUseCase,
@@ -53,9 +54,11 @@ class MoreBottomSheetViewModel(
                     },
                     onFailed = { message ->
                         errorMessage = message
+                        Timber.d(errorMessage)
                     },
                     onError = { t ->
                         errorMessage = t.toString()
+                        Timber.d(errorMessage)
                     },
                 )
             }

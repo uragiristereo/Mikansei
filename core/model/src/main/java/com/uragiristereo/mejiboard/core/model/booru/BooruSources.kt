@@ -8,21 +8,18 @@ object BooruSources {
         key = "gelbooru",
         nameResId = R.string.gelbooru_label,
         domainResId = R.string.gelbooru_domain,
-        dateFormat = "EEE MMM dd HH:mm:ss ZZZ yyyy",
         webUrlPattern = "https://gelbooru.com/index.php?page=post&s=view&id={postId}",
     )
     val Danbooru = BooruSource(
         key = "danbooru",
         nameResId = R.string.danbooru_label,
         domainResId = R.string.danbooru_domain,
-        dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
         webUrlPattern = "https://danbooru.donmai.us/posts/{postId}",
     )
     val SafebooruOrg = BooruSource(
         key = "safebooruorg",
         nameResId = R.string.safebooruorg_label,
         domainResId = R.string.safebooruorg_domain,
-        dateFormat = "EEE MMM dd HH:mm:ss ZZZ yyyy",
         webUrlPattern = "https://safebooru.org/index.php?page=post&s=view&id={postId}",
     )
 

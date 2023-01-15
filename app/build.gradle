@@ -110,6 +110,6 @@ dependencies {
     // Timber Logger
     implementation(libs.timber)
 
-    // Gson JSON Serialization
-    implementation(libs.gson)
+    // Kotlinx.Serialization JSON Serialization
+    implementation(libs.kotlinx.serialization.json)
 }

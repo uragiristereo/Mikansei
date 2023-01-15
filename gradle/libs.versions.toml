@@ -13,6 +13,15 @@ okhttp = "5.0.0-alpha.11"
 retrofit = "2.9.0"
 
 
+[plugins]
+android-application = { id = "com.android.application", version.ref = "gradle" }
+android-library = { id = "com.android.library", version.ref = "gradle" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+
 [libraries]
 # AndroidX
 androidx-core = { module = "androidx.core:core-ktx", version = "1.9.0" }
@@ -63,7 +72,10 @@ okhttp-dnsoverhttps = { module = "com.squareup.okhttp3:okhttp-dnsoverhttps", ver
 
 # Retrofit HTTP Client
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+retrofit-converter-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version = "0.8.0" }
+
+# Kotlinx.Serialization JSON Serialization
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.4.1" }
 
 # Gson JSON Serialization
 gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
@@ -81,11 +93,3 @@ room = ["room-runtime", "room-ktx"]
 koin = ["koin", "koin-androidx-navigation", "koin-androidx-compose"]
 coil = ["coil", "coil-compose"]
 core = ["koin", "timber"]
-
-
-[plugins]
-android-application = { id = "com.android.application", version.ref = "gradle" }
-android-library = { id = "com.android.library", version.ref = "gradle" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

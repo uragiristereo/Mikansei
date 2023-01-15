@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -32,6 +33,9 @@ dependencies {
 
     // Accompanist Compose Extensions
     implementation(libs.accompanist.navigation.animation)
+
+    // Kotlinx.Serialization JSON Serialization
+    implementation(libs.kotlinx.serialization.json)
 
     // Gson JSON Serialization
     implementation(libs.gson)

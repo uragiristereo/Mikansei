@@ -24,8 +24,8 @@ dependencies {
     // AndroidX
     implementation(libs.androidx.datastore)
 
-    // Gson JSON Serialization
-    implementation(libs.gson)
+    // Kotlinx.Serialization JSON Serialization
+    implementation(libs.kotlinx.serialization.json)
 
     // OkHttp HTTP Client
     implementation(libs.okhttp)

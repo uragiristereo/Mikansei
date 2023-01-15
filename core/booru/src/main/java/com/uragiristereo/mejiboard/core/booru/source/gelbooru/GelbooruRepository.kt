@@ -1,7 +1,7 @@
 package com.uragiristereo.mejiboard.core.booru.source.gelbooru
 
 import android.content.Context
-import com.google.gson.GsonBuilder
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.search.GelbooruSearch
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.toPostList
@@ -19,24 +19,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
+@OptIn(ExperimentalSerializationApi::class)
 class GelbooruRepository(
     private val context: Context,
     okHttpClient: OkHttpClient,
 ) : BooruSourceRepository {
     override val source = BooruSources.Gelbooru
 
-    private val gson = GsonBuilder()
-        .setDateFormat(source.dateFormat)
-        .create()
+    private val json = Json {
+        ignoreUnknownKeys = true
+    }
 
     private val retrofitBuilder = Retrofit.Builder()
         .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addConverterFactory(
+            json.asConverterFactory("application/json".toMediaType())
+        )
 
     private val client = retrofitBuilder
         .baseUrl(source.baseUrl(context))

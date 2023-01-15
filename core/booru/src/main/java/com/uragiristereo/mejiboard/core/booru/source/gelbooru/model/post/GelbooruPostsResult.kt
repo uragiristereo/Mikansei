@@ -1,10 +1,12 @@
 package com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.post
 
-import com.google.gson.annotations.SerializedName
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.common.GelbooruAttributes
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class GelbooruPostsResult(
-    @SerializedName(value = "@attributes")
+    @SerialName(value = "@attributes")
     val attributes: GelbooruAttributes,
 
     val post: List<GelbooruPost>?,

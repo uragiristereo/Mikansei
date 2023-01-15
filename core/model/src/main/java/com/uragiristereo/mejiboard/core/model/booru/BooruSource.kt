@@ -5,13 +5,14 @@ import android.os.Parcelable
 import androidx.annotation.StringRes
 import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class BooruSource(
     val key: String,
     @StringRes val nameResId: Int,
     @StringRes val domainResId: Int,
-    val dateFormat: String,
     private val webUrlPattern: String,
 ) : Parcelable {
     fun baseUrl(context: Context): String {

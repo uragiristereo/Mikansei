@@ -1,13 +1,13 @@
 package com.uragiristereo.mejiboard.core.database
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.util.Date
 
 class DatabaseConverters {
-    private val gson = Gson()
-
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {
         return value?.let { Date(it) }
@@ -20,11 +20,11 @@ class DatabaseConverters {
 
     @TypeConverter
     fun imagePostToString(value: PostImage): String {
-        return gson.toJson(value)
+        return Json.encodeToString(value)
     }
 
     @TypeConverter
     fun toImagePost(value: String): PostImage? {
-        return gson.fromJson(value, PostImage::class.java)
+        return Json.decodeFromString(value)
     }
 }
