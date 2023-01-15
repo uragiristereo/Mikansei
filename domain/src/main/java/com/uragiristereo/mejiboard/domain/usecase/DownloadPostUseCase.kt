@@ -1,9 +1,8 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
+import android.net.Uri
 import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
-import com.uragiristereo.mejiboard.core.model.ShareOption
-import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -15,20 +14,15 @@ class DownloadPostUseCase(
     private val downloadRepository: DownloadRepository,
 ) {
     operator fun invoke(
-        post: Post,
-        path: String,
-        shareOption: ShareOption,
+        postId: Int,
+        url: String,
+        uri: Uri,
     ): Flow<DownloadResource> {
-        val url = when {
-            post.scaled && shareOption == ShareOption.COMPRESSED -> post.scaledImage.url
-            else -> post.originalImage.url
-        }
-
         return channelFlow {
             val job = downloadRepository.download(
-                postId = post.id,
+                postId = postId,
                 url = url,
-                path = path,
+                uri = uri,
                 sample = 1000L,
             )
                 .onEach { resource ->

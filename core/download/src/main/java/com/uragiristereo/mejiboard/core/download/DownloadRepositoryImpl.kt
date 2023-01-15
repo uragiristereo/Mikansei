@@ -1,10 +1,8 @@
 package com.uragiristereo.mejiboard.core.download
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Context
-import android.provider.MediaStore
-import android.webkit.MimeTypeMap
+import android.net.Uri
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
 import com.uragiristereo.mejiboard.core.preferences.NetworkRepository
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +14,6 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.io.File
 
 @SuppressLint("MissingPermission")
 class DownloadRepositoryImpl(
@@ -50,14 +47,14 @@ class DownloadRepositoryImpl(
     override fun download(
         postId: Int,
         url: String,
-        path: String,
+        uri: Uri,
         sample: Long,
     ): Flow<DownloadResource> {
         return channelFlow {
             var progress = DownloadResource.Downloading()
             var lastDownloaded = 0L
 
-            val job = downloadFile(url, path)
+            val job = downloadFile(url, uri)
                 .onEach { resource ->
                     when (resource) {
                         DownloadResource.Starting -> {
@@ -94,22 +91,13 @@ class DownloadRepositoryImpl(
 
     private fun downloadFile(
         url: String,
-        path: String,
+        uri: Uri,
     ): Flow<DownloadResource> {
         return flow {
             emit(DownloadResource.Starting)
 
             try {
-                val file = File(url)
                 var length: Long
-
-                val values = ContentValues().apply {
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-                    put(MediaStore.MediaColumns.MIME_TYPE, MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension))
-                    put(MediaStore.MediaColumns.RELATIVE_PATH, path)
-                }
-
-                val uri = resolver.insert(MediaStore.Images.Media.INTERNAL_CONTENT_URI, values)!!
 
                 val result = networkRepository.api.downloadFile(url)
 

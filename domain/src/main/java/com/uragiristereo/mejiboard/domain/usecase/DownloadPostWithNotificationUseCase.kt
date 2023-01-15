@@ -1,9 +1,12 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
 import android.app.PendingIntent
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.os.Environment
+import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
@@ -12,12 +15,15 @@ import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.resources.R
+import timber.log.Timber
 import java.io.File
 
 class DownloadPostWithNotificationUseCase(
     private val context: Context,
     private val downloadRepository: DownloadRepository,
 ) {
+    private val resolver = context.contentResolver
+
     suspend operator fun invoke(post: Post) {
         val notificationId = downloadRepository.incrementNotificationCounter()
         val notificationManager = NotificationManagerCompat.from(context)
@@ -44,10 +50,22 @@ class DownloadPostWithNotificationUseCase(
             .setOnlyAlertOnce(true)
             .addAction(R.drawable.close, context.getString(R.string.download_cancel), cancelDownloadPendingIntent)
 
+        val file = File(post.originalImage.url)
+
+        val values = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
+            put(MediaStore.MediaColumns.MIME_TYPE, MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension))
+            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + context.getString(R.string.app_name_alt))
+        }
+
+        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)!!
+
+        Timber.d(uri.toString())
+
         downloadRepository.download(
             postId = post.id,
             url = post.originalImage.url,
-            path = Environment.DIRECTORY_PICTURES + File.separator + context.getString(R.string.app_name_alt),
+            uri = uri,
             sample = 1200L,
         )
             .collect { resource ->
@@ -94,6 +112,19 @@ class DownloadPostWithNotificationUseCase(
                     }
 
                     is DownloadResource.Completed -> {
+                        val openDownloadedFileIntent = Intent().apply {
+                            action = Intent.ACTION_VIEW
+                            setDataAndType(uri, resolver.getType(uri))
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+
+                        val pendingOpenDownloadedFileIntent = PendingIntent.getActivity(
+                            /* context = */ context,
+                            /* requestCode = */ 0,
+                            /* intent = */ openDownloadedFileIntent,
+                            /* flags = */ PendingIntent.FLAG_IMMUTABLE
+                        )
+
                         val lengthFmt = NumberUtil.convertFileSize(resource.length)
 
                         notificationManager.apply {
@@ -110,6 +141,7 @@ class DownloadPostWithNotificationUseCase(
                                 .setOngoing(false)
                                 .setAutoCancel(true)
                                 .setOnlyAlertOnce(false)
+                                .setContentIntent(pendingOpenDownloadedFileIntent)
                                 .clearActions()
 
                             notificationManager.notify(

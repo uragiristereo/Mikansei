@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +28,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 
 class MainViewModel(
@@ -104,17 +104,23 @@ class MainViewModel(
 
         val tempDir = File(context.cacheDir, "temp")
             .also { dir ->
-                if (dir.isDirectory) {
+                if (!dir.isDirectory) {
                     dir.mkdir()
                 }
             }
 
-        Timber.d(tempDir.absolutePath)
+        val url = when {
+            post.scaled && shareOption == ShareOption.COMPRESSED -> post.scaledImage.url
+            else -> post.originalImage.url
+        }
+
+        val fileName = File(url).name
+        val path = File(tempDir.absolutePath, fileName)
 
         downloadPostUseCase(
-            post = post,
-            path = tempDir.absolutePath,
-            shareOption = shareOption,
+            postId = post.id,
+            url = url,
+            uri = path.toUri(),
         )
             .onEach { resource ->
                 when (resource) {
