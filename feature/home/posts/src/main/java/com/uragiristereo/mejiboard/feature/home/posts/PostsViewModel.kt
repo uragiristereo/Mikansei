@@ -9,6 +9,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.database.dao.session.toPostList
@@ -27,6 +29,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.UUID
 
+@OptIn(SavedStateHandleSaveableApi::class)
 class PostsViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val getPostsUseCase: GetPostsUseCase,
@@ -44,10 +47,11 @@ class PostsViewModel(
     var posts by mutableStateOf<List<Post>>(listOf())
         private set
 
-    var page by mutableStateOf(savedStateHandle[Constants.STATE_KEY_POSTS_CURRENT_PAGE] ?: 0)
+    private var page by savedStateHandle.saveable { mutableStateOf(0) }
+
     var loading by mutableStateOf(PostsLoadingState.FROM_LOAD)
 
-    var canLoadMore by mutableStateOf(savedStateHandle[Constants.STATE_KEY_POSTS_CAN_LOAD_MORE] ?: false)
+    var canLoadMore by savedStateHandle.saveable { mutableStateOf(false) }
         private set
 
     var errorMessage by mutableStateOf<String?>(null)
@@ -72,7 +76,9 @@ class PostsViewModel(
     // session
     private var postsSession = listOf<Post>()
 
-    var savedState = savedStateHandle[Constants.STATE_KEY_POSTS] ?: PostsSavedState()
+    var savedState by savedStateHandle.saveable {
+        mutableStateOf(PostsSavedState())
+    }
         private set
 
     var jumpToPosition by mutableStateOf(false)
@@ -102,7 +108,6 @@ class PostsViewModel(
                 else -> page += 1
             }
 
-            savedStateHandle[Constants.STATE_KEY_POSTS_CURRENT_PAGE] = page
             errorMessage = null
 
             getPostsUseCase(
@@ -127,7 +132,6 @@ class PostsViewModel(
 
                     errorMessage = null
                     canLoadMore = canLoadMoreResult
-                    savedStateHandle[Constants.STATE_KEY_POSTS_CAN_LOAD_MORE] = canLoadMoreResult
                 },
                 onFailed = { message ->
                     errorMessage = message
@@ -188,7 +192,5 @@ class PostsViewModel(
             scrollIndex = index,
             scrollOffset = offset,
         )
-
-        savedStateHandle[Constants.STATE_KEY_POSTS] = savedState
     }
 }
