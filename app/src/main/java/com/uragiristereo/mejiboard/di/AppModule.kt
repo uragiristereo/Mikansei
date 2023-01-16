@@ -8,6 +8,7 @@ import com.uragiristereo.mejiboard.feature.image.ImageViewModel
 import com.uragiristereo.mejiboard.feature.image.more.MoreBottomSheetViewModel
 import com.uragiristereo.mejiboard.feature.search.SearchViewModel
 import com.uragiristereo.mejiboard.feature.settings.SettingsViewModel
+import com.uragiristereo.mejiboard.saved_searches.SavedSearchesViewModel
 import com.uragiristereo.mejiboard.ui.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
@@ -24,5 +25,6 @@ object AppModule {
         viewModelOf(::ImageViewModel)
         viewModelOf(::MoreBottomSheetViewModel)
         viewModelOf(::SettingsViewModel)
+        viewModelOf(::SavedSearchesViewModel)
     }
 }

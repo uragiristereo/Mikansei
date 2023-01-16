@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":feature:home:more"))
     implementation(project(":feature:home:posts"))
     implementation(project(":feature:image"))
+    implementation(project(":feature:saved_searches"))
     implementation(project(":feature:search"))
     implementation(project(":feature:search_history"))
     implementation(project(":feature:settings"))

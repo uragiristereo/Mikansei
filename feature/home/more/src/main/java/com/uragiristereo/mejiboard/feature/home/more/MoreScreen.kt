@@ -91,7 +91,9 @@ fun MoreScreen(
                     title = stringResource(id = R.string.saved_searches_label),
                     icon = painterResource(id = R.drawable.sell),
                     verticalPadding = 16.dp,
-                    onClick = { },
+                    onClick = {
+                        onNavigate(MainRoute.SavedSearches)
+                    },
                 )
             }
 

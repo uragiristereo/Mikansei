@@ -63,6 +63,7 @@ import com.uragiristereo.mejiboard.feature.image.ImageScreen
 import com.uragiristereo.mejiboard.feature.search.SearchScreen
 import com.uragiristereo.mejiboard.feature.search_history.SearchHistoryScreen
 import com.uragiristereo.mejiboard.feature.settings.SettingsScreen
+import com.uragiristereo.mejiboard.saved_searches.SavedSearchesScreen
 import com.uragiristereo.mejiboard.ui.core.ShareDownloadDialog
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -387,7 +388,7 @@ fun MainScreen(
                         composable(
                             route = MainRoute.SavedSearches,
                             content = {
-                                SearchHistoryScreen(
+                                SavedSearchesScreen(
                                     onNavigateBack = lambdaOnNavigateBack,
                                 )
                             },
