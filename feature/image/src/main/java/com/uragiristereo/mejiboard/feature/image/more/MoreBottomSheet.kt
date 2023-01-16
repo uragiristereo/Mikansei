@@ -168,21 +168,23 @@ fun MoreBottomSheet(
                         )
                     }
 
-                    item {
-                        Text(
-                            text = post.imageSource,
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable(
-                                    onClick = remember { { viewModel.launchUrl(context = context, url = post.imageSource) } },
-                                )
-                                .padding(
-                                    horizontal = 16.dp,
-                                    vertical = 4.dp,
-                                ),
-                        )
+                    if (post.imageSource.isNotEmpty()) {
+                        item {
+                            Text(
+                                text = post.imageSource,
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(
+                                        onClick = remember { { viewModel.launchUrl(context = context, url = post.imageSource) } },
+                                    )
+                                    .padding(
+                                        horizontal = 16.dp,
+                                        vertical = 4.dp,
+                                    ),
+                            )
+                        }
                     }
 
                     item {
