@@ -36,12 +36,12 @@ class SafebooruOrgRepository(
         )
 
     private val client = retrofitBuilder
-        .baseUrl(BooruSources.SafebooruOrg.baseUrl(context))
+        .baseUrl(source.baseUrl(context))
         .build()
         .create(SafebooruOrgApi::class.java)
 
     private val clientGelbooru = retrofitBuilder
-        .baseUrl(source.baseUrl(context))
+        .baseUrl(BooruSources.Gelbooru.baseUrl(context))
         .build()
         .create(GelbooruApi::class.java)
 

@@ -21,7 +21,6 @@ data class SafebooruOrgPost(
     @SerialName(value = "sample_width")
     val sampleWidth: Int,
 
-    val score: Int?,
     val tags: String,
     val width: Int,
 )

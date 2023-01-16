@@ -11,5 +11,5 @@ data class DanbooruSearch(
     @SerialName(value = "post_count")
     val postCount: Int,
 
-    val antecedent: String?,
+    val antecedent: String? = null,
 )

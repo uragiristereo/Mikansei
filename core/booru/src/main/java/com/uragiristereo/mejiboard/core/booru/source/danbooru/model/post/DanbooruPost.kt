@@ -32,5 +32,5 @@ data class DanbooruPost(
     val fileExt: String,
 
     @SerialName(value = "has_large")
-    val hasLarge: Boolean?,
+    val hasLarge: Boolean? = null,
 )
