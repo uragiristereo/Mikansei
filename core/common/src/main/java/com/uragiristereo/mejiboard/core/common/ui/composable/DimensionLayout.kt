@@ -31,14 +31,14 @@ fun DimensionSubcomposeLayout(
         var maxWidth = 0
         var maxHeight = 0
 
-        val placables: List<Placeable> = subcompose(slotId = 0) {
+        val placables = subcompose(slotId = 0) {
             content(dimensionScope)
         }.map {
             it.measure(constraints.copy(minWidth = 0, minHeight = 0))
         }
 
         placables.forEach { placeable: Placeable ->
-            maxWidth += placeable.width
+            maxWidth = placeable.width
             maxHeight = placeable.height
         }
 
@@ -49,7 +49,7 @@ fun DimensionSubcomposeLayout(
             )
         }
 
-        layout(maxWidth, maxHeight) {
+        layout(width = maxWidth, height = maxHeight) {
             placables.forEach { placeable: Placeable ->
                 placeable.placeRelative(x = 0, y = 0)
             }
