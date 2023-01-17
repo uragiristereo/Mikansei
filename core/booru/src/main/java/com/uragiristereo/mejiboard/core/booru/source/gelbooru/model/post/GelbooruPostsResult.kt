@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GelbooruPostsResult(
-    val post: List<GelbooruPost>?,
+    val post: List<GelbooruPost>? = null,
 )

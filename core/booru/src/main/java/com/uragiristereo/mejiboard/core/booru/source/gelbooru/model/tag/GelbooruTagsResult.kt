@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GelbooruTagsResult(
-    val tag: List<GelbooruTag>?,
+    val tag: List<GelbooruTag>? = null,
 )
