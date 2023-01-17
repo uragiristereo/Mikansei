@@ -24,7 +24,7 @@ import com.uragiristereo.mejiboard.core.model.booru.post.Post
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PostGrid(
+fun PostsGrid(
     posts: List<Post>,
     gridState: LazyStaggeredGridState,
     canLoadMore: Boolean,
@@ -35,50 +35,50 @@ fun PostGrid(
 ) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-        LazyVerticalStaggeredGrid(
-            state = gridState,
-            columns = StaggeredGridCells.Fixed(
-                count = when {
-                    isLandscape -> 4
-                    else -> 2
-                }
-            ),
-            contentPadding = PaddingValues(
-                start = 8.dp,
-                end = 8.dp,
-                top = 8.dp + topAppBarHeight,
-                bottom = 8.dp + 1.dp +
-                        WindowInsets.navigationBars
-                            .asPaddingValues()
-                            .calculateBottomPadding() +
-                        when {
-                            isLandscape -> 0.dp
-                            else -> 56.dp
-                        },
-            ),
-            verticalArrangement = Arrangement.spacedBy(space = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
-            modifier = modifier.fillMaxSize(),
-        ) {
-            items(
-                items = posts,
-                key = { it.id },
-            ) { item ->
-                PostItem(
-                    post = item,
-                    onClick = {
-                        onItemClick(item)
-                    },
-                    onLongPress = {
-                        onItemLongPress(item)
-                    },
-                )
+    LazyVerticalStaggeredGrid(
+        state = gridState,
+        columns = StaggeredGridCells.Fixed(
+            count = when {
+                isLandscape -> 4
+                else -> 2
             }
+        ),
+        contentPadding = PaddingValues(
+            start = 8.dp,
+            end = 8.dp,
+            top = 8.dp + topAppBarHeight,
+            bottom = 8.dp + 1.dp +
+                    WindowInsets.navigationBars
+                        .asPaddingValues()
+                        .calculateBottomPadding() +
+                    when {
+                        isLandscape -> 0.dp
+                        else -> 56.dp
+                    },
+        ),
+        verticalArrangement = Arrangement.spacedBy(space = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
+        modifier = modifier.fillMaxSize(),
+    ) {
+        items(
+            items = posts,
+            key = { it.id },
+        ) { item ->
+            PostItem(
+                post = item,
+                onClick = {
+                    onItemClick(item)
+                },
+                onLongPress = {
+                    onItemLongPress(item)
+                },
+            )
+        }
 
-            if (canLoadMore && posts.isNotEmpty()) {
-                item(key = Constants.KEY_LOAD_MORE_PROGRESS) {
-                    Spacer(modifier = Modifier.size(1.dp))
-                }
+        if (canLoadMore && posts.isNotEmpty()) {
+            item(key = Constants.KEY_LOAD_MORE_PROGRESS) {
+                Spacer(modifier = Modifier.size(1.dp))
             }
         }
+    }
 }

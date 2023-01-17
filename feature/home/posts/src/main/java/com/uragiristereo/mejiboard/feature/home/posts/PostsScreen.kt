@@ -56,7 +56,7 @@ import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.feature.home.posts.core.PostsFab
 import com.uragiristereo.mejiboard.feature.home.posts.core.PostsTopAppBar
-import com.uragiristereo.mejiboard.feature.home.posts.grid.PostGrid
+import com.uragiristereo.mejiboard.feature.home.posts.grid.PostsGrid
 import com.uragiristereo.mejiboard.feature.home.posts.post_dialog.PostDialog
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsContentState
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsEmpty
@@ -304,7 +304,7 @@ fun PostsScreen(
                         Box(
                             modifier = Modifier.pullRefresh(pullRefreshState),
                         ) {
-                            PostGrid(
+                            PostsGrid(
                                 posts = viewModel.posts,
                                 gridState = gridState,
                                 canLoadMore = viewModel.canLoadMore,
@@ -375,30 +375,19 @@ fun PostsScreen(
             PostsTopAppBar(
                 searchTags = viewModel.tags,
                 booruSource = viewModel.selectedBooru?.nameResId?.let { stringResource(id = it) }.orEmpty(),
-                dropdownExpanded = viewModel.topAppBarDropdownExpanded,
-                onDropdownDismiss = remember { { viewModel.topAppBarDropdownExpanded = false } },
-                onHeightChange = remember { { viewModel.topAppBarHeight = it } },
+                onHeightChange = { viewModel.topAppBarHeight = it },
                 onSearchClick = {
                     onNavigate(MainRoute.Search)
                 },
-                onMoreClick = remember { { viewModel.topAppBarDropdownExpanded = true } },
-                onRefreshClick = remember {
-                    {
-                        scope.launch {
-                            viewModel.topAppBarDropdownExpanded = false
+                onRefreshClick = {
+                    scope.launch {
+                        gridState.animateScrollToItem(index = 0)
 
-                            gridState.animateScrollToItem(index = 0)
-
-                            viewModel.retryGetPosts()
-                        }
+                        viewModel.retryGetPosts()
                     }
                 },
-                onExitClick = remember {
-                    {
-                        viewModel.topAppBarDropdownExpanded = false
-
-                        (context as Activity).finishAffinity()
-                    }
+                onExitClick = {
+                    (context as Activity).finishAffinity()
                 },
                 modifier = Modifier
                     .graphicsLayer {

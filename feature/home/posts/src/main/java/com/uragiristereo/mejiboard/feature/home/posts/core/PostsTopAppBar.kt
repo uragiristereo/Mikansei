@@ -14,6 +14,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,7 +29,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mejiboard.core.common.ui.composable.DimensionLayout
+import com.uragiristereo.mejiboard.core.common.ui.composable.DimensionSubcomposeLayout
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 import com.uragiristereo.mejiboard.core.resources.R
@@ -34,16 +38,15 @@ import com.uragiristereo.mejiboard.core.resources.R
 fun PostsTopAppBar(
     searchTags: String,
     booruSource: String,
-    dropdownExpanded: Boolean,
-    onDropdownDismiss: () -> Unit,
     onHeightChange: (Dp) -> Unit,
     onSearchClick: () -> Unit,
-    onMoreClick: () -> Unit,
     onRefreshClick: () -> Unit,
     onExitClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    DimensionLayout(modifier = modifier) {
+    var dropdownExpanded by rememberSaveable { mutableStateOf(false) }
+
+    DimensionSubcomposeLayout(modifier = modifier) {
         LaunchedEffect(key1 = size) {
             onHeightChange(size.height)
         }
@@ -69,7 +72,10 @@ fun PostsTopAppBar(
                 },
                 actions = {
                     IconButton(
-                        onClick = onSearchClick,
+                        onClick = {
+                            dropdownExpanded = false
+                            onSearchClick()
+                        },
                         content = {
                             Icon(
                                 painter = painterResource(id = R.drawable.search),
@@ -79,7 +85,7 @@ fun PostsTopAppBar(
                     )
 
                     IconButton(
-                        onClick = onMoreClick,
+                        onClick = { dropdownExpanded = true },
                         content = {
                             Icon(
                                 painter = painterResource(id = R.drawable.more_vert),
@@ -90,9 +96,15 @@ fun PostsTopAppBar(
 
                     PostsTopAppBarDropdownMenu(
                         expanded = dropdownExpanded,
-                        onDismissRequest = onDropdownDismiss,
-                        onRefreshClick = onRefreshClick,
-                        onExitClick = onExitClick,
+                        onDismissRequest = { dropdownExpanded = false },
+                        onRefreshClick = {
+                            dropdownExpanded = false
+                            onRefreshClick()
+                        },
+                        onExitClick = {
+                            dropdownExpanded = false
+                            onExitClick()
+                        },
                     )
                 },
             )

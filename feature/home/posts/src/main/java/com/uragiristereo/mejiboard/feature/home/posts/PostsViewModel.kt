@@ -41,7 +41,6 @@ class PostsViewModel(
     val offsetY = Animatable(initialValue = 0f)
     var lastFabVisible by mutableStateOf(false)
     var dialogShown by mutableStateOf(false)
-    var topAppBarDropdownExpanded by mutableStateOf(false)
 
     // posts
     var posts by mutableStateOf<List<Post>>(listOf())
