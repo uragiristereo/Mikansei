@@ -2,7 +2,6 @@ package com.uragiristereo.mejiboard.feature.filters
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
@@ -14,6 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.uragiristereo.mejiboard.core.common.ui.extension.defaultPaddings
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.filters.appbars.FiltersSelectionTopAppBar
@@ -95,7 +95,7 @@ fun FiltersScreen(
                 },
             )
         },
-        modifier = modifier.statusBarsPadding(),
+        modifier = modifier.defaultPaddings(),
     ) { innerPadding ->
         FiltersColumn(
             columnState = columnState,

@@ -6,8 +6,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -67,6 +68,7 @@ fun ImageTopAppBar(
                 Row(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.displayCutoutPadding(),
                 ) {
                     if (windowSize != WindowSize.COMPACT) {
                         if (!originalImageShown) {
@@ -131,7 +133,7 @@ fun ImageTopAppBar(
                     brush = Brush.verticalGradient(colors = listOf(Color.Black, Color.Transparent)),
                     alpha = 0.5f,
                 )
-                .statusBarsPadding(),
+                .systemBarsPadding(),
         )
     }
 }

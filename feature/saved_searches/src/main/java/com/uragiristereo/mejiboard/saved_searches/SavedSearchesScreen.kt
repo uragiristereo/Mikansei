@@ -1,11 +1,11 @@
 package com.uragiristereo.mejiboard.saved_searches
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.uragiristereo.mejiboard.core.common.ui.extension.defaultPaddings
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.saved_searches.appbars.SavedSearchesTopAppBar
 import org.koin.androidx.compose.koinViewModel
@@ -25,7 +25,7 @@ fun SavedSearchesScreen(
                 onSelectAll = { },
             )
         },
-        modifier = modifier.statusBarsPadding(),
+        modifier = modifier.defaultPaddings(),
     ) { innerPadding ->
         LazyColumn(
             contentPadding = innerPadding,

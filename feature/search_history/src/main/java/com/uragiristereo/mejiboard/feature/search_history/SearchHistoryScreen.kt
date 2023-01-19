@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.search_history
 
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.uragiristereo.mejiboard.core.common.ui.extension.defaultPaddings
 
 @Composable
 fun SearchHistoryScreen(
@@ -25,7 +25,7 @@ fun SearchHistoryScreen(
                 },
             )
         },
-        modifier = modifier.statusBarsPadding(),
+        modifier = modifier.defaultPaddings(),
     ) { innerPadding ->
         SearchHistoryColumn(
             contentPadding = innerPadding,

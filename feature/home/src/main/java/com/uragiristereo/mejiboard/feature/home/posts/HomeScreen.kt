@@ -1,8 +1,16 @@
 package com.uragiristereo.mejiboard.feature.home.posts
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
@@ -14,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.uragiristereo.mejiboard.core.common.ui.LocalHomeNavController
+import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
@@ -65,7 +74,13 @@ fun HomeScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         snackbarHost = { scaffoldState.snackbarHostState },
-        modifier = Modifier.statusBarsPadding(),
+        modifier = Modifier
+            .statusBarsPadding()
+            .windowInsetsPadding(
+                insets = WindowInsets.navigationBars.only(sides = WindowInsetsSides.Horizontal),
+            )
+            .background(MaterialTheme.colors.background.backgroundElevation())
+            .displayCutoutPadding(),
     ) { innerPadding ->
         HomeContentResponsive(
             currentRoute = viewModel.currentRoute,

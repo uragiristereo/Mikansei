@@ -1,7 +1,6 @@
 package com.uragiristereo.mejiboard.feature.settings
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -12,6 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.uragiristereo.mejiboard.core.common.ui.extension.defaultPaddings
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.feature.settings.preference.BottomSheetPreference
 import com.uragiristereo.mejiboard.feature.settings.preference.LocalIconPadding
@@ -61,7 +61,7 @@ fun SettingsScreen(
                 onMoreClick = { /*TODO*/ },
             )
         },
-        modifier = modifier.statusBarsPadding(),
+        modifier = modifier.defaultPaddings(),
     ) { innerPadding ->
         CompositionLocalProvider(
             values = arrayOf(

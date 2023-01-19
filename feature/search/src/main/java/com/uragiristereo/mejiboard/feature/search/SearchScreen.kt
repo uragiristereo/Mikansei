@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -36,6 +36,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
+import com.uragiristereo.mejiboard.core.common.ui.extension.defaultPaddings
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.resources.R
@@ -127,7 +128,11 @@ fun SearchScreen(
         navigationBarColor = MaterialTheme.colors.background.backgroundElevation(),
     )
 
-    Box(modifier = modifier.systemBarsPadding()) {
+    Box(
+        modifier = modifier
+            .navigationBarsPadding()
+            .defaultPaddings(),
+    ) {
         Scaffold(
             topBar = {
                 SearchBar(

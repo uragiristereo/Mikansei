@@ -8,12 +8,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
@@ -211,10 +206,6 @@ fun MainScreen(
                                     MaterialTheme.colors.isLight -> Color.White
                                     else -> Color.Black
                                 },
-                            )
-                            .windowInsetsPadding(
-                                insets = WindowInsets.navigationBars
-                                    .only(sides = WindowInsetsSides.Start + WindowInsetsSides.End),
                             ),
                     ) {
                         // Home
