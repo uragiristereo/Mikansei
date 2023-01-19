@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.home.posts.core
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,8 +10,9 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.feature.home.posts.HomeNavGraph
@@ -29,9 +29,29 @@ fun HomeContentResponsive(
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val configuration = LocalConfiguration.current
+    val windowSize = rememberWindowSize()
 
-    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    if (windowSize == WindowSize.COMPACT) {
+        Box(modifier = modifier) {
+            HomeNavGraph(
+                onNavigate = onNavigate,
+                onNavigateImage = onNavigateImage,
+                onCurrentTagsChange = onCurrentTagsChange,
+            )
+
+            Box(
+                contentAlignment = Alignment.BottomCenter,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                HomeSnackbar(snackbarHostState = scaffoldState.snackbarHostState)
+
+                HomeBottomNavigationBar(
+                    currentRoute = currentRoute,
+                    onNavigate = onHomeNavigate,
+                )
+            }
+        }
+    } else {
         Row(modifier = modifier) {
             HomeNavigationRail(
                 currentRoute = currentRoute,
@@ -54,26 +74,6 @@ fun HomeContentResponsive(
                 HomeSnackbar(
                     snackbarHostState = scaffoldState.snackbarHostState,
                     modifier = Modifier.align(Alignment.BottomCenter),
-                )
-            }
-        }
-    } else {
-        Box(modifier = modifier) {
-            HomeNavGraph(
-                onNavigate = onNavigate,
-                onNavigateImage = onNavigateImage,
-                onCurrentTagsChange = onCurrentTagsChange,
-            )
-
-            Box(
-                contentAlignment = Alignment.BottomCenter,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                HomeSnackbar(snackbarHostState = scaffoldState.snackbarHostState)
-
-                HomeBottomNavigationBar(
-                    currentRoute = currentRoute,
-                    onNavigate = onHomeNavigate,
                 )
             }
         }

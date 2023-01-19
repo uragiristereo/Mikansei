@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.home.posts.post_dialog
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -16,12 +15,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
 import com.uragiristereo.mejiboard.core.common.ui.composable.ClickableSection
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.product.component.ProductDialog
 import com.uragiristereo.mejiboard.core.resources.R
@@ -38,8 +38,9 @@ fun PostDialog(
     onHidePostClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val configuration = LocalConfiguration.current
     val density = LocalDensity.current
+
+    val windowSize = rememberWindowSize()
 
     var columnHeight by remember { mutableStateOf(0.dp) }
 
@@ -50,7 +51,7 @@ fun PostDialog(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (windowSize != WindowSize.COMPACT) {
                     PostDialogHeaderResponsive(
                         post = post,
                         onClick = onPostClick,
@@ -68,7 +69,7 @@ fun PostDialog(
                             columnHeight = with(density) { size.height.toDp() }
                         },
                 ) {
-                    if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                    if (windowSize == WindowSize.COMPACT) {
                         item {
                             PostDialogHeaderResponsive(
                                 post = post,

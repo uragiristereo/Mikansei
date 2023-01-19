@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.home.more
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -18,7 +17,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -28,7 +26,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
 import com.uragiristereo.mejiboard.core.common.ui.composable.ClickableSection
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.core.resources.R
@@ -41,7 +41,7 @@ fun MoreScreen(
     modifier: Modifier = Modifier,
     viewModel: MoreViewModel = koinViewModel(),
 ) {
-    val configuration = LocalConfiguration.current
+    val windowSize = rememberWindowSize()
 
     Scaffold(
         topBar = {
@@ -171,9 +171,9 @@ fun MoreScreen(
                             insets = WindowInsets.navigationBars.only(sides = WindowInsetsSides.Bottom),
                         )
                         .padding(
-                            bottom = when (configuration.orientation) {
-                                Configuration.ORIENTATION_LANDSCAPE -> 0.dp
-                                else -> 56.dp
+                            bottom = when (windowSize) {
+                                WindowSize.COMPACT -> 56.dp
+                                else -> 0.dp
                             } + 8.dp + 1.dp,
                         ),
                 )

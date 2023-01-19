@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.home.posts.core
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -12,9 +11,10 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
@@ -23,7 +23,7 @@ fun PostsFab(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val configuration = LocalConfiguration.current
+    val windowSize = rememberWindowSize()
 
     AnimatedVisibility(
         visible = fabVisible,
@@ -41,9 +41,9 @@ fun PostsFab(
                 modifier = modifier
                     .navigationBarsPadding()
                     .padding(
-                        bottom = when (configuration.orientation) {
-                            Configuration.ORIENTATION_LANDSCAPE -> 0.dp
-                            else -> 56.dp
+                        bottom = when (windowSize) {
+                            WindowSize.COMPACT -> 56.dp
+                            else -> 0.dp
                         },
                     ),
             )

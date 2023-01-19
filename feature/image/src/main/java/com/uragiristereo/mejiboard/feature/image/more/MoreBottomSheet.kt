@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.image.more
 
-import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,15 +25,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
 import com.uragiristereo.mejiboard.core.common.ui.composable.DragHandle
 import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mejiboard.core.resources.R
@@ -57,12 +57,12 @@ fun MoreBottomSheet(
     modifier: Modifier = Modifier,
     viewModel: MoreBottomSheetViewModel = koinViewModel(),
 ) {
-    val configuration = LocalConfiguration.current
     val context = LocalContext.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
 
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
+    val windowSize = rememberWindowSize()
 
     val tags = remember(post) {
         post.tags.split(' ')
@@ -71,7 +71,7 @@ fun MoreBottomSheet(
 
     val closeButtonVisible by remember {
         derivedStateOf {
-            viewModel.tagsExpanded && configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && viewModel.tags.isNotEmpty()
+            viewModel.tagsExpanded && windowSize == WindowSize.COMPACT && viewModel.tags.isNotEmpty()
         }
     }
 
@@ -95,7 +95,7 @@ fun MoreBottomSheet(
                         },
                     ),
                 ) {
-                    if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE && closeButtonVisible) {
+                    if (windowSize == WindowSize.COMPACT && closeButtonVisible) {
                         item {
                             Spacer(
                                 modifier = Modifier.height(viewModel.closeButtonHeight),

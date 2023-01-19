@@ -1,7 +1,6 @@
 package com.uragiristereo.mejiboard.feature.home.posts
 
 import android.app.Activity
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
@@ -37,7 +36,6 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -49,7 +47,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnShare
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
 import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
@@ -87,12 +87,11 @@ fun PostsScreen(
 
     val scope = rememberCoroutineScope()
     val gridState = rememberLazyStaggeredGridState()
+    val windowSize = rememberWindowSize()
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
         onRefresh = viewModel::retryGetPosts,
     )
-
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val fabVisible by remember {
         derivedStateOf {
@@ -339,9 +338,9 @@ fun PostsScreen(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(
-                                    bottom = when {
-                                        isLandscape -> 0.dp
-                                        else -> 56.dp + 1.dp
+                                    bottom = when (windowSize) {
+                                        WindowSize.COMPACT -> 56.dp + 1.dp
+                                        else -> 0.dp
                                     },
                                 ),
                         )
@@ -407,9 +406,9 @@ fun PostsScreen(
                             .background(MaterialTheme.colors.background)
                             .navigationBarsPadding()
                             .padding(
-                                bottom = when {
-                                    isLandscape -> 0.dp
-                                    else -> 56.dp + 1.dp
+                                bottom = when (windowSize) {
+                                    WindowSize.COMPACT -> 56.dp + 1.dp
+                                    else -> 0.dp
                                 },
                             ),
                     )

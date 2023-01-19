@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.image.appbars
 
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -19,9 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoadingState
 
@@ -38,7 +38,7 @@ fun ImageTopAppBar(
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val configuration = LocalConfiguration.current
+    val windowSize = rememberWindowSize()
 
     AnimatedVisibility(
         visible = visible,
@@ -68,7 +68,7 @@ fun ImageTopAppBar(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (windowSize != WindowSize.COMPACT) {
                         if (!originalImageShown) {
                             IconButton(
                                 onClick = onExpandClick,

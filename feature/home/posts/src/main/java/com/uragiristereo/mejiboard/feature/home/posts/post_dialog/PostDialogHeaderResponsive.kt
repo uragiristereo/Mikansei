@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.home.posts.post_dialog
 
-import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,13 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 
 @Composable
@@ -32,7 +32,8 @@ fun PostDialogHeaderResponsive(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val configuration = LocalConfiguration.current
+
+    val windowSize = rememberWindowSize()
 
     @Composable
     fun PostThumbnail(modifier: Modifier = Modifier) {
@@ -51,32 +52,7 @@ fun PostDialogHeaderResponsive(
         )
     }
 
-    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .clickable(onClick = onClick)
-                .padding(all = 16.dp),
-        ) {
-            Text(
-                text = "#${post.id}",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp),
-            )
-
-            PostThumbnail(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(size = 4.dp))
-                    .width(72.dp)
-                    .heightIn(
-                        min = 32.dp,
-                        max = 72.dp * 2.5f,
-                    ),
-            )
-        }
-    } else {
+    if (windowSize == WindowSize.COMPACT) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
@@ -102,6 +78,31 @@ fun PostDialogHeaderResponsive(
                 text = "#${post.id}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+            )
+        }
+    } else {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+                .clickable(onClick = onClick)
+                .padding(all = 16.dp),
+        ) {
+            Text(
+                text = "#${post.id}",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
+
+            PostThumbnail(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(size = 4.dp))
+                    .width(72.dp)
+                    .heightIn(
+                        min = 32.dp,
+                        max = 72.dp * 2.5f,
+                    ),
             )
         }
     }

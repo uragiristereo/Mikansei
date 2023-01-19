@@ -1,7 +1,6 @@
 package com.uragiristereo.mejiboard.feature.image
 
 import android.app.Activity
-import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,16 +19,17 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.common.data.Constants
 import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
 import com.uragiristereo.mejiboard.core.common.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mejiboard.core.common.ui.extension.hideSystemBars
 import com.uragiristereo.mejiboard.core.common.ui.extension.showSystemBars
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.feature.image.appbars.ImageBottomAppBar
 import com.uragiristereo.mejiboard.feature.image.appbars.ImageTopAppBar
 import com.uragiristereo.mejiboard.feature.image.image.ImagePost
@@ -47,13 +47,13 @@ fun ImageScreen(
 ) {
     val context = LocalContext.current
     val window = (context as Activity).window
-    val configuration = LocalConfiguration.current
     val density = LocalDensity.current
     val hapticFeedback = LocalHapticFeedback.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val windowSize = rememberWindowSize()
 
     val maxOffset = remember { with(density) { 100.dp.toPx() } }
     val showExpandButton = !viewModel.showOriginalImage && !viewModel.originalImageShown && viewModel.post.scaled
@@ -147,7 +147,7 @@ fun ImageScreen(
                 },
         )
 
-        if (configuration.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+        if (windowSize == WindowSize.COMPACT) {
             ImageBottomAppBar(
                 visible = viewModel.appBarsVisible,
                 loading = viewModel.loading,

@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.home.posts.state
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme
 import com.uragiristereo.mejiboard.core.resources.R
 
@@ -32,20 +32,20 @@ fun PostsError(
     onRetryClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val windowSize = rememberWindowSize()
 
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .fillMaxSize()
             .padding(
-                bottom = when {
-                    isLandscape -> 0.dp
-                    else -> 56.dp + 1.dp
-                },
-                start = when {
-                    isLandscape -> 56.dp + 1.dp
+                bottom = when (windowSize) {
+                    WindowSize.COMPACT -> 56.dp + 1.dp
                     else -> 0.dp
+                },
+                start = when (windowSize) {
+                    WindowSize.COMPACT -> 0.dp
+                    else -> 56.dp + 1.dp
                 },
             ),
     ) {

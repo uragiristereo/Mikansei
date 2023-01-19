@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.home.posts.grid
 
-import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,10 +15,11 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.common.data.Constants
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -33,14 +33,14 @@ fun PostsGrid(
     onItemLongPress: (Post) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val windowSize = rememberWindowSize()
 
     LazyVerticalStaggeredGrid(
         state = gridState,
         columns = StaggeredGridCells.Fixed(
-            count = when {
-                isLandscape -> 4
-                else -> 2
+            count = when (windowSize) {
+                WindowSize.COMPACT -> 2
+                else -> 4
             }
         ),
         contentPadding = PaddingValues(
@@ -51,9 +51,9 @@ fun PostsGrid(
                     WindowInsets.navigationBars
                         .asPaddingValues()
                         .calculateBottomPadding() +
-                    when {
-                        isLandscape -> 0.dp
-                        else -> 56.dp
+                    when (windowSize) {
+                        WindowSize.COMPACT -> 56.dp
+                        else -> 0.dp
                     },
         ),
         verticalArrangement = Arrangement.spacedBy(space = 8.dp),

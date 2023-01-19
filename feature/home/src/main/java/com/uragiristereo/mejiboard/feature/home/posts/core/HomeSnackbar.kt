@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.feature.home.posts.core
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.navigationBars
@@ -16,15 +15,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 
 @Composable
 fun HomeSnackbar(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
-    val configuration = LocalConfiguration.current
+    val windowSize = rememberWindowSize()
 
     SnackbarHost(
         hostState = snackbarHostState,
@@ -36,9 +36,9 @@ fun HomeSnackbar(
                         insets = WindowInsets.navigationBars.only(sides = WindowInsetsSides.Bottom),
                     )
                     .padding(
-                        bottom = when (configuration.orientation) {
-                            Configuration.ORIENTATION_LANDSCAPE -> 0.dp
-                            else -> 56.dp
+                        bottom = when (windowSize) {
+                            WindowSize.COMPACT -> 56.dp
+                            else -> 0.dp
                         },
                     ),
                 content = {

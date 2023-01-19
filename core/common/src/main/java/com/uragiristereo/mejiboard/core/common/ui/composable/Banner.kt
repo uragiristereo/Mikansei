@@ -1,6 +1,5 @@
 package com.uragiristereo.mejiboard.core.common.ui.composable
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.uragiristereo.mejiboard.core.common.ui.WindowSize
+import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 
 @Composable
 fun Banner(
@@ -25,15 +25,15 @@ fun Banner(
     text: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val windowSize = rememberWindowSize()
 
     ConstraintLayout(
         modifier
             .fillMaxSize()
             .padding(
-                bottom = when {
-                    isLandscape -> 0.dp
-                    else -> 56.dp + 1.dp
+                bottom = when (windowSize) {
+                    WindowSize.COMPACT -> 56.dp + 1.dp
+                    else -> 0.dp
                 },
             )
             .navigationBarsPadding(),
