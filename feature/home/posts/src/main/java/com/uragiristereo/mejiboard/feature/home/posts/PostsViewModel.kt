@@ -17,11 +17,11 @@ import com.uragiristereo.mejiboard.core.database.dao.session.toPostList
 import com.uragiristereo.mejiboard.core.database.dao.session.toPostSessionList
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.model.navigation.getData
 import com.uragiristereo.mejiboard.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsContentState
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsLoadingState
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsSavedState
+import com.uragiristereo.mejiboard.lib.navigation_extension.getData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -35,7 +35,7 @@ class PostsViewModel(
     private val getPostsUseCase: GetPostsUseCase,
     private val sessionDao: SessionDao,
 ) : ViewModel() {
-    val tags = savedStateHandle.getData(key = "tags", defaultValue = "")
+    val tags = savedStateHandle.getData<PostsRoute.IndexRoute>()?.tags ?: ""
 
     var topAppBarHeight by mutableStateOf(0.dp)
     val offsetY = Animatable(initialValue = 0f)

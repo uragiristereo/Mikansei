@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.noarg)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 android {
@@ -21,6 +23,11 @@ android {
     }
 }
 
+noArg {
+    annotation("com.uragiristereo.mejiboard.lib.navigation_extension.NoArg")
+    invokeInitializers true
+}
+
 dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:database"))
@@ -29,6 +36,7 @@ dependencies {
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":domain"))
+    implementation(project(":lib:navigation_extension"))
 
     // AndroidX
     implementation(libs.bundles.androidx)
@@ -48,4 +56,7 @@ dependencies {
 
     // Timber Logger
     implementation(libs.timber)
+
+    // Kotlinx.Serialization JSON Serialization
+    implementation(libs.kotlinx.serialization.json)
 }
