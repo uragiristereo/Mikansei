@@ -88,6 +88,7 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:search_history"))
     implementation(project(":feature:settings"))
+    implementation(project(":lib:navigation_extension"))
 
     // AndroidX
     implementation(libs.bundles.androidx)

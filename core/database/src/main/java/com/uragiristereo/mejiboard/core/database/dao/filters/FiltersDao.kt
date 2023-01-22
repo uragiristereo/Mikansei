@@ -1,11 +1,10 @@
-package com.uragiristereo.mejiboard.core.database.database.dao.filters
+package com.uragiristereo.mejiboard.core.database.dao.filters
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.uragiristereo.mejiboard.core.database.dao.filters.FilterTableItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao

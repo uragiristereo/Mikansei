@@ -1,13 +1,13 @@
 package com.uragiristereo.mejiboard.feature.home.posts
 
-import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.NavRoute
+import kotlinx.serialization.Serializable
 
-sealed class PostsRoute(
-    route: String,
-    argsKeys: List<String> = listOf(),
-) : NavigationRoute(route, argsKeys) {
-    object Index : PostsRoute(
-        route = "home/index",
-        argsKeys = listOf("tags"),
-    )
+sealed interface PostsRoute : NavRoute {
+    @Serializable
+    data class IndexRoute(
+        val tags: String,
+    ) : PostsRoute {
+        override val route: String = "/home/posts/index"
+    }
 }

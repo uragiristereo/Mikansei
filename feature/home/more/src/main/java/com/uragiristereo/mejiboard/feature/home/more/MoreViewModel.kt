@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.core.database.database.dao.filters.FiltersDao
+import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import kotlinx.coroutines.Dispatchers

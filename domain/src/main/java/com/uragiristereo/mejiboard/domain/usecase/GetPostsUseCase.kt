@@ -1,7 +1,7 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
 import com.uragiristereo.mejiboard.core.booru.BooruRepository
-import com.uragiristereo.mejiboard.core.database.database.dao.filters.FiltersDao
+import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository

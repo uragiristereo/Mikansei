@@ -20,5 +20,6 @@ object DatabaseModule {
 
         single { get<MejiboardDatabase>().filtersDao() }
         single { get<MejiboardDatabase>().sessionDao() }
+        single { get<MejiboardDatabase>().savedSearchesDao() }
     }
 }

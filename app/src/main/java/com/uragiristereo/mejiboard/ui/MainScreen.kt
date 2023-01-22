@@ -58,6 +58,7 @@ import com.uragiristereo.mejiboard.feature.image.ImageScreen
 import com.uragiristereo.mejiboard.feature.search.SearchScreen
 import com.uragiristereo.mejiboard.feature.search_history.SearchHistoryScreen
 import com.uragiristereo.mejiboard.feature.settings.SettingsScreen
+import com.uragiristereo.mejiboard.lib.navigation_extension.navigate
 import com.uragiristereo.mejiboard.saved_searches.SavedSearchesScreen
 import com.uragiristereo.mejiboard.ui.core.ShareDownloadDialog
 import kotlinx.coroutines.launch
@@ -318,8 +319,7 @@ fun MainScreen(
                                         }
 
                                         postsNavController.navigate(
-                                            route = PostsRoute.Index,
-                                            data = mapOf("tags" to searchTags),
+                                            route = PostsRoute.IndexRoute(searchTags),
                                         )
                                     },
                                 )
