@@ -1,6 +1,6 @@
 package com.uragiristereo.mejiboard.core.database.dao.saved_searches
 
-import com.uragiristereo.mejiboard.core.common.ui.entity.SavedSearchItem
+import com.uragiristereo.mejiboard.core.ui.database.SavedSearchItem
 
 fun SavedSearchTableItem.toSavedSearchItem(): SavedSearchItem {
     return SavedSearchItem(

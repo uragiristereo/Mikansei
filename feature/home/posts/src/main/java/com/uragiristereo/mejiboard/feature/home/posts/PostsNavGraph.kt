@@ -5,23 +5,24 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.uragiristereo.mejiboard.core.common.ui.LocalPostsNavController
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
+import com.uragiristereo.mejiboard.core.ui.LocalPostsNavController
+import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
+import com.uragiristereo.mejiboard.core.ui.navigation.PostsRoute
 import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.AnimatedNavHost
 import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.composable
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PostsNavGraph(
-    onNavigate: (NavigationRoute) -> Unit,
+    onNavigateMain: (MainRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AnimatedNavHost(
         navController = LocalPostsNavController.current,
-        startDestination = PostsRoute.IndexRoute::class,
+        startDestination = PostsRoute.Index::class,
         enterTransition = {
             slideIntoContainer(
                 towards = AnimatedContentScope.SlideDirection.Right,
@@ -49,10 +50,10 @@ fun PostsNavGraph(
         modifier = modifier,
     ) {
         composable(
-            route = PostsRoute.IndexRoute::class,
+            route = PostsRoute.Index::class,
             content = {
                 PostsScreen(
-                    onNavigate = onNavigate,
+                    onNavigate = onNavigateMain,
                     onNavigateImage = onNavigateImage,
                     onCurrentTagsChange = onCurrentTagsChange,
                 )

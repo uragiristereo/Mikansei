@@ -6,6 +6,7 @@ import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import kotlinx.serialization.Serializable
 import java.util.Date
 
+@Serializable
 @Stable
 data class Post(
     val source: BooruSource,

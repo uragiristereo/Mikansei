@@ -4,7 +4,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
-import com.uragiristereo.mejiboard.core.common.ui.composable.SetSystemBarsColors
+import com.uragiristereo.mejiboard.core.ui.composable.SetSystemBarsColors
 
 @Composable
 fun ProductSetSystemBarsColor(

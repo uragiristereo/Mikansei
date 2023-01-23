@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.composable.Banner
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.composable.Banner
 
 @Composable
 fun PostsEmpty(

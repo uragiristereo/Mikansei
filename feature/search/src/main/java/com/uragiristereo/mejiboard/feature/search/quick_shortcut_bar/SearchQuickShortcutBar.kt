@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
 fun SearchQuickShortcutBar(

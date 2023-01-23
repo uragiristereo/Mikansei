@@ -17,9 +17,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagType
+import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
 fun MoreTagItem(

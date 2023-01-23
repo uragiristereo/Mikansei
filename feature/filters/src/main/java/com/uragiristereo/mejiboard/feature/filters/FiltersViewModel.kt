@@ -8,14 +8,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.core.common.ui.entity.FilterItem
-import com.uragiristereo.mejiboard.core.common.ui.extension.strip
 import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
 import com.uragiristereo.mejiboard.core.database.dao.filters.toFilterItemList
 import com.uragiristereo.mejiboard.core.database.dao.filters.toFilterTableItem
 import com.uragiristereo.mejiboard.core.database.dao.filters.toFilterTableItemList
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.core.preferences.model.Preferences
+import com.uragiristereo.mejiboard.core.ui.database.FilterItem
+import com.uragiristereo.mejiboard.core.ui.extension.strip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

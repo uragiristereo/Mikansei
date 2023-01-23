@@ -1,6 +1,6 @@
 package com.uragiristereo.mejiboard.core.database.dao.filters
 
-import com.uragiristereo.mejiboard.core.common.ui.entity.FilterItem
+import com.uragiristereo.mejiboard.core.ui.database.FilterItem
 
 fun FilterTableItem.toFilterItem(): FilterItem {
     return FilterItem(

@@ -29,10 +29,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mejiboard.core.common.ui.composable.DimensionSubcomposeLayout
-import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.composable.DimensionSubcomposeLayout
+import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import timber.log.Timber
 
 @Composable

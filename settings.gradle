@@ -41,3 +41,4 @@ include(":feature:search")
 include(":feature:search_history")
 include(":feature:settings")
 include(":lib:navigation_extension")
+include ':core:ui'

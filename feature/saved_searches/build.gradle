@@ -26,6 +26,7 @@ dependencies {
     implementation(project(":core:preferences"))
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
+    implementation(project(":core:ui"))
 
     // Compose UI
     implementation(libs.bundles.compose)

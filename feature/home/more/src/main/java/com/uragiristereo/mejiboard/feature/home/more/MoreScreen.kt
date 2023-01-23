@@ -26,18 +26,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mejiboard.core.common.ui.WindowSize
-import com.uragiristereo.mejiboard.core.common.ui.composable.ClickableSection
-import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
-import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
-import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.WindowSize
+import com.uragiristereo.mejiboard.core.ui.composable.ClickableSection
+import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
+import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 
 @Composable
 fun MoreScreen(
-    onNavigate: (NavigationRoute) -> Unit,
+    onNavigate: (MainRoute) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MoreViewModel = koinViewModel(),
 ) {
@@ -70,7 +69,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.public_globe),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.Settings)
+                        onNavigate(MainRoute.Settings())
                     },
                 )
             }
@@ -81,7 +80,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.history),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.SearchHistory)
+                        onNavigate(MainRoute.SearchHistory())
                     },
                 )
             }
@@ -92,7 +91,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.sell),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.SavedSearches)
+                        onNavigate(MainRoute.SavedSearches())
                     },
                 )
             }
@@ -119,7 +118,7 @@ fun MoreScreen(
                     },
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.Filters)
+                        onNavigate(MainRoute.Filters())
                     },
                 )
             }
@@ -134,7 +133,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.settings),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.Settings)
+                        onNavigate(MainRoute.Settings())
                     },
                 )
             }
@@ -145,7 +144,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.info),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.About)
+                        onNavigate(MainRoute.About())
                     },
                 )
             }

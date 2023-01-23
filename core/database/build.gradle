@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":core:booru"))
     implementation(project(":core:common"))
     implementation(project(":core:model"))
+    implementation(project(":core:ui"))
 
     // Koin Dependency Injection & Timber Logger
     implementation(libs.bundles.core)

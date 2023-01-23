@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.core.common.ui.entity.SavedSearchItem
 import com.uragiristereo.mejiboard.core.database.dao.saved_searches.SavedSearchesDao
 import com.uragiristereo.mejiboard.core.database.dao.saved_searches.toSavedSearchItemList
+import com.uragiristereo.mejiboard.core.ui.database.SavedSearchItem
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 

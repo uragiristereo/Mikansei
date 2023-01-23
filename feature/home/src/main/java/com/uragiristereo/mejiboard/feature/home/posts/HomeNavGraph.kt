@@ -6,25 +6,26 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.uragiristereo.mejiboard.core.common.ui.LocalHomeNavController
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
-import com.uragiristereo.mejiboard.core.model.navigation.composable
+import com.uragiristereo.mejiboard.core.ui.LocalHomeNavController
+import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
+import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.feature.home.collections.CollectionsScreen
 import com.uragiristereo.mejiboard.feature.home.more.MoreScreen
+import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.AnimatedNavHost
+import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.composable
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HomeNavGraph(
-    onNavigate: (NavigationRoute) -> Unit,
+    onNavigate: (MainRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AnimatedNavHost(
         navController = LocalHomeNavController.current,
-        startDestination = HomeRoute.Posts.route,
+        startDestination = HomeRoute.Posts::class,
         enterTransition = {
             fadeIn(animationSpec = tween(durationMillis = 300))
         },
@@ -35,10 +36,10 @@ fun HomeNavGraph(
     ) {
         // Posts
         composable(
-            route = HomeRoute.Posts,
+            route = HomeRoute.Posts::class,
             content = {
                 PostsNavGraph(
-                    onNavigate = onNavigate,
+                    onNavigateMain = onNavigate,
                     onNavigateImage = onNavigateImage,
                     onCurrentTagsChange = onCurrentTagsChange,
                 )
@@ -47,7 +48,7 @@ fun HomeNavGraph(
 
         // Collections
         composable(
-            route = HomeRoute.Collections,
+            route = HomeRoute.Collections::class,
             content = {
                 CollectionsScreen()
             },
@@ -55,7 +56,7 @@ fun HomeNavGraph(
 
         // More
         composable(
-            route = HomeRoute.More,
+            route = HomeRoute.More::class,
             content = {
                 MoreScreen(
                     onNavigate = onNavigate,

@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":core:network"))
     implementation(project(":core:preferences"))
     implementation(project(":core:resources"))
+    implementation(project(":core:ui"))
 
     // Koin Dependency Injection & Timber Logger
     implementation(libs.bundles.core)

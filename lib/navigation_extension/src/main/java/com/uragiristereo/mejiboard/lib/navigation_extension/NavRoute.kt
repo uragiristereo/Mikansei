@@ -4,13 +4,18 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import timber.log.Timber
+import kotlin.reflect.KClass
 
 @NoArg
 interface NavRoute {
     val route: String
 }
 
-fun NavRoute.parseRoute(): String = "$route?data={data}"
+val NavRoute.parsedRoute: String
+    get() = "$route?data={data}"
+
+val <T : NavRoute> KClass<T>.route: String
+    get() = this.java.getConstructor().newInstance().parsedRoute
 
 internal fun NavRoute.parseData(): String {
     val encoded = Serializer.encode(value = this)
@@ -21,7 +26,7 @@ internal fun NavRoute.parseData(): String {
 inline fun <reified T> NavRoute.getData(entry: NavBackStackEntry): T? {
     return when (val data = entry.arguments?.getString("data")) {
         null -> {
-            val e = IllegalArgumentException("Navigation route \"${parseRoute()}\" cannot be found.")
+            val e = IllegalArgumentException("Navigation route \"$parsedRoute\" cannot be found.")
 
             Timber.w(e.message)
 

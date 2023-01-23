@@ -21,9 +21,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.WindowSize
-import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.WindowSize
+import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoadingState
 
 @Composable

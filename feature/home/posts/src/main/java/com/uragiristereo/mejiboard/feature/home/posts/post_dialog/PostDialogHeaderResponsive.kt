@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.uragiristereo.mejiboard.core.common.ui.WindowSize
-import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
+import com.uragiristereo.mejiboard.core.ui.WindowSize
+import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 
 @Composable
 fun PostDialogHeaderResponsive(

@@ -17,21 +17,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
-import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
-import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
-import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
 import com.uragiristereo.mejiboard.core.resources.R
-import com.uragiristereo.mejiboard.feature.home.posts.HomeRoute
+import com.uragiristereo.mejiboard.core.ui.composable.NavigationBarSpacer
+import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
+import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.route
 
 @Composable
 fun HomeBottomNavigationBar(
     currentRoute: String?,
-    onNavigate: (NavigationRoute) -> Unit,
+    onNavigate: (HomeRoute) -> Unit,
+    onNavigateSearch: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val alwaysShowLabel = remember { false }
-
     Column(
         modifier = modifier
             .background(
@@ -61,12 +60,12 @@ fun HomeBottomNavigationBar(
                 label = {
                     Text(text = stringResource(id = R.string.posts_label))
                 },
-                selected = currentRoute == HomeRoute.Posts.route,
+                selected = currentRoute == HomeRoute.Posts::class.route,
                 icon = {
                     Icon(
                         painter = painterResource(
                             id = when (currentRoute) {
-                                HomeRoute.Posts.route -> R.drawable.home_fill
+                                HomeRoute.Posts::class.route -> R.drawable.home_fill
                                 else -> R.drawable.home
                             },
                         ),
@@ -74,7 +73,7 @@ fun HomeBottomNavigationBar(
                     )
                 },
                 onClick = {
-                    onNavigate(HomeRoute.Posts)
+                    onNavigate(HomeRoute.Posts())
                 },
                 alwaysShowLabel = alwaysShowLabel,
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
@@ -92,9 +91,7 @@ fun HomeBottomNavigationBar(
                         contentDescription = null,
                     )
                 },
-                onClick = {
-                    onNavigate(MainRoute.Search)
-                },
+                onClick = onNavigateSearch,
                 alwaysShowLabel = alwaysShowLabel,
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
             )
@@ -104,7 +101,7 @@ fun HomeBottomNavigationBar(
                 label = {
                     Text(text = stringResource(id = R.string.collections_label))
                 },
-                selected = currentRoute == HomeRoute.Collections.route,
+                selected = currentRoute == HomeRoute.Collections::class.route,
                 icon = {
                     BadgedBox(
                         badge = {
@@ -114,7 +111,7 @@ fun HomeBottomNavigationBar(
                             Icon(
                                 painter = painterResource(
                                     id = when (currentRoute) {
-                                        HomeRoute.Collections.route -> R.drawable.photo_library_fill
+                                        HomeRoute.Collections::class.route -> R.drawable.photo_library_fill
                                         else -> R.drawable.photo_library
                                     },
                                 ),
@@ -124,7 +121,7 @@ fun HomeBottomNavigationBar(
                     )
                 },
                 onClick = {
-                    onNavigate(HomeRoute.Collections)
+                    onNavigate(HomeRoute.Collections())
                 },
                 alwaysShowLabel = alwaysShowLabel,
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
@@ -135,7 +132,7 @@ fun HomeBottomNavigationBar(
                 label = {
                     Text(text = stringResource(id = R.string.more_label))
                 },
-                selected = currentRoute == HomeRoute.More.route,
+                selected = currentRoute == HomeRoute.More::class.route,
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.more_horiz),
@@ -143,7 +140,7 @@ fun HomeBottomNavigationBar(
                     )
                 },
                 onClick = {
-                    onNavigate(HomeRoute.More)
+                    onNavigate(HomeRoute.More())
                 },
                 alwaysShowLabel = alwaysShowLabel,
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),

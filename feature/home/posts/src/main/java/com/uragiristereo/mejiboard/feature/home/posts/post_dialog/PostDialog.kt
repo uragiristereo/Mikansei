@@ -19,12 +19,12 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.WindowSize
-import com.uragiristereo.mejiboard.core.common.ui.composable.ClickableSection
-import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.product.component.ProductDialog
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.WindowSize
+import com.uragiristereo.mejiboard.core.ui.composable.ClickableSection
+import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 
 @Composable
 fun PostDialog(

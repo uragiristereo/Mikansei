@@ -9,10 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
-import com.uragiristereo.mejiboard.core.model.navigation.getData
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
+import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase
 import com.uragiristereo.mejiboard.feature.search.state.SearchWordIndex
+import com.uragiristereo.mejiboard.lib.navigation_extension.getData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -24,7 +25,7 @@ class SearchViewModel(
     preferencesRepository: PreferencesRepository,
     private val searchTermUseCase: SearchTermUseCase,
 ) : ViewModel() {
-    val tags = savedStateHandle.getData(key = "tags", defaultValue = "")
+    val tags = savedStateHandle.getData(MainRoute.Search()).tags
 
     var preferences by mutableStateOf(preferencesRepository.data)
         private set

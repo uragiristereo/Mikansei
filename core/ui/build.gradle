@@ -1,0 +1,49 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.noarg)
+    alias(libs.plugins.kotlinx.serialization)
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.core.ui"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+noArg {
+    annotation("com.uragiristereo.mejiboard.lib.navigation_extension.NoArg")
+    invokeInitializers true
+}
+
+dependencies {
+    implementation(project(":core:model"))
+    implementation(project(":core:resources"))
+    implementation(project(":lib:navigation_extension"))
+
+    // Compose UI
+    implementation(libs.compose)
+    implementation(libs.compose.material)
+    implementation(libs.androidx.constraintlayout.compose)
+
+    // Accompanist Compose Extensions
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.navigation.animation)
+
+    // Kotlinx.Serialization JSON Serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // Timber Logger
+    implementation(libs.timber)
+}

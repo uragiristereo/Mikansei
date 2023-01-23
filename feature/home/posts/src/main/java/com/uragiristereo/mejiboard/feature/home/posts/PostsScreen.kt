@@ -45,15 +45,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mejiboard.core.common.data.Constants
-import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnDownload
-import com.uragiristereo.mejiboard.core.common.ui.LocalLambdaOnShare
-import com.uragiristereo.mejiboard.core.common.ui.WindowSize
-import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
-import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
-import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
+import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnDownload
+import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnShare
+import com.uragiristereo.mejiboard.core.ui.WindowSize
+import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
+import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
+import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.feature.home.posts.core.PostsFab
 import com.uragiristereo.mejiboard.feature.home.posts.core.PostsTopAppBar
 import com.uragiristereo.mejiboard.feature.home.posts.grid.PostsGrid
@@ -72,7 +71,7 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun PostsScreen(
-    onNavigate: (NavigationRoute) -> Unit,
+    onNavigate: (MainRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -376,7 +375,7 @@ fun PostsScreen(
                 booruSource = viewModel.selectedBooru?.nameResId?.let { stringResource(id = it) }.orEmpty(),
                 onHeightChange = { viewModel.topAppBarHeight = it },
                 onSearchClick = {
-                    onNavigate(MainRoute.Search)
+                    onNavigate(MainRoute.Search(tags = viewModel.tags))
                 },
                 onRefreshClick = {
                     scope.launch {

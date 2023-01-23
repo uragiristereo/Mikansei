@@ -16,10 +16,10 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.core.preferences.model.DetailSizePreference
 import com.uragiristereo.mejiboard.core.preferences.model.ThemePreference
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.feature.settings.preference.BottomSheetPreferenceState
 import com.uragiristereo.mejiboard.feature.settings.preference.DropDownPreference
 import com.uragiristereo.mejiboard.feature.settings.preference.PreferenceCategory

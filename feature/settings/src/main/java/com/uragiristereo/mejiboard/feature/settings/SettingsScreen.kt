@@ -11,8 +11,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.uragiristereo.mejiboard.core.common.ui.extension.defaultPaddings
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
+import com.uragiristereo.mejiboard.core.ui.extension.defaultPaddings
 import com.uragiristereo.mejiboard.feature.settings.preference.BottomSheetPreference
 import com.uragiristereo.mejiboard.feature.settings.preference.LocalIconPadding
 import com.uragiristereo.mejiboard.feature.settings.preference.rememberBottomSheetPreferenceState

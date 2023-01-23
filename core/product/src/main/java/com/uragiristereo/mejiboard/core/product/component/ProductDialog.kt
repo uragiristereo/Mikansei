@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
+import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

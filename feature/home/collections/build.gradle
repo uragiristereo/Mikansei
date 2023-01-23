@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
+    implementation(project(":core:ui"))
 
     // Compose UI
     implementation(libs.bundles.compose)

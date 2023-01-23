@@ -36,8 +36,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.product.theme.ScrimColor
+import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)

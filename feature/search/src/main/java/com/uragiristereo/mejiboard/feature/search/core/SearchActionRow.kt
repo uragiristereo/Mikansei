@@ -14,10 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.composable.Chips
-import com.uragiristereo.mejiboard.core.common.ui.composable.SidesGradient
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.composable.Chips
+import com.uragiristereo.mejiboard.core.ui.composable.SidesGradient
 
 @Composable
 fun SearchActionRow(

@@ -5,8 +5,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.uragiristereo.mejiboard.core.common.ui.extension.defaultPaddings
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
+import com.uragiristereo.mejiboard.core.ui.extension.defaultPaddings
 import com.uragiristereo.mejiboard.saved_searches.appbars.SavedSearchesTopAppBar
 import org.koin.androidx.compose.koinViewModel
 

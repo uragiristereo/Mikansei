@@ -10,7 +10,7 @@ import com.uragiristereo.mejiboard.lib.navigation_extension.NavRoute
 import com.uragiristereo.mejiboard.lib.navigation_extension.Serializer
 import com.uragiristereo.mejiboard.lib.navigation_extension.getData
 import com.uragiristereo.mejiboard.lib.navigation_extension.namedNavArg
-import com.uragiristereo.mejiboard.lib.navigation_extension.parseRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.parsedRoute
 import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
@@ -26,7 +26,7 @@ inline fun <reified T : NavRoute> NavGraphBuilder.composable(
     }
 
     composable(
-        route = route.parseRoute(),
+        route = route.parsedRoute,
         arguments = listOf(namedNavArg),
         deepLinks = deepLinks,
         content = { entry ->
@@ -49,7 +49,7 @@ inline fun <reified T : NavRoute> NavGraphBuilder.composable(
     }
 
     composable(
-        route = newRoute.parseRoute(),
+        route = newRoute.parsedRoute,
         arguments = listOf(namedNavArg),
         deepLinks = deepLinks,
         content = { entry ->
@@ -70,7 +70,7 @@ inline fun <reified T : NavRoute> NavGraphBuilder.composable(
     }
 
     composable(
-        route = route.parseRoute(),
+        route = route.parsedRoute,
         arguments = listOf(namedNavArg),
         deepLinks = deepLinks,
         content = { entry ->

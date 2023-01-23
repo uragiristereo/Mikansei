@@ -11,10 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.WindowSize
-import com.uragiristereo.mejiboard.core.common.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.model.navigation.NavigationRoute
+import com.uragiristereo.mejiboard.core.ui.WindowSize
+import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
+import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
+import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.feature.home.posts.HomeNavGraph
 import com.uragiristereo.mejiboard.feature.home.posts.appbars.HomeBottomNavigationBar
 import com.uragiristereo.mejiboard.feature.home.posts.appbars.HomeNavigationRail
@@ -23,8 +24,9 @@ import com.uragiristereo.mejiboard.feature.home.posts.appbars.HomeNavigationRail
 fun HomeContentResponsive(
     currentRoute: String?,
     scaffoldState: ScaffoldState,
-    onNavigate: (NavigationRoute) -> Unit,
-    onHomeNavigate: (NavigationRoute) -> Unit,
+    onNavigate: (MainRoute) -> Unit,
+    onNavigateHome: (HomeRoute) -> Unit,
+    onNavigateSearch: () -> Unit,
     onNavigateImage: (Post) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -47,7 +49,8 @@ fun HomeContentResponsive(
 
                 HomeBottomNavigationBar(
                     currentRoute = currentRoute,
-                    onNavigate = onHomeNavigate,
+                    onNavigate = onNavigateHome,
+                    onNavigateSearch = onNavigateSearch,
                 )
             }
         }
@@ -55,7 +58,8 @@ fun HomeContentResponsive(
         Row(modifier = modifier) {
             HomeNavigationRail(
                 currentRoute = currentRoute,
-                onNavigate = onHomeNavigate,
+                onNavigate = onNavigateHome,
+                onNavigateSearch = onNavigateSearch,
             )
 
             Divider(

@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.uragiristereo.mejiboard.lib.navigation_extension.NavRoute
-import com.uragiristereo.mejiboard.lib.navigation_extension.parseRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.parsedRoute
 import kotlin.reflect.KClass
 
 @Composable
@@ -20,7 +20,7 @@ inline fun <reified T : NavRoute> NavHost(
 
     androidx.navigation.compose.NavHost(
         navController = navController,
-        startDestination = startRoute.parseRoute(),
+        startDestination = startRoute.parsedRoute,
         modifier = modifier,
         route = route,
         builder = builder,

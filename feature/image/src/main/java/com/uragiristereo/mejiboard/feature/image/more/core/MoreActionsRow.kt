@@ -12,10 +12,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.uragiristereo.mejiboard.core.common.ui.composable.Chips
-import com.uragiristereo.mejiboard.core.common.ui.composable.SidesGradient
-import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.composable.Chips
+import com.uragiristereo.mejiboard.core.ui.composable.SidesGradient
+import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
 fun MoreActionsRow(

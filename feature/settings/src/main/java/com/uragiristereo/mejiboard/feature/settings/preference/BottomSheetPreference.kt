@@ -23,11 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.composable.DragHandle
-import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
 import com.uragiristereo.mejiboard.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.composable.DragHandle
+import com.uragiristereo.mejiboard.core.ui.composable.NavigationBarSpacer
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 

@@ -35,11 +35,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.common.ui.extension.backgroundElevation
-import com.uragiristereo.mejiboard.core.common.ui.extension.defaultPaddings
-import com.uragiristereo.mejiboard.core.model.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
+import com.uragiristereo.mejiboard.core.ui.extension.defaultPaddings
+import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.feature.search.core.SearchActionRow
 import com.uragiristereo.mejiboard.feature.search.core.SearchBar
 import com.uragiristereo.mejiboard.feature.search.core.SearchBrowseButton
@@ -176,19 +176,19 @@ fun SearchScreen(
                             filtersEnabled = viewModel.preferences.filtersEnabled,
                             historyEnabled = true,
                             onSelectedBooruClick = {
-                                onNavigate(MainRoute.Settings)
+                                onNavigate(MainRoute.Settings())
                             },
                             onSavedSearchesClick = {
                                 keyboardController?.hide()
-                                onNavigate(MainRoute.SavedSearches)
+                                onNavigate(MainRoute.SavedSearches())
                             },
                             onFiltersClick = {
                                 keyboardController?.hide()
-                                onNavigate(MainRoute.Filters)
+                                onNavigate(MainRoute.Filters())
                             },
                             onHistoryClick = {
                                 keyboardController?.hide()
-                                onNavigate(MainRoute.SearchHistory)
+                                onNavigate(MainRoute.SearchHistory())
                             },
                         )
                     }

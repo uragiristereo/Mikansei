@@ -14,7 +14,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.uragiristereo.mejiboard.lib.navigation_extension.NavRoute
-import com.uragiristereo.mejiboard.lib.navigation_extension.parseRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.parsedRoute
 import kotlin.reflect.KClass
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -37,7 +37,7 @@ inline fun <reified T : NavRoute> AnimatedNavHost(
 
     com.google.accompanist.navigation.animation.AnimatedNavHost(
         navController = navController,
-        startDestination = startRoute.parseRoute(),
+        startDestination = startRoute.parsedRoute,
         modifier = modifier,
         contentAlignment = contentAlignment,
         route = route,

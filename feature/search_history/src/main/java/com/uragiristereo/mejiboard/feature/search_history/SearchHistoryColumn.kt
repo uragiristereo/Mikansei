@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.uragiristereo.mejiboard.core.common.ui.composable.NavigationBarSpacer
-import com.uragiristereo.mejiboard.core.common.ui.composable.SettingTip
-import com.uragiristereo.mejiboard.core.common.ui.composable.SettingToggle
+import com.uragiristereo.mejiboard.core.ui.composable.NavigationBarSpacer
+import com.uragiristereo.mejiboard.core.ui.composable.SettingTip
+import com.uragiristereo.mejiboard.core.ui.composable.SettingToggle
 
 @Composable
 fun SearchHistoryColumn(
