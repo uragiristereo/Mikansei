@@ -13,7 +13,7 @@ import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.domain.usecase.SearchTermUseCase
 import com.uragiristereo.mejiboard.feature.search.state.SearchWordIndex
-import com.uragiristereo.mejiboard.lib.navigation_extension.getData
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.getData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

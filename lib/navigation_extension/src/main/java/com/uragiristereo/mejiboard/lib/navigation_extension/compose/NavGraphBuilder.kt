@@ -6,11 +6,11 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.uragiristereo.mejiboard.lib.navigation_extension.NavRoute
-import com.uragiristereo.mejiboard.lib.navigation_extension.Serializer
-import com.uragiristereo.mejiboard.lib.navigation_extension.getData
-import com.uragiristereo.mejiboard.lib.navigation_extension.namedNavArg
-import com.uragiristereo.mejiboard.lib.navigation_extension.parsedRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.NavRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.Serializer
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.getData
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.namedNavArg
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.parsedRoute
 import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 

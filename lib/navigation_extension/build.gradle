@@ -23,7 +23,7 @@ android {
 }
 
 noArg {
-    annotation("com.uragiristereo.mejiboard.lib.navigation_extension.NoArg")
+    annotation("com.uragiristereo.mejiboard.lib.navigation_extension.core.NoArg")
     invokeInitializers true
 }
 

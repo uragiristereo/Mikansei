@@ -26,8 +26,8 @@ import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsCo
 import com.uragiristereo.mejiboard.core.ui.LocalHomeNavController
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.feature.home.posts.core.HomeContentResponsive
-import com.uragiristereo.mejiboard.lib.navigation_extension.NavRoute
-import com.uragiristereo.mejiboard.lib.navigation_extension.navigate
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.NavRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.navigate
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

@@ -21,7 +21,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
-import com.uragiristereo.mejiboard.lib.navigation_extension.route
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.route
 
 @Composable
 fun HomeBottomNavigationBar(
@@ -140,7 +140,7 @@ fun HomeBottomNavigationBar(
                     )
                 },
                 onClick = {
-                    onNavigate(HomeRoute.More())
+                    onNavigate(HomeRoute.TestDialog())
                 },
                 alwaysShowLabel = alwaysShowLabel,
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),

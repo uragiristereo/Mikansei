@@ -1,6 +1,6 @@
 package com.uragiristereo.mejiboard.core.ui.navigation
 
-import com.uragiristereo.mejiboard.lib.navigation_extension.NavRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.NavRoute
 import kotlinx.serialization.Serializable
 
 sealed interface PostsRoute : NavRoute {

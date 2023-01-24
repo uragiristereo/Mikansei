@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.lib.navigation_extension
+package com.uragiristereo.mejiboard.lib.navigation_extension.core
 
 import androidx.lifecycle.SavedStateHandle
 

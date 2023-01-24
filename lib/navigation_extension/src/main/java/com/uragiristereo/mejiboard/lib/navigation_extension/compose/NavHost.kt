@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.uragiristereo.mejiboard.lib.navigation_extension.NavRoute
-import com.uragiristereo.mejiboard.lib.navigation_extension.parsedRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.NavRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.parsedRoute
 import kotlin.reflect.KClass
 
 @Composable

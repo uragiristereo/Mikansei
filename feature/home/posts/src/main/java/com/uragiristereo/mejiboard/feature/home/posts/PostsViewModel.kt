@@ -22,7 +22,7 @@ import com.uragiristereo.mejiboard.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsContentState
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsLoadingState
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsSavedState
-import com.uragiristereo.mejiboard.lib.navigation_extension.getData
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.getData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

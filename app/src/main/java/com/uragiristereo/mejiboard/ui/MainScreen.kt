@@ -57,8 +57,8 @@ import com.uragiristereo.mejiboard.feature.search_history.SearchHistoryScreen
 import com.uragiristereo.mejiboard.feature.settings.SettingsScreen
 import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.AnimatedNavHost
 import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.composable
-import com.uragiristereo.mejiboard.lib.navigation_extension.navigate
-import com.uragiristereo.mejiboard.lib.navigation_extension.route
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.navigate
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.route
 import com.uragiristereo.mejiboard.saved_searches.SavedSearchesScreen
 import com.uragiristereo.mejiboard.ui.core.ShareDownloadDialog
 import kotlinx.coroutines.launch
