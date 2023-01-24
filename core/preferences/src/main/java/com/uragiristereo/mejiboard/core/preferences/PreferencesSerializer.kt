@@ -11,12 +11,17 @@ import java.io.InputStream
 import java.io.OutputStream
 
 object PreferencesSerializer : Serializer<Preferences> {
+    private val json = Json {
+        encodeDefaults = true
+        prettyPrint = true
+    }
+
     override val defaultValue: Preferences
         get() = Preferences()
 
     override suspend fun readFrom(input: InputStream): Preferences {
         return try {
-            Json.decodeFromString(input.readBytes().decodeToString()) ?: defaultValue
+            json.decodeFromString(input.readBytes().decodeToString()) ?: defaultValue
         } catch (t: Throwable) {
             t.printStackTrace()
 
@@ -26,7 +31,7 @@ object PreferencesSerializer : Serializer<Preferences> {
 
     override suspend fun writeTo(t: Preferences, output: OutputStream) {
         withContext(Dispatchers.IO) {
-            output.write(Json.encodeToString(t).encodeToByteArray())
+            output.write(json.encodeToString(t).encodeToByteArray())
         }
     }
 }
