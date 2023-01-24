@@ -374,8 +374,8 @@ fun PostsScreen(
                 searchTags = viewModel.tags,
                 booruSource = viewModel.selectedBooru?.nameResId?.let { stringResource(id = it) }.orEmpty(),
                 onHeightChange = { viewModel.topAppBarHeight = it },
-                onSearchClick = {
-                    onNavigate(MainRoute.Search(tags = viewModel.tags))
+                onSearchClick = { tags ->
+                    onNavigate(MainRoute.Search(tags))
                 },
                 onRefreshClick = {
                     scope.launch {

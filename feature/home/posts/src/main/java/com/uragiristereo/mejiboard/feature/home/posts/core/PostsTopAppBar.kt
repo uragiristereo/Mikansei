@@ -40,7 +40,7 @@ fun PostsTopAppBar(
     searchTags: String,
     booruSource: String,
     onHeightChange: (Dp) -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (String) -> Unit,
     onRefreshClick: () -> Unit,
     onExitClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -76,7 +76,7 @@ fun PostsTopAppBar(
                     IconButton(
                         onClick = {
                             dropdownExpanded = false
-                            onSearchClick()
+                            onSearchClick(searchTags)
                         },
                         content = {
                             Icon(
