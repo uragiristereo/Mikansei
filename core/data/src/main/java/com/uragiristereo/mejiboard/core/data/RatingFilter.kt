@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.core.common.data
+package com.uragiristereo.mejiboard.core.data
 
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 

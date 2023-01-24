@@ -4,8 +4,8 @@ import android.content.Context
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.post.GelbooruPostsResult
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.search.GelbooruSearch
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.tag.GelbooruTagsResult
-import com.uragiristereo.mejiboard.core.common.data.Constants
-import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
+import com.uragiristereo.mejiboard.core.data.Constants
+import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage

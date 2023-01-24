@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import com.uragiristereo.mejiboard.core.common.data.Constants
+import com.uragiristereo.mejiboard.core.data.Constants
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.database.dao.session.toPostList
 import com.uragiristereo.mejiboard.core.database.dao.session.toPostSessionList

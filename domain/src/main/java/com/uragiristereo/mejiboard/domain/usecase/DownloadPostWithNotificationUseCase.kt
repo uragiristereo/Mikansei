@@ -9,7 +9,7 @@ import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
+import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.download.DownloadBroadcastReceiver
 import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource

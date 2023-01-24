@@ -9,8 +9,8 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.core.common.data.Constants
-import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
+import com.uragiristereo.mejiboard.core.data.Constants
+import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource

@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.core.common.data
+package com.uragiristereo.mejiboard.core.data
 
 object Constants {
     const val STATE_KEY_NOTIFICATION_COUNT = "main.notification.count"

@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.uragiristereo.mejiboard.core.common.data.Constants
+import com.uragiristereo.mejiboard.core.data.Constants
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 
 @OptIn(ExperimentalFoundationApi::class)

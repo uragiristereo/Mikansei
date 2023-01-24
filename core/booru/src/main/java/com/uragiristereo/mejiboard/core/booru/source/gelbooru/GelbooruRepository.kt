@@ -9,8 +9,8 @@ import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.toTagList
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.SafebooruOrgApi
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.search.SafebooruOrgSearch
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.toTagList
-import com.uragiristereo.mejiboard.core.common.data.Constants
-import com.uragiristereo.mejiboard.core.common.data.RatingFilter
+import com.uragiristereo.mejiboard.core.data.Constants
+import com.uragiristereo.mejiboard.core.data.RatingFilter
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating

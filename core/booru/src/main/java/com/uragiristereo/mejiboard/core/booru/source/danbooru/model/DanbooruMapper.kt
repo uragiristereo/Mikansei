@@ -3,7 +3,7 @@ package com.uragiristereo.mejiboard.core.booru.source.danbooru.model
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.search.DanbooruSearch
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.tag.DanbooruTag
-import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
+import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage

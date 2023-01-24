@@ -2,7 +2,7 @@ package com.uragiristereo.mejiboard.core.preferences
 
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.uragiristereo.mejiboard.core.common.data.util.CacheUtil
+import com.uragiristereo.mejiboard.core.data.util.CacheUtil
 import com.uragiristereo.mejiboard.core.preferences.api.MejiboardApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

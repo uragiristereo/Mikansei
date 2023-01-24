@@ -17,7 +17,7 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import com.ortiz.touchview.OnTouchImageViewListener
 import com.ortiz.touchview.TouchImageView
-import com.uragiristereo.mejiboard.core.common.data.util.ImageUtil
+import com.uragiristereo.mejiboard.core.data.util.ImageUtil
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.preferences.model.DetailSizePreference
 import com.uragiristereo.mejiboard.feature.image.ImageViewModel

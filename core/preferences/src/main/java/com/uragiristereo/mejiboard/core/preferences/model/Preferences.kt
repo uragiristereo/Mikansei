@@ -1,7 +1,7 @@
 package com.uragiristereo.mejiboard.core.preferences.model
 
 import android.os.Build
-import com.uragiristereo.mejiboard.core.common.data.RatingFilter
+import com.uragiristereo.mejiboard.core.data.RatingFilter
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 import kotlinx.serialization.SerialName

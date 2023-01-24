@@ -3,7 +3,7 @@ package com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model
 import android.content.Context
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.posts.SafebooruOrgPost
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.search.SafebooruOrgSearch
-import com.uragiristereo.mejiboard.core.common.data.util.NumberUtil
+import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage

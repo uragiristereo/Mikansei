@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.core.common.data.RatingFilter
+import com.uragiristereo.mejiboard.core.data.RatingFilter
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository

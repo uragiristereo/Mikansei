@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.core.common.data.util
+package com.uragiristereo.mejiboard.core.data.util
 
 import kotlin.math.floor
 import kotlin.math.ln
