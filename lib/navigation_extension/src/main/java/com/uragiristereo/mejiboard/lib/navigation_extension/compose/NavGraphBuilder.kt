@@ -7,32 +7,56 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.uragiristereo.mejiboard.lib.navigation_extension.core.NavRoute
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.NavRouteUtil
 import com.uragiristereo.mejiboard.lib.navigation_extension.core.Serializer
-import com.uragiristereo.mejiboard.lib.navigation_extension.core.getData
 import com.uragiristereo.mejiboard.lib.navigation_extension.core.namedNavArg
-import com.uragiristereo.mejiboard.lib.navigation_extension.core.parsedRoute
 import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
-
 inline fun <reified T : NavRoute> NavGraphBuilder.composable(
+    route: T,
     deepLinks: List<NavDeepLink> = listOf(),
-    noinline content: @Composable T?.(NavBackStackEntry) -> Unit,
+    noinline content: @Composable NavBackStackEntry.(T) -> Unit,
 ) {
-    val route = T::class.java.getConstructor().newInstance()
-
     Serializer.addPolymorphicType(name = T::class.qualifiedName!!) {
         subclass(T::class, serializer())
     }
 
     composable(
-        route = route.parsedRoute,
+        route = route.route,
         arguments = listOf(namedNavArg),
         deepLinks = deepLinks,
         content = { entry ->
-            val data = remember(entry) { route.getData<T>(entry) }
+            val data = remember(entry) {
+                when (val data = entry.arguments?.getString("data")) {
+                    null -> route
 
-            content(data, entry)
+                    else -> Serializer.decode(data) ?: route
+                }
+            }
+
+            content(entry, data)
+        },
+    )
+}
+
+@Suppress("UNUSED_PARAMETER")
+inline fun <reified T : NavRoute> NavGraphBuilder.composable(
+    route: T,
+    disableDeserialization: Boolean,
+    deepLinks: List<NavDeepLink> = listOf(),
+    noinline content: @Composable NavBackStackEntry.() -> Unit,
+) {
+    Serializer.addPolymorphicType(name = T::class.qualifiedName!!) {
+        subclass(T::class, serializer())
+    }
+
+    composable(
+        route = route.route,
+        arguments = listOf(namedNavArg),
+        deepLinks = deepLinks,
+        content = { entry ->
+            content(entry)
         },
     )
 }
@@ -40,7 +64,7 @@ inline fun <reified T : NavRoute> NavGraphBuilder.composable(
 inline fun <reified T : NavRoute> NavGraphBuilder.composable(
     route: KClass<T>,
     deepLinks: List<NavDeepLink> = listOf(),
-    noinline content: @Composable T?.(NavBackStackEntry) -> Unit,
+    noinline content: @Composable NavBackStackEntry.(T?) -> Unit,
 ) {
     val newRoute = route.java.getConstructor().newInstance()
 
@@ -49,34 +73,38 @@ inline fun <reified T : NavRoute> NavGraphBuilder.composable(
     }
 
     composable(
-        route = newRoute.parsedRoute,
+        route = newRoute.route,
         arguments = listOf(namedNavArg),
         deepLinks = deepLinks,
         content = { entry ->
-            val data = remember(entry) { newRoute.getData<T>(entry) }
+            val data = remember(entry) {
+                NavRouteUtil.getDataOrNull<T>(newRoute, entry)
+            }
 
-            content(data, entry)
+            content(entry, data)
         },
     )
 }
 
+@Suppress("UNUSED_PARAMETER")
 inline fun <reified T : NavRoute> NavGraphBuilder.composable(
-    route: T,
+    route: KClass<T>,
+    disableDeserialization: Boolean,
     deepLinks: List<NavDeepLink> = listOf(),
-    noinline content: @Composable T?.(NavBackStackEntry) -> Unit,
+    noinline content: @Composable NavBackStackEntry.() -> Unit,
 ) {
+    val newRoute = route.java.getConstructor().newInstance()
+
     Serializer.addPolymorphicType(name = T::class.qualifiedName!!) {
         subclass(T::class, serializer())
     }
 
     composable(
-        route = route.parsedRoute,
+        route = newRoute.route,
         arguments = listOf(namedNavArg),
         deepLinks = deepLinks,
         content = { entry ->
-            val data = remember(entry) { route.getData<T>(entry) ?: route }
-
-            content(data, entry)
+            content(entry)
         },
     )
 }

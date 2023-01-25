@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
-import com.uragiristereo.mejiboard.lib.navigation_extension.core.route
 
 @Composable
 fun HomeNavigationRail(
@@ -52,12 +51,12 @@ fun HomeNavigationRail(
                 label = {
                     Text(text = stringResource(id = R.string.posts_label))
                 },
-                selected = currentRoute == HomeRoute.Posts::class.route,
+                selected = currentRoute == HomeRoute.Posts.route,
                 icon = {
                     Icon(
                         painter = painterResource(
                             id = when (currentRoute) {
-                                HomeRoute.Posts::class.route -> R.drawable.home_fill
+                                HomeRoute.Posts.route -> R.drawable.home_fill
                                 else -> R.drawable.home
                             },
                         ),
@@ -65,7 +64,7 @@ fun HomeNavigationRail(
                     )
                 },
                 onClick = {
-                    onNavigate(HomeRoute.Posts())
+                    onNavigate(HomeRoute.Posts)
                 },
                 alwaysShowLabel = alwaysShowLabel,
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
@@ -93,12 +92,12 @@ fun HomeNavigationRail(
                 label = {
                     Text(text = stringResource(id = R.string.collections_label))
                 },
-                selected = currentRoute == HomeRoute.Collections::class.route,
+                selected = currentRoute == HomeRoute.Collections.route,
                 icon = {
                     Icon(
                         painter = painterResource(
                             id = when (currentRoute) {
-                                HomeRoute.Collections::class.route -> R.drawable.photo_library_fill
+                                HomeRoute.Collections.route -> R.drawable.photo_library_fill
                                 else -> R.drawable.photo_library
                             },
                         ),
@@ -106,7 +105,7 @@ fun HomeNavigationRail(
                     )
                 },
                 onClick = {
-                    onNavigate(HomeRoute.Collections())
+                    onNavigate(HomeRoute.Collections)
                 },
                 alwaysShowLabel = alwaysShowLabel,
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
@@ -117,7 +116,7 @@ fun HomeNavigationRail(
                 label = {
                     Text(text = stringResource(id = R.string.more_label))
                 },
-                selected = currentRoute == HomeRoute.More::class.route,
+                selected = currentRoute == HomeRoute.More.route,
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.more_horiz),
@@ -125,7 +124,7 @@ fun HomeNavigationRail(
                     )
                 },
                 onClick = {
-                    onNavigate(HomeRoute.More())
+                    onNavigate(HomeRoute.More)
                 },
                 alwaysShowLabel = alwaysShowLabel,
                 unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),

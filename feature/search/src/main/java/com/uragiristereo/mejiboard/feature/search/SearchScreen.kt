@@ -176,19 +176,19 @@ fun SearchScreen(
                             filtersEnabled = viewModel.preferences.filtersEnabled,
                             historyEnabled = true,
                             onSelectedBooruClick = {
-                                onNavigate(MainRoute.Settings())
+                                onNavigate(MainRoute.Settings)
                             },
                             onSavedSearchesClick = {
                                 keyboardController?.hide()
-                                onNavigate(MainRoute.SavedSearches())
+                                onNavigate(MainRoute.SavedSearches)
                             },
                             onFiltersClick = {
                                 keyboardController?.hide()
-                                onNavigate(MainRoute.Filters())
+                                onNavigate(MainRoute.Filters)
                             },
                             onHistoryClick = {
                                 keyboardController?.hide()
-                                onNavigate(MainRoute.SearchHistory())
+                                onNavigate(MainRoute.SearchHistory)
                             },
                         )
                     }

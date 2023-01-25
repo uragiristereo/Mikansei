@@ -69,7 +69,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.public_globe),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.Settings())
+                        onNavigate(MainRoute.Settings)
                     },
                 )
             }
@@ -80,7 +80,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.history),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.SearchHistory())
+                        onNavigate(MainRoute.SearchHistory)
                     },
                 )
             }
@@ -91,7 +91,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.sell),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.SavedSearches())
+                        onNavigate(MainRoute.SavedSearches)
                     },
                 )
             }
@@ -118,7 +118,7 @@ fun MoreScreen(
                     },
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.Filters())
+                        onNavigate(MainRoute.Filters)
                     },
                 )
             }
@@ -133,7 +133,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.settings),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.Settings())
+                        onNavigate(MainRoute.Settings)
                     },
                 )
             }
@@ -144,7 +144,7 @@ fun MoreScreen(
                     icon = painterResource(id = R.drawable.info),
                     verticalPadding = 16.dp,
                     onClick = {
-                        onNavigate(MainRoute.About())
+                        onNavigate(MainRoute.About)
                     },
                 )
             }

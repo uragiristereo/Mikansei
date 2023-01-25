@@ -133,7 +133,7 @@ fun MainScreen(
     }
 
     BackHandler(
-        enabled = viewModel.confirmExit && currentRoute == MainRoute.Home::class.route,
+        enabled = viewModel.confirmExit && currentRoute == MainRoute.Home.route,
         onBack = remember {
             {
                 scope.launch {
@@ -150,7 +150,7 @@ fun MainScreen(
     )
 
     BackHandler(
-        enabled = !viewModel.confirmExit && currentRoute == MainRoute.Home::class.route,
+        enabled = !viewModel.confirmExit && currentRoute == MainRoute.Home.route,
         onBack = {
             (context as Activity).finishAffinity()
         },
@@ -188,7 +188,7 @@ fun MainScreen(
                 content = {
                     AnimatedNavHost(
                         navController = mainNavController,
-                        startDestination = MainRoute.Home::class,
+                        startDestination = MainRoute.Home,
                         enterTransition = {
                             translateXFadeIn(forward = true)
                         },
@@ -211,34 +211,35 @@ fun MainScreen(
                     ) {
                         // Home
                         composable(
-                            route = MainRoute.Home::class,
+                            route = MainRoute.Home,
+                            disableDeserialization = true,
                             enterTransition = {
                                 when (initialState.destination.route) {
-                                    MainRoute.Home::class.route -> fadeIn()
-                                    MainRoute.Search::class.route -> holdIn()
+                                    MainRoute.Home.route -> fadeIn()
+                                    MainRoute.Search().route -> holdIn()
                                     else -> translateXFadeIn(forward = true)
                                 }
                             },
                             exitTransition = {
                                 when (targetState.destination.route) {
-                                    MainRoute.Home::class.route -> fadeOut()
-                                    MainRoute.Search::class.route -> holdOut()
+                                    MainRoute.Home.route -> fadeOut()
+                                    MainRoute.Search().route -> holdOut()
                                     MainRoute.Image::class.route -> holdOut(durationMillis = 350)
                                     else -> translateXFadeOut(forward = true)
                                 }
                             },
                             popEnterTransition = {
                                 when (initialState.destination.route) {
-                                    MainRoute.Home::class.route -> fadeIn()
-                                    MainRoute.Search::class.route -> fadeIn()
+                                    MainRoute.Home.route -> fadeIn()
+                                    MainRoute.Search().route -> fadeIn()
                                     MainRoute.Image::class.route -> holdIn(durationMillis = 350)
                                     else -> translateXFadeIn(forward = false)
                                 }
                             },
                             popExitTransition = {
                                 when (targetState.destination.route) {
-                                    MainRoute.Home::class.route -> fadeOut()
-                                    MainRoute.Search::class.route -> holdOut()
+                                    MainRoute.Home.route -> fadeOut()
+                                    MainRoute.Search().route -> holdOut()
                                     else -> translateXFadeOut(forward = false)
                                 }
                             },
@@ -270,13 +271,14 @@ fun MainScreen(
 
                         // Search
                         composable(
-                            route = MainRoute.Search::class,
+                            route = MainRoute.Search(),
+                            disableDeserialization = true,
                             enterTransition = {
                                 holdIn()
                             },
                             exitTransition = {
                                 when (targetState.destination.route) {
-                                    MainRoute.Home::class.route -> fadeOut()
+                                    MainRoute.Home.route -> fadeOut()
                                     else -> translateXFadeOut(forward = true)
                                 }
                             },
@@ -285,7 +287,7 @@ fun MainScreen(
                             },
                             popExitTransition = {
                                 when (targetState.destination.route) {
-                                    MainRoute.Home::class.route -> fadeOut()
+                                    MainRoute.Home.route -> fadeOut()
                                     else -> translateXFadeOut(forward = false)
                                 }
                             },
@@ -296,14 +298,14 @@ fun MainScreen(
                                     },
                                     onNavigateBack = lambdaOnNavigateBack,
                                     onSearchSubmit = { searchTags ->
-                                        mainNavController.navigate(route = MainRoute.Home()) {
+                                        mainNavController.navigate(route = MainRoute.Home) {
                                             popUpTo(id = mainNavController.graph.findStartDestination().id)
 
                                             restoreState = true
                                             launchSingleTop = true
                                         }
 
-                                        homeNavController.navigate(route = HomeRoute.Posts()) {
+                                        homeNavController.navigate(route = HomeRoute.Posts) {
                                             popUpTo(id = homeNavController.graph.findStartDestination().id) {
                                                 saveState = true
                                             }
@@ -323,6 +325,7 @@ fun MainScreen(
                         // Image
                         composable(
                             route = MainRoute.Image::class,
+                            disableDeserialization = true,
                             enterTransition = {
                                 translateYFadeIn(
                                     initialOffsetY = { it / 5 },
@@ -351,7 +354,8 @@ fun MainScreen(
 
                         // Settings
                         composable(
-                            route = MainRoute.Settings::class,
+                            route = MainRoute.Settings,
+                            disableDeserialization = true,
                             content = {
                                 SettingsScreen(
                                     onNavigateBack = lambdaOnNavigateBack,
@@ -361,7 +365,8 @@ fun MainScreen(
 
                         // Filters
                         composable(
-                            route = MainRoute.Filters::class,
+                            route = MainRoute.Filters,
+                            disableDeserialization = true,
                             content = {
                                 FiltersScreen(
                                     onNavigateBack = lambdaOnNavigateBack,
@@ -371,7 +376,8 @@ fun MainScreen(
 
                         // Saved searches
                         composable(
-                            route = MainRoute.SavedSearches::class,
+                            route = MainRoute.SavedSearches,
+                            disableDeserialization = true,
                             content = {
                                 SavedSearchesScreen(
                                     onNavigateBack = lambdaOnNavigateBack,
@@ -381,7 +387,8 @@ fun MainScreen(
 
                         // Search history
                         composable(
-                            route = MainRoute.SearchHistory::class,
+                            route = MainRoute.SearchHistory,
+                            disableDeserialization = true,
                             content = {
                                 SearchHistoryScreen(
                                     onNavigateBack = lambdaOnNavigateBack,
@@ -391,7 +398,8 @@ fun MainScreen(
 
                         // About
                         composable(
-                            route = MainRoute.About::class,
+                            route = MainRoute.About,
+                            disableDeserialization = true,
                             content = {
                                 AboutScreen(
                                     onNavigateBack = lambdaOnNavigateBack,

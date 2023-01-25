@@ -22,7 +22,7 @@ fun PostsNavGraph(
 ) {
     AnimatedNavHost(
         navController = LocalPostsNavController.current,
-        startDestination = PostsRoute.Index::class,
+        startDestination = PostsRoute.Index(),
         enterTransition = {
             slideIntoContainer(
                 towards = AnimatedContentScope.SlideDirection.Right,
@@ -50,7 +50,8 @@ fun PostsNavGraph(
         modifier = modifier,
     ) {
         composable(
-            route = PostsRoute.Index::class,
+            route = PostsRoute.Index(),
+            disableDeserialization = true,
             content = {
                 PostsScreen(
                     onNavigate = onNavigateMain,

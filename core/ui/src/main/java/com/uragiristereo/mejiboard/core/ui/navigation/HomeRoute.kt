@@ -5,17 +5,17 @@ import kotlinx.serialization.Serializable
 
 sealed interface HomeRoute : NavRoute {
     @Serializable
-    class Posts : HomeRoute {
+    object Posts : HomeRoute {
         override val route: String = "home/posts"
     }
 
     @Serializable
-    class Collections : HomeRoute {
+    object Collections : HomeRoute {
         override val route: String = "home/collections"
     }
 
     @Serializable
-    class More : HomeRoute {
+    object More : HomeRoute {
         override val route: String = "home/more"
     }
 }

@@ -25,7 +25,7 @@ fun HomeNavGraph(
 ) {
     AnimatedNavHost(
         navController = LocalHomeNavController.current,
-        startDestination = HomeRoute.Posts::class,
+        startDestination = HomeRoute.Posts,
         enterTransition = {
             fadeIn(animationSpec = tween(durationMillis = 300))
         },
@@ -36,7 +36,8 @@ fun HomeNavGraph(
     ) {
         // Posts
         composable(
-            route = HomeRoute.Posts::class,
+            route = HomeRoute.Posts,
+            disableDeserialization = true,
             content = {
                 PostsNavGraph(
                     onNavigateMain = onNavigate,
@@ -48,7 +49,8 @@ fun HomeNavGraph(
 
         // Collections
         composable(
-            route = HomeRoute.Collections::class,
+            route = HomeRoute.Collections,
+            disableDeserialization = true,
             content = {
                 CollectionsScreen()
             },
@@ -56,7 +58,8 @@ fun HomeNavGraph(
 
         // More
         composable(
-            route = HomeRoute.More::class,
+            route = HomeRoute.More,
+            disableDeserialization = true,
             content = {
                 MoreScreen(
                     onNavigate = onNavigate,
