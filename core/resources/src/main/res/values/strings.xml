@@ -1,7 +1,6 @@
 <resources>
     <!-- Global -->
-    <string name="app_name" translatable="false">Mejiboard2</string>
-    <string name="app_name_alt" translatable="false">Mejiboard</string>
+    <string name="app_name" translatable="false">Mikansei</string>
     <string name="field_placeholder_example">Example: 1girl blue_sky</string>
     <string name="feature_under_development">Feature is under development</string>
     <string name="none">None</string>
@@ -73,7 +72,7 @@
     <string name="exit_app">Exit app</string>
     <string name="block_tags_post_action">Block tags from this post</string>
     <string name="hide_post_action">Hide post</string>
-    <string name="press_back_again_to_exit">Press BACK again to exit Mejiboard</string>
+    <string name="press_back_again_to_exit">Press BACK again to exit %1$s</string>
 
     <!-- Home > More -->
     <string name="selected_booru">Selected Booru</string>

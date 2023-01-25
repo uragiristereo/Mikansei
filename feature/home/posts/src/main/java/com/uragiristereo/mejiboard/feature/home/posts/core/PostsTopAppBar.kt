@@ -62,7 +62,7 @@ fun PostsTopAppBar(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Column {
-                            Text(text = stringResource(id = R.string.app_name_alt))
+                            Text(text = stringResource(id = R.string.app_name))
 
                             Text(
                                 text = booruSource,

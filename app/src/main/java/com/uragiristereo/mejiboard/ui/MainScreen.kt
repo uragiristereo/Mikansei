@@ -140,7 +140,10 @@ fun MainScreen(
                     viewModel.confirmExit = false
 
                     homeScaffoldState.snackbarHostState.showSnackbar(
-                        message = context.resources.getString(R.string.press_back_again_to_exit),
+                        message = context.resources.getString(
+                            /* id = */ R.string.press_back_again_to_exit,
+                            /* ...formatArgs = */ context.resources.getString(R.string.app_name),
+                        ),
                     )
 
                     viewModel.confirmExit = true
