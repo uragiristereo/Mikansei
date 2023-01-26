@@ -6,10 +6,12 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import com.uragiristereo.mejiboard.lib.navigation_extension.core.NavRoute
 import com.uragiristereo.mejiboard.lib.navigation_extension.core.NavRouteUtil
 import com.uragiristereo.mejiboard.lib.navigation_extension.core.Serializer
 import com.uragiristereo.mejiboard.lib.navigation_extension.core.namedNavArg
+import com.uragiristereo.mejiboard.lib.navigation_extension.core.route
 import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
@@ -106,5 +108,65 @@ inline fun <reified T : NavRoute> NavGraphBuilder.composable(
         content = { entry ->
             content(entry)
         },
+    )
+}
+
+fun NavGraphBuilder.navigation(
+    startDestination: NavRoute,
+    route: NavRoute,
+    deepLinks: List<NavDeepLink> = listOf(),
+    builder: NavGraphBuilder.() -> Unit,
+) {
+    navigation(
+        startDestination = startDestination.route,
+        route = route.route,
+        arguments = listOf(namedNavArg),
+        deepLinks = deepLinks,
+        builder = builder,
+    )
+}
+
+fun NavGraphBuilder.navigation(
+    startDestination: KClass<NavRoute>,
+    route: KClass<NavRoute>,
+    deepLinks: List<NavDeepLink> = listOf(),
+    builder: NavGraphBuilder.() -> Unit,
+) {
+    navigation(
+        startDestination = startDestination.route,
+        route = route.route,
+        arguments = listOf(namedNavArg),
+        deepLinks = deepLinks,
+        builder = builder,
+    )
+}
+
+fun NavGraphBuilder.navigation(
+    startDestination: NavRoute,
+    route: KClass<NavRoute>,
+    deepLinks: List<NavDeepLink> = listOf(),
+    builder: NavGraphBuilder.() -> Unit,
+) {
+    navigation(
+        startDestination = startDestination.route,
+        route = route.route,
+        arguments = listOf(namedNavArg),
+        deepLinks = deepLinks,
+        builder = builder,
+    )
+}
+
+fun NavGraphBuilder.navigation(
+    startDestination: KClass<NavRoute>,
+    route: NavRoute,
+    deepLinks: List<NavDeepLink> = listOf(),
+    builder: NavGraphBuilder.() -> Unit,
+) {
+    navigation(
+        startDestination = startDestination.route,
+        route = route.route,
+        arguments = listOf(namedNavArg),
+        deepLinks = deepLinks,
+        builder = builder,
     )
 }
