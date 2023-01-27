@@ -3,7 +3,6 @@ package com.uragiristereo.mejiboard.feature.home.posts.appbars
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.BadgedBox
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Divider
@@ -11,13 +10,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
@@ -29,7 +26,6 @@ fun HomeBottomNavigationBar(
     onNavigateSearch: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val alwaysShowLabel = remember { false }
     Column(
         modifier = modifier
             .background(
@@ -54,96 +50,33 @@ fun HomeBottomNavigationBar(
             backgroundColor = Color.Transparent,
             contentColor = MaterialTheme.colors.primary,
         ) {
-            // Posts
-            BottomNavigationItem(
-                label = {
-                    Text(text = stringResource(id = R.string.posts_label))
-                },
-                selected = currentRoute == HomeRoute.Posts.route,
-                icon = {
-                    Icon(
-                        painter = painterResource(
-                            id = when (currentRoute) {
-                                HomeRoute.Posts.route -> R.drawable.home_fill
-                                else -> R.drawable.home
-                            },
-                        ),
-                        contentDescription = null,
-                    )
-                },
-                onClick = {
-                    onNavigate(HomeRoute.Posts)
-                },
-                alwaysShowLabel = alwaysShowLabel,
-                unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
-            )
-
-            // Search
-            BottomNavigationItem(
-                label = {
-                    Text(text = stringResource(id = R.string.search_label))
-                },
-                selected = false,
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.search),
-                        contentDescription = null,
-                    )
-                },
-                onClick = onNavigateSearch,
-                alwaysShowLabel = alwaysShowLabel,
-                unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
-            )
-
-            // Collections
-            BottomNavigationItem(
-                label = {
-                    Text(text = stringResource(id = R.string.collections_label))
-                },
-                selected = currentRoute == HomeRoute.Collections.route,
-                icon = {
-                    BadgedBox(
-                        badge = {
-//                            Badge()
-                        },
-                        content = {
-                            Icon(
-                                painter = painterResource(
-                                    id = when (currentRoute) {
-                                        HomeRoute.Collections.route -> R.drawable.photo_library_fill
-                                        else -> R.drawable.photo_library
-                                    },
-                                ),
-                                contentDescription = null,
-                            )
+            HomeNavigationItems.values().forEach { item ->
+                BottomNavigationItem(
+                    label = {
+                        Text(text = stringResource(id = item.label))
+                    },
+                    selected = currentRoute == item.route.route,
+                    icon = {
+                        Icon(
+                            painter = painterResource(
+                                id = when (currentRoute) {
+                                    item.route.route -> item.selectedIcon
+                                    else -> item.unselectedIcon
+                                },
+                            ),
+                            contentDescription = stringResource(id = item.label),
+                        )
+                    },
+                    onClick = {
+                        when (item) {
+                            HomeNavigationItems.Search -> onNavigateSearch()
+                            else -> onNavigate(item.route as HomeRoute)
                         }
-                    )
-                },
-                onClick = {
-                    onNavigate(HomeRoute.Collections)
-                },
-                alwaysShowLabel = alwaysShowLabel,
-                unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
-            )
-
-            // More
-            BottomNavigationItem(
-                label = {
-                    Text(text = stringResource(id = R.string.more_label))
-                },
-                selected = currentRoute == HomeRoute.More.route,
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.more_horiz),
-                        contentDescription = null,
-                    )
-                },
-                onClick = {
-                    onNavigate(HomeRoute.More)
-                },
-                alwaysShowLabel = alwaysShowLabel,
-                unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
-            )
+                    },
+                    alwaysShowLabel = false,
+                    unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
+                )
+            }
         }
 
         NavigationBarSpacer()
