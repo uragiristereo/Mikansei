@@ -33,7 +33,6 @@ import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.composable.DimensionSubcomposeLayout
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
-import timber.log.Timber
 
 @Composable
 fun PostsTopAppBar(
@@ -49,7 +48,6 @@ fun PostsTopAppBar(
 
     DimensionSubcomposeLayout(modifier = modifier) {
         LaunchedEffect(key1 = size) {
-            Timber.d(size.toString())
             onHeightChange(size.height)
         }
 

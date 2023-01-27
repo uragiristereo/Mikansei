@@ -23,14 +23,13 @@ android {
 }
 
 noArg {
-    annotation("com.uragiristereo.mejiboard.lib.navigation_extension.core.NoArg")
+    annotation("com.github.uragiristereo.safer.compose.navigation.core.NoArg")
     invokeInitializers true
 }
 
 dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:resources"))
-    implementation(project(":lib:navigation_extension"))
 
     // Compose UI
     implementation(libs.compose)
@@ -46,4 +45,7 @@ dependencies {
 
     // Timber Logger
     implementation(libs.timber)
+
+    // Safer Navigation Compose
+    implementation(libs.bundles.safer.navigation)
 }

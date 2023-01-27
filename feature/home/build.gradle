@@ -28,7 +28,6 @@ dependencies {
     implementation(project(":feature:home:collections"))
     implementation(project(":feature:home:more"))
     implementation(project(":feature:home:posts"))
-    implementation(project(":lib:navigation_extension"))
 
     // Compose UI
     implementation(libs.bundles.compose)
@@ -42,4 +41,7 @@ dependencies {
 
     // Timber Logger
     implementation(libs.timber)
+
+    // Safer Navigation Compose
+    implementation(libs.bundles.safer.navigation)
 }

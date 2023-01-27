@@ -27,7 +27,6 @@ dependencies {
     implementation(project(":core:resources"))
     implementation(project(":domain"))
     implementation(project(":core:ui"))
-    implementation(project(":lib:navigation_extension"))
 
     // Compose UI
     implementation(libs.bundles.compose)
@@ -38,4 +37,7 @@ dependencies {
 
     // Timber Logger
     implementation(libs.timber)
+
+    // Safer Navigation Compose
+    implementation(libs.safer.navigation.core)
 }

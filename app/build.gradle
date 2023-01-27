@@ -69,7 +69,7 @@ android {
 
 dependencies {
     implementation(project(":core:booru"))
-    implementation implementation(project(':core:data',))
+    implementation(project(":core:data"))
     implementation(project(":core:database"))
     implementation(project(":core:download"))
     implementation(project(":core:model"))
@@ -90,7 +90,6 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:search_history"))
     implementation(project(":feature:settings"))
-    implementation(project(":lib:navigation_extension"))
 
     // AndroidX
     implementation(libs.bundles.androidx)
@@ -116,4 +115,7 @@ dependencies {
 
     // Kotlinx.Serialization JSON Serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // Safer Navigation Compose
+    implementation(libs.bundles.safer.navigation)
 }

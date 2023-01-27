@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
+import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mejiboard.core.data.Constants
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.database.dao.session.toPostList
@@ -22,7 +23,6 @@ import com.uragiristereo.mejiboard.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsContentState
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsLoadingState
 import com.uragiristereo.mejiboard.feature.home.posts.state.PostsSavedState
-import com.uragiristereo.mejiboard.lib.navigation_extension.core.getData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

@@ -4,13 +4,14 @@ kotlin = "1.7.21"
 ksp = "1.7.21-1.0.8"
 lifecycle = "2.5.1"
 compose = "1.4.0-alpha03"
-compose_compiler = "1.4.0-alpha02"
+compose-compiler = "1.4.0-alpha02"
 room = "2.5.0"
 accompanist = "0.28.0"
 koin = "3.3.2"
 coil = "2.2.2"
 okhttp = "5.0.0-alpha.11"
 retrofit = "2.9.0"
+safer-navigation-compose = "1.0.0"
 
 
 [plugins]
@@ -84,6 +85,10 @@ gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
 # Timber Logger
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 
+# Safer Navigation Compose
+safer-navigation-core = { module = "com.github.uragiristereo.safer-navigation-compose:core", version.ref = "safer-navigation-compose" }
+safer-navigation-animation = { module = "com.github.uragiristereo.safer-navigation-compose:navigation-animation", version.ref = "safer-navigation-compose" }
+
 
 [bundles]
 androidx = ["androidx-core", "androidx-lifecycle-runtime", "androidx-savedstate"]
@@ -94,3 +99,4 @@ room = ["room-runtime", "room-ktx"]
 koin = ["koin", "koin-androidx-navigation", "koin-androidx-compose"]
 coil = ["coil", "coil-compose"]
 core = ["koin", "timber"]
+safer-navigation = ["safer-navigation-core", "safer-navigation-animation"]

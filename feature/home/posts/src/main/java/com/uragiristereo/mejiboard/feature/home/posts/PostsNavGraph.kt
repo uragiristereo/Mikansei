@@ -5,12 +5,12 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.github.uragiristereo.safer.compose.navigation.animation.AnimatedNavHost
+import com.github.uragiristereo.safer.compose.navigation.animation.composable
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.ui.LocalPostsNavController
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.ui.navigation.PostsRoute
-import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.AnimatedNavHost
-import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.composable
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

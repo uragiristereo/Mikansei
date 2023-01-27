@@ -21,13 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
+import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.ui.LocalHomeNavController
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.feature.home.posts.core.HomeContentResponsive
-import com.uragiristereo.mejiboard.lib.navigation_extension.core.NavRoute
-import com.uragiristereo.mejiboard.lib.navigation_extension.core.navigate
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

@@ -6,14 +6,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.github.uragiristereo.safer.compose.navigation.animation.AnimatedNavHost
+import com.github.uragiristereo.safer.compose.navigation.animation.composable
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.ui.LocalHomeNavController
 import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.feature.home.collections.CollectionsScreen
 import com.uragiristereo.mejiboard.feature.home.more.MoreScreen
-import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.AnimatedNavHost
-import com.uragiristereo.mejiboard.lib.navigation_extension.accompanist.composable
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
