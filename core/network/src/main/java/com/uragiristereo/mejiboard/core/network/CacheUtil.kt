@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.core.data.util
+package com.uragiristereo.mejiboard.core.network
 
 import android.content.Context
 import android.os.StatFs

@@ -11,7 +11,7 @@ koin = "3.3.2"
 coil = "2.2.2"
 okhttp = "5.0.0-alpha.11"
 retrofit = "2.9.0"
-safer-navigation-compose = "1.0.0"
+safer-navigation-compose = "1.0.1"
 
 
 [plugins]

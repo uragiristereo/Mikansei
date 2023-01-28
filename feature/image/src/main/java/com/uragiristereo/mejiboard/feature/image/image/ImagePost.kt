@@ -17,9 +17,8 @@ import coil.request.Disposable
 import coil.request.ImageRequest
 import com.ortiz.touchview.OnTouchImageViewListener
 import com.ortiz.touchview.TouchImageView
-import com.uragiristereo.mejiboard.core.data.util.ImageUtil
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.preferences.model.DetailSizePreference
+import com.uragiristereo.mejiboard.core.network.model.DetailSizePreference
 import com.uragiristereo.mejiboard.feature.image.ImageViewModel
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoadingState
 import kotlinx.coroutines.currentCoroutineContext
@@ -60,7 +59,7 @@ fun ImagePost(
     }
 
     DisposableEffect(key1 = viewModel) {
-        val resized = ImageUtil.resizeImage(post.originalImage)
+        val resized = viewModel.resizeImage(post.originalImage)
 
         imageDisposable = context.imageLoader.enqueue(
             request = imageRequest
@@ -121,7 +120,7 @@ fun ImagePost(
 
     LaunchedEffect(key1 = viewModel.originalImageShown) {
         if (viewModel.originalImageShown) {
-            val resized = ImageUtil.resizeImage(post.originalImage)
+            val resized = viewModel.resizeImage(post.originalImage)
 
             viewModel.loading = ImageLoadingState.FROM_EXPAND
 

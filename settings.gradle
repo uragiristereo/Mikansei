@@ -20,7 +20,6 @@ rootProject.name = "Mejiboard 2"
 
 include(":app")
 include(":core:booru")
-include(":core:data")
 include(":core:database")
 include(":core:download")
 include(":core:model")

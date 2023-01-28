@@ -9,16 +9,16 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.core.data.Constants
-import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
+import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
-import com.uragiristereo.mejiboard.core.preferences.model.Preferences
+import com.uragiristereo.mejiboard.core.network.PreferencesRepository
+import com.uragiristereo.mejiboard.core.network.model.Preferences
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostWithNotificationUseCase
 import com.uragiristereo.mejiboard.ui.core.DownloadState
@@ -37,6 +37,7 @@ class MainViewModel(
     private val downloadRepository: DownloadRepository,
     private val downloadPostUseCase: DownloadPostUseCase,
     private val downloadPostWithNotificationUseCase: DownloadPostWithNotificationUseCase,
+    private val convertFileSizeUseCase: ConvertFileSizeUseCase,
 ) : ViewModel() {
     var preferences by mutableStateOf(Preferences(theme = preferencesRepository.getInitialTheme()))
         private set
@@ -134,9 +135,9 @@ class MainViewModel(
                     }
 
                     is DownloadResource.Downloading -> {
-                        val lengthFmt = NumberUtil.convertFileSize(resource.length)
-                        val downloadSpeedFmt = "${NumberUtil.convertFileSize(resource.speed)}/s"
-                        val downloadedFmt = NumberUtil.convertFileSize(resource.downloaded)
+                        val lengthFmt = convertFileSizeUseCase(resource.length)
+                        val downloadSpeedFmt = "${convertFileSizeUseCase(resource.speed)}/s"
+                        val downloadedFmt = convertFileSizeUseCase(resource.downloaded)
 
                         downloadState = DownloadState(
                             downloaded = downloadedFmt,

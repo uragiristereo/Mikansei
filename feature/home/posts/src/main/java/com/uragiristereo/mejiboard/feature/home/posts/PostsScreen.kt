@@ -44,7 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.uragiristereo.mejiboard.core.data.Constants
+import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnDownload

@@ -1,5 +1,6 @@
 package com.uragiristereo.mejiboard.domain.di
 
+import com.uragiristereo.mejiboard.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostWithNotificationUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetFileSizeUseCase
@@ -18,5 +19,6 @@ object DomainModule {
         factoryOf(::GetFileSizeUseCase)
         factoryOf(::DownloadPostUseCase)
         factoryOf(::DownloadPostWithNotificationUseCase)
+        factoryOf(::ConvertFileSizeUseCase)
     }
 }

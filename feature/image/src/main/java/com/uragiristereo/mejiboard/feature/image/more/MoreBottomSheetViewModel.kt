@@ -10,9 +10,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
+import com.uragiristereo.mejiboard.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetFileSizeUseCase
 import com.uragiristereo.mejiboard.domain.usecase.GetTagsUseCase
 import kotlinx.coroutines.launch
@@ -21,6 +21,7 @@ import timber.log.Timber
 class MoreBottomSheetViewModel(
     private val getTagsUseCase: GetTagsUseCase,
     private val getFileSizeUseCase: GetFileSizeUseCase,
+    private val convertFileSizeUseCase: ConvertFileSizeUseCase,
 ) : ViewModel() {
     var infoExpanded by mutableStateOf(false)
     var tagsExpanded by mutableStateOf(false)
@@ -77,7 +78,7 @@ class MoreBottomSheetViewModel(
                             }
                         },
                         onSuccess = { size ->
-                            scaledImageFileSizeStr = NumberUtil.convertFileSize(size)
+                            scaledImageFileSizeStr = convertFileSizeUseCase(size)
                         },
                         onFailed = {
                             scaledImageFileSizeStr = "Error!"
@@ -98,7 +99,7 @@ class MoreBottomSheetViewModel(
                         }
                     },
                     onSuccess = { size ->
-                        originalImageFileSizeStr = NumberUtil.convertFileSize(size)
+                        originalImageFileSizeStr = convertFileSizeUseCase(size)
                     },
                     onFailed = {
                         originalImageFileSizeStr = "Error!"

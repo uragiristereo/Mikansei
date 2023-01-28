@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.core.preferences.api
+package com.uragiristereo.mejiboard.core.network.api
 
 import okhttp3.ResponseBody
 import retrofit2.Response

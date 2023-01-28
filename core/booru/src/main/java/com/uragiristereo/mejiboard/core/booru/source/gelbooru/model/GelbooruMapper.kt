@@ -1,11 +1,11 @@
 package com.uragiristereo.mejiboard.core.booru.source.gelbooru.model
 
 import android.content.Context
+import com.uragiristereo.mejiboard.core.booru.source.BooruSourceConverters
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.post.GelbooruPostsResult
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.search.GelbooruSearch
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.tag.GelbooruTagsResult
-import com.uragiristereo.mejiboard.core.data.Constants
-import com.uragiristereo.mejiboard.core.data.util.NumberUtil
+import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage
@@ -60,7 +60,7 @@ fun GelbooruPostsResult.toPostList(context: Context): List<Post> {
                 height = it.previewHeight,
                 width = it.previewWidth,
             ),
-            aspectRatio = NumberUtil.coerceAspectRatio(it.width, it.height),
+            aspectRatio = BooruSourceConverters.coerceAspectRatio(it.width, it.height),
         )
     }
         ?: emptyList()
@@ -72,7 +72,7 @@ fun List<GelbooruSearch>.toTagList(): List<Tag> {
             id = index,
             name = it.value,
             count = it.postCount,
-            countFmt = NumberUtil.convertToUnit(it.postCount),
+            countFmt = BooruSourceConverters.convertToUnit(it.postCount),
             type = when (it.type) {
                 "tag" -> TagType.GENERAL
                 "artist" -> TagType.ARTIST
@@ -91,7 +91,7 @@ fun GelbooruTagsResult.toTagList(): List<Tag> {
             id = it.id,
             name = it.name,
             count = it.count,
-            countFmt = NumberUtil.convertToUnit(it.count),
+            countFmt = BooruSourceConverters.convertToUnit(it.count),
             type = when (it.type) {
                 0 -> TagType.GENERAL
                 1 -> TagType.ARTIST

@@ -9,8 +9,8 @@ import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult
-import com.uragiristereo.mejiboard.core.preferences.NetworkRepository
-import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
+import com.uragiristereo.mejiboard.core.network.NetworkRepository
+import com.uragiristereo.mejiboard.core.network.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

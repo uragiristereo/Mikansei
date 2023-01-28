@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
-import com.uragiristereo.mejiboard.core.preferences.NetworkRepository
+import com.uragiristereo.mejiboard.core.network.NetworkRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

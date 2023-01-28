@@ -1,9 +1,9 @@
 package com.uragiristereo.mejiboard.core.booru.source.danbooru.model
 
+import com.uragiristereo.mejiboard.core.booru.source.BooruSourceConverters
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.search.DanbooruSearch
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.tag.DanbooruTag
-import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage
@@ -60,7 +60,7 @@ fun List<DanbooruPost>.toPostList(): List<Post> {
                 height = 180,
                 width = ((180f / it.imageHeight) * it.imageWidth).toInt(),
             ),
-            aspectRatio = NumberUtil.coerceAspectRatio(it.imageWidth, it.imageHeight),
+            aspectRatio = BooruSourceConverters.coerceAspectRatio(it.imageWidth, it.imageHeight),
         )
     }
 }
@@ -71,7 +71,7 @@ fun List<DanbooruSearch>.toTagList(): List<Tag> {
             id = index,
             name = it.antecedent ?: it.value,
             count = it.postCount,
-            countFmt = NumberUtil.convertToUnit(it.postCount),
+            countFmt = BooruSourceConverters.convertToUnit(it.postCount),
             type = when (it.category) {
                 0 -> TagType.GENERAL
                 1 -> TagType.ARTIST
@@ -91,7 +91,7 @@ fun List<DanbooruTag>.toTagList(): List<Tag> {
             id = it.id,
             name = it.name,
             count = it.postCount,
-            countFmt = NumberUtil.convertToUnit(it.postCount),
+            countFmt = BooruSourceConverters.convertToUnit(it.postCount),
             type = when (it.category) {
                 0 -> TagType.GENERAL
                 1 -> TagType.ARTIST

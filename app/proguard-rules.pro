@@ -35,7 +35,7 @@
 -keepclassmembers class com.uragiristereo.mejiboard.core.booru.source.** { <fields>; }
 
 # Preferences
--keepclassmembers class com.uragiristereo.mejiboard.core.preferences.model.Preferences { <fields>; }
+-keepclassmembers class com.uragiristereo.mejiboard.core.network.model.Preferences { <fields>; }
 
 # Kotlinx.Serialization
 -if @kotlinx.serialization.Serializable class **

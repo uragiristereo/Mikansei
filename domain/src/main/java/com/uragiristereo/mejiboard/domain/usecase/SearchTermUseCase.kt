@@ -1,8 +1,8 @@
 package com.uragiristereo.mejiboard.domain.usecase
 
 import com.uragiristereo.mejiboard.core.booru.BooruRepository
-import com.uragiristereo.mejiboard.core.data.Constants
 import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
+import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

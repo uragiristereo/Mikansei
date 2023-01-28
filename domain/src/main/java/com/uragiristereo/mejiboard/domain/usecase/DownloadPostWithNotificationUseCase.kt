@@ -9,7 +9,6 @@ import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.download.DownloadBroadcastReceiver
 import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
@@ -21,6 +20,7 @@ import java.io.File
 class DownloadPostWithNotificationUseCase(
     private val context: Context,
     private val downloadRepository: DownloadRepository,
+    private val convertFileSizeUseCase: ConvertFileSizeUseCase,
 ) {
     private val resolver = context.contentResolver
 
@@ -89,10 +89,10 @@ class DownloadPostWithNotificationUseCase(
                     }
 
                     is DownloadResource.Downloading -> {
-                        val lengthFmt = NumberUtil.convertFileSize(resource.length)
+                        val lengthFmt = convertFileSizeUseCase(resource.length)
                         val progressPercentage = (resource.progress * 100).toInt()
-                        val downloadSpeedFmt = NumberUtil.convertFileSize(resource.speed)
-                        val downloadedFmt = NumberUtil.convertFileSize(resource.downloaded)
+                        val downloadSpeedFmt = convertFileSizeUseCase(resource.speed)
+                        val downloadedFmt = convertFileSizeUseCase(resource.downloaded)
 
                         notificationManager.apply {
                             notificationBuilder
@@ -125,7 +125,7 @@ class DownloadPostWithNotificationUseCase(
                             /* flags = */ PendingIntent.FLAG_IMMUTABLE
                         )
 
-                        val lengthFmt = NumberUtil.convertFileSize(resource.length)
+                        val lengthFmt = convertFileSizeUseCase(resource.length)
 
                         notificationManager.apply {
                             notificationBuilder

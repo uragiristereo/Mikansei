@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.core.preferences.model
+package com.uragiristereo.mejiboard.core.network.model
 
 import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
 

@@ -5,7 +5,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.toPostList
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.toTagList
-import com.uragiristereo.mejiboard.core.data.Constants
+import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating

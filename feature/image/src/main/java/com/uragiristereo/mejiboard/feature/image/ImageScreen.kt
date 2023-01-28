@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mejiboard.core.data.Constants
+import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.ui.WindowSize
 import com.uragiristereo.mejiboard.core.ui.composable.SetSystemBarsColors

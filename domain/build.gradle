@@ -22,7 +22,6 @@ android {
 
 dependencies {
     implementation(project(":core:booru"))
-    implementation(project(":core:data"))
     implementation(project(":core:database"))
     implementation(project(":core:download"))
     implementation(project(":core:model"))

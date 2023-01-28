@@ -1,12 +1,11 @@
-package com.uragiristereo.mejiboard.core.data.util
+package com.uragiristereo.mejiboard.core.booru.source
 
 import kotlin.math.floor
 import kotlin.math.ln
 import kotlin.math.pow
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
-object NumberUtil {
+object BooruSourceConverters {
     fun convertToUnit(number: Int): String {
         if (number < 1000)
             return "$number"
@@ -31,18 +30,5 @@ object NumberUtil {
                 minimumValue = 0.5f,
                 maximumValue = 2.5f,
             )
-    }
-
-    fun convertFileSize(sizeBytes: Long): String {
-        if (sizeBytes == 0L)
-            return "0 B"
-
-        val sizeName = listOf("B", "KB", "MB", "GB")
-
-        val i = floor(ln(sizeBytes.toDouble()) / ln(1024.0))
-        val p = 1024.0.pow(i)
-        val s = (sizeBytes / p * 100).roundToLong() / 100.0
-
-        return "$s ${sizeName[i.toInt()]}"
     }
 }

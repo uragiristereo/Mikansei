@@ -12,10 +12,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.github.uragiristereo.safer.compose.navigation.core.getData
-import com.uragiristereo.mejiboard.core.data.Constants
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.database.dao.session.toPostList
 import com.uragiristereo.mejiboard.core.database.dao.session.toPostSessionList
+import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.ui.navigation.PostsRoute

@@ -1,7 +1,7 @@
-package com.uragiristereo.mejiboard.core.preferences
+package com.uragiristereo.mejiboard.core.network
 
 import androidx.datastore.core.Serializer
-import com.uragiristereo.mejiboard.core.preferences.model.Preferences
+import com.uragiristereo.mejiboard.core.network.model.Preferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString

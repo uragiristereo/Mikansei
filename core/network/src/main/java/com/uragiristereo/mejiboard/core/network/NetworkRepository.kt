@@ -1,6 +1,6 @@
-package com.uragiristereo.mejiboard.core.preferences
+package com.uragiristereo.mejiboard.core.network
 
-import com.uragiristereo.mejiboard.core.preferences.api.MejiboardApi
+import com.uragiristereo.mejiboard.core.network.api.MejiboardApi
 import okhttp3.OkHttpClient
 
 interface NetworkRepository {

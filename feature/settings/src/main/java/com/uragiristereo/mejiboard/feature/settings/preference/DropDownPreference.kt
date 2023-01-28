@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
-import com.uragiristereo.mejiboard.core.preferences.model.BasePreference
+import com.uragiristereo.mejiboard.core.network.model.BasePreference
 
 @Composable
 fun DropDownPreference(

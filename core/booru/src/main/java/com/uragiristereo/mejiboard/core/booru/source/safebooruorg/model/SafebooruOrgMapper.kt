@@ -1,9 +1,9 @@
 package com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model
 
 import android.content.Context
+import com.uragiristereo.mejiboard.core.booru.source.BooruSourceConverters
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.posts.SafebooruOrgPost
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.search.SafebooruOrgSearch
-import com.uragiristereo.mejiboard.core.data.util.NumberUtil
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage
@@ -50,7 +50,7 @@ fun List<SafebooruOrgPost>.toPostList(context: Context): List<Post> {
                 height = 150,
                 width = ((150f / it.height) * it.width).toInt(),
             ),
-            aspectRatio = NumberUtil.coerceAspectRatio(it.width, it.height),
+            aspectRatio = BooruSourceConverters.coerceAspectRatio(it.width, it.height),
         )
     }
 }
@@ -71,7 +71,7 @@ fun List<SafebooruOrgSearch>.toTagList(): List<Tag> {
             id = index,
             name = it.value,
             count = count,
-            countFmt = NumberUtil.convertToUnit(count),
+            countFmt = BooruSourceConverters.convertToUnit(count),
             type = TagType.NONE,
         )
     }

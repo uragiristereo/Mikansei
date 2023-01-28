@@ -8,8 +8,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
-import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
-import com.uragiristereo.mejiboard.core.preferences.model.DetailSizePreference
+import com.uragiristereo.mejiboard.core.model.booru.post.PostImage
+import com.uragiristereo.mejiboard.core.network.PreferencesRepository
+import com.uragiristereo.mejiboard.core.network.model.DetailSizePreference
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoadingState
 import kotlinx.coroutines.flow.launchIn
@@ -42,5 +43,25 @@ class ImageViewModel(
                 showOriginalImage = detailSize == DetailSizePreference.KEY_ORIGINAL
             }
             .launchIn(viewModelScope)
+    }
+
+    fun resizeImage(postImage: PostImage): Pair<Int, Int> {
+        val maxSize = 4096f
+
+        return when {
+            postImage.width > maxSize || postImage.height > maxSize -> {
+                val scale = when {
+                    postImage.width > postImage.height -> maxSize.div(postImage.width)
+                    else -> maxSize.div(postImage.height)
+                }
+
+                val scaledWidth = postImage.width * scale
+                val scaledHeight = postImage.height * scale
+
+                Pair(scaledWidth.toInt(), scaledHeight.toInt())
+            }
+
+            else -> Pair(postImage.width, postImage.height)
+        }
     }
 }
