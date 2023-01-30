@@ -29,7 +29,7 @@ import org.koin.androidx.compose.koinViewModel
 import kotlin.math.abs
 
 @Composable
-fun ImagePost(
+internal fun ImagePost(
     post: Post,
     maxOffset: Float,
     onNavigateBack: (Boolean) -> Unit,

@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PostsProgress(
+internal fun PostsProgress(
     modifier: Modifier = Modifier,
 ) {
     Box(

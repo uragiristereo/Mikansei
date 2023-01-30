@@ -11,7 +11,7 @@ import com.uragiristereo.mejiboard.saved_searches.appbars.SavedSearchesTopAppBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SavedSearchesScreen(
+internal fun SavedSearchesScreen(
     modifier: Modifier = Modifier,
     viewModel: SavedSearchesViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,

@@ -18,7 +18,7 @@ import com.uragiristereo.mejiboard.core.ui.WindowSize
 import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 
 @Composable
-fun PostsFab(
+internal fun PostsFab(
     fabVisible: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

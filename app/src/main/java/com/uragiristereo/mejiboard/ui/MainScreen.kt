@@ -4,28 +4,33 @@ import android.app.Activity
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.github.uragiristereo.safer.compose.navigation.animation.AnimatedNavHost
-import com.github.uragiristereo.safer.compose.navigation.animation.composable
+import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
-import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -38,29 +43,18 @@ import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsCo
 import com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme
 import com.uragiristereo.mejiboard.core.product.theme.Theme
 import com.uragiristereo.mejiboard.core.resources.R
-import com.uragiristereo.mejiboard.core.ui.LocalHomeNavController
 import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mejiboard.core.ui.LocalMainNavController
-import com.uragiristereo.mejiboard.core.ui.LocalPostsNavController
-import com.uragiristereo.mejiboard.core.ui.animation.holdIn
-import com.uragiristereo.mejiboard.core.ui.animation.holdOut
-import com.uragiristereo.mejiboard.core.ui.animation.translateXFadeIn
-import com.uragiristereo.mejiboard.core.ui.animation.translateXFadeOut
-import com.uragiristereo.mejiboard.core.ui.animation.translateYFadeIn
-import com.uragiristereo.mejiboard.core.ui.animation.translateYFadeOut
-import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
+import com.uragiristereo.mejiboard.core.ui.LocalNavigationRailPadding
+import com.uragiristereo.mejiboard.core.ui.WindowSize
+import com.uragiristereo.mejiboard.core.ui.composable.DimensionSubcomposeLayout
+import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
-import com.uragiristereo.mejiboard.core.ui.navigation.PostsRoute
-import com.uragiristereo.mejiboard.feature.about.AboutScreen
-import com.uragiristereo.mejiboard.feature.filters.FiltersScreen
-import com.uragiristereo.mejiboard.feature.home.posts.HomeScreen
-import com.uragiristereo.mejiboard.feature.image.ImageScreen
-import com.uragiristereo.mejiboard.feature.search.SearchScreen
-import com.uragiristereo.mejiboard.feature.search_history.SearchHistoryScreen
-import com.uragiristereo.mejiboard.feature.settings.SettingsScreen
-import com.uragiristereo.mejiboard.saved_searches.SavedSearchesScreen
-import com.uragiristereo.mejiboard.ui.core.ShareDownloadDialog
+import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
+import com.uragiristereo.mejiboard.ui.appbars.MainBottomNavigationBar
+import com.uragiristereo.mejiboard.ui.appbars.MainNavigationRail
+import com.uragiristereo.mejiboard.ui.share_dialog.ShareDownloadDialog
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
@@ -70,19 +64,18 @@ import timber.log.Timber
 fun MainScreen(
     viewModel: MainViewModel = koinViewModel(),
 ) {
-    val mainNavController = rememberAnimatedNavController()
-    val homeNavController = rememberAnimatedNavController()
-    val postsNavController = rememberAnimatedNavController()
-
-    val homeScaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    val navBackStackEntry by mainNavController.currentBackStackEntryAsState()
+    val navController = rememberAnimatedNavController()
+    val homeScaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+    val windowSize = rememberWindowSize()
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val lambdaOnNavigateBack: () -> Unit = {
-        mainNavController.navigateUp()
+    LaunchedEffect(key1 = currentRoute) {
+        currentRoute?.let { viewModel.currentRoute = it }
     }
 
     val notificationPermissionState = rememberPermissionState(
@@ -170,11 +163,13 @@ fun MainScreen(
     ) {
         CompositionLocalProvider(
             values = arrayOf(
-                LocalMainNavController provides mainNavController,
-                LocalHomeNavController provides homeNavController,
-                LocalPostsNavController provides postsNavController,
+                LocalMainNavController provides navController,
                 LocalLambdaOnDownload provides lambdaOnDownload,
                 LocalLambdaOnShare provides lambdaOnShare,
+                LocalNavigationRailPadding provides when {
+                    windowSize != WindowSize.COMPACT -> viewModel.navigationRailPadding
+                    else -> 0.dp
+                },
             ),
         ) {
             ProductSetSystemBarsColor()
@@ -186,232 +181,77 @@ fun MainScreen(
                 )
             }
 
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                content = {
-                    AnimatedNavHost(
-                        navController = mainNavController,
-                        startDestination = MainRoute.Home,
-                        enterTransition = {
-                            translateXFadeIn(forward = true)
-                        },
-                        exitTransition = {
-                            translateXFadeOut(forward = true)
-                        },
-                        popEnterTransition = {
-                            translateXFadeIn(forward = false)
-                        },
-                        popExitTransition = {
-                            translateXFadeOut(forward = false)
-                        },
-                        modifier = Modifier
-                            .background(
-                                color = when {
-                                    MaterialTheme.colors.isLight -> Color.White
-                                    else -> Color.Black
-                                },
-                            ),
-                    ) {
-                        // Home
-                        composable(
-                            route = MainRoute.Home,
-                            disableDeserialization = true,
-                            enterTransition = {
-                                when (initialState.destination.route) {
-                                    MainRoute.Home.route -> fadeIn()
-                                    MainRoute.Search().route -> holdIn()
-                                    else -> translateXFadeIn(forward = true)
+            val lambdaOnNavigate: (NavRoute) -> Unit = remember {
+                { route ->
+                    navController.navigate(route) {
+                        popUpTo(id = navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+
+                        restoreState = true
+                        launchSingleTop = true
+                    }
+                }
+            }
+
+            val lambdaOnNavigateSearch: () -> Unit = remember {
+                {
+                    navController.navigate(
+                        route = MainRoute.Search(tags = viewModel.currentTags)
+                    )
+                }
+            }
+
+            Surface {
+                if (windowSize == WindowSize.COMPACT) {
+                    Box {
+                        MainNavGraph(navController = navController)
+
+                        AnimatedVisibility(
+                            visible = viewModel.currentRoute in HomeRoutesString,
+                            enter = slideInVertically(initialOffsetY = { it }),
+                            exit = slideOutVertically(targetOffsetY = { it }),
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        ) {
+                            MainBottomNavigationBar(
+                                currentRoute = viewModel.currentRoute,
+                                onNavigate = lambdaOnNavigate,
+                                onNavigateSearch = lambdaOnNavigateSearch,
+                            )
+                        }
+                    }
+                } else {
+                    Box {
+                        MainNavGraph(navController = navController)
+
+                        AnimatedVisibility(
+                            visible = viewModel.currentRoute in HomeRoutesString,
+                            enter = slideInHorizontally(initialOffsetX = { -it }),
+                            exit = slideOutHorizontally(targetOffsetX = { -it }),
+                        ) {
+                            DimensionSubcomposeLayout {
+                                LaunchedEffect(key1 = size) {
+                                    viewModel.navigationRailPadding = size.width
                                 }
-                            },
-                            exitTransition = {
-                                when (targetState.destination.route) {
-                                    MainRoute.Home.route -> fadeOut()
-                                    MainRoute.Search().route -> holdOut()
-                                    MainRoute.Image::class.route -> holdOut(durationMillis = 350)
-                                    else -> translateXFadeOut(forward = true)
-                                }
-                            },
-                            popEnterTransition = {
-                                when (initialState.destination.route) {
-                                    MainRoute.Home.route -> fadeIn()
-                                    MainRoute.Search().route -> fadeIn()
-                                    MainRoute.Image::class.route -> holdIn(durationMillis = 350)
-                                    else -> translateXFadeIn(forward = false)
-                                }
-                            },
-                            popExitTransition = {
-                                when (targetState.destination.route) {
-                                    MainRoute.Home.route -> fadeOut()
-                                    MainRoute.Search().route -> holdOut()
-                                    else -> translateXFadeOut(forward = false)
-                                }
-                            },
-                            content = {
-                                HomeScreen(
-                                    scaffoldState = homeScaffoldState,
-                                    onNavigate = { route ->
-                                        mainNavController.navigate(route = route)
-                                    },
-                                    onNavigateSearch = { tags ->
-                                        mainNavController.navigate(route = MainRoute.Search(tags)) {
-                                            popUpTo(id = mainNavController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
 
-                                            launchSingleTop = true
-                                        }
-                                    },
-                                    onNavigateImage = remember {
-                                        { item ->
-                                            viewModel.navigatedBackByGesture = false
+                                Row {
+                                    MainNavigationRail(
+                                        currentRoute = viewModel.currentRoute,
+                                        onNavigate = lambdaOnNavigate,
+                                        onNavigateSearch = lambdaOnNavigateSearch,
+                                    )
 
-                                            mainNavController.navigate(route = MainRoute.Image(post = item))
-                                        }
-                                    }
-                                )
-                            },
-                        )
-
-                        // Search
-                        composable(
-                            route = MainRoute.Search(),
-                            disableDeserialization = true,
-                            enterTransition = {
-                                holdIn()
-                            },
-                            exitTransition = {
-                                when (targetState.destination.route) {
-                                    MainRoute.Home.route -> fadeOut()
-                                    else -> translateXFadeOut(forward = true)
-                                }
-                            },
-                            popEnterTransition = {
-                                translateXFadeIn(forward = false)
-                            },
-                            popExitTransition = {
-                                when (targetState.destination.route) {
-                                    MainRoute.Home.route -> fadeOut()
-                                    else -> translateXFadeOut(forward = false)
-                                }
-                            },
-                            content = {
-                                SearchScreen(
-                                    onNavigate = { route ->
-                                        mainNavController.navigate(route)
-                                    },
-                                    onNavigateBack = lambdaOnNavigateBack,
-                                    onSearchSubmit = { searchTags ->
-                                        mainNavController.navigate(route = MainRoute.Home) {
-                                            popUpTo(id = mainNavController.graph.findStartDestination().id)
-
-                                            restoreState = true
-                                            launchSingleTop = true
-                                        }
-
-                                        homeNavController.navigate(route = HomeRoute.Posts) {
-                                            popUpTo(id = homeNavController.graph.findStartDestination().id) {
-                                                saveState = true
-                                            }
-
-                                            restoreState = true
-                                            launchSingleTop = true
-                                        }
-
-                                        postsNavController.navigate(
-                                            route = PostsRoute.Index(searchTags),
-                                        )
-                                    },
-                                )
-                            },
-                        )
-
-                        // Image
-                        composable(
-                            route = MainRoute.Image::class,
-                            disableDeserialization = true,
-                            enterTransition = {
-                                translateYFadeIn(
-                                    initialOffsetY = { it / 5 },
-                                    durationMillis = 350,
-                                )
-                            },
-                            popExitTransition = {
-                                when {
-                                    viewModel.navigatedBackByGesture -> fadeOut()
-                                    else -> translateYFadeOut(
-                                        targetOffsetY = { it / 5 },
-                                        durationMillis = 350,
+                                    Divider(
+                                        modifier = Modifier
+                                            .width(1.dp)
+                                            .fillMaxHeight(),
                                     )
                                 }
-
-                            },
-                            content = {
-                                ImageScreen(
-                                    onNavigateBack = {
-                                        viewModel.navigatedBackByGesture = it
-                                        mainNavController.navigateUp()
-                                    },
-                                )
-                            },
-                        )
-
-                        // Settings
-                        composable(
-                            route = MainRoute.Settings,
-                            disableDeserialization = true,
-                            content = {
-                                SettingsScreen(
-                                    onNavigateBack = lambdaOnNavigateBack,
-                                )
-                            },
-                        )
-
-                        // Filters
-                        composable(
-                            route = MainRoute.Filters,
-                            disableDeserialization = true,
-                            content = {
-                                FiltersScreen(
-                                    onNavigateBack = lambdaOnNavigateBack,
-                                )
-                            },
-                        )
-
-                        // Saved searches
-                        composable(
-                            route = MainRoute.SavedSearches,
-                            disableDeserialization = true,
-                            content = {
-                                SavedSearchesScreen(
-                                    onNavigateBack = lambdaOnNavigateBack,
-                                )
-                            },
-                        )
-
-                        // Search history
-                        composable(
-                            route = MainRoute.SearchHistory,
-                            disableDeserialization = true,
-                            content = {
-                                SearchHistoryScreen(
-                                    onNavigateBack = lambdaOnNavigateBack,
-                                )
-                            },
-                        )
-
-                        // About
-                        composable(
-                            route = MainRoute.About,
-                            disableDeserialization = true,
-                            content = {
-                                AboutScreen(
-                                    onNavigateBack = lambdaOnNavigateBack,
-                                )
-                            },
-                        )
+                            }
+                        }
                     }
-                },
-            )
+                }
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SwitchPreference(
+internal fun SwitchPreference(
     state: SwitchPreferenceState,
     title: String,
     subtitle: String,
@@ -42,7 +42,7 @@ fun SwitchPreference(
 }
 
 @Composable
-fun SwitchPreference(
+internal fun SwitchPreference(
     state: SwitchPreferenceState,
     title: String,
     subtitle: AnnotatedString?,
@@ -111,7 +111,7 @@ fun SwitchPreference(
 }
 
 @Composable
-fun SwitchPreference(
+internal fun SwitchPreference(
     title: String,
     subtitle: String,
     selected: Boolean,
@@ -132,7 +132,7 @@ fun SwitchPreference(
 }
 
 @Composable
-fun SwitchPreference(
+internal fun SwitchPreference(
     title: String,
     subtitle: AnnotatedString?,
     selected: Boolean,
@@ -228,7 +228,7 @@ class SwitchPreferenceState(
 }
 
 @Composable
-fun rememberSwitchPreferenceState(
+internal fun rememberSwitchPreferenceState(
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
 ): SwitchPreferenceState {

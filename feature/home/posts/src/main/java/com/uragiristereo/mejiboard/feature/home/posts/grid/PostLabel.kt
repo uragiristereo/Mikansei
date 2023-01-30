@@ -12,7 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PostLabel(
+internal fun PostLabel(
     fileType: String,
     modifier: Modifier = Modifier,
 ) {

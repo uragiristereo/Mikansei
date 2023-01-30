@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
-fun SearchQuickShortcutItem(
+internal fun SearchQuickShortcutItem(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

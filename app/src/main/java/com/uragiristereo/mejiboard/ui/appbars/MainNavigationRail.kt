@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.feature.home.posts.appbars
+package com.uragiristereo.mejiboard.ui.appbars
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,13 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
-import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
+import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 
 @Composable
-fun HomeNavigationRail(
-    currentRoute: String?,
-    onNavigate: (HomeRoute) -> Unit,
+fun MainNavigationRail(
+    currentRoute: String,
+    onNavigate: (NavRoute) -> Unit,
     onNavigateSearch: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -42,7 +43,7 @@ fun HomeNavigationRail(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxHeight(),
         ) {
-            HomeNavigationItems.values().forEach { item ->
+            MainNavigationItems.values().forEach { item ->
                 NavigationRailItem(
                     label = {
                         Text(text = stringResource(id = item.label))
@@ -60,9 +61,9 @@ fun HomeNavigationRail(
                         )
                     },
                     onClick = {
-                        when (item) {
-                            HomeNavigationItems.Search -> onNavigateSearch()
-                            else -> onNavigate(item.route as HomeRoute)
+                        when (item.route) {
+                            MainRoute.Search() -> onNavigateSearch()
+                            else -> onNavigate(item.route)
                         }
                     },
                     alwaysShowLabel = false,

@@ -21,7 +21,7 @@ import com.uragiristereo.mejiboard.core.model.booru.post.Post
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PostItem(
+internal fun PostItem(
     post: Post,
     onClick: () -> Unit,
     onLongPress: () -> Unit,

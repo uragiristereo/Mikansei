@@ -21,7 +21,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun FiltersFab(
+internal fun FiltersFab(
     visible: Boolean,
     isDeleteButton: Boolean,
     onAdd: () -> Unit,

@@ -33,7 +33,7 @@ import com.uragiristereo.mejiboard.core.ui.database.FilterItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FiltersColumn(
+internal fun FiltersColumn(
     columnState: LazyListState,
     items: List<FilterItem>,
     onItemChange: (FilterItem) -> Unit,

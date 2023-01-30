@@ -26,7 +26,7 @@ import com.uragiristereo.mejiboard.core.ui.WindowSize
 import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 
 @Composable
-fun PostDialogHeaderResponsive(
+internal fun PostDialogHeaderResponsive(
     post: Post,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

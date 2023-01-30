@@ -35,7 +35,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
-fun SearchBar(
+internal fun SearchBar(
     query: TextFieldValue,
     actionsRowExpanded: Boolean,
     loading: Boolean,

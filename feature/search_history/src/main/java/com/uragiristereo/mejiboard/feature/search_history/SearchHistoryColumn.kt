@@ -9,7 +9,7 @@ import com.uragiristereo.mejiboard.core.ui.composable.SettingTip
 import com.uragiristereo.mejiboard.core.ui.composable.SettingToggle
 
 @Composable
-fun SearchHistoryColumn(
+internal fun SearchHistoryColumn(
     contentPadding: PaddingValues,
     toggleChecked: Boolean,
     onToggleChecked: (Boolean) -> Unit,

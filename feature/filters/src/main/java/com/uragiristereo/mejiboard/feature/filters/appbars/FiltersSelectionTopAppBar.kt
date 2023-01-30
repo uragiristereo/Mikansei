@@ -19,7 +19,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
-fun FiltersSelectionTopAppBar(
+internal fun FiltersSelectionTopAppBar(
     title: String,
     onClose: () -> Unit,
     onDelete: () -> Unit,

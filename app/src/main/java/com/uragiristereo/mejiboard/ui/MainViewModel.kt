@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -18,6 +19,7 @@ import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.network.PreferencesRepository
 import com.uragiristereo.mejiboard.core.network.model.Preferences
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
 import com.uragiristereo.mejiboard.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostWithNotificationUseCase
@@ -45,6 +47,12 @@ class MainViewModel(
     var confirmExit by mutableStateOf(true)
 
     var navigatedBackByGesture by mutableStateOf(false)
+        private set
+
+    var currentRoute by mutableStateOf(HomeRoute.Posts().route)
+
+    var currentTags by mutableStateOf("")
+        private set
 
     private val initialized = savedStateHandle[Constants.STATE_KEY_INITIALIZED] ?: false
 
@@ -56,6 +64,8 @@ class MainViewModel(
 
     var downloadState by mutableStateOf(DownloadState())
         private set
+
+    var navigationRailPadding by mutableStateOf(0.dp)
 
     init {
         if (!initialized) {
@@ -69,6 +79,16 @@ class MainViewModel(
         preferencesRepository.flowData.onEach {
             preferences = it
         }.launchIn(viewModelScope)
+    }
+
+    @JvmName(name = "setNavigatedBackByGesture2")
+    fun setNavigatedBackByGesture(value: Boolean) {
+        navigatedBackByGesture = value
+    }
+
+    @JvmName(name = "setCurrentTags2")
+    fun setCurrentTags(value: String) {
+        currentTags = value
     }
 
     fun downloadPost(

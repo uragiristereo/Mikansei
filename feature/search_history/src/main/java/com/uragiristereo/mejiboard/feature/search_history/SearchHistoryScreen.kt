@@ -8,9 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.uragiristereo.mejiboard.core.ui.extension.defaultPaddings
+import com.uragiristereo.mejiboard.feature.search_history.core.SearchHistoryTopAppBar
 
 @Composable
-fun SearchHistoryScreen(
+internal fun SearchHistoryScreen(
     modifier: Modifier = Modifier,
     onNavigateBack: () -> Unit,
 ) {

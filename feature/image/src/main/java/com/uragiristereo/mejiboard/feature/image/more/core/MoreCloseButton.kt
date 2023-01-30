@@ -21,7 +21,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MoreCloseButton(
+internal fun MoreCloseButton(
     visible: Boolean,
     currentHeight: Dp,
     onHeightChanged: (Dp) -> Unit,

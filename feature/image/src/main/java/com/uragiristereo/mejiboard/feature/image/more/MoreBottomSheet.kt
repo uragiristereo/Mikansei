@@ -49,7 +49,7 @@ import java.text.DateFormat
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MoreBottomSheet(
+internal fun MoreBottomSheet(
     post: Post,
     sheetState: ModalBottomSheetState,
     showExpandButton: Boolean,

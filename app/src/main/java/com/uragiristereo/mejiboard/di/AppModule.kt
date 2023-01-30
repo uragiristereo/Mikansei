@@ -2,7 +2,6 @@ package com.uragiristereo.mejiboard.di
 
 import com.uragiristereo.mejiboard.feature.filters.FiltersViewModel
 import com.uragiristereo.mejiboard.feature.home.more.MoreViewModel
-import com.uragiristereo.mejiboard.feature.home.posts.HomeViewModel
 import com.uragiristereo.mejiboard.feature.home.posts.PostsViewModel
 import com.uragiristereo.mejiboard.feature.image.ImageViewModel
 import com.uragiristereo.mejiboard.feature.image.more.MoreBottomSheetViewModel
@@ -21,7 +20,6 @@ object AppModule {
         viewModelOf(::SearchViewModel)
         viewModelOf(::MoreViewModel)
         viewModelOf(::FiltersViewModel)
-        viewModelOf(::HomeViewModel)
         viewModelOf(::ImageViewModel)
         viewModelOf(::MoreBottomSheetViewModel)
         viewModelOf(::SettingsViewModel)

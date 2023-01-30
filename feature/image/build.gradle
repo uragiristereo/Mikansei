@@ -39,6 +39,7 @@ dependencies {
 
     // Accompanist Compose Extensions
     implementation(libs.accompanist.flowlayout)
+    implementation(libs.accompanist.navigation.animation)
 
     // Koin Dependency Injection
     implementation(libs.bundles.koin)
@@ -54,5 +55,5 @@ dependencies {
     implementation(libs.timber)
 
     // Safer Navigation Compose
-    implementation(libs.safer.navigation.core)
+    implementation(libs.bundles.safer.navigation)
 }

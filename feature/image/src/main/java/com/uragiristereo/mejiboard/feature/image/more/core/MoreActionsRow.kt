@@ -18,7 +18,7 @@ import com.uragiristereo.mejiboard.core.ui.composable.SidesGradient
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
-fun MoreActionsRow(
+internal fun MoreActionsRow(
     showExpandButton: Boolean,
     onDownloadClick: () -> Unit,
     onShareClick: () -> Unit,

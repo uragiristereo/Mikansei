@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LinearProgressIndicator
@@ -31,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -47,6 +49,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
+import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mejiboard.core.ui.WindowSize
@@ -70,10 +73,9 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun PostsScreen(
+internal fun PostsScreen(
     onNavigate: (MainRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
-    onCurrentTagsChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = koinViewModel(),
 ) {
@@ -132,10 +134,6 @@ fun PostsScreen(
         scope.launch {
             viewModel.offsetY.snapTo(targetValue = 0f)
         }
-    }
-
-    LaunchedEffect(key1 = viewModel) {
-        onCurrentTagsChange(viewModel.tags)
     }
 
     LaunchedEffect(key1 = viewModel.loading) {
@@ -257,6 +255,10 @@ fun PostsScreen(
         }
     }
 
+    ProductSetSystemBarsColor(
+        navigationBarColor = Color.Transparent,
+    )
+
     Scaffold(
         floatingActionButton = {
             PostsFab(
@@ -267,10 +269,11 @@ fun PostsScreen(
                     }
                 },
             )
-        }
+        },
+        modifier = modifier.statusBarsPadding(),
     ) { innerPadding ->
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .nestedScroll(
                     connection = remember {

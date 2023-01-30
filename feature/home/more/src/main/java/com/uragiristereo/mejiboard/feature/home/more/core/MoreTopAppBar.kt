@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.feature.home.more
+package com.uragiristereo.mejiboard.feature.home.more.core
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -8,7 +8,7 @@ import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
-fun MoreTopAppBar(
+internal fun MoreTopAppBar(
     modifier: Modifier = Modifier,
 ) {
     ProductTopAppBar(

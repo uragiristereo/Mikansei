@@ -33,7 +33,7 @@ import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SavedSearchesColumnItem(
+internal fun SavedSearchesColumnItem(
     text: String,
     isEven: Boolean,
     selectionMode: Boolean,

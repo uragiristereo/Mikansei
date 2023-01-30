@@ -19,7 +19,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun MoreInfoColumn(
+internal fun MoreInfoColumn(
     post: Post,
     scaledImageFileSizeStr: String,
     originalImageFileSizeStr: String,

@@ -24,7 +24,7 @@ import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PostsGrid(
+internal fun PostsGrid(
     posts: List<Post>,
     gridState: LazyStaggeredGridState,
     canLoadMore: Boolean,

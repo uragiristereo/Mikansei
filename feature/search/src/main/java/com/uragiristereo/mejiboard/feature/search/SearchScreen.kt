@@ -52,7 +52,7 @@ import timber.log.Timber
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchScreen(
+internal fun SearchScreen(
     onNavigate: (MainRoute) -> Unit,
     onNavigateBack: () -> Unit,
     onSearchSubmit: (String) -> Unit,

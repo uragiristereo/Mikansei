@@ -1,12 +1,15 @@
 package com.uragiristereo.mejiboard.core.ui.navigation
 
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
+import com.github.uragiristereo.safer.compose.navigation.core.routeWithData
 import kotlinx.serialization.Serializable
 
 sealed interface HomeRoute : NavRoute {
     @Serializable
-    object Posts : HomeRoute {
-        override val route: String = "home/posts"
+    data class Posts(
+        val tags: String = "",
+    ) : HomeRoute {
+        override val route: String = "home/posts".routeWithData()
     }
 
     @Serializable
@@ -19,3 +22,13 @@ sealed interface HomeRoute : NavRoute {
         override val route: String = "home/more"
     }
 }
+
+val HomeRoutes: List<HomeRoute>
+    get() = listOf(
+        HomeRoute.Posts(),
+        HomeRoute.Collections,
+        HomeRoute.More,
+    )
+
+val HomeRoutesString: List<String>
+    get() = HomeRoutes.map { it.route }

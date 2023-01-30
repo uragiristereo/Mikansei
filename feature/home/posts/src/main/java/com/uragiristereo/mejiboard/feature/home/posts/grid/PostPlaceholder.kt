@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.compositeOver
 
 @Composable
-fun PostPlaceholder(
+internal fun PostPlaceholder(
     modifier: Modifier = Modifier,
 ) {
     Box(

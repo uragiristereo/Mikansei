@@ -12,7 +12,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PreferenceContainer(
+internal fun PreferenceContainer(
     title: String,
     subtitle: AnnotatedString?,
     enabled: Boolean,

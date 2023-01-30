@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SettingsColumn(
+internal fun SettingsColumn(
     columnState: LazyListState,
     bottomSheetPreferenceState: BottomSheetPreferenceState,
     contentPadding: PaddingValues,

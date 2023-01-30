@@ -27,7 +27,7 @@ import com.uragiristereo.mejiboard.core.ui.composable.ClickableSection
 import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 
 @Composable
-fun PostDialog(
+internal fun PostDialog(
     post: Post,
     onDismiss: () -> Unit,
     onPostClick: () -> Unit,

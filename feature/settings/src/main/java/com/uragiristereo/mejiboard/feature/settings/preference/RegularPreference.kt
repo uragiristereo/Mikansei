@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
-fun RegularPreference(
+internal fun RegularPreference(
     title: String,
     subtitle: String,
     onClick: () -> Unit,
@@ -36,7 +36,7 @@ fun RegularPreference(
 }
 
 @Composable
-fun RegularPreference(
+internal fun RegularPreference(
     title: String,
     subtitle: AnnotatedString?,
     onClick: () -> Unit,

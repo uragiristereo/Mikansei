@@ -11,7 +11,7 @@ import com.ortiz.touchview.TouchImageView
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoading
 
 @Composable
-fun ImageViewer(
+internal fun ImageViewer(
     imageView: TouchImageView,
     loading: Boolean,
     modifier: Modifier = Modifier,

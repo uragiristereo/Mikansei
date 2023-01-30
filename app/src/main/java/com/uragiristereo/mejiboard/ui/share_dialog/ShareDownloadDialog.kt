@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.ui.core
+package com.uragiristereo.mejiboard.ui.share_dialog
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.product.component.ProductAlertDialog
 import com.uragiristereo.mejiboard.core.resources.R
+import com.uragiristereo.mejiboard.ui.core.DownloadState
 
 @Composable
 fun ShareDownloadDialog(

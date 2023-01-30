@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.feature.home.posts.appbars
+package com.uragiristereo.mejiboard.ui.appbars
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -9,14 +9,14 @@ import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 
 @Stable
-enum class HomeNavigationItems(
+enum class MainNavigationItems(
     val route: NavRoute,
     @StringRes val label: Int,
     @DrawableRes val unselectedIcon: Int,
     @DrawableRes val selectedIcon: Int = unselectedIcon,
 ) {
     Posts(
-        route = HomeRoute.Posts,
+        route = HomeRoute.Posts(),
         label = R.string.posts_label,
         unselectedIcon = R.drawable.home,
         selectedIcon = R.drawable.home_fill,

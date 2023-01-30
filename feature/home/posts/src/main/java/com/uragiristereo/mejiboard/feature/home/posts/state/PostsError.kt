@@ -27,7 +27,7 @@ import com.uragiristereo.mejiboard.core.ui.WindowSize
 import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 
 @Composable
-fun PostsError(
+internal fun PostsError(
     message: String,
     onRetryClick: () -> Unit,
     modifier: Modifier = Modifier,
