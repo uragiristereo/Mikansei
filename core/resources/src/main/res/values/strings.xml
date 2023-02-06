@@ -15,6 +15,8 @@
 
     <string name="safebooruorg_label" translatable="false">Safebooru.org</string>
     <string name="safebooruorg_domain" translatable="false">safebooru.org</string>
+    <string name="yandere_label" translatable="false">yande.re</string>
+    <string name="yandere_domain" translatable="false">yande.re</string>
 
     <!-- Screens label -->
     <string name="filters_label">Filters</string>

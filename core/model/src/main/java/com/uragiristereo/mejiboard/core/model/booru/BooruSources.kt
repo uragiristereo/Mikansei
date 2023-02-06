@@ -22,11 +22,18 @@ object BooruSources {
         domainResId = R.string.safebooruorg_domain,
         webUrlPattern = "https://safebooru.org/index.php?page=post&s=view&id={postId}",
     )
+    val Yandere = BooruSource(
+        key = "yandere",
+        nameResId = R.string.yandere_label,
+        domainResId = R.string.yandere_domain,
+        webUrlPattern = "https://yande.re/post/show/{postId}",
+    )
 
     val list = listOf(
         Gelbooru,
         Danbooru,
         SafebooruOrg,
+        Yandere,
     )
 
     val map = list.associate { it.toPair() }
