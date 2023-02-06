@@ -73,7 +73,10 @@ fun MainBottomNavigationBar(
                     },
                     onClick = {
                         when {
-                            HomeRoute.Posts::class.route in listOf(item.route.route, currentRoute) -> onRequestScrollToTop()
+                            listOf(item.route.route, currentRoute).all {
+                                it == HomeRoute.Posts::class.route
+                            } -> onRequestScrollToTop()
+
                             item.route.route == MainRoute.Search::class.route -> onNavigateSearch()
                             else -> onNavigate(item.route)
                         }

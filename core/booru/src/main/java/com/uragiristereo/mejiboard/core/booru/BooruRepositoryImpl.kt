@@ -5,6 +5,7 @@ import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.DanbooruRepository
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.GelbooruRepository
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.SafebooruOrgRepository
+import com.uragiristereo.mejiboard.core.booru.source.yandere.YandereRepository
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.BooruSources
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
@@ -58,6 +59,7 @@ class BooruRepositoryImpl(
             BooruSources.Gelbooru to GelbooruRepository(context, preferredOkHttpClient),
             BooruSources.Danbooru to DanbooruRepository(context, preferredOkHttpClient),
             BooruSources.SafebooruOrg to SafebooruOrgRepository(context, preferredOkHttpClient),
+            BooruSources.Yandere to YandereRepository(context, preferredOkHttpClient),
         )
     }
 
