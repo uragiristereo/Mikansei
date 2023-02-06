@@ -1,6 +1,7 @@
 package com.uragiristereo.mejiboard.ui
 
 import android.content.Context
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +11,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mejiboard.core.database.dao.session.SessionDao
 import com.uragiristereo.mejiboard.core.download.DownloadRepository
 import com.uragiristereo.mejiboard.core.download.model.DownloadResource
@@ -25,7 +27,6 @@ import com.uragiristereo.mejiboard.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mejiboard.domain.usecase.DownloadPostWithNotificationUseCase
 import com.uragiristereo.mejiboard.ui.core.DownloadState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -49,17 +50,18 @@ class MainViewModel(
     var navigatedBackByGesture by mutableStateOf(false)
         private set
 
-    var currentRoute by mutableStateOf(HomeRoute.Posts().route)
+    var currentRoute by mutableStateOf(HomeRoute.Posts::class.route)
 
     var currentTags by mutableStateOf("")
         private set
+
+    private var callbackOnRequestScrollToTop: (() -> Unit) = { }
 
     private val initialized = savedStateHandle[Constants.STATE_KEY_INITIALIZED] ?: false
 
     var selectedPost: Post? = null
 
     // share
-    private var shareJob: Job? = null
     var shareDialogVisible by mutableStateOf(false)
 
     var downloadState by mutableStateOf(DownloadState())
@@ -118,7 +120,7 @@ class MainViewModel(
         context: Context,
         post: Post,
         shareOption: ShareOption,
-        onDownloadCompleted: () -> Unit,
+        onDownloadCompleted: (Uri) -> Unit,
         onDownloadFailed: (String) -> Unit,
     ) {
         selectedPost = post
@@ -136,12 +138,12 @@ class MainViewModel(
         }
 
         val fileName = File(url).name
-        val path = File(tempDir.absolutePath, fileName)
+        val uri = File(tempDir.absolutePath, fileName).toUri()
 
         downloadPostUseCase(
             postId = post.id,
             url = url,
-            uri = path.toUri(),
+            uri = uri,
         )
             .onEach { resource ->
                 when (resource) {
@@ -170,7 +172,7 @@ class MainViewModel(
                     is DownloadResource.Completed -> {
                         shareDialogVisible = false
 
-                        onDownloadCompleted()
+                        onDownloadCompleted(uri)
                     }
 
                     is DownloadResource.Failed -> {
@@ -186,5 +188,13 @@ class MainViewModel(
     fun cancelShare() {
         shareDialogVisible = false
         selectedPost?.let { downloadRepository.remove(it.id) }
+    }
+
+    fun setScrollToTopCallback(callback: (() -> Unit)) {
+        callbackOnRequestScrollToTop = callback
+    }
+
+    fun requestScrollToTop() {
+        callbackOnRequestScrollToTop()
     }
 }

@@ -1,6 +1,8 @@
 package com.uragiristereo.mejiboard.ui
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -10,6 +12,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -27,10 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
+import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -54,12 +60,12 @@ import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.ui.appbars.MainBottomNavigationBar
 import com.uragiristereo.mejiboard.ui.appbars.MainNavigationRail
-import com.uragiristereo.mejiboard.ui.share_dialog.ShareDownloadDialog
+import com.uragiristereo.mejiboard.ui.core.ShareDownloadDialog
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel = koinViewModel(),
@@ -115,8 +121,30 @@ fun MainScreen(
                 context = context,
                 post = post,
                 shareOption = shareOption,
-                onDownloadCompleted = {
+                onDownloadCompleted = { uri ->
                     Timber.d("download completed")
+
+                    val uriProvider = FileProvider.getUriForFile(
+                        /* context = */ context,
+                        /* authority = */ "${context.packageName}.provider",
+                        /* file = */ uri.toFile(),
+                    )
+
+                    val intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_STREAM, uriProvider)
+                        clipData = ClipData.newRawUri(/* label = */ null, /* uri = */ uriProvider)
+                        type = context.contentResolver.getType(uriProvider)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+
+                    context.startActivity(
+                        /* intent = */
+                        Intent.createChooser(
+                            /* target = */ intent,
+                            /* title = */ context.getString(R.string.share_label),
+                        ),
+                    )
                 },
                 onDownloadFailed = {
                     Timber.d("download failed = $it")
@@ -126,7 +154,7 @@ fun MainScreen(
     }
 
     BackHandler(
-        enabled = viewModel.confirmExit && currentRoute == MainRoute.Home.route,
+        enabled = viewModel.confirmExit && currentRoute == MainRoute.Home::class.route,
         onBack = remember {
             {
                 scope.launch {
@@ -146,7 +174,7 @@ fun MainScreen(
     )
 
     BackHandler(
-        enabled = !viewModel.confirmExit && currentRoute == MainRoute.Home.route,
+        enabled = !viewModel.confirmExit && currentRoute == MainRoute.Home::class.route,
         onBack = {
             (context as Activity).finishAffinity()
         },
@@ -217,6 +245,7 @@ fun MainScreen(
                                 currentRoute = viewModel.currentRoute,
                                 onNavigate = lambdaOnNavigate,
                                 onNavigateSearch = lambdaOnNavigateSearch,
+                                onRequestScrollToTop = viewModel::requestScrollToTop,
                             )
                         }
                     }

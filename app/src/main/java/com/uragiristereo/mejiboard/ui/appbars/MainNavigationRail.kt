@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
+import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 
@@ -48,12 +49,12 @@ fun MainNavigationRail(
                     label = {
                         Text(text = stringResource(id = item.label))
                     },
-                    selected = currentRoute == item.route.route,
+                    selected = currentRoute == item.route::class.route,
                     icon = {
                         Icon(
                             painter = painterResource(
                                 id = when (currentRoute) {
-                                    item.route.route -> item.selectedIcon
+                                    item.route::class.route -> item.selectedIcon
                                     else -> item.unselectedIcon
                                 },
                             ),

@@ -1,52 +1,29 @@
 package com.uragiristereo.mejiboard.core.ui.navigation
 
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
-import com.github.uragiristereo.safer.compose.navigation.core.routeWithData
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import kotlinx.serialization.Serializable
 
 sealed interface MainRoute : NavRoute {
-    @Serializable
-    object Home : MainRoute {
-        override val route: String = "home"
-    }
+    object Home : MainRoute
 
     @Serializable
     data class Search(
         val tags: String = "",
-    ) : MainRoute {
-        override val route: String = "search".routeWithData()
-    }
+    ) : MainRoute
 
     @Serializable
     data class Image(
         val post: Post,
-    ) : MainRoute {
-        override val route: String = "image".routeWithData()
-    }
+    ) : MainRoute
 
-    @Serializable
-    object Settings : MainRoute {
-        override val route: String = "settings"
-    }
+    object Settings : MainRoute
 
-    @Serializable
-    object Filters : MainRoute {
-        override val route: String = "filters"
-    }
+    object Filters : MainRoute
 
-    @Serializable
-    object SearchHistory : MainRoute {
-        override val route: String = "search_history"
-    }
+    object SearchHistory : MainRoute
 
-    @Serializable
-    object SavedSearches : MainRoute {
-        override val route: String = "saved_searches"
-    }
+    object SavedSearches : MainRoute
 
-    @Serializable
-    object About : MainRoute {
-        override val route: String = "about"
-    }
+    object About : MainRoute
 }

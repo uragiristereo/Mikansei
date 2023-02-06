@@ -16,8 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
+import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mejiboard.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
+import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 
 @Composable
@@ -25,6 +27,7 @@ fun MainBottomNavigationBar(
     currentRoute: String,
     onNavigate: (NavRoute) -> Unit,
     onNavigateSearch: () -> Unit,
+    onRequestScrollToTop: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -56,12 +59,12 @@ fun MainBottomNavigationBar(
                     label = {
                         Text(text = stringResource(id = item.label))
                     },
-                    selected = currentRoute == item.route.route,
+                    selected = currentRoute == item.route::class.route,
                     icon = {
                         Icon(
                             painter = painterResource(
                                 id = when (currentRoute) {
-                                    item.route.route -> item.selectedIcon
+                                    item.route::class.route -> item.selectedIcon
                                     else -> item.unselectedIcon
                                 },
                             ),
@@ -69,8 +72,9 @@ fun MainBottomNavigationBar(
                         )
                     },
                     onClick = {
-                        when (item.route) {
-                            MainRoute.Search() -> onNavigateSearch()
+                        when {
+                            HomeRoute.Posts::class.route in listOf(item.route.route, currentRoute) -> onRequestScrollToTop()
+                            item.route.route == MainRoute.Search::class.route -> onNavigateSearch()
                             else -> onNavigate(item.route)
                         }
                     },

@@ -22,21 +22,22 @@ fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
     onNavigatedBackByGesture: (Boolean) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
+    onRequestScrollToTop: (() -> Unit) -> Unit,
 ) {
     navigation(
-        startDestination = HomeRoute.Posts(),
-        route = MainRoute.Home,
+        startDestination = HomeRoute.Posts::class,
+        route = MainRoute.Home::class,
         enterTransition = {
             when (initialState.destination.route) {
                 in HomeRoutesString -> fadeIn(animationSpec = tween(durationMillis = 300))
-                MainRoute.Search().route -> fadeIn()
+                MainRoute.Search::class.route -> fadeIn()
                 else -> null
             }
         },
         exitTransition = {
             when (targetState.destination.route) {
                 in HomeRoutesString -> fadeOut(animationSpec = tween(durationMillis = 300))
-                MainRoute.Search().route -> holdOut()
+                MainRoute.Search::class.route -> holdOut()
                 MainRoute.Image::class.route -> holdOut(durationMillis = 350)
                 else -> null
             }
@@ -44,7 +45,7 @@ fun NavGraphBuilder.homeGraph(
         popEnterTransition = {
             when (initialState.destination.route) {
                 in HomeRoutesString -> fadeIn(animationSpec = tween(durationMillis = 300))
-                MainRoute.Search().route -> fadeIn()
+                MainRoute.Search::class.route -> fadeIn()
                 MainRoute.Image::class.route -> holdIn(durationMillis = 350)
                 else -> null
             }
@@ -52,7 +53,7 @@ fun NavGraphBuilder.homeGraph(
         popExitTransition = {
             when (targetState.destination.route) {
                 in HomeRoutesString -> fadeOut(animationSpec = tween(durationMillis = 300))
-                MainRoute.Search().route -> holdOut()
+                MainRoute.Search::class.route -> holdOut()
                 MainRoute.Image::class.route -> holdOut(durationMillis = 350)
                 else -> null
             }
@@ -62,6 +63,7 @@ fun NavGraphBuilder.homeGraph(
             navController = navController,
             onNavigatedBackByGesture = onNavigatedBackByGesture,
             onCurrentTagsChange = onCurrentTagsChange,
+            onRequestScrollToTop = onRequestScrollToTop,
         )
 
         collectionsRoute()

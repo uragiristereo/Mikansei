@@ -56,7 +56,6 @@ import com.uragiristereo.mejiboard.core.ui.WindowSize
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
-import com.uragiristereo.mejiboard.feature.home.posts.core.PostsFab
 import com.uragiristereo.mejiboard.feature.home.posts.core.PostsTopAppBar
 import com.uragiristereo.mejiboard.feature.home.posts.grid.PostsGrid
 import com.uragiristereo.mejiboard.feature.home.posts.post_dialog.PostDialog
@@ -76,6 +75,7 @@ import kotlin.math.roundToInt
 internal fun PostsScreen(
     onNavigate: (MainRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
+    onRequestScrollToTop: (() -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = koinViewModel(),
 ) {
@@ -93,22 +93,6 @@ internal fun PostsScreen(
         refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
         onRefresh = viewModel::retryGetPosts,
     )
-
-    val fabVisible by remember {
-        derivedStateOf {
-            when {
-                gridState.firstVisibleItemIndex >= 5 -> {
-                    when (viewModel.offsetY.value) {
-                        0f -> true
-                        -viewModel.offsetY.value -> false
-                        else -> viewModel.lastFabVisible
-                    }
-                }
-
-                else -> false
-            }
-        }
-    }
 
     val isMoreLoadingVisible by remember {
         derivedStateOf {
@@ -133,6 +117,18 @@ internal fun PostsScreen(
     LaunchedEffect(key1 = Unit) {
         scope.launch {
             viewModel.offsetY.snapTo(targetValue = 0f)
+        }
+    }
+
+    LaunchedEffect(key1 = viewModel) {
+        onRequestScrollToTop {
+            scope.launch {
+                viewModel.offsetY.animateTo(targetValue = 0f)
+            }
+
+            scope.launch {
+                gridState.animateScrollToItem(index = 0)
+            }
         }
     }
 
@@ -260,16 +256,6 @@ internal fun PostsScreen(
     )
 
     Scaffold(
-        floatingActionButton = {
-            PostsFab(
-                fabVisible = fabVisible,
-                onClick = {
-                    scope.launch {
-                        gridState.animateScrollToItem(index = 0)
-                    }
-                },
-            )
-        },
         modifier = modifier.statusBarsPadding(),
     ) { innerPadding ->
         Box(
@@ -321,7 +307,7 @@ internal fun PostsScreen(
                                 },
                             )
 
-                            if (isScrollIndexZero) {
+                            if (viewModel.loading == PostsLoadingState.FROM_REFRESH || isScrollIndexZero) {
                                 PullRefreshIndicator(
                                     refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
                                     state = pullRefreshState,

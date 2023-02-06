@@ -14,8 +14,8 @@ fun NavGraphBuilder.settingsGraph(
     navController: NavHostController,
 ) {
     navigation(
-        startDestination = SettingsRoute.Index,
-        route = MainRoute.Settings,
+        startDestination = SettingsRoute.Index::class,
+        route = MainRoute.Settings::class,
     ) {
         composable(
             route = SettingsRoute.Index,

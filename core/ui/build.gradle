@@ -22,11 +22,6 @@ android {
     }
 }
 
-noArg {
-    annotation("com.github.uragiristereo.safer.compose.navigation.core.NoArg")
-    invokeInitializers true
-}
-
 dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:resources"))

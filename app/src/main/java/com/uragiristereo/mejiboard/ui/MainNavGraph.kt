@@ -28,7 +28,7 @@ fun MainNavGraph(
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = MainRoute.Home,
+        startDestination = MainRoute.Home::class,
         enterTransition = {
             translateXFadeIn(forward = true)
         },
@@ -47,6 +47,7 @@ fun MainNavGraph(
             navController = navController,
             onNavigatedBackByGesture = viewModel::setNavigatedBackByGesture,
             onCurrentTagsChange = viewModel::setCurrentTags,
+            onRequestScrollToTop = viewModel::setScrollToTopCallback,
         )
 
         searchRoute(navController)
