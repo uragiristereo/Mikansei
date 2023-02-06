@@ -16,6 +16,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
@@ -232,7 +233,7 @@ fun MainScreen(
 
             Surface {
                 if (windowSize == WindowSize.COMPACT) {
-                    Box {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         MainNavGraph(navController = navController)
 
                         AnimatedVisibility(
@@ -250,7 +251,7 @@ fun MainScreen(
                         }
                     }
                 } else {
-                    Box {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         MainNavGraph(navController = navController)
 
                         AnimatedVisibility(
