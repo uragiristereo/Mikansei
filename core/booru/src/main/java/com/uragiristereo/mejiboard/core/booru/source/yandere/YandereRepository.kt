@@ -40,11 +40,9 @@ class YandereRepository(
     override suspend fun getPosts(tags: String, page: Int, filters: List<Rating>): PostsResult {
         // yande.re allows unlimited tags to search so we can filter ratings from server
         val filterTags = when (filters) {
-            RatingFilter.GENERAL_ONLY -> " rating:safe"
-            RatingFilter.SAFE -> " rating:safe"
             RatingFilter.NO_EXPLICIT -> " -rating:explicit"
             RatingFilter.UNFILTERED -> ""
-            else -> " rating:general"
+            else -> " rating:safe"
         }
 
         val response = client.getPosts(
