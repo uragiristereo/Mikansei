@@ -22,7 +22,7 @@ import com.uragiristereo.mejiboard.core.model.booru.tag.TagType
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
-fun MoreTagItem(
+internal fun MoreTagItem(
     tag: Tag,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -38,7 +38,7 @@ fun MoreTagItem(
 }
 
 @Composable
-fun MoreTagItem(
+internal fun MoreTagItem(
     tag: Tag,
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LinearProgressIndicator
@@ -31,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -47,13 +49,13 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
+import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mejiboard.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mejiboard.core.ui.WindowSize
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
-import com.uragiristereo.mejiboard.feature.home.posts.core.PostsFab
 import com.uragiristereo.mejiboard.feature.home.posts.core.PostsTopAppBar
 import com.uragiristereo.mejiboard.feature.home.posts.grid.PostsGrid
 import com.uragiristereo.mejiboard.feature.home.posts.post_dialog.PostDialog
@@ -70,10 +72,10 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun PostsScreen(
+internal fun PostsScreen(
     onNavigate: (MainRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
-    onCurrentTagsChange: (String) -> Unit,
+    onRequestScrollToTop: (() -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = koinViewModel(),
 ) {
@@ -91,22 +93,6 @@ fun PostsScreen(
         refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
         onRefresh = viewModel::retryGetPosts,
     )
-
-    val fabVisible by remember {
-        derivedStateOf {
-            when {
-                gridState.firstVisibleItemIndex >= 5 -> {
-                    when (viewModel.offsetY.value) {
-                        0f -> true
-                        -viewModel.offsetY.value -> false
-                        else -> viewModel.lastFabVisible
-                    }
-                }
-
-                else -> false
-            }
-        }
-    }
 
     val isMoreLoadingVisible by remember {
         derivedStateOf {
@@ -135,7 +121,15 @@ fun PostsScreen(
     }
 
     LaunchedEffect(key1 = viewModel) {
-        onCurrentTagsChange(viewModel.tags)
+        onRequestScrollToTop {
+            scope.launch {
+                viewModel.offsetY.animateTo(targetValue = 0f)
+            }
+
+            scope.launch {
+                gridState.animateScrollToItem(index = 0)
+            }
+        }
     }
 
     LaunchedEffect(key1 = viewModel.loading) {
@@ -257,20 +251,15 @@ fun PostsScreen(
         }
     }
 
+    ProductSetSystemBarsColor(
+        navigationBarColor = Color.Transparent,
+    )
+
     Scaffold(
-        floatingActionButton = {
-            PostsFab(
-                fabVisible = fabVisible,
-                onClick = {
-                    scope.launch {
-                        gridState.animateScrollToItem(index = 0)
-                    }
-                },
-            )
-        }
+        modifier = modifier.statusBarsPadding(),
     ) { innerPadding ->
         Box(
-            modifier = modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .nestedScroll(
                     connection = remember {
@@ -318,7 +307,7 @@ fun PostsScreen(
                                 },
                             )
 
-                            if (isScrollIndexZero) {
+                            if (viewModel.loading == PostsLoadingState.FROM_REFRESH || isScrollIndexZero) {
                                 PullRefreshIndicator(
                                     refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
                                     state = pullRefreshState,

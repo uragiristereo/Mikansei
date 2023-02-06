@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun ImageLoading(
+internal fun ImageLoading(
     visible: Boolean,
     modifier: Modifier = Modifier,
 ) {

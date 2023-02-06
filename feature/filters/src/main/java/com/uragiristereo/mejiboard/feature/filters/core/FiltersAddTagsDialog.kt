@@ -33,7 +33,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun FiltersAddTagsDialog(
+internal fun FiltersAddTagsDialog(
     dialogShown: Boolean,
     onDialogShownChange: (Boolean) -> Unit,
     onDone: (String) -> Unit,

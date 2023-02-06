@@ -27,7 +27,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FiltersScreen(
+internal fun FiltersScreen(
     modifier: Modifier = Modifier,
     viewModel: FiltersViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,

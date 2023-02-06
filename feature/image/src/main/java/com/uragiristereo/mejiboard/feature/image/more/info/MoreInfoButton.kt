@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
-fun MoreInfoButton(
+internal fun MoreInfoButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

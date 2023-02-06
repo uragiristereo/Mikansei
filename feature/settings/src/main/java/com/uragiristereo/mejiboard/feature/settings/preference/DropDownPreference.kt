@@ -25,7 +25,7 @@ import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
 import com.uragiristereo.mejiboard.core.network.model.BasePreference
 
 @Composable
-fun DropDownPreference(
+internal fun DropDownPreference(
     state: DropDownPreferenceState,
     title: String,
     icon: Painter?,
@@ -124,7 +124,7 @@ class DropDownPreferenceState(
 }
 
 @Composable
-fun rememberDropDownPreferenceState(
+internal fun rememberDropDownPreferenceState(
     items: List<PreferenceItem>,
     selectedItem: PreferenceItem?,
     onItemSelected: (PreferenceItem) -> Unit,
@@ -149,7 +149,7 @@ fun rememberDropDownPreferenceState(
 }
 
 @Composable
-fun rememberDropDownPreferenceState(
+internal fun rememberDropDownPreferenceState(
     preference: BasePreference,
     selectedItemKey: String,
     onItemSelected: (PreferenceItem) -> Unit,

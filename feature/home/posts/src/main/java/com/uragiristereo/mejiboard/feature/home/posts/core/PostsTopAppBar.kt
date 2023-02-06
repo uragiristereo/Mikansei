@@ -35,7 +35,7 @@ import com.uragiristereo.mejiboard.core.ui.composable.DimensionSubcomposeLayout
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
-fun PostsTopAppBar(
+internal fun PostsTopAppBar(
     searchTags: String,
     booruSource: String,
     onHeightChange: (Dp) -> Unit,

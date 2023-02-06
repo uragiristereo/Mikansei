@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
-fun SearchBrowseButton(
+internal fun SearchBrowseButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

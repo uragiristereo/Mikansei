@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
-fun MoreTagsButton(
+internal fun MoreTagsButton(
     tagCount: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ContentAlpha
@@ -17,6 +18,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -26,27 +28,33 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.WindowSize
 import com.uragiristereo.mejiboard.core.ui.composable.ClickableSection
 import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
+import com.uragiristereo.mejiboard.feature.home.more.core.MoreTopAppBar
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 
 @Composable
-fun MoreScreen(
+internal fun MoreScreen(
     onNavigate: (MainRoute) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MoreViewModel = koinViewModel(),
 ) {
     val windowSize = rememberWindowSize()
 
+    ProductSetSystemBarsColor(
+        navigationBarColor = Color.Transparent,
+    )
+
     Scaffold(
         topBar = {
             MoreTopAppBar()
         },
-        modifier = modifier,
+        modifier = modifier.statusBarsPadding(),
     ) { innerPadding ->
         LazyColumn(
             contentPadding = innerPadding,

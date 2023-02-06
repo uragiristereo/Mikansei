@@ -16,7 +16,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 
 @Composable
-fun SearchQuickShortcutBar(
+internal fun SearchQuickShortcutBar(
     query: TextFieldValue,
     onQueryChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,

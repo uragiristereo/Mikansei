@@ -10,7 +10,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.uragiristereo.mejiboard.core.model.booru.tag.Tag
 
 @Composable
-fun MoreTagsRow(
+internal fun MoreTagsRow(
     tags: SnapshotStateList<Tag>,
     modifier: Modifier = Modifier,
 ) {

@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme
 
 @Composable
-fun FullscreenPreference(
+internal fun FullscreenPreference(
     title: String,
     items: List<Pair<String, Pair<String, String>>>,
     selectedItem: String,
@@ -87,7 +87,7 @@ fun FullscreenPreference(
 }
 
 @Composable
-fun RadioPreferenceItem(
+internal fun RadioPreferenceItem(
     title: String,
     subtitle: String?,
     onClick: () -> Unit,

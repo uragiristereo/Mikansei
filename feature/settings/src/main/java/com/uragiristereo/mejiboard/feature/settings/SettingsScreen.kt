@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.ui.extension.defaultPaddings
+import com.uragiristereo.mejiboard.feature.settings.core.SettingsTopAppBar
 import com.uragiristereo.mejiboard.feature.settings.preference.BottomSheetPreference
 import com.uragiristereo.mejiboard.feature.settings.preference.LocalIconPadding
 import com.uragiristereo.mejiboard.feature.settings.preference.rememberBottomSheetPreferenceState
@@ -21,7 +22,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SettingsScreen(
+internal fun SettingsScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel(),

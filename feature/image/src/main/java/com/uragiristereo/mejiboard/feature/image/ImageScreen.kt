@@ -40,7 +40,7 @@ import kotlin.math.abs
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ImageScreen(
+internal fun ImageScreen(
     onNavigateBack: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ImageViewModel = koinViewModel(),

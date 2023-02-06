@@ -16,7 +16,7 @@ import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
-fun FiltersTopAppBar(
+internal fun FiltersTopAppBar(
     onNavigateBack: () -> Unit,
     onSelectAll: () -> Unit,
 ) {

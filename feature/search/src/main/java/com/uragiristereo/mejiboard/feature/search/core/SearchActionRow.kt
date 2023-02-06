@@ -20,7 +20,7 @@ import com.uragiristereo.mejiboard.core.ui.composable.Chips
 import com.uragiristereo.mejiboard.core.ui.composable.SidesGradient
 
 @Composable
-fun SearchActionRow(
+internal fun SearchActionRow(
     selectedBooru: BooruSource,
     filtersEnabled: Boolean,
     historyEnabled: Boolean,

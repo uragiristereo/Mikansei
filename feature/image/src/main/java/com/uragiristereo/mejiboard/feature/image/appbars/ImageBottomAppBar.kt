@@ -23,7 +23,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoadingState
 
 @Composable
-fun ImageBottomAppBar(
+internal fun ImageBottomAppBar(
     visible: Boolean,
     loading: ImageLoadingState,
     showExpandButton: Boolean,

@@ -1,34 +1,21 @@
-package com.uragiristereo.mejiboard.feature.settings
+package com.uragiristereo.mejiboard.feature.search_history.core
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
-fun SettingsTopAppBar(
+internal fun SearchHistoryTopAppBar(
     onNavigateBack: () -> Unit,
     onMoreClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     ProductTopAppBar(
         title = {
-            Text(text = "Settings")
-        },
-        navigationIcon = {
-            IconButton(
-                onClick = onNavigateBack,
-                content = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.arrow_back),
-                        contentDescription = null,
-                    )
-                },
-            )
+            Text(text = "Search history")
         },
         actions = {
             IconButton(
@@ -41,6 +28,16 @@ fun SettingsTopAppBar(
                 },
             )
         },
-        modifier = modifier,
+        navigationIcon = {
+            IconButton(
+                onClick = onNavigateBack,
+                content = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.arrow_back),
+                        contentDescription = null,
+                    )
+                },
+            )
+        }
     )
 }

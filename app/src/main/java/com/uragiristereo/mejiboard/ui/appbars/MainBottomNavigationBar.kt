@@ -1,4 +1,4 @@
-package com.uragiristereo.mejiboard.feature.home.posts.appbars
+package com.uragiristereo.mejiboard.ui.appbars
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,15 +15,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
+import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mejiboard.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mejiboard.core.ui.extension.backgroundElevation
 import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
+import com.uragiristereo.mejiboard.core.ui.navigation.MainRoute
 
 @Composable
-fun HomeBottomNavigationBar(
-    currentRoute: String?,
-    onNavigate: (HomeRoute) -> Unit,
+fun MainBottomNavigationBar(
+    currentRoute: String,
+    onNavigate: (NavRoute) -> Unit,
     onNavigateSearch: () -> Unit,
+    onRequestScrollToTop: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -50,17 +54,17 @@ fun HomeBottomNavigationBar(
             backgroundColor = Color.Transparent,
             contentColor = MaterialTheme.colors.primary,
         ) {
-            HomeNavigationItems.values().forEach { item ->
+            MainNavigationItems.values().forEach { item ->
                 BottomNavigationItem(
                     label = {
                         Text(text = stringResource(id = item.label))
                     },
-                    selected = currentRoute == item.route.route,
+                    selected = currentRoute == item.route::class.route,
                     icon = {
                         Icon(
                             painter = painterResource(
                                 id = when (currentRoute) {
-                                    item.route.route -> item.selectedIcon
+                                    item.route::class.route -> item.selectedIcon
                                     else -> item.unselectedIcon
                                 },
                             ),
@@ -68,9 +72,10 @@ fun HomeBottomNavigationBar(
                         )
                     },
                     onClick = {
-                        when (item) {
-                            HomeNavigationItems.Search -> onNavigateSearch()
-                            else -> onNavigate(item.route as HomeRoute)
+                        when {
+                            HomeRoute.Posts::class.route in listOf(item.route.route, currentRoute) -> onRequestScrollToTop()
+                            item.route.route == MainRoute.Search::class.route -> onNavigateSearch()
+                            else -> onNavigate(item.route)
                         }
                     },
                     alwaysShowLabel = false,

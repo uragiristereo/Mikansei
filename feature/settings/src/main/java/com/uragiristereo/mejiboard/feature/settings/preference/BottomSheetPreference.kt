@@ -33,7 +33,7 @@ import kotlinx.parcelize.Parcelize
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BottomSheetPreference(
+internal fun BottomSheetPreference(
     state: BottomSheetPreferenceState,
     modifier: Modifier = Modifier,
 ) {
@@ -136,7 +136,7 @@ class BottomSheetPreferenceState(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun rememberBottomSheetPreferenceState(
+internal fun rememberBottomSheetPreferenceState(
     sheetState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
     onItemSelected: (preferenceKey: String, selectedItem: PreferenceItem?) -> Unit,
 ): BottomSheetPreferenceState {

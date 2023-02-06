@@ -23,7 +23,7 @@ import com.uragiristereo.mejiboard.core.ui.composable.ClickableSection
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FiltersModalBottomSheet(
+internal fun FiltersModalBottomSheet(
     sheetState: ModalBottomSheetState,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,

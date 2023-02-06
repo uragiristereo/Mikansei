@@ -4,6 +4,7 @@
     <string name="field_placeholder_example">Example: 1girl blue_sky</string>
     <string name="feature_under_development">Feature is under development</string>
     <string name="none">None</string>
+    <string name="share_label">Share to</string>
 
     <!-- Boorus -->
     <string name="gelbooru_label" translatable="false">Gelbooru</string>

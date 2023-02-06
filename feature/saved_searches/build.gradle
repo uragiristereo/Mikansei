@@ -31,9 +31,15 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
 
+    // Accompanist Compose Extensions
+    implementation(libs.accompanist.navigation.animation)
+
     // Koin Dependency Injection
     implementation(libs.bundles.koin)
 
     // Timber Logger
     implementation(libs.timber)
+
+    // Safer Navigation Compose
+    implementation(libs.bundles.safer.navigation)
 }

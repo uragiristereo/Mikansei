@@ -13,7 +13,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.extension.defaultPaddings
 
 @Composable
-fun AboutScreen(
+internal fun AboutScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

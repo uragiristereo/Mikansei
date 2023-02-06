@@ -12,7 +12,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.composable.Banner
 
 @Composable
-fun PostsEmpty(
+internal fun PostsEmpty(
     modifier: Modifier = Modifier,
 ) {
     Banner(

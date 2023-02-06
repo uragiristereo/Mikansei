@@ -27,7 +27,7 @@ import com.uragiristereo.mejiboard.core.ui.rememberWindowSize
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoadingState
 
 @Composable
-fun ImageTopAppBar(
+internal fun ImageTopAppBar(
     postId: Int,
     visible: Boolean,
     loading: ImageLoadingState,

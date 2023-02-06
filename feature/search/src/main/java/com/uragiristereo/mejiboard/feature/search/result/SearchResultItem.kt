@@ -26,7 +26,7 @@ import com.uragiristereo.mejiboard.core.resources.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SearchResultItem(
+internal fun SearchResultItem(
     tag: Tag,
     delimiter: String,
     boldWord: String,

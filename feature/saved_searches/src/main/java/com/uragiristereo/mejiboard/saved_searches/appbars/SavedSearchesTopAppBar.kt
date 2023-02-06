@@ -16,7 +16,7 @@ import com.uragiristereo.mejiboard.core.product.component.ProductTopAppBar
 import com.uragiristereo.mejiboard.core.resources.R
 
 @Composable
-fun SavedSearchesTopAppBar(
+internal fun SavedSearchesTopAppBar(
     onNavigateBack: () -> Unit,
     onSelectAll: () -> Unit,
 ) {

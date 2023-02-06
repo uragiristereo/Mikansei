@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun PreferenceCategory(
+internal fun PreferenceCategory(
     title: String,
     modifier: Modifier = Modifier,
 ) {

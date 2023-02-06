@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MoreInfo(
+internal fun MoreInfo(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier,
