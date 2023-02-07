@@ -1,7 +1,6 @@
 package com.uragiristereo.mejiboard.core.booru.source.danbooru
 
 import android.content.Context
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.toPostList
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.toTagList
@@ -10,31 +9,19 @@ import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit
 
-@OptIn(ExperimentalSerializationApi::class)
 class DanbooruRepository(
     context: Context,
     okHttpClient: OkHttpClient,
 ) : BooruSourceRepository {
     override val source = BooruSource.Danbooru
 
-    private val json = Json {
-        ignoreUnknownKeys = true
-    }
-
-    private val client = Retrofit.Builder()
-        .baseUrl(source.baseUrl(context))
-        .client(okHttpClient)
-        .addConverterFactory(
-            json.asConverterFactory("application/json".toMediaType())
-        )
-        .build()
-        .create(DanbooruApi::class.java)
+    private val client = buildClient(
+        baseUrl = source.baseUrl(context),
+        okHttpClient = okHttpClient,
+        service = DanbooruApi::class.java,
+    )
 
     override suspend fun getPosts(tags: String, page: Int, filters: List<Rating>): PostsResult {
         val response = client.getPosts(

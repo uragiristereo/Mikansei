@@ -1,7 +1,6 @@
 package com.uragiristereo.mejiboard.core.booru.source.safebooruorg
 
 import android.content.Context
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.GelbooruApi
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.toTagList
@@ -12,38 +11,25 @@ import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit
 
-@OptIn(ExperimentalSerializationApi::class)
 class SafebooruOrgRepository(
     private val context: Context,
     okHttpClient: OkHttpClient,
 ) : BooruSourceRepository {
     override val source = BooruSource.SafebooruOrg
 
-    private val json = Json {
-        ignoreUnknownKeys = true
-    }
+    private val client = buildClient(
+        baseUrl = source.baseUrl(context),
+        okHttpClient = okHttpClient,
+        service = SafebooruOrgApi::class.java,
+    )
 
-    private val retrofitBuilder = Retrofit.Builder()
-        .client(okHttpClient)
-        .addConverterFactory(
-            json.asConverterFactory("application/json".toMediaType())
-        )
-
-    private val client = retrofitBuilder
-        .baseUrl(source.baseUrl(context))
-        .build()
-        .create(SafebooruOrgApi::class.java)
-
-    private val clientGelbooru = retrofitBuilder
-        .baseUrl(BooruSource.Gelbooru.baseUrl(context))
-        .build()
-        .create(GelbooruApi::class.java)
+    private val clientGelbooru = buildClient(
+        baseUrl = BooruSource.Gelbooru.baseUrl(context),
+        okHttpClient = okHttpClient,
+        service = GelbooruApi::class.java,
+    )
 
     override suspend fun getPosts(tags: String, page: Int, filters: List<Rating>): PostsResult {
         val response = client.getPosts(

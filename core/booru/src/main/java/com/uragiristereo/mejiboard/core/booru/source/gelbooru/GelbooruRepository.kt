@@ -1,7 +1,6 @@
 package com.uragiristereo.mejiboard.core.booru.source.gelbooru
 
 import android.content.Context
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.search.GelbooruSearch
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.toPostList
@@ -19,39 +18,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Response
-import retrofit2.Retrofit
 
-@OptIn(ExperimentalSerializationApi::class)
 class GelbooruRepository(
     private val context: Context,
     okHttpClient: OkHttpClient,
 ) : BooruSourceRepository {
     override val source = BooruSource.Gelbooru
 
-    private val json = Json {
-        ignoreUnknownKeys = true
-    }
+    private val client = buildClient(
+        baseUrl = source.baseUrl(context),
+        okHttpClient = okHttpClient,
+        service = GelbooruApi::class.java,
+    )
 
-    private val retrofitBuilder = Retrofit.Builder()
-        .client(okHttpClient)
-        .addConverterFactory(
-            json.asConverterFactory("application/json".toMediaType())
-        )
-
-    private val client = retrofitBuilder
-        .baseUrl(source.baseUrl(context))
-        .build()
-        .create(GelbooruApi::class.java)
-
-    private val clientSafe = retrofitBuilder
-        .baseUrl(BooruSource.SafebooruOrg.baseUrl(context))
-        .build()
-        .create(SafebooruOrgApi::class.java)
+    private val clientSafe = buildClient(
+        baseUrl = BooruSource.SafebooruOrg.baseUrl(context),
+        okHttpClient = okHttpClient,
+        service = SafebooruOrgApi::class.java,
+    )
 
     override suspend fun getPosts(tags: String, page: Int, filters: List<Rating>): PostsResult {
         // Gelbooru allows unlimited tags to search so we can filter ratings from server
