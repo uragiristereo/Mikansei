@@ -6,11 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.model.RatingFilter
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
+import com.uragiristereo.mejiboard.core.model.booru.getBooruByKey
 import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
-import com.uragiristereo.mejiboard.core.network.PreferencesRepository
-import com.uragiristereo.mejiboard.core.network.model.Preferences
-import com.uragiristereo.mejiboard.core.network.model.RatingPreference
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
+import com.uragiristereo.mejiboard.core.preferences.model.Preferences
+import com.uragiristereo.mejiboard.core.preferences.model.RatingPreference
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.feature.settings.preference.BottomSheetPreferenceData
 import kotlinx.coroutines.flow.launchIn
@@ -39,8 +40,8 @@ class SettingsViewModel(
         value = BottomSheetPreferenceData(
             preferenceKey = "booru_sources",
             preferenceTextResId = R.string.settings_default_booru_source_select,
-            items = BooruSources.toPreferenceItemList(),
-            selectedItem = BooruSources.getBooruByKey(preferences.booru)?.toPreferenceItem() ?: BooruSources.Gelbooru.toPreferenceItem(),
+            items = BooruSource.values().map { it.toPreferenceItem() },
+            selectedItem = BooruSource.values().getBooruByKey(preferences.booru)?.toPreferenceItem() ?: BooruSource.Gelbooru.toPreferenceItem(),
         ),
     )
         private set
@@ -70,7 +71,7 @@ class SettingsViewModel(
 
                 updatePreferences {
                     it.copy(
-                        booru = booruSources.selectedItem?.key ?: BooruSources.Gelbooru.key,
+                        booru = booruSources.selectedItem?.key ?: BooruSource.Gelbooru.key,
                     )
                 }
             }

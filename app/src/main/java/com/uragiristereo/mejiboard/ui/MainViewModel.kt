@@ -18,8 +18,8 @@ import com.uragiristereo.mejiboard.core.download.model.DownloadResource
 import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.network.PreferencesRepository
-import com.uragiristereo.mejiboard.core.network.model.Preferences
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
+import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import com.uragiristereo.mejiboard.core.resources.R
 import com.uragiristereo.mejiboard.core.ui.navigation.HomeRoute
 import com.uragiristereo.mejiboard.domain.usecase.ConvertFileSizeUseCase

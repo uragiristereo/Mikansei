@@ -4,7 +4,7 @@ import com.uragiristereo.mejiboard.core.booru.source.BooruSourceConverters
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.search.DanbooruSearch
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.tag.DanbooruTag
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
@@ -28,7 +28,7 @@ fun List<DanbooruPost>.toPostList(): List<Post> {
         }
 
         Post(
-            source = BooruSources.Danbooru,
+            source = BooruSource.Danbooru,
             id = it.id ?: 0,
             scaled = it.hasLarge ?: false,
             rating = when (it.rating) {

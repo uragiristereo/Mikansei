@@ -18,7 +18,7 @@ import coil.request.ImageRequest
 import com.ortiz.touchview.OnTouchImageViewListener
 import com.ortiz.touchview.TouchImageView
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.network.model.DetailSizePreference
+import com.uragiristereo.mejiboard.core.preferences.model.DetailSizePreference
 import com.uragiristereo.mejiboard.feature.image.ImageViewModel
 import com.uragiristereo.mejiboard.feature.image.core.ImageLoadingState
 import kotlinx.coroutines.currentCoroutineContext

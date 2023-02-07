@@ -12,8 +12,8 @@ import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
 import com.uragiristereo.mejiboard.core.database.dao.filters.toFilterItemList
 import com.uragiristereo.mejiboard.core.database.dao.filters.toFilterTableItem
 import com.uragiristereo.mejiboard.core.database.dao.filters.toFilterTableItemList
-import com.uragiristereo.mejiboard.core.network.PreferencesRepository
-import com.uragiristereo.mejiboard.core.network.model.Preferences
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
+import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import com.uragiristereo.mejiboard.core.ui.database.FilterItem
 import com.uragiristereo.mejiboard.core.ui.extension.strip
 import kotlinx.coroutines.Dispatchers

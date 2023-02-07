@@ -4,7 +4,7 @@ import com.uragiristereo.mejiboard.core.booru.BooruRepository
 import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.network.PreferencesRepository
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

@@ -1,8 +1,8 @@
-package com.uragiristereo.mejiboard.core.network.model
+package com.uragiristereo.mejiboard.core.preferences.model
 
 import android.os.Build
 import com.uragiristereo.mejiboard.core.model.RatingFilter
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -26,7 +26,7 @@ data class Preferences(
     @SerialName(value = "doh_enabled")
     val dohEnabled: Boolean = true,
 
-    val booru: String = BooruSources.Gelbooru.key,
+    val booru: String = BooruSource.Gelbooru.key,
 
     @SerialName(value = "filters_enabled")
     val filtersEnabled: Boolean = true,

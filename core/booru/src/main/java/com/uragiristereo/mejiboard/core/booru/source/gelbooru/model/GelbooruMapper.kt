@@ -6,7 +6,7 @@ import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.post.Gelboor
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.search.GelbooruSearch
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.tag.GelbooruTagsResult
 import com.uragiristereo.mejiboard.core.model.Constants
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
@@ -15,13 +15,13 @@ import com.uragiristereo.mejiboard.core.model.booru.tag.TagType
 import java.io.File
 
 fun GelbooruPostsResult.toPostList(context: Context): List<Post> {
-    val domain = context.getString(BooruSources.Gelbooru.domainResId)
+    val domain = context.getString(BooruSource.Gelbooru.domainResId)
 
     return this.post?.map {
         val fileType = File(it.image).extension
 
         Post(
-            source = BooruSources.Gelbooru,
+            source = BooruSource.Gelbooru,
             id = it.id,
             scaled = it.sample == 1,
             rating = when (it.rating) {

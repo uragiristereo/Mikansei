@@ -2,13 +2,13 @@ package com.uragiristereo.mejiboard.core.booru.source.safebooruorg
 
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.GelbooruApi
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.toTagList
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.toPostList
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.toTagList
 import com.uragiristereo.mejiboard.core.model.Constants
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
+import com.uragiristereo.mejiboard.core.model.booru.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult
@@ -23,7 +23,7 @@ class SafebooruOrgRepository(
     private val context: Context,
     okHttpClient: OkHttpClient,
 ) : BooruSourceRepository {
-    override val source = BooruSources.SafebooruOrg
+    override val source = BooruSource.SafebooruOrg
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -41,7 +41,7 @@ class SafebooruOrgRepository(
         .create(SafebooruOrgApi::class.java)
 
     private val clientGelbooru = retrofitBuilder
-        .baseUrl(BooruSources.Gelbooru.baseUrl(context))
+        .baseUrl(BooruSource.Gelbooru.baseUrl(context))
         .build()
         .create(GelbooruApi::class.java)
 

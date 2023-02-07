@@ -3,6 +3,7 @@ package com.uragiristereo.mejiboard.core.network
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mejiboard.core.network.api.MejiboardApi
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

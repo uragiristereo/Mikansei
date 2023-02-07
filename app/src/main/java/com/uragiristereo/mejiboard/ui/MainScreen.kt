@@ -45,7 +45,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.uragiristereo.mejiboard.core.model.ShareOption
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
-import com.uragiristereo.mejiboard.core.network.model.ThemePreference
+import com.uragiristereo.mejiboard.core.preferences.model.ThemePreference
 import com.uragiristereo.mejiboard.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mejiboard.core.product.theme.MejiboardTheme
 import com.uragiristereo.mejiboard.core.product.theme.Theme

@@ -12,7 +12,7 @@ import com.uragiristereo.mejiboard.core.database.di.DatabaseModule
 import com.uragiristereo.mejiboard.core.download.di.DownloadModule
 import com.uragiristereo.mejiboard.core.network.NetworkRepository
 import com.uragiristereo.mejiboard.core.network.di.NetworkModule
-import com.uragiristereo.mejiboard.core.network.di.PreferencesModule
+import com.uragiristereo.mejiboard.core.preferences.di.PreferencesModule
 import com.uragiristereo.mejiboard.di.AppModule
 import com.uragiristereo.mejiboard.domain.di.DomainModule
 import org.koin.android.ext.koin.androidContext

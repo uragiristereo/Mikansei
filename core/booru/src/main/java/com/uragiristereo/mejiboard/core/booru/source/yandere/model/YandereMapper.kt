@@ -4,7 +4,7 @@ import com.uragiristereo.mejiboard.core.booru.source.BooruSourceConverters
 import com.uragiristereo.mejiboard.core.booru.source.yandere.model.post.YanderePost
 import com.uragiristereo.mejiboard.core.booru.source.yandere.model.search.YandereSearch
 import com.uragiristereo.mejiboard.core.booru.source.yandere.model.tag.YandereTags
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
@@ -16,7 +16,7 @@ import java.util.Date
 fun List<YanderePost>.toPostList(): List<Post> {
     return map {
         Post(
-            source = BooruSources.Yandere,
+            source = BooruSource.Yandere,
             id = it.id,
             scaled = true,
             rating = when (it.rating) {

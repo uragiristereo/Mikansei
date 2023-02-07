@@ -4,7 +4,7 @@ import android.content.Context
 import com.uragiristereo.mejiboard.core.booru.source.BooruSourceConverters
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.posts.SafebooruOrgPost
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.search.SafebooruOrgSearch
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.Post
 import com.uragiristereo.mejiboard.core.model.booru.post.PostImage
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
@@ -14,7 +14,7 @@ import java.io.File
 import java.util.Date
 
 fun List<SafebooruOrgPost>.toPostList(context: Context): List<Post> {
-    val baseUrl = BooruSources.SafebooruOrg.baseUrl(context)
+    val baseUrl = BooruSource.SafebooruOrg.baseUrl(context)
 
     return this.map {
         val fileNameWithoutExtension = it.image
@@ -24,7 +24,7 @@ fun List<SafebooruOrgPost>.toPostList(context: Context): List<Post> {
             )
 
         Post(
-            source = BooruSources.SafebooruOrg,
+            source = BooruSource.SafebooruOrg,
             id = it.id,
             scaled = it.sample,
             rating = Rating.GENERAL,

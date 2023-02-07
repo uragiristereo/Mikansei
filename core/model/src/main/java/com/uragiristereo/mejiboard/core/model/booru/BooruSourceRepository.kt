@@ -1,6 +1,5 @@
-package com.uragiristereo.mejiboard.core.booru.source
+package com.uragiristereo.mejiboard.core.model.booru
 
-import com.uragiristereo.mejiboard.core.model.booru.BooruSource
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult

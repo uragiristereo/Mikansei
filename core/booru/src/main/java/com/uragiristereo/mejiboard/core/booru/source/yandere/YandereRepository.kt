@@ -2,12 +2,12 @@ package com.uragiristereo.mejiboard.core.booru.source.yandere
 
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.yandere.model.toPostList
 import com.uragiristereo.mejiboard.core.booru.source.yandere.model.toTagList
 import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.RatingFilter
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
+import com.uragiristereo.mejiboard.core.model.booru.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult
@@ -22,7 +22,7 @@ class YandereRepository(
     context: Context,
     okHttpClient: OkHttpClient,
 ) : BooruSourceRepository {
-    override val source = BooruSources.Yandere
+    override val source = BooruSource.Yandere
 
     private val json = Json {
         ignoreUnknownKeys = true

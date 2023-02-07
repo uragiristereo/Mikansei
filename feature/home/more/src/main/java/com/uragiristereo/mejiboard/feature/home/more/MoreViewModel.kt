@@ -6,8 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mejiboard.core.database.dao.filters.FiltersDao
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
-import com.uragiristereo.mejiboard.core.network.PreferencesRepository
+import com.uragiristereo.mejiboard.core.model.booru.BooruSource
+import com.uragiristereo.mejiboard.core.model.booru.getBooruByKey
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -21,7 +22,7 @@ class MoreViewModel(
     var preferences by mutableStateOf(preferencesRepository.data)
         private set
 
-    var selectedBooru by mutableStateOf(BooruSources.getBooruByKey(preferences.booru) ?: BooruSources.Gelbooru)
+    var selectedBooru by mutableStateOf(BooruSource.values().getBooruByKey(preferences.booru) ?: BooruSource.Gelbooru)
         private set
 
     var enabledFiltersCount by mutableStateOf(0)
@@ -30,7 +31,7 @@ class MoreViewModel(
         preferencesRepository.flowData
             .onEach {
                 preferences = it
-                selectedBooru = BooruSources.getBooruByKey(it.booru) ?: BooruSources.Gelbooru
+                selectedBooru = BooruSource.values().getBooruByKey(it.booru) ?: BooruSource.Gelbooru
             }
             .launchIn(viewModelScope)
 

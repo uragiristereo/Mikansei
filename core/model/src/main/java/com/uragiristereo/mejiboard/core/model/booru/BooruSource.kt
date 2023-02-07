@@ -1,24 +1,45 @@
 package com.uragiristereo.mejiboard.core.model.booru
 
 import android.content.Context
-import android.os.Parcelable
 import androidx.annotation.StringRes
 import com.uragiristereo.mejiboard.core.model.preferences.PreferenceItem
-import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
+import com.uragiristereo.mejiboard.core.resources.R
 
-@Parcelize
-@Serializable
-data class BooruSource(
+enum class BooruSource(
     val key: String,
     @StringRes val nameResId: Int,
     @StringRes val domainResId: Int,
     private val webUrlPattern: String,
-) : Parcelable {
-    fun baseUrl(context: Context): String {
-        val realDomain = context.getString(domainResId)
+) {
+    Gelbooru(
+        key = "gelbooru",
+        nameResId = R.string.gelbooru_label,
+        domainResId = R.string.gelbooru_domain,
+        webUrlPattern = "https://gelbooru.com/index.php?page=post&s=view&id={postId}",
+    ),
+    Danbooru(
+        key = "danbooru",
+        nameResId = R.string.danbooru_label,
+        domainResId = R.string.danbooru_domain,
+        webUrlPattern = "https://danbooru.donmai.us/posts/{postId}",
+    ),
+    SafebooruOrg(
+        key = "safebooruorg",
+        nameResId = R.string.safebooruorg_label,
+        domainResId = R.string.safebooruorg_domain,
+        webUrlPattern = "https://safebooru.org/index.php?page=post&s=view&id={postId}",
+    ),
+    Yandere(
+        key = "yandere",
+        nameResId = R.string.yandere_label,
+        domainResId = R.string.yandere_domain,
+        webUrlPattern = "https://yande.re/post/show/{postId}",
+    );
 
-        return "https://$realDomain"
+    fun baseUrl(context: Context): String {
+        val domain = context.getString(domainResId)
+
+        return "https://$domain"
     }
 
     fun parseWebUrl(postId: Int): String {
@@ -40,4 +61,9 @@ data class BooruSource(
             subtitleResId = domainResId,
         )
     }
+}
+
+
+fun Array<BooruSource>.getBooruByKey(key: String): BooruSource? {
+    return this.firstOrNull { it.key == key }
 }

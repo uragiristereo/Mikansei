@@ -1,17 +1,18 @@
 package com.uragiristereo.mejiboard.core.booru
 
 import android.content.Context
-import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.DanbooruRepository
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.GelbooruRepository
 import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.SafebooruOrgRepository
 import com.uragiristereo.mejiboard.core.booru.source.yandere.YandereRepository
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
-import com.uragiristereo.mejiboard.core.model.booru.BooruSources
+import com.uragiristereo.mejiboard.core.model.booru.BooruSourceRepository
+import com.uragiristereo.mejiboard.core.model.booru.getBooruByKey
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult
 import com.uragiristereo.mejiboard.core.network.NetworkRepository
-import com.uragiristereo.mejiboard.core.network.PreferencesRepository
+import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
+import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ class BooruRepositoryImpl(
     private val networkRepository: NetworkRepository,
     private val preferencesRepository: PreferencesRepository,
 ) : BooruRepository {
-    private var preferences = preferencesRepository.data
+    private var preferences = Preferences()
 
     private var dohEnabled = preferences.dohEnabled
 
@@ -33,7 +34,7 @@ class BooruRepositoryImpl(
         get() = preferences.ratingFilters
 
     override val currentBooru
-        get() = BooruSources.getBooruByKey(preferences.booru) ?: BooruSources.Gelbooru
+        get() = BooruSource.values().getBooruByKey(preferences.booru) ?: BooruSource.Gelbooru
 
     override var boorus: Map<BooruSource, BooruSourceRepository> = initializeBoorus()
 
@@ -54,12 +55,16 @@ class BooruRepositoryImpl(
         }
     }
 
+    private fun initializeBooru(
+        constructor: (Context, OkHttpClient) -> BooruSourceRepository,
+    ): BooruSourceRepository = constructor(context, preferredOkHttpClient)
+
     private fun initializeBoorus(): Map<BooruSource, BooruSourceRepository> {
         return mapOf(
-            BooruSources.Gelbooru to GelbooruRepository(context, preferredOkHttpClient),
-            BooruSources.Danbooru to DanbooruRepository(context, preferredOkHttpClient),
-            BooruSources.SafebooruOrg to SafebooruOrgRepository(context, preferredOkHttpClient),
-            BooruSources.Yandere to YandereRepository(context, preferredOkHttpClient),
+            BooruSource.Gelbooru to initializeBooru(::GelbooruRepository),
+            BooruSource.Danbooru to initializeBooru(::DanbooruRepository),
+            BooruSource.SafebooruOrg to initializeBooru(::SafebooruOrgRepository),
+            BooruSource.Yandere to initializeBooru(::YandereRepository),
         )
     }
 
