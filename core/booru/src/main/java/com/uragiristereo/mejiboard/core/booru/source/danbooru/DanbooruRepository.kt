@@ -2,11 +2,11 @@ package com.uragiristereo.mejiboard.core.booru.source.danbooru
 
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.toPostList
 import com.uragiristereo.mejiboard.core.booru.source.danbooru.model.toTagList
 import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
-import com.uragiristereo.mejiboard.core.model.booru.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult

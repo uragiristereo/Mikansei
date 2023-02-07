@@ -2,6 +2,7 @@ package com.uragiristereo.mejiboard.core.booru.source.gelbooru
 
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.search.GelbooruSearch
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.toPostList
 import com.uragiristereo.mejiboard.core.booru.source.gelbooru.model.toTagList
@@ -11,7 +12,6 @@ import com.uragiristereo.mejiboard.core.booru.source.safebooruorg.model.toTagLis
 import com.uragiristereo.mejiboard.core.model.Constants
 import com.uragiristereo.mejiboard.core.model.RatingFilter
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
-import com.uragiristereo.mejiboard.core.model.booru.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.post.Rating
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult

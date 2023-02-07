@@ -1,7 +1,7 @@
 package com.uragiristereo.mejiboard.core.booru
 
+import com.uragiristereo.mejiboard.core.booru.source.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.model.booru.BooruSource
-import com.uragiristereo.mejiboard.core.model.booru.BooruSourceRepository
 import com.uragiristereo.mejiboard.core.model.booru.post.PostsResult
 import com.uragiristereo.mejiboard.core.model.booru.tag.TagsResult
 
