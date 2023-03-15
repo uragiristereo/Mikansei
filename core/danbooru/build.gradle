@@ -1,0 +1,24 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinx.serialization)
+}
+
+android {
+    namespace "com.uragiristereo.mejiboard.core.danbooru"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+}
+
+dependencies {
+    implementation(project(":core:model"))
+    implementation(project(":core:network"))
+    implementation(project(":core:preferences"))
+
+    implementation(libs.bundles.core)
+    implementation(libs.bundles.retrofit)
+    implementation(libs.kotlinx.serialization.json)
+}
