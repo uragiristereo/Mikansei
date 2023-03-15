@@ -36,4 +36,10 @@ data class Preferences(
 
     @SerialName(value = "developer_mode")
     val developerMode: Boolean = false,
+
+    @SerialName(value = "subdomain")
+    val subdomain: DanbooruSubdomain = DanbooruSubdomain.SAFEBOORU,
+
+    @SerialName(value = "blacklisted_tags")
+    val blacklistedTags: List<String> = listOf(),
 )
