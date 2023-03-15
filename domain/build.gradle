@@ -22,6 +22,7 @@ android {
 
 dependencies {
     implementation(project(":core:booru"))
+    implementation(project(":core:danbooru"))
     implementation(project(":core:database"))
     implementation(project(":core:download"))
     implementation(project(":core:model"))
