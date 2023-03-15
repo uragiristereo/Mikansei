@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.danbooru.result
+package com.uragiristereo.mejiboard.core.model.result
 
 sealed interface Result<T> {
     data class Success<T>(val data: T) : Result<T>

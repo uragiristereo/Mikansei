@@ -1,9 +1,9 @@
 package com.uragiristereo.mikansei.core.danbooru.repository
 
+import com.uragiristereo.mejiboard.core.model.result.Result
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
-import com.uragiristereo.mikansei.core.danbooru.result.Result
 import kotlinx.coroutines.flow.Flow
 
 interface DanbooruRepository {

@@ -1,11 +1,11 @@
 package com.uragiristereo.mejiboard.domain.usecase_new
 
+import com.uragiristereo.mejiboard.core.model.result.Result
+import com.uragiristereo.mejiboard.core.model.result.mapSuccess
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.domain.entity.tag.Tag
 import com.uragiristereo.mejiboard.domain.entity.tag.toTag
 import com.uragiristereo.mikansei.core.danbooru.repository.DanbooruRepository
-import com.uragiristereo.mikansei.core.danbooru.result.Result
-import com.uragiristereo.mikansei.core.danbooru.result.mapSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 

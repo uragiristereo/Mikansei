@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.danbooru.result
+package com.uragiristereo.mejiboard.core.model.result
 
 import retrofit2.Response
 

@@ -1,15 +1,15 @@
 package com.uragiristereo.mikansei.core.danbooru.repository
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.uragiristereo.mejiboard.core.model.result.Result
+import com.uragiristereo.mejiboard.core.model.result.mapSuccess
+import com.uragiristereo.mejiboard.core.model.result.resultFlow
 import com.uragiristereo.mejiboard.core.network.NetworkRepository
 import com.uragiristereo.mejiboard.core.preferences.PreferencesRepository
 import com.uragiristereo.mejiboard.core.preferences.model.DanbooruSubdomain
 import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import com.uragiristereo.mikansei.core.danbooru.DanbooruApi
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
-import com.uragiristereo.mikansei.core.danbooru.result.Result
-import com.uragiristereo.mikansei.core.danbooru.result.mapSuccess
-import com.uragiristereo.mikansei.core.danbooru.result.resultFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
