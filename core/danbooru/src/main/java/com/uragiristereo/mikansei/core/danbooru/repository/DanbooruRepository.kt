@@ -14,4 +14,6 @@ interface DanbooruRepository {
     suspend fun getTagsAutoComplete(query: String): Flow<Result<List<DanbooruTagAutoComplete>>>
 
     suspend fun getTags(tags: List<String>): Flow<Result<List<DanbooruTag>>>
+
+    suspend fun isPostInFavorites(postId: Int, userId: Int): Flow<Result<Boolean>>
 }

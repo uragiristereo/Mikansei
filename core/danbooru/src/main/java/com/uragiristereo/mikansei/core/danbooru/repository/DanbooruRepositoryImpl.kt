@@ -8,6 +8,7 @@ import com.uragiristereo.mejiboard.core.preferences.model.Preferences
 import com.uragiristereo.mikansei.core.danbooru.DanbooruApi
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.result.Result
+import com.uragiristereo.mikansei.core.danbooru.result.mapSuccess
 import com.uragiristereo.mikansei.core.danbooru.result.resultFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +74,12 @@ class DanbooruRepositoryImpl(
 
     override suspend fun getTags(tags: List<String>) = resultFlow {
         client.getTags(tags)
+    }
+
+    override suspend fun isPostInFavorites(postId: Int, userId: Int): Flow<Result<Boolean>> = resultFlow {
+        client.getFavorites(postId, userId)
+    }.mapSuccess { favorites ->
+        favorites.any { it.postId == postId && it.userId == userId }
     }
 }
 

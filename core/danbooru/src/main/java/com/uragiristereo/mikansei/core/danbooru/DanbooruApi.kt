@@ -1,6 +1,7 @@
 package com.uragiristereo.mikansei.core.danbooru
 
 import com.uragiristereo.mejiboard.core.model.Constants
+import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
@@ -31,4 +32,10 @@ interface DanbooruApi {
     suspend fun getTags(
         @Query("search[name][]") tags: List<String>,
     ): Response<List<DanbooruTag>>
+
+    @GET("/favorites.json")
+    suspend fun getFavorites(
+        @Query("search[post_id]") postId: Int,
+        @Query("search[user_id]") userId: Int,
+    ): Response<List<DanbooruFavorite>>
 }
