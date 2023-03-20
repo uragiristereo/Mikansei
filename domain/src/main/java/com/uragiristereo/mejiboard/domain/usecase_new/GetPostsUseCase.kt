@@ -33,7 +33,7 @@ class GetPostsUseCase(
                     .blacklistedTags
 
                 val posts = danbooruPosts.toPostList()
-                var filtered = posts
+                var filtered = listOf<Post>()
 
                 if (filters.isNotEmpty()) {
                     filtered = posts.filter { post ->
@@ -43,7 +43,7 @@ class GetPostsUseCase(
                     }
                 }
 
-                var canLoadMore = (posts.size == Constants.POSTS_PER_PAGE)
+                var canLoadMore = posts.size == Constants.POSTS_PER_PAGE
 
                 if (canLoadMore && filtered.isEmpty()) {
                     canLoadMore = false
