@@ -8,7 +8,7 @@ import android.os.Build.VERSION.SDK_INT
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.uragiristereo.mejiboard.core.booru.di.BooruModule
-import com.uragiristereo.mejiboard.core.database.di.DatabaseModule
+import com.uragiristereo.mejiboard.core.database.DatabaseModule
 import com.uragiristereo.mejiboard.core.download.di.DownloadModule
 import com.uragiristereo.mejiboard.core.network.NetworkRepository
 import com.uragiristereo.mejiboard.core.network.di.NetworkModule
@@ -22,7 +22,7 @@ import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
-class MejiboardApp : Application(), ImageLoaderFactory, KoinComponent {
+class MikanseiApp : Application(), ImageLoaderFactory, KoinComponent {
     private val networkRepository: NetworkRepository by inject()
 
     override fun onCreate() {
@@ -38,7 +38,7 @@ class MejiboardApp : Application(), ImageLoaderFactory, KoinComponent {
 
         startKoin {
             androidLogger()
-            androidContext(this@MejiboardApp)
+            androidContext(this@MikanseiApp)
             modules(
                 listOf(
                     AppModule(),
