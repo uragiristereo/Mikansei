@@ -1,11 +1,17 @@
 package com.uragiristereo.mejiboard.domain.entity.post
 
 import com.uragiristereo.mejiboard.core.model.Rating
+import com.uragiristereo.mikansei.core.danbooru.model.DanbooruDateSerializer
+import kotlinx.serialization.Serializable
 import java.util.Date
 
+@Serializable
 data class Post(
     val id: Int,
+
+    @Serializable(DanbooruDateSerializer::class)
     val createdAt: Date,
+
     val uploaderId: Int,
     val source: String?,
     val pixivId: Int?,
