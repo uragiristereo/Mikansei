@@ -64,8 +64,8 @@ class DanbooruRepositoryImpl(
         client.getPost(id)
     }
 
-    override suspend fun getPosts(tags: String, pageId: Int) = resultFlow {
-        client.getPosts(tags, pageId)
+    override suspend fun getPosts(tags: String, page: Int) = resultFlow {
+        client.getPosts(tags, page)
     }
 
     override suspend fun getTagsAutoComplete(query: String) = resultFlow {

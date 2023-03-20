@@ -17,14 +17,14 @@ class GetPostsUseCase(
 ) {
     suspend operator fun invoke(
         tags: String,
-        pageId: Int,
+        page: Int,
         currentPosts: List<Post>,
     ): Flow<Result<PostsResult>> {
-        return danbooruRepository.getPosts(tags, pageId)
+        return danbooruRepository.getPosts(tags, page)
             .mapSuccess { danbooruPosts ->
-                // if page == 0, it means refreshing and previous posts should be cleared
-                val previousPosts = when (pageId) {
-                    0 -> listOf()
+                // if page == 1, it means refreshing and previous posts should be cleared
+                val previousPosts = when (page) {
+                    1 -> listOf()
                     else -> currentPosts
                 }
 

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface DanbooruRepository {
     suspend fun getPost(id: Int): Flow<Result<DanbooruPost>>
 
-    suspend fun getPosts(tags: String, pageId: Int): Flow<Result<List<DanbooruPost>>>
+    suspend fun getPosts(tags: String, page: Int): Flow<Result<List<DanbooruPost>>>
 
     suspend fun getTagsAutoComplete(query: String): Flow<Result<List<DanbooruTagAutoComplete>>>
 
