@@ -31,12 +31,6 @@
 -dontwarn org.openjsse.javax.net.ssl.SSLSocket
 -dontwarn org.openjsse.net.ssl.OpenJSSE
 
-# Data Transfer Objects
--keepclassmembers class com.uragiristereo.mejiboard.core.booru.source.** { <fields>; }
-
-# Preferences
--keepclassmembers class com.uragiristereo.mejiboard.core.preferences.model.Preferences { <fields>; }
-
 # Kotlinx.Serialization
 -if @kotlinx.serialization.Serializable class **
 -keepclassmembers class <1> {

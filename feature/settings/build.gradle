@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard.feature.settings"
+    namespace "com.uragiristereo.mikansei.feature.settings"
     compileSdk 33
 
     defaultConfig {

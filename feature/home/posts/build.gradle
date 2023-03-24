@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard.feature.home.posts"
+    namespace "com.uragiristereo.mikansei.feature.home.posts"
     compileSdk 33
 
     defaultConfig {
@@ -29,7 +29,7 @@ dependencies {
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
-    implementation(project(":domain"))
+    implementation(project(":core:domain"))
 
     // AndroidX
     implementation(libs.bundles.androidx)

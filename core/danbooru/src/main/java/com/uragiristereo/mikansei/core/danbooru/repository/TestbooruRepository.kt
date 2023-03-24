@@ -1,10 +1,10 @@
 package com.uragiristereo.mikansei.core.danbooru.repository
 
-import com.uragiristereo.mejiboard.core.network.NetworkRepository
-import com.uragiristereo.mejiboard.core.preferences.model.DanbooruSubdomain
+import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
+import com.uragiristereo.mikansei.core.network.NetworkRepository
 
 class TestbooruRepository(
     networkRepository: NetworkRepository,
 ) : DanbooruRepositoryImpl(networkRepository) {
-    override val subdomain = DanbooruSubdomain.TESTBOORU
+    override val host = DanbooruHost.Testbooru
 }

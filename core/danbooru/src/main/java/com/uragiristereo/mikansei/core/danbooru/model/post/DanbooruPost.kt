@@ -2,10 +2,10 @@ package com.uragiristereo.mikansei.core.danbooru.model.post
 
 
 import androidx.annotation.Keep
-import com.uragiristereo.mikansei.core.danbooru.model.DanbooruDateSerializer
+import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.Date
+import java.util.*
 
 @Keep
 @Serializable

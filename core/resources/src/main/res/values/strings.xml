@@ -125,8 +125,8 @@
 
     <string name="settings_booru_listing_mode">Booru listing mode</string>
     <string name="settings_booru_listing_mode_select">Select Booru listing mode</string>
-    <string name="settings_booru_listing_mode_item_general">General only (SFW)</string>
-    <string name="settings_booru_listing_mode_item_safe">General &amp; Sensitive (default)</string>
+    <string name="settings_booru_listing_mode_item_general">General only (default)</string>
+    <string name="settings_booru_listing_mode_item_safe">General &amp; Sensitive (legacy safe)</string>
     <string name="settings_booru_listing_mode_item_no_explicit">Filter Explicit</string>
     <string name="settings_booru_listing_mode_item_unfiltered">Unfiltered</string>
 

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard.feature.image"
+    namespace "com.uragiristereo.mikansei.feature.image"
     compileSdk 33
 
     defaultConfig {
@@ -27,7 +27,7 @@ dependencies {
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
-    implementation(project(":domain"))
+    implementation(project(":core:domain"))
 
     // AndroidX
     implementation(libs.androidx.browser)
@@ -51,8 +51,8 @@ dependencies {
     // TouchImageView
     implementation(libs.touchimageview)
 
-    // Timber Logger
-    implementation(libs.timber)
+    // Core
+    implementation(libs.bundles.core)
 
     // Safer Navigation Compose
     implementation(libs.bundles.safer.navigation)

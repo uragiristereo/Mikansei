@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard.feature.search"
+    namespace "com.uragiristereo.mikansei.feature.search"
     compileSdk 33
 
     defaultConfig {
@@ -25,7 +25,7 @@ dependencies {
     implementation(project(":core:preferences"))
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
-    implementation(project(":domain"))
+    implementation(project(":core:domain"))
     implementation(project(":core:ui"))
 
     // Compose UI

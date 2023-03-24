@@ -1,13 +1,13 @@
 package com.uragiristereo.mikansei.core.danbooru.repository
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.uragiristereo.mejiboard.core.model.result.Result
-import com.uragiristereo.mejiboard.core.model.result.mapSuccess
-import com.uragiristereo.mejiboard.core.model.result.resultFlow
-import com.uragiristereo.mejiboard.core.network.NetworkRepository
-import com.uragiristereo.mejiboard.core.preferences.model.DanbooruSubdomain
 import com.uragiristereo.mikansei.core.danbooru.DanbooruApi
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
+import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
+import com.uragiristereo.mikansei.core.model.result.Result
+import com.uragiristereo.mikansei.core.model.result.mapSuccess
+import com.uragiristereo.mikansei.core.model.result.resultFlow
+import com.uragiristereo.mikansei.core.network.NetworkRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -18,7 +18,7 @@ import retrofit2.Retrofit
 open class DanbooruRepositoryImpl(
     private val networkRepository: NetworkRepository,
 ) : DanbooruRepository {
-    open val subdomain = DanbooruSubdomain.DANBOORU
+    open val host = DanbooruHost.Danbooru
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -26,7 +26,7 @@ open class DanbooruRepositoryImpl(
 
     private val client by lazy {
         Retrofit.Builder()
-            .baseUrl(subdomain.baseUrl)
+            .baseUrl(host.getBaseUrl())
             .client(networkRepository.okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
