@@ -6,15 +6,15 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard"
+    namespace "com.uragiristereo.mikansei"
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.uragiristereo.mejiboard"
+        applicationId "com.uragiristereo.mikansei"
         minSdk 21
         targetSdk 33
-        versionName "2.0.0-preview"
-        versionCode 200
+        versionName "1.0.0"
+        versionCode 1000
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -68,7 +68,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:booru"))
+    implementation(project(":core:danbooru"))
     implementation(project(":core:database"))
     implementation(project(":core:download"))
     implementation(project(":core:model"))
@@ -77,7 +77,7 @@ dependencies {
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
-    implementation(project(":domain"))
+    implementation(project(":core:domain"))
     implementation(project(":feature:about"))
     implementation(project(":feature:filters"))
     implementation(project(":feature:home"))

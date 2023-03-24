@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard.core.model"
+    namespace "com.uragiristereo.mikansei.core.model"
     compileSdk 33
 
     defaultConfig {
@@ -33,6 +33,8 @@ dependencies {
 
     // Accompanist Compose Extensions
     implementation(libs.accompanist.navigation.animation)
+
+    implementation(libs.bundles.retrofit)
 
     // Kotlinx.Serialization JSON Serialization
     implementation(libs.kotlinx.serialization.json)

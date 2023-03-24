@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard.core.product"
+    namespace "com.uragiristereo.mikansei.core.product"
     compileSdk 33
 
     defaultConfig {

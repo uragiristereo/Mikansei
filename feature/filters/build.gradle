@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard.feature.filters"
+    namespace "com.uragiristereo.mikansei.feature.filters"
     compileSdk 33
 
     defaultConfig {

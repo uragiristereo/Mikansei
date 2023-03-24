@@ -1,0 +1,16 @@
+package com.uragiristereo.mikansei.core.database.dao.session
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+
+@Entity(tableName = "sessions")
+data class SessionRow(
+    @PrimaryKey
+    val uuid: String,
+
+    val sessionUuid: String,
+    val sequence: Int,
+
+    val post: Post,
+)

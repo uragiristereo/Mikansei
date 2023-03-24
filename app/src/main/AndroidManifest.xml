@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name=".MejiboardApp"
+        android:name=".MikanseiApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.uragiristereo.mejiboard.core.download.DownloadBroadcastReceiver" />
+        <receiver android:name="com.uragiristereo.mikansei.core.download.DownloadBroadcastReceiver" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

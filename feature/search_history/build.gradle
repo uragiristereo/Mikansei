@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mejiboard.feature.search_history"
+    namespace "com.uragiristereo.mikansei.feature.search_history"
     compileSdk 33
 
     defaultConfig {
