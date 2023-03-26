@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e1cb813f4b4eb80cce6ee9bd79372c78",
+    "identityHash": "29f075a563ceeb9a04f91173e470da06",
     "entities": [
       {
         "tableName": "sessions",
@@ -41,12 +41,92 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "users",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `apiKey` TEXT NOT NULL, `level` INTEGER NOT NULL, `safeMode` INTEGER NOT NULL, `showDeletedPosts` INTEGER NOT NULL, `defaultImageSize` TEXT NOT NULL, `blacklistedTags` TEXT NOT NULL, `isActive` INTEGER NOT NULL, `blurQuestionablePosts` INTEGER NOT NULL, `blurExplicitPosts` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apiKey",
+            "columnName": "apiKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "safeMode",
+            "columnName": "safeMode",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "showDeletedPosts",
+            "columnName": "showDeletedPosts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "defaultImageSize",
+            "columnName": "defaultImageSize",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "blacklistedTags",
+            "columnName": "blacklistedTags",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isActive",
+            "columnName": "isActive",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "blurQuestionablePosts",
+            "columnName": "blurQuestionablePosts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "blurExplicitPosts",
+            "columnName": "blurExplicitPosts",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e1cb813f4b4eb80cce6ee9bd79372c78')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '29f075a563ceeb9a04f91173e470da06')"
     ]
   }
 }
