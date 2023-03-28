@@ -16,6 +16,7 @@ import com.uragiristereo.mikansei.core.model.result.resultFlow
 import com.uragiristereo.mikansei.core.network.NetworkRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -34,7 +35,11 @@ open class DanbooruRepositoryImpl(
         ignoreUnknownKeys = true
     }
 
-    private var client = buildClient(auth = true)
+    private val activeUser = runBlocking {
+        userDao.getActive().first().toUser()
+    }
+
+    private var client = buildClient(user = activeUser, auth = true)
     private val clientNoAuth = buildClient(auth = false)
 
     init {
