@@ -38,7 +38,7 @@ fun SettingTip(
                 tint = MaterialTheme.colors.onSurface
                     .copy(alpha = ContentAlpha.medium),
                 modifier = Modifier
-                    .padding(end = 38.dp)
+                    .padding(end = 34.dp)
                     .size(18.dp),
             )
 
