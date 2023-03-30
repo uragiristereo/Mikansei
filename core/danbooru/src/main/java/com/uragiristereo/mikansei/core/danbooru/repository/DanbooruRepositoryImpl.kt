@@ -5,6 +5,7 @@ import com.uragiristereo.mikansei.core.danbooru.DanbooruApi
 import com.uragiristereo.mikansei.core.danbooru.DanbooruAuthInterceptor
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
+import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.database.dao.user.toUser
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
@@ -33,6 +34,7 @@ open class DanbooruRepositoryImpl(
 
     private val json = Json {
         ignoreUnknownKeys = true
+        explicitNulls = false
     }
 
     private val activeUser = runBlocking {
@@ -85,6 +87,10 @@ open class DanbooruRepositoryImpl(
 
     override suspend fun getTags(tags: List<String>) = resultFlow {
         client.getTags(tags)
+    }
+
+    override suspend fun getProfile() = resultFlow {
+        client.getProfile()
     }
 
     override suspend fun isPostInFavorites(postId: Int, userId: Int): Flow<Result<Boolean>> = resultFlow {
@@ -142,6 +148,10 @@ open class DanbooruRepositoryImpl(
                 else -> emit(Result.Error(t))
             }
         }
+    }
+
+    override suspend fun updateUserSettings(id: Int, data: DanbooruUserField) = resultFlow {
+        client.updateUserSettings(id, data)
     }
 }
 
