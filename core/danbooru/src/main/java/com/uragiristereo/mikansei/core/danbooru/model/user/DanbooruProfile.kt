@@ -128,10 +128,10 @@ data class DanbooruProfile(
     val statementTimeout: Int,
 
     @SerialName("favorite_group_limit")
-    val favoriteGroupLimit: Int,
+    val favoriteGroupLimit: Int?,
 
     @SerialName("tag_query_limit")
-    val tagQueryLimit: Int,
+    val tagQueryLimit: Int?,
 
     @SerialName("max_saved_searches")
     val maxSavedSearches: Int,
