@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "29f075a563ceeb9a04f91173e470da06",
+    "identityHash": "75853b3763b76e7f3859828e1db85242",
     "entities": [
       {
         "tableName": "sessions",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `apiKey` TEXT NOT NULL, `level` INTEGER NOT NULL, `safeMode` INTEGER NOT NULL, `showDeletedPosts` INTEGER NOT NULL, `defaultImageSize` TEXT NOT NULL, `blacklistedTags` TEXT NOT NULL, `isActive` INTEGER NOT NULL, `blurQuestionablePosts` INTEGER NOT NULL, `blurExplicitPosts` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `apiKey` TEXT NOT NULL, `level` INTEGER NOT NULL, `safeMode` INTEGER NOT NULL, `showDeletedPosts` INTEGER NOT NULL, `defaultImageSize` TEXT NOT NULL, `blacklistedTags` TEXT NOT NULL, `isActive` INTEGER NOT NULL, `postsRatingFilter` TEXT NOT NULL, `blurQuestionablePosts` INTEGER NOT NULL, `blurExplicitPosts` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -101,6 +101,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "postsRatingFilter",
+            "columnName": "postsRatingFilter",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "blurQuestionablePosts",
             "columnName": "blurQuestionablePosts",
             "affinity": "INTEGER",
@@ -126,7 +132,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '29f075a563ceeb9a04f91173e470da06')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '75853b3763b76e7f3859828e1db85242')"
     ]
   }
 }

@@ -24,9 +24,9 @@ object DatabaseModule {
                             db.execSQL(
                                 """
                                 insert into users 
-                                  (id, name, apiKey, level, safeMode, showDeletedPosts, defaultImageSize, blacklistedTags, isActive, blurQuestionablePosts, blurExplicitPosts)
+                                  (id, name, apiKey, level, safeMode, showDeletedPosts, defaultImageSize, blacklistedTags, isActive, postsRatingFilter, blurQuestionablePosts, blurExplicitPosts)
                                 values
-                                  (0, 'Anonymous', '', '0', 1, 0, 'large', 'guro scat furry', 1, 1, 1)
+                                  (0, 'Anonymous', '', '0', 1, 0, 'large', 'guro scat furry', 1, 'GENERAL_ONLY', 1, 1)
                             """.trimIndent()
                             )
                         }

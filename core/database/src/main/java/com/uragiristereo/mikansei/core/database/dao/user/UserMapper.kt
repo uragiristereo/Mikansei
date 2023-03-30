@@ -1,9 +1,10 @@
 package com.uragiristereo.mikansei.core.database.dao.user
 
-import com.uragiristereo.mikansei.core.model.danbooru.user.User
-import com.uragiristereo.mikansei.core.model.danbooru.user.UserLevel
-import com.uragiristereo.mikansei.core.model.danbooru.user.getUserLevelById
-import com.uragiristereo.mikansei.core.model.preferences.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.danbooru.UserLevel
+import com.uragiristereo.mikansei.core.model.danbooru.getUserLevelById
+import com.uragiristereo.mikansei.core.model.user.User
+import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.user.preference.getEnumFromDanbooru
 
 fun UserRow.toUser(): User {
     return User(
@@ -13,13 +14,10 @@ fun UserRow.toUser(): User {
         level = UserLevel.values().getUserLevelById(level),
         safeMode = safeMode,
         showDeletedPosts = showDeletedPosts,
-        defaultImageSize = when (defaultImageSize) {
-            "large" -> DetailSizePreference.COMPRESSED
-            "original" -> DetailSizePreference.ORIGINAL
-            else -> DetailSizePreference.COMPRESSED
-        },
+        defaultImageSize = DetailSizePreference.values().getEnumFromDanbooru(defaultImageSize),
         blacklistedTags = blacklistedTags.split(' '),
         isActive = isActive,
+        postsRatingFilter = postsRatingFilter,
         blurQuestionablePosts = blurQuestionablePosts,
         blurExplicitPosts = blurExplicitPosts,
         nameAlias = getInitialChars(name),
@@ -38,12 +36,10 @@ fun User.toUserRow(): UserRow {
         level = level.id,
         safeMode = safeMode,
         showDeletedPosts = showDeletedPosts,
-        defaultImageSize = when (defaultImageSize) {
-            DetailSizePreference.COMPRESSED -> "large"
-            DetailSizePreference.ORIGINAL -> "original"
-        },
+        defaultImageSize = defaultImageSize.getEnumForDanbooru(),
         blacklistedTags = blacklistedTags.joinToString(separator = " "),
         isActive = isActive,
+        postsRatingFilter = postsRatingFilter,
         blurQuestionablePosts = blurQuestionablePosts,
         blurExplicitPosts = blurExplicitPosts,
     )

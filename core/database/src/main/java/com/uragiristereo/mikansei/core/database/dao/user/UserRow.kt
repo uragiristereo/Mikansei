@@ -2,6 +2,7 @@ package com.uragiristereo.mikansei.core.database.dao.user
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
 
 @Entity(tableName = "users")
 data class UserRow(
@@ -17,6 +18,7 @@ data class UserRow(
 
     // Mikansei
     val isActive: Boolean = false,
+    val postsRatingFilter: RatingPreference = RatingPreference.GENERAL_ONLY,
     val blurQuestionablePosts: Boolean = true,
     val blurExplicitPosts: Boolean = true,
 )
