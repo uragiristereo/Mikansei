@@ -23,8 +23,14 @@ interface UserDao {
     @Query("update users set isActive = 1 where id = :id")
     suspend fun activate(id: Int)
 
-    @Query("update users set isActive = 0 where id in (:ids)")
-    suspend fun deactivate(ids: List<Int>)
+    @Query("update users set isActive = 0 where id <> :activeId")
+    suspend fun deactivate(activeId: Int)
+
+    @Transaction
+    suspend fun switchActiveUser(id: Int) {
+        activate(id)
+        deactivate(activeId = id)
+    }
 
     @Insert
     suspend fun add(user: UserRow)
