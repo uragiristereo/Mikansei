@@ -22,7 +22,6 @@ fun NavGraphBuilder.postsRoute(
     navController: NavHostController,
     onNavigatedBackByGesture: (Boolean) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
-    onRequestScrollToTop: (() -> Unit) -> Unit,
 ) {
     composable(
         route = HomeRoute.Posts(),
@@ -63,7 +62,6 @@ fun NavGraphBuilder.postsRoute(
                         )
                     }
                 },
-                onRequestScrollToTop = onRequestScrollToTop,
                 modifier = Modifier.padding(start = LocalNavigationRailPadding.current),
             )
         },

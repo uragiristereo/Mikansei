@@ -4,11 +4,12 @@ import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
+import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruProfile
+import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
+import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.model.Constants
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface DanbooruApi {
     @GET("/posts/{id}.json")
@@ -39,4 +40,18 @@ interface DanbooruApi {
         @Query("search[post_id]") postId: Int,
         @Query("search[user_id]") userId: Int,
     ): Response<List<DanbooruFavorite>>
+
+    @GET("/profile.json")
+    suspend fun getProfile(
+        @Header("Authorization") credentials: String? = null,
+    ): Response<DanbooruProfile>
+
+    @GET("/users/{id}.json")
+    suspend fun getUser(@Path("id") id: Int): Response<DanbooruUser>
+
+    @PATCH("/users/{id}.json")
+    suspend fun updateUserSettings(
+        @Path("id") id: Int,
+        @Body data: DanbooruUserField,
+    ): Response<Unit>
 }

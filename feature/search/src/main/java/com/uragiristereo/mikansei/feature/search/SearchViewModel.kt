@@ -92,6 +92,8 @@ class SearchViewModel(
         job?.cancel()
 
         job = viewModelScope.launch {
+            loading = true
+
             getTagsAutoCompleteUseCase(query = term)
                 .collect { result ->
                     when (result) {
@@ -113,9 +115,12 @@ class SearchViewModel(
                             searches.clear()
                             errorMessage = result.t.toString()
                             Timber.d(errorMessage)
+                            loading = false
                         }
                     }
                 }
+
+            loading = false
         }
     }
 

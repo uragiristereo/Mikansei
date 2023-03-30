@@ -2,7 +2,7 @@ package com.uragiristereo.mikansei.core.domain.entity.post
 
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.domain.entity.UnitConverter
-import com.uragiristereo.mikansei.core.model.Rating
+import com.uragiristereo.mikansei.core.model.danbooru.Rating
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.model.danbooru.post.PostImage
 import java.io.File
@@ -28,6 +28,7 @@ fun DanbooruPost.toPost(): Post {
         favoriteCount = favCount,
         isPending = isPending,
         isDeleted = isDeleted,
+        isBanned = isBanned,
         hasScaled = hasLarge,
         image = PostImage(
             url = fileUrl.orEmpty(),

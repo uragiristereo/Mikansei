@@ -1,0 +1,38 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace "com.uragiristereo.mikansei.feature.user.login"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+dependencies {
+    implementation(project(":core:database"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:model"))
+    implementation(project(":core:product"))
+    implementation(project(":core:resources"))
+    implementation(project(":core:ui"))
+
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.androidx.compose)
+    debugImplementation(libs.bundles.compose.debug)
+    implementation(libs.bundles.core)
+    implementation(libs.bundles.koin)
+    implementation(libs.accompanist.navigation.animation)
+    implementation(libs.bundles.safer.navigation)
+}

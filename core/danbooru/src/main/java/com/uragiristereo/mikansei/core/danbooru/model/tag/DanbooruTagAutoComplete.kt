@@ -18,10 +18,10 @@ data class DanbooruTagAutoComplete(
     val value: String,
 
     @SerialName("category")
-    val category: Int,
+    val category: Int? = null,
 
     @SerialName("post_count")
-    val postCount: Long,
+    val postCount: Long? = null,
 
     @SerialName("antecedent")
     val antecedent: String? = null,

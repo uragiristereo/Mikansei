@@ -45,6 +45,7 @@ import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
+import java.util.*
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -60,10 +61,6 @@ fun MainScreen(
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
-    LaunchedEffect(key1 = currentRoute) {
-        currentRoute?.let { viewModel.currentRoute = it }
-    }
 
     val notificationPermissionState = rememberPermissionState(
         permission = when {
@@ -134,6 +131,16 @@ fun MainScreen(
         }
     }
 
+    val lambdaOnRequestScrollToTop: () -> Unit = {
+        scope.launch {
+            viewModel.scrollToTopChannel.send(UUID.randomUUID().toString())
+        }
+    }
+
+    LaunchedEffect(key1 = currentRoute) {
+        currentRoute?.let { viewModel.currentRoute = it }
+    }
+
     BackHandler(
         enabled = viewModel.confirmExit && currentRoute == MainRoute.Home::class.route,
         onBack = remember {
@@ -143,8 +150,10 @@ fun MainScreen(
 
                     homeScaffoldState.snackbarHostState.showSnackbar(
                         message = context.resources.getString(
-                            /* id = */ R.string.press_back_again_to_exit,
-                            /* ...formatArgs = */ context.resources.getString(R.string.app_name),
+                            /* id = */
+                            R.string.press_back_again_to_exit,
+                            /* ...formatArgs = */
+                            context.resources.getString(R.string.app_name),
                         ),
                     )
 
@@ -179,6 +188,7 @@ fun MainScreen(
                     windowSize != WindowSize.COMPACT -> viewModel.navigationRailPadding
                     else -> 0.dp
                 },
+                LocalScrollToTopChannel provides viewModel.scrollToTopChannel,
             ),
         ) {
             ProductSetSystemBarsColor()
@@ -226,7 +236,7 @@ fun MainScreen(
                                 currentRoute = viewModel.currentRoute,
                                 onNavigate = lambdaOnNavigate,
                                 onNavigateSearch = lambdaOnNavigateSearch,
-                                onRequestScrollToTop = viewModel::requestScrollToTop,
+                                onRequestScrollToTop = lambdaOnRequestScrollToTop,
                             )
                         }
                     }
@@ -249,6 +259,7 @@ fun MainScreen(
                                         currentRoute = viewModel.currentRoute,
                                         onNavigate = lambdaOnNavigate,
                                         onNavigateSearch = lambdaOnNavigateSearch,
+                                        onRequestScrollToTop = lambdaOnRequestScrollToTop,
                                     )
 
                                     Divider(

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -21,11 +22,13 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:model"))
+    implementation(project(":core:resources"))
     implementation(project(":core:ui"))
 
     // Compose UI
-    implementation(libs.compose)
-    implementation(libs.compose.material)
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.bundles.compose.debug)
 
     // Timber Logger
     implementation(libs.timber)

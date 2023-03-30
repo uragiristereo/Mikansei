@@ -14,7 +14,7 @@ import coil.request.ImageRequest
 import com.ortiz.touchview.OnTouchImageViewListener
 import com.ortiz.touchview.TouchImageView
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
-import com.uragiristereo.mikansei.core.preferences.model.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
 import com.uragiristereo.mikansei.feature.image.ImageViewModel
 import com.uragiristereo.mikansei.feature.image.core.ImageLoadingState
 import kotlinx.coroutines.currentCoroutineContext

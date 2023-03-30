@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
+import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 
 @Composable
@@ -19,21 +20,12 @@ fun MainNavigationRail(
     currentRoute: String,
     onNavigate: (NavRoute) -> Unit,
     onNavigateSearch: () -> Unit,
+    onRequestScrollToTop: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     NavigationRail(
         elevation = 0.dp,
         backgroundColor = MaterialTheme.colors.background.backgroundElevation(),
-//        header = {
-//            Icon(
-//                painter = painterResource(id = R.drawable.meji),
-//                contentDescription = null,
-//                tint = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-//                modifier = Modifier
-//                    .padding(top = 4.dp)
-//                    .size(32.dp),
-//            )
-//        },
         modifier = modifier,
     ) {
         Column(
@@ -58,8 +50,12 @@ fun MainNavigationRail(
                         )
                     },
                     onClick = {
-                        when (item.route) {
-                            MainRoute.Search() -> onNavigateSearch()
+                        when {
+                            listOf(item.route.route, currentRoute).all {
+                                it == HomeRoute.Posts::class.route
+                            } -> onRequestScrollToTop()
+
+                            item.route.route == MainRoute.Search::class.route -> onNavigateSearch()
                             else -> onNavigate(item.route)
                         }
                     },

@@ -1,7 +1,7 @@
 package com.uragiristereo.mikansei.core.model.danbooru.post
 
-import com.uragiristereo.mikansei.core.model.Rating
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
+import com.uragiristereo.mikansei.core.model.danbooru.Rating
 import kotlinx.serialization.Serializable
 import java.util.*
 
@@ -24,6 +24,7 @@ data class Post(
 
     val isPending: Boolean,
     val isDeleted: Boolean,
+    val isBanned: Boolean,
     val hasScaled: Boolean,
 
     val image: PostImage,

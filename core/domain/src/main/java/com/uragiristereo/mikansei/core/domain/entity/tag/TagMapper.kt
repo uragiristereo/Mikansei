@@ -27,6 +27,8 @@ fun List<DanbooruTag>.toTagList(): List<Tag> {
 }
 
 fun DanbooruTagAutoComplete.toTagAutoComplete(): TagAutoComplete {
+    val postCount = postCount ?: 0
+
     return TagAutoComplete(
         value = value,
         category = when (category) {

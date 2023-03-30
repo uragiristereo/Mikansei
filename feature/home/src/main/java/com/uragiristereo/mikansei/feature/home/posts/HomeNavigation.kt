@@ -22,7 +22,6 @@ fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
     onNavigatedBackByGesture: (Boolean) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
-    onRequestScrollToTop: (() -> Unit) -> Unit,
 ) {
     navigation(
         startDestination = HomeRoute.Posts::class,
@@ -63,7 +62,6 @@ fun NavGraphBuilder.homeGraph(
             navController = navController,
             onNavigatedBackByGesture = onNavigatedBackByGesture,
             onCurrentTagsChange = onCurrentTagsChange,
-            onRequestScrollToTop = onRequestScrollToTop,
         )
 
         collectionsRoute()
