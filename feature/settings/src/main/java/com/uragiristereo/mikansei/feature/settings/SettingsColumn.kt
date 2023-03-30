@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,7 +15,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
 import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
 import com.uragiristereo.mikansei.core.product.preference.*
 import com.uragiristereo.mikansei.core.resources.R
@@ -27,21 +25,11 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun SettingsColumn(
-    columnState: LazyListState,
-    bottomSheetPreferenceState: BottomSheetPreferenceState,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
-
-//    val languageState = rememberDropDownPreferenceState(
-//        items = PreferenceLanguage.items,
-//        selectedItem = PreferenceItem(key = PreferenceLanguage.KEY_SYSTEM_DEFAULT, title = "System default - English (US)"),
-//        onItemSelected = {
-//            Timber.i(it.key)
-//        },
-//    )
 
     val themeState = rememberDropDownPreferenceState(
         items = ThemePreference.values(),
@@ -69,21 +57,12 @@ internal fun SettingsColumn(
     )
 
     LazyColumn(
-        state = columnState,
         contentPadding = contentPadding,
         modifier = modifier,
     ) {
         item {
-            PreferenceCategory(title = stringResource(id = R.string.settings_category_interface))
+            PreferenceCategory(title = stringResource(id = R.string.settings_category_appearance))
         }
-
-//        item {
-//            DropDownPreference(
-//                state = languageState,
-//                title = "Language",
-//                icon = painterResource(id = R.drawable.translate),
-//            )
-//        }
 
         item {
             DropDownPreference(
@@ -133,67 +112,6 @@ internal fun SettingsColumn(
                 },
                 icon = painterResource(id = R.drawable.format_color_fill),
                 enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
-            )
-        }
-
-        item {
-            Divider()
-        }
-
-        item {
-            PreferenceCategory(title = stringResource(id = R.string.settings_category_behavior))
-        }
-
-//        item {
-//            RegularPreference(
-//                title = stringResource(id = R.string.settings_default_booru_source),
-//                subtitle = viewModel.booruSources.selectedItem?.titleResId
-//                    ?.let { stringResource(id = it) } ?: stringResource(id = R.string.none),
-//                icon = painterResource(id = R.drawable.public_globe),
-//                onClick = {
-//                    scope.launch {
-//                        bottomSheetPreferenceState.navigate(data = viewModel.booruSources)
-//                    }
-//                },
-//            )
-//        }
-
-        item {
-            RegularPreference(
-                title = stringResource(id = R.string.settings_booru_listing_mode),
-                subtitle = viewModel.ratingFilters.selectedItem?.getTitleString().orEmpty(),
-                onClick = {
-                    scope.launch {
-                        bottomSheetPreferenceState.navigate(data = viewModel.ratingFilters)
-                    }
-                },
-            )
-        }
-
-        item {
-            RegularPreference(
-                title = stringResource(id = R.string.settings_manage_booru_api_keys),
-                subtitle = stringResource(id = R.string.settings_manage_booru_api_keys_desc),
-                icon = painterResource(id = R.drawable.api),
-                onClick = {
-                    // TODO
-                },
-            )
-        }
-
-        item {
-            DropDownPreference(
-                state = rememberDropDownPreferenceState(
-                    items = DetailSizePreference.values(),
-                    selectedItem = viewModel.preferences.detailSize,
-                    onItemSelected = remember {
-                        { detailSize ->
-                            viewModel.updatePreferences { it.copy(detailSize = detailSize) }
-                        }
-                    },
-                ),
-                title = stringResource(id = R.string.settings_image_detail_size),
-                icon = painterResource(id = R.drawable.aspect_ratio),
             )
         }
 

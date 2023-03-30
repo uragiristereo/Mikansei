@@ -5,7 +5,6 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -53,14 +52,12 @@ fun NavGraphBuilder.postsRoute(
 
             PostsScreen(
                 onNavigate = navController::navigate,
-                onNavigateImage = remember {
-                    { item ->
-                        onNavigatedBackByGesture(false)
+                onNavigateImage = { item ->
+                    onNavigatedBackByGesture(false)
 
-                        navController.navigate(
-                            route = MainRoute.Image(post = item),
-                        )
-                    }
+                    navController.navigate(
+                        MainRoute.Image(post = item)
+                    )
                 },
                 modifier = Modifier.padding(start = LocalNavigationRailPadding.current),
             )

@@ -6,25 +6,32 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
+import com.uragiristereo.mikansei.core.database.dao.user.UserDao
+import com.uragiristereo.mikansei.core.database.dao.user.toUser
 import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
-import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.image.core.ImageLoadingState
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 class ImageViewModel(
     savedStateHandle: SavedStateHandle,
-    preferencesRepository: PreferencesRepository,
+    userDao: UserDao,
 ) : ViewModel() {
     val post = savedStateHandle.getData<MainRoute.Image>()!!.post
 
+    // TODO: avoid using runBlocking here
+    private val activeUser = runBlocking {
+        userDao.getActive()
+            .first()
+            .toUser()
+    }
+
+    var detailSize by mutableStateOf(activeUser.defaultImageSize)
+
     var appBarsVisible by mutableStateOf(true)
     val offsetY = Animatable(initialValue = 0f)
-
-    var detailSize by mutableStateOf(preferencesRepository.data.detailSize)
 
     var showOriginalImage by mutableStateOf(detailSize == DetailSizePreference.ORIGINAL)
     var originalImageShown by mutableStateOf(false)
@@ -34,15 +41,6 @@ class ImageViewModel(
     var isPressed by mutableStateOf(false)
     var fingerCount by mutableStateOf(1)
     var currentZoom by mutableStateOf(1f)
-
-    init {
-        preferencesRepository.flowData
-            .onEach { preferences ->
-                detailSize = preferences.detailSize
-                showOriginalImage = detailSize == DetailSizePreference.ORIGINAL
-            }
-            .launchIn(viewModelScope)
-    }
 
     fun resizeImage(width: Int, height: Int): Pair<Int, Int> {
         val maxSize = 4096f

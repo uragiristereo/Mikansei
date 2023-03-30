@@ -166,8 +166,6 @@ internal fun SearchScreen(
                         exit = shrinkVertically(),
                     ) {
                         SearchActionRow(
-                            selectedBooru = viewModel.selectedBooru,
-                            filtersEnabled = viewModel.preferences.filtersEnabled,
                             historyEnabled = true,
                             onSelectedBooruClick = {
                                 onNavigate(MainRoute.Settings)

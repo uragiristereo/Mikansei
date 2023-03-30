@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
-import com.uragiristereo.mikansei.core.ui.composable.SettingToggle
 import com.uragiristereo.mikansei.core.ui.database.FilterItem
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -30,8 +29,6 @@ internal fun FiltersColumn(
     onItemChange: (FilterItem) -> Unit,
     onItemSelected: (FilterItem) -> Unit,
     selectionMode: Boolean,
-    toggleChecked: Boolean,
-    onToggleChecked: (Boolean) -> Unit,
     onOutsideTapped: () -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
@@ -44,13 +41,6 @@ internal fun FiltersColumn(
             state = columnState,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            item {
-                SettingToggle(
-                    checked = toggleChecked,
-                    onCheckedChange = onToggleChecked,
-                )
-            }
-
             item {
                 SettingTip(
                     text = stringResource(id = R.string.filters_tip),

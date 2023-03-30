@@ -10,10 +10,9 @@ import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.domain.entity.tag.TagAutoComplete
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsAutoCompleteUseCase
-import com.uragiristereo.mikansei.core.model.booru.BooruSource
-import com.uragiristereo.mikansei.core.model.booru.getBooruByKey
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
+import com.uragiristereo.mikansei.core.preferences.model.Preferences
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.search.state.SearchWordIndex
 import kotlinx.coroutines.Job
@@ -29,10 +28,7 @@ class SearchViewModel(
 ) : ViewModel() {
     val tags = savedStateHandle.getData(MainRoute.Search()).tags
 
-    var preferences by mutableStateOf(preferencesRepository.data)
-        private set
-
-    var selectedBooru by mutableStateOf(BooruSource.values().getBooruByKey(preferences.booru) ?: BooruSource.Gelbooru)
+    var preferences by mutableStateOf(Preferences())
         private set
 
     var actionsRowExpanded by mutableStateOf(true)
@@ -59,10 +55,7 @@ class SearchViewModel(
 
     init {
         preferencesRepository.flowData
-            .onEach {
-                preferences = it
-                selectedBooru = BooruSource.values().getBooruByKey(it.booru) ?: BooruSource.Gelbooru
-            }
+            .onEach { preferences = it }
             .launchIn(viewModelScope)
     }
 

@@ -8,25 +8,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
-import com.uragiristereo.mikansei.core.preferences.model.Preferences
 import com.uragiristereo.mikansei.core.ui.database.FilterItem
 import com.uragiristereo.mikansei.core.ui.extension.strip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FiltersViewModel(
-//    private val filtersDao: FiltersDao,
-    private val preferencesRepository: PreferencesRepository,
-) : ViewModel() {
-//    private val itemsFromDb
-
-    private val preferences: Preferences
-        get() = preferencesRepository.data
-
-
-    var toggleChecked by mutableStateOf(preferences.filtersEnabled)
-
+class FiltersViewModel() : ViewModel() {
     var dialogShown by mutableStateOf(false)
         private set
 

@@ -100,8 +100,7 @@
     <string name="search_space">Space</string>
 
     <!-- Settings -->
-    <string name="settings_category_interface">Interface</string>
-    <string name="settings_category_behavior">Behavior</string>
+    <string name="settings_category_appearance">Appearance</string>
     <string name="settings_category_advanced">Advanced</string>
     <string name="settings_category_miscellaneous">Miscellaneous</string>
 

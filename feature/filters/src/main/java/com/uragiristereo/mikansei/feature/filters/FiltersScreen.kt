@@ -103,8 +103,6 @@ internal fun FiltersScreen(
             items = viewModel.items,
             onItemChange = viewModel::updateItem,
             onItemSelected = viewModel::updateSelectedItem,
-            toggleChecked = viewModel.toggleChecked,
-            onToggleChecked = {},
             onOutsideTapped = viewModel::deselectAll,
             contentPadding = innerPadding,
         )
