@@ -81,7 +81,7 @@ dependencies {
     implementation(project(":feature:about"))
     implementation(project(":feature:filters"))
     implementation(project(":feature:home"))
-    implementation(project(":feature:home:collections"))
+    implementation(project(":feature:home:favorites"))
     implementation(project(":feature:home:more"))
     implementation(project(":feature:home:posts"))
     implementation(project(":feature:image"))

@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.collections
+package com.uragiristereo.mikansei.feature.home.favorites
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -17,7 +17,7 @@ import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.Banner
 
 @Composable
-internal fun CollectionsScreen(
+internal fun FavoritesScreen(
     modifier: Modifier = Modifier,
 ) {
     ProductSetSystemBarsColor(
@@ -28,7 +28,7 @@ internal fun CollectionsScreen(
         topBar = {
             ProductTopAppBar(
                 title = {
-                    Text(text = stringResource(id = R.string.collections_label))
+                    Text(text = stringResource(id = R.string.favorites_label))
                 },
             )
         },

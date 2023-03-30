@@ -27,8 +27,8 @@ enum class MainNavigationItems(
         unselectedIcon = R.drawable.search,
     ),
     Collections(
-        route = HomeRoute.Collections,
-        label = R.string.collections_label,
+        route = HomeRoute.Favorites,
+        label = R.string.favorites_label,
         unselectedIcon = R.drawable.photo_library,
         selectedIcon = R.drawable.photo_library_fill,
     ),

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.feature.collections"
+    namespace "com.uragiristereo.mikansei.feature.favorites"
     compileSdk 33
 
     defaultConfig {

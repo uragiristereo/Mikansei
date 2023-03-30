@@ -10,7 +10,7 @@ sealed interface HomeRoute : NavRoute {
         val tags: String = "",
     ) : HomeRoute
 
-    object Collections : HomeRoute
+    object Favorites : HomeRoute
 
     object More : HomeRoute
 }
@@ -18,7 +18,7 @@ sealed interface HomeRoute : NavRoute {
 val HomeRoutes: List<HomeRoute>
     get() = listOf(
         HomeRoute.Posts(),
-        HomeRoute.Collections,
+        HomeRoute.Favorites,
         HomeRoute.More,
     )
 

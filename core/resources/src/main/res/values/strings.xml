@@ -22,7 +22,7 @@
     <string name="filters_label">Filters</string>
     <string name="posts_label">Posts</string>
     <string name="search_label">Search</string>
-    <string name="collections_label">Collections</string>
+    <string name="favorites_label">Favorites</string>
     <string name="more_label">More</string>
     <string name="search_history_label">Search history</string>
     <string name="search_history_short_label">History</string>

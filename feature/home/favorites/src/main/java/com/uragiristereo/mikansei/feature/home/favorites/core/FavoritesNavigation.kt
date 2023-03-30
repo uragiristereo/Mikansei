@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.collections.core
+package com.uragiristereo.mikansei.feature.home.favorites.core
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.padding
@@ -7,15 +7,16 @@ import androidx.navigation.NavGraphBuilder
 import com.github.uragiristereo.safer.compose.navigation.animation.composable
 import com.uragiristereo.mikansei.core.ui.LocalNavigationRailPadding
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
-import com.uragiristereo.mikansei.feature.home.collections.CollectionsScreen
+import com.uragiristereo.mikansei.feature.home.favorites.FavoritesScreen
 
 @OptIn(ExperimentalAnimationApi::class)
-fun NavGraphBuilder.collectionsRoute() {
+fun NavGraphBuilder.favoritesRoute() {
     composable(
-        route = HomeRoute.Collections,
+        route = HomeRoute.Favorites,
         content = {
-            CollectionsScreen(
-                modifier = Modifier.padding(start = LocalNavigationRailPadding.current),
+            FavoritesScreen(
+                modifier = Modifier
+                    .padding(start = LocalNavigationRailPadding.current),
             )
         },
     )
