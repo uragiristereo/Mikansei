@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.model
+package com.uragiristereo.mikansei.core.model.danbooru
 
 enum class Rating {
     GENERAL,

@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.model.danbooru.user
+package com.uragiristereo.mikansei.core.model.danbooru
 
 enum class UserLevel(val id: Int) {
     Lurker(id = 0),

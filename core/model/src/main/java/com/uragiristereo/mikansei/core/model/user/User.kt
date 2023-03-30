@@ -1,6 +1,8 @@
-package com.uragiristereo.mikansei.core.model.danbooru.user
+package com.uragiristereo.mikansei.core.model.user
 
-import com.uragiristereo.mikansei.core.model.preferences.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.danbooru.UserLevel
+import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
 
 data class User(
     // Danbooru
@@ -15,6 +17,7 @@ data class User(
 
     // Mikansei
     val isActive: Boolean = false,
+    val postsRatingFilter: RatingPreference = RatingPreference.GENERAL_ONLY,
     val blurQuestionablePosts: Boolean = true,
     val blurExplicitPosts: Boolean = true,
     val nameAlias: String,

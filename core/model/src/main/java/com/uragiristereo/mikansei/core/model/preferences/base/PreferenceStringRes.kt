@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.preferences.model.base
+package com.uragiristereo.mikansei.core.model.preferences.base
 
 import androidx.annotation.StringRes
 

@@ -1,7 +1,7 @@
-package com.uragiristereo.mikansei.core.preferences.model
+package com.uragiristereo.mikansei.core.model.user.preference
 
-import com.uragiristereo.mikansei.core.model.Rating
-import com.uragiristereo.mikansei.core.preferences.model.base.PreferenceStringRes
+import com.uragiristereo.mikansei.core.model.danbooru.Rating
+import com.uragiristereo.mikansei.core.model.preferences.base.PreferenceStringRes
 import com.uragiristereo.mikansei.core.resources.R
 
 enum class RatingPreference : PreferenceStringRes {
