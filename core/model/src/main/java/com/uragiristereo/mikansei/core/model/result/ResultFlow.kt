@@ -19,7 +19,14 @@ inline fun <reified A> resultFlow(
                 emit(Result.Success(data))
             }
 
-            else -> emit(Result.Failed(message = failedResponseFormatter(response)))
+            else -> emit(
+                Result.Failed(
+                    message = failedResponseFormatter(
+                        responseCode = response.code(),
+                        errorBody = response.errorBody()?.string(),
+                    )
+                )
+            )
         }
     } catch (t: Throwable) {
         when (t) {

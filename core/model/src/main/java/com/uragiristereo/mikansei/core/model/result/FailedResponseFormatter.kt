@@ -1,8 +1,16 @@
 package com.uragiristereo.mikansei.core.model.result
 
-import retrofit2.Response
-
-fun failedResponseFormatter(response: Response<*>): String {
+fun failedResponseFormatter(
+    responseCode: Int,
+    errorBody: String?,
+): String {
     // TODO: Format response properly
-    return "${response.code()} ${response.message()}: ${response.errorBody()}"
+
+    val body = when {
+        errorBody == null -> null
+        responseCode == 401 -> "Invalid name/API key."
+        else -> errorBody
+    }
+
+    return "$responseCode: $body"
 }
