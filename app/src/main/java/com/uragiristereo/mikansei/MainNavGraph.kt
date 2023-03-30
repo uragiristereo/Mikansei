@@ -11,7 +11,7 @@ import com.uragiristereo.mikansei.core.ui.animation.translateXFadeOut
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.about.core.aboutRoute
 import com.uragiristereo.mikansei.feature.filters.core.filtersRoute
-import com.uragiristereo.mikansei.feature.home.posts.homeGraph
+import com.uragiristereo.mikansei.feature.home.homeGraph
 import com.uragiristereo.mikansei.feature.image.core.imageRoute
 import com.uragiristereo.mikansei.feature.search.core.searchRoute
 import com.uragiristereo.mikansei.feature.search_history.core.searchHistoryRoute

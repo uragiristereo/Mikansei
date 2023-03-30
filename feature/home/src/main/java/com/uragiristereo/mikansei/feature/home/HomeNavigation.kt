@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.posts
+package com.uragiristereo.mikansei.feature.home
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
