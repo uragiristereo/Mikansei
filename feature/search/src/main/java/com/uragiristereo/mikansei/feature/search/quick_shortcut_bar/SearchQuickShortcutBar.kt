@@ -149,6 +149,24 @@ internal fun SearchQuickShortcutBar(
 
             item {
                 SearchQuickShortcutItem(
+                    text = "*",
+                    onClick = {
+                        onQueryChange(
+                            TextFieldValue(
+                                text = query.text.replaceRange(
+                                    startIndex = query.selection.start,
+                                    endIndex = query.selection.start,
+                                    replacement = "*",
+                                ),
+                                selection = TextRange(index = query.selection.start + 1)
+                            )
+                        )
+                    },
+                )
+            }
+
+            item {
+                SearchQuickShortcutItem(
                     text = "{",
                     onClick = {
                         var replacement = "{"
@@ -228,24 +246,6 @@ internal fun SearchQuickShortcutBar(
                                     replacement = replacement,
                                 ),
                                 selection = TextRange(index = query.selection.start + replacement.length)
-                            )
-                        )
-                    },
-                )
-            }
-
-            item {
-                SearchQuickShortcutItem(
-                    text = "*",
-                    onClick = {
-                        onQueryChange(
-                            TextFieldValue(
-                                text = query.text.replaceRange(
-                                    startIndex = query.selection.start,
-                                    endIndex = query.selection.start,
-                                    replacement = "*",
-                                ),
-                                selection = TextRange(index = query.selection.start + 1)
                             )
                         )
                     },

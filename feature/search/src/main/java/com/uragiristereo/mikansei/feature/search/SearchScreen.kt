@@ -1,9 +1,6 @@
 package com.uragiristereo.mikansei.feature.search
 
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,13 +26,11 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.feature.search.core.SearchActionRow
 import com.uragiristereo.mikansei.feature.search.core.SearchBar
 import com.uragiristereo.mikansei.feature.search.core.SearchBrowseButton
 import com.uragiristereo.mikansei.feature.search.quick_shortcut_bar.SearchQuickShortcutBar
@@ -154,37 +149,37 @@ internal fun SearchScreen(
                 contentPadding = innerPadding,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                // TODO: workaround for column not scrolling back to index 0
-                item {
-                    Spacer(modifier = Modifier.height(1.dp))
-                }
-
-                item {
-                    AnimatedVisibility(
-                        visible = viewModel.actionsRowExpanded,
-                        enter = expandVertically(),
-                        exit = shrinkVertically(),
-                    ) {
-                        SearchActionRow(
-                            historyEnabled = true,
-                            onSelectedBooruClick = {
-                                onNavigate(MainRoute.Settings)
-                            },
-                            onSavedSearchesClick = {
-                                keyboardController?.hide()
-                                onNavigate(MainRoute.SavedSearches)
-                            },
-                            onFiltersClick = {
-                                keyboardController?.hide()
-                                onNavigate(MainRoute.Filters)
-                            },
-                            onHistoryClick = {
-                                keyboardController?.hide()
-                                onNavigate(MainRoute.SearchHistory)
-                            },
-                        )
-                    }
-                }
+                // workaround for column not scrolling back to index 0
+//                item {
+//                    Spacer(modifier = Modifier.height(1.dp))
+//                }
+//
+//                item {
+//                    AnimatedVisibility(
+//                        visible = viewModel.actionsRowExpanded,
+//                        enter = expandVertically(),
+//                        exit = shrinkVertically(),
+//                    ) {
+//                        SearchActionRow(
+//                            historyEnabled = true,
+//                            onSelectedBooruClick = {
+//                                onNavigate(MainRoute.Settings)
+//                            },
+//                            onSavedSearchesClick = {
+//                                keyboardController?.hide()
+//                                onNavigate(MainRoute.SavedSearches)
+//                            },
+//                            onFiltersClick = {
+//                                keyboardController?.hide()
+//                                onNavigate(MainRoute.Filters)
+//                            },
+//                            onHistoryClick = {
+//                                keyboardController?.hide()
+//                                onNavigate(MainRoute.SearchHistory)
+//                            },
+//                        )
+//                    }
+//                }
 
                 item {
                     SearchBrowseButton(

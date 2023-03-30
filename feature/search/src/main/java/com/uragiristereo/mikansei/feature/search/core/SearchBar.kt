@@ -88,22 +88,22 @@ internal fun SearchBar(
                         )
                     }
 
-                    IconButton(
-                        onClick = {
-                            onActionsRowExpandedChange(!actionsRowExpanded)
-                        },
-                        content = {
-                            Icon(
-                                painter = painterResource(
-                                    id = when {
-                                        actionsRowExpanded -> R.drawable.expand_less
-                                        else -> R.drawable.expand_more
-                                    },
-                                ),
-                                contentDescription = null,
-                            )
-                        },
-                    )
+//                    IconButton(
+//                        onClick = {
+//                            onActionsRowExpandedChange(!actionsRowExpanded)
+//                        },
+//                        content = {
+//                            Icon(
+//                                painter = painterResource(
+//                                    id = when {
+//                                        actionsRowExpanded -> R.drawable.expand_less
+//                                        else -> R.drawable.expand_more
+//                                    },
+//                                ),
+//                                contentDescription = null,
+//                            )
+//                        },
+//                    )
                 }
             },
             colors = TextFieldDefaults.textFieldColors(
