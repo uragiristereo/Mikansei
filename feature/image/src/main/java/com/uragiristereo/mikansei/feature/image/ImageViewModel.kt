@@ -8,8 +8,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
+import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
-import com.uragiristereo.mikansei.core.preferences.model.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.image.core.ImageLoadingState
 import kotlinx.coroutines.flow.launchIn

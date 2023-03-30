@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.model.Rating
+import com.uragiristereo.mikansei.core.model.danbooru.Rating
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.resources.R
 
