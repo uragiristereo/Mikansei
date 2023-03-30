@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.settings.preference
+package com.uragiristereo.mikansei.core.product.preference
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
@@ -23,7 +23,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun SwitchPreference(
+fun SwitchPreference(
     state: SwitchPreferenceState,
     title: String,
     subtitle: String,
@@ -42,7 +42,7 @@ internal fun SwitchPreference(
 }
 
 @Composable
-internal fun SwitchPreference(
+fun SwitchPreference(
     state: SwitchPreferenceState,
     title: String,
     subtitle: AnnotatedString?,
@@ -111,7 +111,7 @@ internal fun SwitchPreference(
 }
 
 @Composable
-internal fun SwitchPreference(
+fun SwitchPreference(
     title: String,
     subtitle: String,
     selected: Boolean,
@@ -132,7 +132,7 @@ internal fun SwitchPreference(
 }
 
 @Composable
-internal fun SwitchPreference(
+fun SwitchPreference(
     title: String,
     subtitle: AnnotatedString?,
     selected: Boolean,
@@ -228,7 +228,7 @@ class SwitchPreferenceState(
 }
 
 @Composable
-internal fun rememberSwitchPreferenceState(
+fun rememberSwitchPreferenceState(
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
 ): SwitchPreferenceState {

@@ -16,11 +16,11 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import com.uragiristereo.mikansei.core.preferences.model.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
 import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
+import com.uragiristereo.mikansei.core.product.preference.*
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
-import com.uragiristereo.mikansei.feature.settings.preference.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel

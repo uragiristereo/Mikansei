@@ -5,12 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.uragiristereo.mikansei.core.model.preferences.base.Preference
+import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.preferences.model.Preferences
-import com.uragiristereo.mikansei.core.preferences.model.RatingPreference
-import com.uragiristereo.mikansei.core.preferences.model.base.Preference
+import com.uragiristereo.mikansei.core.product.preference.BottomSheetPreferenceData
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.feature.settings.preference.BottomSheetPreferenceData
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

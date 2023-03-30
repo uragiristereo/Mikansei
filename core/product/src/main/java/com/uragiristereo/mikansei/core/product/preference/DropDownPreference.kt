@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.settings.preference
+package com.uragiristereo.mikansei.core.product.preference
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,9 +16,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.preferences.model.base.Preference
-import com.uragiristereo.mikansei.core.preferences.model.base.PreferenceString
-import com.uragiristereo.mikansei.core.preferences.model.base.PreferenceStringRes
+import com.uragiristereo.mikansei.core.model.preferences.base.Preference
+import com.uragiristereo.mikansei.core.model.preferences.base.PreferenceString
+import com.uragiristereo.mikansei.core.model.preferences.base.PreferenceStringRes
 
 @Composable
 fun Preference.getTitleString(): String {
@@ -39,7 +39,7 @@ fun Preference.getSubtitleString(): String? {
 }
 
 @Composable
-internal fun <T : Preference> DropDownPreference(
+fun <T : Preference> DropDownPreference(
     state: DropDownPreferenceState<T>,
     title: String,
     icon: Painter?,
@@ -138,7 +138,7 @@ class DropDownPreferenceState<T : Preference>(
 }
 
 @Composable
-internal fun <T : Preference> rememberDropDownPreferenceState(
+fun <T : Preference> rememberDropDownPreferenceState(
     items: Array<T>,
     selectedItem: T?,
     onItemSelected: (T) -> Unit,

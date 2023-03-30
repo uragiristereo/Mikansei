@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.settings.preference
+package com.uragiristereo.mikansei.core.product.preference
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.resources.R
 
 @Composable
-internal fun RegularPreference(
+fun RegularPreference(
     title: String,
     subtitle: String,
     onClick: () -> Unit,
@@ -36,7 +36,7 @@ internal fun RegularPreference(
 }
 
 @Composable
-internal fun RegularPreference(
+fun RegularPreference(
     title: String,
     subtitle: AnnotatedString?,
     onClick: () -> Unit,

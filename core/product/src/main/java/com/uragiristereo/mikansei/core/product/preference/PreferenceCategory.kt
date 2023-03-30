@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.settings.preference
+package com.uragiristereo.mikansei.core.product.preference
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-internal fun PreferenceCategory(
+fun PreferenceCategory(
     title: String,
     modifier: Modifier = Modifier,
 ) {

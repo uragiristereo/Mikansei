@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.settings.preference
+package com.uragiristereo.mikansei.core.product.preference
 
 import android.os.Parcelable
 import androidx.annotation.StringRes
@@ -13,7 +13,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.preferences.model.base.Preference
+import com.uragiristereo.mikansei.core.model.preferences.base.Preference
 import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.DragHandle
@@ -24,7 +24,7 @@ import kotlinx.parcelize.RawValue
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun BottomSheetPreference(
+fun BottomSheetPreference(
     state: BottomSheetPreferenceState,
     modifier: Modifier = Modifier,
 ) {
@@ -127,7 +127,7 @@ class BottomSheetPreferenceState(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun rememberBottomSheetPreferenceState(
+fun rememberBottomSheetPreferenceState(
     sheetState: ModalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
     onItemSelected: (Preference) -> Unit,
 ): BottomSheetPreferenceState {

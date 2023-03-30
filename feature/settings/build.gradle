@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -22,6 +21,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:danbooru"))
+    implementation(project(":core:database"))
+    implementation(project(":core:domain"))
     implementation(project(":core:model"))
     implementation(project(":core:preferences"))
     implementation(project(":core:product"))

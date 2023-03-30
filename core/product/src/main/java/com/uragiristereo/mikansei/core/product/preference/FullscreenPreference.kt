@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.settings.preference
+package com.uragiristereo.mikansei.core.product.preference
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable

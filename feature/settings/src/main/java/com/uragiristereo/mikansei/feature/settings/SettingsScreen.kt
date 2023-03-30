@@ -12,11 +12,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
+import com.uragiristereo.mikansei.core.product.preference.BottomSheetPreference
+import com.uragiristereo.mikansei.core.product.preference.LocalIconPadding
+import com.uragiristereo.mikansei.core.product.preference.rememberBottomSheetPreferenceState
 import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
 import com.uragiristereo.mikansei.feature.settings.core.SettingsTopAppBar
-import com.uragiristereo.mikansei.feature.settings.preference.BottomSheetPreference
-import com.uragiristereo.mikansei.feature.settings.preference.LocalIconPadding
-import com.uragiristereo.mikansei.feature.settings.preference.rememberBottomSheetPreferenceState
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
