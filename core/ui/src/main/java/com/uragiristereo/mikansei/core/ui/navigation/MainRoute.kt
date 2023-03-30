@@ -26,4 +26,6 @@ sealed interface MainRoute : NavRoute {
     object SavedSearches : MainRoute
 
     object About : MainRoute
+
+    object User : MainRoute
 }
