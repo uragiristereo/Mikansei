@@ -14,9 +14,14 @@ inline fun <reified A> resultFlow(
 
         when {
             response.isSuccessful -> {
-                val data = response.body()!!
+                when {
+                    A::class == Unit::class -> emit(Result.Success(Unit as A))
+                    else -> {
+                        val data = response.body()!!
 
-                emit(Result.Success(data))
+                        emit(Result.Success(data))
+                    }
+                }
             }
 
             else -> emit(
