@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.feature.user"
+    namespace "com.uragiristereo.mikansei.feature.user.manage"
     compileSdk 33
 
     defaultConfig {
@@ -21,26 +21,18 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:database"))
+    implementation(project(":core:domain"))
     implementation(project(":core:model"))
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
-    implementation(project(":feature:user:login"))
-    implementation(project(":feature:user:manage"))
 
-    // Compose UI
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
-
-    // Accompanist Compose Extensions
-    implementation(libs.accompanist.navigation.animation)
-
-    // Koin Dependency Injection
+    debugImplementation(libs.bundles.compose.debug)
+    implementation(libs.bundles.core)
     implementation(libs.bundles.koin)
-
-    // Timber Logger
-    implementation(libs.timber)
-
-    // Safer Navigation Compose
+    implementation(libs.accompanist.navigation.animation)
     implementation(libs.bundles.safer.navigation)
 }

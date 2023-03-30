@@ -7,6 +7,7 @@ import com.github.uragiristereo.safer.compose.navigation.animation.navigation
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.login.core.loginRoute
+import com.uragiristereo.mikansei.feature.user.manage.core.manageRoute
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.userGraph(
@@ -17,5 +18,7 @@ fun NavGraphBuilder.userGraph(
         route = MainRoute.User::class,
     ) {
         loginRoute(navController)
+
+        manageRoute(navController)
     }
 }
