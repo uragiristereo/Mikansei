@@ -4,26 +4,29 @@ import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import java.util.*
 
 fun SessionRow.toPost(): Post {
-    return Post(
-        id = post.id,
-        createdAt = post.createdAt,
-        uploaderId = post.uploaderId,
-        source = post.source,
-        pixivId = post.pixivId,
-        rating = post.rating,
-        score = post.score,
-        upScore = post.upScore,
-        downScore = post.downScore,
-        favoriteCount = post.favoriteCount,
-        isPending = post.isPending,
-        isDeleted = post.isDeleted,
-        hasScaled = post.hasScaled,
-        image = post.image,
-        scaledImage = post.scaledImage,
-        previewImage = post.previewImage,
-        aspectRatio = post.aspectRatio,
-        tags = post.tags,
-    )
+    return post.apply {
+        Post(
+            id = id,
+            createdAt = createdAt,
+            uploaderId = uploaderId,
+            source = source,
+            pixivId = pixivId,
+            rating = rating,
+            score = score,
+            upScore = upScore,
+            downScore = downScore,
+            favoriteCount = favoriteCount,
+            isPending = isPending,
+            isDeleted = isDeleted,
+            isBanned = isBanned,
+            hasScaled = hasScaled,
+            image = image,
+            scaledImage = scaledImage,
+            previewImage = previewImage,
+            aspectRatio = aspectRatio,
+            tags = tags,
+        )
+    }
 }
 
 fun List<SessionRow>.toPostList(): List<Post> {
