@@ -27,6 +27,7 @@ import com.uragiristereo.mikansei.core.preferences.model.Preferences
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -55,8 +56,6 @@ class MainViewModel(
     var currentTags by mutableStateOf("")
         private set
 
-    private var callbackOnRequestScrollToTop: (() -> Unit) = { }
-
     private val initialized = savedStateHandle[Constants.STATE_KEY_INITIALIZED] ?: false
 
     var selectedPost: Post? = null
@@ -68,6 +67,8 @@ class MainViewModel(
         private set
 
     var navigationRailPadding by mutableStateOf(0.dp)
+
+    val scrollToTopChannel = Channel<String>()
 
     init {
         if (!initialized) {
@@ -188,13 +189,5 @@ class MainViewModel(
     fun cancelShare() {
         shareDialogVisible = false
         selectedPost?.let { downloadRepository.remove(it.id) }
-    }
-
-    fun setScrollToTopCallback(callback: (() -> Unit)) {
-        callbackOnRequestScrollToTop = callback
-    }
-
-    fun requestScrollToTop() {
-        callbackOnRequestScrollToTop()
     }
 }

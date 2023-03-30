@@ -38,12 +38,10 @@ import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.ShareOption
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
-import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
-import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
-import com.uragiristereo.mikansei.core.ui.WindowSize
+import com.uragiristereo.mikansei.core.ui.*
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
+import com.uragiristereo.mikansei.core.ui.extension.forEach
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.home.posts.core.PostsTopAppBar
 import com.uragiristereo.mikansei.feature.home.posts.grid.PostsGrid
 import com.uragiristereo.mikansei.feature.home.posts.post_dialog.PostDialog
@@ -59,7 +57,6 @@ import kotlin.math.roundToInt
 internal fun PostsScreen(
     onNavigate: (MainRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
-    onRequestScrollToTop: (() -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = koinViewModel(),
 ) {
@@ -69,6 +66,7 @@ internal fun PostsScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
     val lambdaOnShare = LocalLambdaOnShare.current
+    val scrollToTopChannel = LocalScrollToTopChannel.current
 
     val scope = rememberCoroutineScope()
     val gridState = rememberLazyStaggeredGridState()
@@ -105,7 +103,7 @@ internal fun PostsScreen(
     }
 
     LaunchedEffect(key1 = viewModel) {
-        onRequestScrollToTop {
+        scrollToTopChannel.forEach {
             scope.launch {
                 viewModel.offsetY.animateTo(targetValue = 0f)
             }
