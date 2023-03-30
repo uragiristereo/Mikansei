@@ -31,6 +31,7 @@ dependencies {
     // Compose UI
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
+    debugImplementation(libs.bundles.compose.debug)
 
     // Accompanist Compose Extensions
     implementation(libs.accompanist.navigation.animation)

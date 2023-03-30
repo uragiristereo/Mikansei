@@ -1,36 +1,47 @@
 package com.uragiristereo.mikansei.feature.home.more
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.WindowSize
-import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
+import com.uragiristereo.mikansei.core.ui.composable.SectionTitle
+import com.uragiristereo.mikansei.core.ui.extension.plus
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.home.more.core.MoreTopAppBar
+import com.uragiristereo.mikansei.feature.home.more.core.NavigationItem
+import com.uragiristereo.mikansei.feature.home.more.core.UserHeader
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun MoreScreen(
-    onNavigate: (MainRoute) -> Unit,
+    onNavigate: (NavRoute) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MoreViewModel = koinViewModel(),
 ) {
     val windowSize = rememberWindowSize()
+    val gridSize = remember { 2 }
+    val span: (LazyGridItemSpanScope.() -> GridItemSpan) = {
+        GridItemSpan(currentLineSpan = gridSize)
+    }
 
     ProductSetSystemBarsColor(
         navigationBarColor = Color.Transparent,
@@ -42,108 +53,86 @@ internal fun MoreScreen(
         },
         modifier = modifier.statusBarsPadding(),
     ) { innerPadding ->
-        LazyColumn(
-            contentPadding = innerPadding,
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(gridSize),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = innerPadding + PaddingValues(
+                start = 16.dp,
+                end = 16.dp,
+                top = 16.dp,
+            ),
         ) {
-            item {
-                Icon(
-                    painter = painterResource(id = R.drawable.meji),
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.primary.copy(alpha = ContentAlpha.high),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp),
-                )
+            item(span = span) {
+                SectionTitle(text = "Account")
             }
 
+            item(span = span) {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            viewModel.activeUser?.let { activeUser ->
+                item(span = span) {
+                    activeUser.apply {
+                        UserHeader(
+                            name = name,
+                            nameAlias = nameAlias,
+                            userId = id,
+                            level = level,
+                            onProfileClick = { },
+                            onMoreClick = {
+                                onNavigate(UserRoute.Manage)
+                            },
+                        )
+                    }
+                }
+            }
+
+            item(span = span) {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item(span = span) {
+                SectionTitle(text = "Navigation")
+            }
+
+            item(span = span) {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+//            item {
+//                NavigationItem(
+//                    text = "Filters",
+//                    painter = painterResource(id = R.drawable.filter_list),
+//                    onClick = {
+//                        onNavigate(MainRoute.Filters)
+//                    },
+//                    modifier = Modifier.padding(bottom = 12.dp),
+//                )
+//            }
+
             item {
-                ClickableSection(
-                    title = stringResource(id = R.string.selected_booru),
-                    subtitle = stringResource(id = viewModel.selectedBooru.nameResId),
-                    icon = painterResource(id = R.drawable.public_globe),
-                    verticalPadding = 16.dp,
+                NavigationItem(
+                    text = "Settings",
+                    painter = painterResource(id = R.drawable.settings),
                     onClick = {
                         onNavigate(MainRoute.Settings)
                     },
+                    modifier = Modifier.padding(bottom = 12.dp),
                 )
             }
 
             item {
-                ClickableSection(
-                    title = stringResource(id = R.string.search_history_label),
-                    icon = painterResource(id = R.drawable.history),
-                    verticalPadding = 16.dp,
-                    onClick = {
-                        onNavigate(MainRoute.SearchHistory)
-                    },
-                )
-            }
-
-            item {
-                ClickableSection(
-                    title = stringResource(id = R.string.saved_searches_label),
-                    icon = painterResource(id = R.drawable.sell),
-                    verticalPadding = 16.dp,
-                    onClick = {
-                        onNavigate(MainRoute.SavedSearches)
-                    },
-                )
-            }
-
-            item {
-                ClickableSection(
-                    title = stringResource(id = R.string.filters_label),
-                    icon = painterResource(id = R.drawable.filter_list),
-                    subtitle = buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                            append(
-                                text = stringResource(
-                                    id = when {
-                                        viewModel.preferences.filtersEnabled -> R.string.enabled_action
-                                        else -> R.string.disabled_action
-                                    },
-                                ),
-                            )
-                        }
-
-                        val count = stringResource(id = R.string.filters_n_tags_enabled, viewModel.enabledFiltersCount)
-
-                        append(text = " - $count")
-                    },
-                    verticalPadding = 16.dp,
-                    onClick = {
-                        onNavigate(MainRoute.Filters)
-                    },
-                )
-            }
-
-            item {
-                Divider()
-            }
-
-            item {
-                ClickableSection(
-                    title = stringResource(id = R.string.settings_label),
-                    icon = painterResource(id = R.drawable.settings),
-                    verticalPadding = 16.dp,
-                    onClick = {
-                        onNavigate(MainRoute.Settings)
-                    },
-                )
-            }
-
-            item {
-                ClickableSection(
-                    title = stringResource(id = R.string.about_label),
-                    icon = painterResource(id = R.drawable.info),
-                    verticalPadding = 16.dp,
+                NavigationItem(
+                    text = "About",
+                    painter = painterResource(id = R.drawable.info),
                     onClick = {
                         onNavigate(MainRoute.About)
                     },
+                    modifier = Modifier.padding(bottom = 12.dp),
                 )
             }
 
-            item {
+            item(span = span) {
                 Text(
                     text = "V1.0.0",
                     style = MaterialTheme.typography.overline,
@@ -153,11 +142,15 @@ internal fun MoreScreen(
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(all = 4.dp),
+                        .padding(all = 4.dp)
                 )
             }
 
-            item {
+            item(span = span) {
+                Spacer(modifier = Modifier.padding(bottom = 8.dp))
+            }
+
+            item(span = span) {
                 Box(
                     modifier = Modifier
                         .windowInsetsPadding(
