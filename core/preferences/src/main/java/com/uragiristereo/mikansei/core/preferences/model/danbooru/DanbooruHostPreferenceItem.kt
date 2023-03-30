@@ -1,7 +1,7 @@
 package com.uragiristereo.mikansei.core.preferences.model.danbooru
 
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
-import com.uragiristereo.mikansei.core.preferences.model.base.PreferenceString
+import com.uragiristereo.mikansei.core.model.preferences.base.PreferenceString
 
 interface DanbooruHostPreferenceItem : PreferenceString {
     val host: DanbooruHost

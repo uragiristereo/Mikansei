@@ -1,6 +1,6 @@
 package com.uragiristereo.mikansei.core.preferences.model
 
-import com.uragiristereo.mikansei.core.preferences.model.base.PreferenceStringRes
+import com.uragiristereo.mikansei.core.model.preferences.base.PreferenceStringRes
 import com.uragiristereo.mikansei.core.resources.R
 
 enum class LanguagePreference : PreferenceStringRes {

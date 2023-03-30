@@ -4,6 +4,8 @@ import android.os.Build
 import androidx.annotation.Keep
 import com.uragiristereo.mikansei.core.model.booru.BooruSource
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
+import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
