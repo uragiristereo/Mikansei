@@ -138,69 +138,69 @@ internal fun SettingsColumn(
             )
         }
 
-        item {
-            SwitchPreference(
-                state = dohState,
-                title = stringResource(id = R.string.settings_block_content_from_recent_apps),
-                subtitle = null,
-            )
-        }
+//        item {
+//            SwitchPreference(
+//                state = dohState,
+//                title = stringResource(id = R.string.settings_block_content_from_recent_apps),
+//                subtitle = null,
+//            )
+//        }
 
-        item {
-            Divider()
-        }
-
-        item {
-            PreferenceCategory(title = stringResource(id = R.string.settings_category_miscellaneous))
-        }
-
-        item {
-            SwitchPreference(
-                state = dohState,
-                title = stringResource(id = R.string.settings_auto_clean_cache),
-                subtitle = stringResource(id = R.string.settings_auto_clean_cache_desc),
-                icon = painterResource(id = R.drawable.mop),
-            )
-        }
-
-        item {
-            RegularPreference(
-                title = stringResource(id = R.string.settings_clear_cache_now),
-                subtitle = buildAnnotatedString {
-                    append(text = "${stringResource(id = R.string.settings_clear_cache_now_desc)} ")
-
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(text = "40.12 MB")
-                    }
-
-                    append(text = " (${stringResource(id = R.string.settings_clear_cache_now_desc_estimated)})")
-                },
-                icon = painterResource(id = R.drawable.cached),
-                onClick = { /*TODO*/ },
-            )
-        }
-
-        item {
-            RegularPreference(
-                title = stringResource(id = R.string.settings_check_for_update),
-                subtitle = buildAnnotatedString {
-                    append(text = "${stringResource(id = R.string.settings_current_version)} ")
-
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(text = "v2.0.0")
-                    }
-
-                    append(text = "\n${stringResource(id = R.string.settings_latest_version)} ")
-
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(text = "v2.0.0")
-                        append(text = "\n\n${stringResource(id = R.string.settings_using_latest_version)}")
-                    }
-                },
-                icon = painterResource(id = R.drawable.update),
-                onClick = { /*TODO*/ },
-            )
-        }
+//        item {
+//            Divider()
+//        }
+//
+//        item {
+//            PreferenceCategory(title = stringResource(id = R.string.settings_category_miscellaneous))
+//        }
+//
+//        item {
+//            SwitchPreference(
+//                state = dohState,
+//                title = stringResource(id = R.string.settings_auto_clean_cache),
+//                subtitle = stringResource(id = R.string.settings_auto_clean_cache_desc),
+//                icon = painterResource(id = R.drawable.mop),
+//            )
+//        }
+//
+//        item {
+//            RegularPreference(
+//                title = stringResource(id = R.string.settings_clear_cache_now),
+//                subtitle = buildAnnotatedString {
+//                    append(text = "${stringResource(id = R.string.settings_clear_cache_now_desc)} ")
+//
+//                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+//                        append(text = "40.12 MB")
+//                    }
+//
+//                    append(text = " (${stringResource(id = R.string.settings_clear_cache_now_desc_estimated)})")
+//                },
+//                icon = painterResource(id = R.drawable.cached),
+//                onClick = { /*TODO*/ },
+//            )
+//        }
+//
+//        item {
+//            RegularPreference(
+//                title = stringResource(id = R.string.settings_check_for_update),
+//                subtitle = buildAnnotatedString {
+//                    append(text = "${stringResource(id = R.string.settings_current_version)} ")
+//
+//                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+//                        append(text = "v2.0.0")
+//                    }
+//
+//                    append(text = "\n${stringResource(id = R.string.settings_latest_version)} ")
+//
+//                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+//                        append(text = "v2.0.0")
+//                        append(text = "\n\n${stringResource(id = R.string.settings_using_latest_version)}")
+//                    }
+//                },
+//                icon = painterResource(id = R.drawable.update),
+//                onClick = { /*TODO*/ },
+//            )
+//        }
 
         item {
             NavigationBarSpacer()
