@@ -8,11 +8,11 @@ import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.database.dao.user.toUser
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
-import com.uragiristereo.mikansei.core.model.danbooru.user.User
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.failedResponseFormatter
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import com.uragiristereo.mikansei.core.model.result.resultFlow
+import com.uragiristereo.mikansei.core.model.user.User
 import com.uragiristereo.mikansei.core.network.NetworkRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -100,8 +100,6 @@ open class DanbooruRepositoryImpl(
                 password = apiKey,
             )
         )
-    }.mapSuccess { profile ->
-        profile.name == name
     }
 
     override suspend fun getUser(userId: Int) = resultFlow {
@@ -123,7 +121,15 @@ open class DanbooruRepositoryImpl(
                     }
 
                     else -> {
-                        emit(Result.Failed(message = failedResponseFormatter(response)))
+                        emit(
+                            Result.Failed(
+                                message = failedResponseFormatter(
+                                    responseCode = response.code(),
+                                    errorBody = response.errorBody()?.string(),
+                                )
+                            )
+                        )
+
                         return@flow
                     }
                 }
