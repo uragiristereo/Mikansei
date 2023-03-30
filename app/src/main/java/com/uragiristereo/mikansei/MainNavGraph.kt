@@ -16,6 +16,7 @@ import com.uragiristereo.mikansei.feature.image.core.imageRoute
 import com.uragiristereo.mikansei.feature.search.core.searchRoute
 import com.uragiristereo.mikansei.feature.search_history.core.searchHistoryRoute
 import com.uragiristereo.mikansei.feature.settings.core.settingsGraph
+import com.uragiristereo.mikansei.feature.user.userGraph
 import com.uragiristereo.mikansei.saved_searches.core.savedSearchesRoute
 import org.koin.androidx.compose.koinViewModel
 
@@ -47,7 +48,6 @@ fun MainNavGraph(
             navController = navController,
             onNavigatedBackByGesture = viewModel::setNavigatedBackByGesture,
             onCurrentTagsChange = viewModel::setCurrentTags,
-            onRequestScrollToTop = viewModel::setScrollToTopCallback,
         )
 
         searchRoute(navController)
@@ -67,5 +67,7 @@ fun MainNavGraph(
         searchHistoryRoute(navController)
 
         aboutRoute(navController)
+
+        userGraph(navController)
     }
 }

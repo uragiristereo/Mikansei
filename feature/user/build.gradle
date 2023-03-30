@@ -1,0 +1,44 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace "com.uragiristereo.mikansei.feature.user"
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 21
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+dependencies {
+    implementation(project(":core:model"))
+    implementation(project(":core:product"))
+    implementation(project(":core:resources"))
+    implementation(project(":core:ui"))
+
+    // Compose UI
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.androidx.compose)
+
+    // Accompanist Compose Extensions
+    implementation(libs.accompanist.navigation.animation)
+
+    // Koin Dependency Injection
+    implementation(libs.bundles.koin)
+
+    // Timber Logger
+    implementation(libs.timber)
+
+    // Safer Navigation Compose
+    implementation(libs.bundles.safer.navigation)
+}
