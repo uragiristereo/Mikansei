@@ -15,5 +15,7 @@ object DomainModule {
         factoryOf(::DownloadPostWithNotificationUseCase)
         factoryOf(::ConvertFileSizeUseCase)
         factoryOf(::PerformLoginUseCase)
+        factoryOf(::SyncUserSettingsUseCase)
+        factoryOf(::UpdateUserSettingsUseCase)
     }
 }
