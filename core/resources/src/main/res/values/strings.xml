@@ -124,7 +124,7 @@
     <string name="settings_default_booru_source_select">Select Booru source</string>
 
     <string name="settings_booru_listing_mode">Booru listing mode</string>
-    <string name="settings_booru_listing_mode_select">Select Booru listing mode</string>
+    <string name="settings_booru_listing_mode_select">Select posts rating listing filters</string>
     <string name="settings_booru_listing_mode_item_general">General only (default)</string>
     <string name="settings_booru_listing_mode_item_safe">General &amp; Sensitive (legacy safe)</string>
     <string name="settings_booru_listing_mode_item_no_explicit">Filter Explicit</string>
