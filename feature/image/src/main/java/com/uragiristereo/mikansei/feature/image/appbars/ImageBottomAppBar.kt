@@ -36,17 +36,18 @@ internal fun ImageBottomAppBar(
         visible = visible,
         enter = fadeIn(),
         exit = fadeOut(),
-        modifier = modifier
-            .background(
-                brush = Brush.verticalGradient(colors = listOf(Color.Transparent, Color.Black)),
-                alpha = 0.5f,
-            )
-            .navigationBarsPadding(),
+        modifier = modifier,
     ) {
         BottomAppBar(
             elevation = 0.dp,
             backgroundColor = Color.Transparent,
             contentColor = Color.White,
+            modifier = Modifier
+                .background(
+                    brush = Brush.verticalGradient(colors = listOf(Color.Transparent, Color.Black)),
+                    alpha = 0.5f,
+                )
+                .navigationBarsPadding(),
             content = {
                 Row(
                     horizontalArrangement = Arrangement.End,
