@@ -45,7 +45,7 @@ internal fun MoreActionsRow(
                 Chips(
                     text = stringResource(id = R.string.download_action),
                     icon = painterResource(id = R.drawable.download),
-                    elevation = 3.dp,
+                    elevation = 0.dp,
                     onClick = onDownloadClick,
                     modifier = Modifier.padding(end = 8.dp),
                 )
@@ -55,7 +55,7 @@ internal fun MoreActionsRow(
                 Chips(
                     text = stringResource(id = R.string.share_action),
                     icon = painterResource(id = R.drawable.share),
-                    elevation = 3.dp,
+                    elevation = 0.dp,
                     onClick = onShareClick,
                     modifier = Modifier.padding(end = 8.dp),
                 )
@@ -66,7 +66,7 @@ internal fun MoreActionsRow(
                     Chips(
                         text = stringResource(id = R.string.show_original_action),
                         icon = painterResource(id = R.drawable.open_in_full),
-                        elevation = 3.dp,
+                        elevation = 0.dp,
                         onClick = onExpandClick,
                         modifier = Modifier.padding(end = 8.dp),
                     )
@@ -77,7 +77,7 @@ internal fun MoreActionsRow(
                 Chips(
                     text = stringResource(id = R.string.open_externally_action),
                     icon = painterResource(id = R.drawable.open_in_browser),
-                    elevation = 3.dp,
+                    elevation = 0.dp,
                     onClick = onOpenInExternalClick,
                 )
             }
