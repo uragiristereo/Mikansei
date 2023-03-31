@@ -129,7 +129,7 @@ class DownloadPostWithNotificationUseCase(
 
                         notificationManager.apply {
                             notificationBuilder
-                                .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                                .setSmallIcon(R.drawable.download_done)
                                 .setContentTitle(context.getString(R.string.download_post_id, post.id))
                                 .setProgress(
                                     /* max = */ 0,
