@@ -95,6 +95,9 @@ internal fun MoreScreen(
                             userId = id,
                             level = level,
                             onProfileClick = { },
+                            onSettingsClick = {
+                                onNavigate(UserRoute.Settings)
+                            },
                             onMoreClick = {
                                 onNavigate(UserRoute.Manage)
                             },

@@ -3,10 +3,21 @@ package com.uragiristereo.mikansei.feature.home.more.core
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +39,7 @@ internal fun UserHeader(
     userId: Int,
     level: UserLevel,
     onProfileClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -86,15 +98,29 @@ internal fun UserHeader(
             )
         }
 
-        IconButton(
-            onClick = onMoreClick,
-            content = {
-                Icon(
-                    painter = painterResource(id = R.drawable.expand_more),
-                    contentDescription = null,
-                )
-            },
-        )
+        Row {
+            IconButton(
+                onClick = onSettingsClick,
+                content = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.settings),
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
+                    )
+                },
+            )
+
+            IconButton(
+                onClick = onMoreClick,
+                content = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.expand_more),
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
+                    )
+                },
+            )
+        }
     }
 }
 
@@ -109,6 +135,7 @@ private fun UserHeaderPreview() {
                 userId = 101001,
                 level = UserLevel.Member,
                 onProfileClick = { },
+                onSettingsClick = { },
                 onMoreClick = { },
             )
         }
