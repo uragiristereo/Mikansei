@@ -33,7 +33,7 @@ class PerformLoginUseCase(
                                             name = name,
                                             apiKey = apiKey,
                                             level = level,
-                                            safeMode = enableSafeMode,
+                                            safeMode = true,
                                             showDeletedPosts = showDeletedPosts,
                                             defaultImageSize = defaultImageSize,
                                             blacklistedTags = blacklistedTags.replace('\n', ' '),
