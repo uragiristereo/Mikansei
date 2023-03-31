@@ -102,10 +102,10 @@ internal fun MoreBottomSheet(
                             },
                             onOpenInExternalClick = remember {
                                 {
-//                                    viewModel.launchUrl(
-//                                        context = context,
-//                                        url = post.source.parseWebUrl(post.id),
-//                                    )
+                                    viewModel.launchUrl(
+                                        context = context,
+                                        url = "https://danbooru.donmai.us/posts/${post.id}",
+                                    )
                                 }
                             },
                             modifier = Modifier.padding(bottom = 8.dp),
