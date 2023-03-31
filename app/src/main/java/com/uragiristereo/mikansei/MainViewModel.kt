@@ -110,9 +110,12 @@ class MainViewModel(
             }
 
             Toast.makeText(
-                /* context = */ context,
-                /* text = */ context.getText(R.string.download_added),
-                /* duration = */ Toast.LENGTH_LONG,
+                /* context = */
+                context,
+                /* text = */
+                context.getText(R.string.download_added),
+                /* duration = */
+                Toast.LENGTH_SHORT,
             ).show()
         }
     }
