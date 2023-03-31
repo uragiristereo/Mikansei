@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.home.more
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -114,16 +115,85 @@ internal fun MoreScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-//            item {
-//                NavigationItem(
-//                    text = "Filters",
-//                    painter = painterResource(id = R.drawable.filter_list),
-//                    onClick = {
-//                        onNavigate(MainRoute.Filters)
-//                    },
-//                    modifier = Modifier.padding(bottom = 12.dp),
-//                )
-//            }
+            item {
+                NavigationItem(
+                    text = "Pools",
+                    painter = painterResource(id = R.drawable.photo_library),
+                    elevated = false,
+                    onClick = {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.feature_under_development),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+            }
+
+            item {
+                NavigationItem(
+                    text = "Wiki",
+                    painter = painterResource(id = R.drawable.lightbulb),
+                    elevated = false,
+                    onClick = {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.feature_under_development),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+            }
+
+            item {
+                NavigationItem(
+                    text = "Saved searches",
+                    painter = painterResource(id = R.drawable.sell),
+                    elevated = false,
+                    onClick = {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.feature_under_development),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+            }
+
+            item {
+                NavigationItem(
+                    text = "Filters",
+                    painter = painterResource(id = R.drawable.filter_list),
+                    elevated = false,
+                    onClick = {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.feature_under_development),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+            }
+
+            item {
+                NavigationItem(
+                    text = "Search history",
+                    painter = painterResource(id = R.drawable.history),
+                    elevated = false,
+                    onClick = {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.feature_under_development),
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    },
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+            }
 
             item {
                 NavigationItem(

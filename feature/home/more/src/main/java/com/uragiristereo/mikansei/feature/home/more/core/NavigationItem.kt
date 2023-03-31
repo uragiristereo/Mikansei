@@ -23,13 +23,21 @@ internal fun NavigationItem(
     painter: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    elevated: Boolean = true,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colors.background.backgroundElevation())
+            .background(
+                MaterialTheme.colors.background.backgroundElevation(
+                    elevation = when {
+                        elevated -> 2.dp
+                        else -> 1.dp
+                    }
+                )
+            )
             .clickable(onClick = onClick)
             .padding(
                 vertical = 12.dp,
