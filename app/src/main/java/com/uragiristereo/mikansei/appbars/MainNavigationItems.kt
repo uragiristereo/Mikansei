@@ -26,11 +26,11 @@ enum class MainNavigationItems(
         label = R.string.search_label,
         unselectedIcon = R.drawable.search,
     ),
-    Collections(
+    Favorites(
         route = HomeRoute.Favorites,
         label = R.string.favorites_label,
-        unselectedIcon = R.drawable.photo_library,
-        selectedIcon = R.drawable.photo_library_fill,
+        unselectedIcon = R.drawable.collections_bookmark,
+        selectedIcon = R.drawable.collections_bookmark,
     ),
     More(
         route = HomeRoute.More,
