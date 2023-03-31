@@ -1,6 +1,18 @@
 package com.uragiristereo.mikansei.feature.home.more
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
@@ -12,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -23,6 +36,7 @@ import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.SectionTitle
 import com.uragiristereo.mikansei.core.ui.extension.plus
+import com.uragiristereo.mikansei.core.ui.extension.versionName
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
@@ -37,6 +51,7 @@ internal fun MoreScreen(
     modifier: Modifier = Modifier,
     viewModel: MoreViewModel = koinViewModel(),
 ) {
+    val context = LocalContext.current
     val windowSize = rememberWindowSize()
     val gridSize = remember { 2 }
     val span: (LazyGridItemSpanScope.() -> GridItemSpan) = {
@@ -133,8 +148,10 @@ internal fun MoreScreen(
             }
 
             item(span = span) {
+                val version = remember { context.versionName }
+
                 Text(
-                    text = "V1.0.0",
+                    text = "V$version",
                     style = MaterialTheme.typography.overline,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
