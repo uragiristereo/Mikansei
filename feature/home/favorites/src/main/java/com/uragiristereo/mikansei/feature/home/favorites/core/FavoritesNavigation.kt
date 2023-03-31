@@ -1,7 +1,7 @@
 package com.uragiristereo.mikansei.feature.home.favorites.core
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import com.github.uragiristereo.safer.compose.navigation.animation.composable
@@ -16,7 +16,11 @@ fun NavGraphBuilder.favoritesRoute() {
         content = {
             FavoritesScreen(
                 modifier = Modifier
-                    .padding(start = LocalNavigationRailPadding.current),
+                    .padding(start = LocalNavigationRailPadding.current)
+                    .displayCutoutPadding()
+                    .windowInsetsPadding(
+                        WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
+                    ),
             )
         },
     )

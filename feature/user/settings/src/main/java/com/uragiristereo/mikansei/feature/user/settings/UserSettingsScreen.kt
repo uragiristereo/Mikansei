@@ -16,6 +16,7 @@ import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreferenc
 import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.product.preference.*
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
 import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
 import kotlinx.coroutines.launch
@@ -133,6 +134,10 @@ internal fun UserSettingsScreen(
 
             item {
                 SettingTip(text = "(*) indicates a Mikansei feature and won't be synced with Danbooru.")
+            }
+
+            item {
+                NavigationBarSpacer()
             }
         }
     }

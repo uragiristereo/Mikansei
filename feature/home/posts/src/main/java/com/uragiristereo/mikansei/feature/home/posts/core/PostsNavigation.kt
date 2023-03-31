@@ -3,7 +3,7 @@ package com.uragiristereo.mikansei.feature.home.posts.core
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
@@ -59,7 +59,12 @@ fun NavGraphBuilder.postsRoute(
                         MainRoute.Image(post = item)
                     )
                 },
-                modifier = Modifier.padding(start = LocalNavigationRailPadding.current),
+                modifier = Modifier
+                    .padding(start = LocalNavigationRailPadding.current)
+                    .displayCutoutPadding()
+                    .windowInsetsPadding(
+                        WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
+                    ),
             )
         },
     )

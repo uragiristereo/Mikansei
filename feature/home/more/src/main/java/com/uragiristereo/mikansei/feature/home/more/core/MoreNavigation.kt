@@ -1,7 +1,7 @@
 package com.uragiristereo.mikansei.feature.home.more.core
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,7 +20,12 @@ fun NavGraphBuilder.moreRoute(
         content = {
             MoreScreen(
                 onNavigate = navController::navigate,
-                modifier = Modifier.padding(start = LocalNavigationRailPadding.current),
+                modifier = Modifier
+                    .padding(start = LocalNavigationRailPadding.current)
+                    .displayCutoutPadding()
+                    .windowInsetsPadding(
+                        WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
+                    ),
             )
         },
     )

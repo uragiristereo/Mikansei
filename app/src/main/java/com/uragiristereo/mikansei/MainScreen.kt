@@ -7,8 +7,10 @@ import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
@@ -40,6 +42,7 @@ import com.uragiristereo.mikansei.core.product.theme.Theme
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.*
 import com.uragiristereo.mikansei.core.ui.composable.DimensionSubcomposeLayout
+import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import kotlinx.coroutines.launch
@@ -70,9 +73,12 @@ fun MainScreen(
         onPermissionResult = { isGranted ->
             if (!isGranted) {
                 Toast.makeText(
-                    /* context = */ context,
-                    /* text = */ context.getText(R.string.download_permission_denied),
-                    /* duration = */ Toast.LENGTH_LONG,
+                    /* context = */
+                    context,
+                    /* text = */
+                    context.getText(R.string.download_permission_denied),
+                    /* duration = */
+                    Toast.LENGTH_LONG,
                 ).show()
             }
 
@@ -103,9 +109,12 @@ fun MainScreen(
                     Timber.d("download completed")
 
                     val uriProvider = FileProvider.getUriForFile(
-                        /* context = */ context,
-                        /* authority = */ "${context.packageName}.provider",
-                        /* file = */ uri.toFile(),
+                        /* context = */
+                        context,
+                        /* authority = */
+                        "${context.packageName}.provider",
+                        /* file = */
+                        uri.toFile(),
                     )
 
                     val intent = Intent().apply {
@@ -119,8 +128,10 @@ fun MainScreen(
                     context.startActivity(
                         /* intent = */
                         Intent.createChooser(
-                            /* target = */ intent,
-                            /* title = */ context.getString(R.string.share_label),
+                            /* target = */
+                            intent,
+                            /* title = */
+                            context.getString(R.string.share_label),
                         ),
                     )
                 },
@@ -248,25 +259,35 @@ fun MainScreen(
                             visible = viewModel.currentRoute in HomeRoutesString,
                             enter = slideInHorizontally(initialOffsetX = { -it }),
                             exit = slideOutHorizontally(targetOffsetX = { -it }),
+                            modifier = Modifier,
                         ) {
-                            DimensionSubcomposeLayout {
-                                LaunchedEffect(key1 = size) {
-                                    viewModel.navigationRailPadding = size.width
-                                }
+                            Row {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .background(MaterialTheme.colors.background.backgroundElevation())
+                                        .displayCutoutPadding(),
+                                )
 
-                                Row {
-                                    MainNavigationRail(
-                                        currentRoute = viewModel.currentRoute,
-                                        onNavigate = lambdaOnNavigate,
-                                        onNavigateSearch = lambdaOnNavigateSearch,
-                                        onRequestScrollToTop = lambdaOnRequestScrollToTop,
-                                    )
+                                DimensionSubcomposeLayout {
+                                    LaunchedEffect(key1 = size) {
+                                        viewModel.navigationRailPadding = size.width
+                                    }
 
-                                    Divider(
-                                        modifier = Modifier
-                                            .width(1.dp)
-                                            .fillMaxHeight(),
-                                    )
+                                    Row {
+                                        MainNavigationRail(
+                                            currentRoute = viewModel.currentRoute,
+                                            onNavigate = lambdaOnNavigate,
+                                            onNavigateSearch = lambdaOnNavigateSearch,
+                                            onRequestScrollToTop = lambdaOnRequestScrollToTop,
+                                        )
+
+                                        Divider(
+                                            modifier = Modifier
+                                                .width(1.dp)
+                                                .fillMaxHeight(),
+                                        )
+                                    }
                                 }
                             }
                         }

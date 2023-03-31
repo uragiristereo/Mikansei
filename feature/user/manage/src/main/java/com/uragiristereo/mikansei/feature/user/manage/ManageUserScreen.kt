@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.composable.SectionTitle
 import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
 import com.uragiristereo.mikansei.core.ui.extension.plus
@@ -113,6 +114,16 @@ internal fun ManageUserScreen(
                     modifier = Modifier
                         .padding(bottom = 8.dp)
                         .animateItemPlacement(),
+                )
+            }
+
+            item {
+                NavigationBarSpacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            bottom = 56.dp + 32.dp,
+                        ),
                 )
             }
         }

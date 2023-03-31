@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -237,143 +236,73 @@ internal fun PostsScreen(
         navigationBarColor = Color.Transparent,
     )
 
-    Scaffold(
-        modifier = modifier.statusBarsPadding(),
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .nestedScroll(
-                    connection = remember {
-                        object : NestedScrollConnection {
-                            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                                val delta = available.y
-                                val newOffset = viewModel.offsetY.value + delta
+    Box(
+        modifier = modifier
+            .statusBarsPadding()
+            .nestedScroll(
+                connection = remember {
+                    object : NestedScrollConnection {
+                        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                            val delta = available.y
+                            val newOffset = viewModel.offsetY.value + delta
 
-                                scope.launch {
-                                    if (pullRefreshState.progress == 0f && !areAllItemsVisible) {
-                                        viewModel.offsetY.snapTo(
-                                            targetValue = newOffset.coerceIn(
-                                                minimumValue = with(density) { -viewModel.topAppBarHeight.toPx() },
-                                                maximumValue = 0f,
-                                            ),
-                                        )
-                                    }
+                            scope.launch {
+                                if (pullRefreshState.progress == 0f && !areAllItemsVisible) {
+                                    viewModel.offsetY.snapTo(
+                                        targetValue = newOffset.coerceIn(
+                                            minimumValue = with(density) { -viewModel.topAppBarHeight.toPx() },
+                                            maximumValue = 0f,
+                                        ),
+                                    )
                                 }
-
-                                return Offset.Zero
                             }
+
+                            return Offset.Zero
                         }
-                    }
-                ),
-        ) {
-            Crossfade(targetState = viewModel.contentState, label = "PostsContent") { target ->
-                when (target) {
-                    PostsContentState.SHOW_POSTS -> {
-                        Box(
-                            modifier = Modifier.pullRefresh(pullRefreshState),
-                        ) {
-                            PostsGrid(
-                                posts = viewModel.posts,
-                                gridState = gridState,
-                                canLoadMore = viewModel.canLoadMore,
-                                topAppBarHeight = viewModel.topAppBarHeight,
-                                onItemClick = onNavigateImage,
-                                onItemLongPress = remember {
-                                    { post ->
-                                        viewModel.selectedPost = post
-                                        viewModel.dialogShown = true
-
-                                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                    }
-                                },
-                            )
-
-                            if (viewModel.loading == PostsLoadingState.FROM_REFRESH || isScrollIndexZero) {
-                                PullRefreshIndicator(
-                                    refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
-                                    state = pullRefreshState,
-                                    backgroundColor = MaterialTheme.colors.background.backgroundElevation(),
-                                    contentColor = MaterialTheme.colors.primary,
-                                    modifier = Modifier
-                                        .padding(top = viewModel.topAppBarHeight)
-                                        .align(Alignment.TopCenter),
-                                )
-                            }
-                        }
-                    }
-
-                    PostsContentState.SHOW_MAIN_LOADING -> {
-                        PostsProgress(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(
-                                    bottom = when (windowSize) {
-                                        WindowSize.COMPACT -> 56.dp + 1.dp
-                                        else -> 0.dp
-                                    },
-                                ),
-                        )
-                    }
-
-                    PostsContentState.SHOW_EMPTY -> {
-                        PostsEmpty(
-                            modifier = Modifier.padding(top = 56.dp + 1.dp),
-                        )
-                    }
-
-                    PostsContentState.SHOW_ERROR -> {
-                        viewModel.errorMessage?.let {
-                            PostsError(
-                                message = it,
-                                onRetryClick = viewModel::retryGetPosts,
-                            )
-                        }
-                    }
-
-                    PostsContentState.SHOW_NOTHING -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(MaterialTheme.colors.background),
-                        )
                     }
                 }
-            }
+            ),
+    ) {
+        Crossfade(targetState = viewModel.contentState, label = "PostsContent") { target ->
+            when (target) {
+                PostsContentState.SHOW_POSTS -> {
+                    Box(
+                        modifier = Modifier.pullRefresh(pullRefreshState),
+                    ) {
+                        PostsGrid(
+                            posts = viewModel.posts,
+                            gridState = gridState,
+                            canLoadMore = viewModel.canLoadMore,
+                            topAppBarHeight = viewModel.topAppBarHeight,
+                            onItemClick = onNavigateImage,
+                            onItemLongPress = remember {
+                                { post ->
+                                    viewModel.selectedPost = post
+                                    viewModel.dialogShown = true
 
-            PostsTopAppBar(
-                searchTags = viewModel.tags,
-                onHeightChange = { viewModel.topAppBarHeight = it },
-                onSearchClick = { tags ->
-                    onNavigate(MainRoute.Search(tags))
-                },
-                onRefreshClick = {
-                    scope.launch {
-                        gridState.animateScrollToItem(index = 0)
+                                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                                }
+                            },
+                        )
 
-                        viewModel.retryGetPosts()
+                        if (viewModel.loading == PostsLoadingState.FROM_REFRESH || isScrollIndexZero) {
+                            PullRefreshIndicator(
+                                refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
+                                state = pullRefreshState,
+                                backgroundColor = MaterialTheme.colors.background.backgroundElevation(),
+                                contentColor = MaterialTheme.colors.primary,
+                                modifier = Modifier
+                                    .padding(top = viewModel.topAppBarHeight)
+                                    .align(Alignment.TopCenter),
+                            )
+                        }
                     }
-                },
-                onExitClick = {
-                    (context as Activity).finishAffinity()
-                },
-                modifier = Modifier
-                    .graphicsLayer {
-                        translationY = viewModel.offsetY.value
-                    },
-            )
+                }
 
-            AnimatedVisibility(
-                visible = viewModel.loading == PostsLoadingState.FROM_LOAD_MORE,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier.align(Alignment.BottomCenter),
-                content = {
-                    LinearProgressIndicator(
+                PostsContentState.SHOW_MAIN_LOADING -> {
+                    PostsProgress(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colors.background)
-                            .navigationBarsPadding()
+                            .fillMaxSize()
                             .padding(
                                 bottom = when (windowSize) {
                                     WindowSize.COMPACT -> 56.dp + 1.dp
@@ -381,8 +310,74 @@ internal fun PostsScreen(
                                 },
                             ),
                     )
-                },
-            )
+                }
+
+                PostsContentState.SHOW_EMPTY -> {
+                    PostsEmpty(
+                        modifier = Modifier.padding(top = 56.dp + 1.dp),
+                    )
+                }
+
+                PostsContentState.SHOW_ERROR -> {
+                    viewModel.errorMessage?.let {
+                        PostsError(
+                            message = it,
+                            onRetryClick = viewModel::retryGetPosts,
+                        )
+                    }
+                }
+
+                PostsContentState.SHOW_NOTHING -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colors.background),
+                    )
+                }
+            }
         }
+
+        PostsTopAppBar(
+            searchTags = viewModel.tags,
+            onHeightChange = { viewModel.topAppBarHeight = it },
+            onSearchClick = { tags ->
+                onNavigate(MainRoute.Search(tags))
+            },
+            onRefreshClick = {
+                scope.launch {
+                    gridState.animateScrollToItem(index = 0)
+
+                    viewModel.retryGetPosts()
+                }
+            },
+            onExitClick = {
+                (context as Activity).finishAffinity()
+            },
+            modifier = Modifier
+                .graphicsLayer {
+                    translationY = viewModel.offsetY.value
+                },
+        )
+
+        AnimatedVisibility(
+            visible = viewModel.loading == PostsLoadingState.FROM_LOAD_MORE,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier.align(Alignment.BottomCenter),
+            content = {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.background)
+                        .navigationBarsPadding()
+                        .padding(
+                            bottom = when (windowSize) {
+                                WindowSize.COMPACT -> 56.dp + 1.dp
+                                else -> 0.dp
+                            },
+                        ),
+                )
+            },
+        )
     }
 }
