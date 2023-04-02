@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import coil.compose.SubcomposeAsyncImage
+import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
@@ -38,9 +42,11 @@ internal fun PostItem(
                 onLongClick = onLongPress,
             ),
     ) {
+        var loaded by rememberSaveable { mutableStateOf(false) }
+
         PostPlaceholder()
 
-        SubcomposeAsyncImage(
+        AsyncImage(
             model = remember {
                 ImageRequest.Builder(context)
                     .data(post.previewImage.url)
@@ -53,12 +59,7 @@ internal fun PostItem(
             },
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            loading = {
-                PostPlaceholder()
-            },
-            error = {
-                PostPlaceholder()
-            },
+            onSuccess = { loaded = true },
             modifier = Modifier.fillMaxSize(),
         )
 
