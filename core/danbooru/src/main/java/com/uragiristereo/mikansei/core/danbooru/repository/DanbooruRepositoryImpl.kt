@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.core.danbooru.repository
 
+import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mikansei.core.danbooru.DanbooruApi
 import com.uragiristereo.mikansei.core.danbooru.DanbooruAuthInterceptor
@@ -15,6 +16,7 @@ import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import com.uragiristereo.mikansei.core.model.result.resultFlow
 import com.uragiristereo.mikansei.core.model.user.User
 import com.uragiristereo.mikansei.core.network.NetworkRepository
+import com.uragiristereo.mikansei.core.resources.R
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -24,9 +26,11 @@ import kotlinx.serialization.json.Json
 import okhttp3.Credentials
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import java.util.zip.GZIPInputStream
 
 @OptIn(ExperimentalSerializationApi::class)
 open class DanbooruRepositoryImpl(
+    private val context: Context,
     private val networkRepository: NetworkRepository,
     private val userDao: UserDao,
 ) : DanbooruRepository {
@@ -44,11 +48,29 @@ open class DanbooruRepositoryImpl(
     private var client = buildClient(user = activeUser, auth = true)
     private val clientNoAuth = buildClient(auth = false)
 
+    override var unsafeTags: List<String> = listOf()
+
     init {
         CoroutineScope(context = Dispatchers.IO + SupervisorJob()).launch {
             userDao.getActive().collect { userRow ->
                 client = buildClient(user = userRow.toUser(), auth = true)
             }
+        }
+
+        loadUnsafeTags()
+    }
+
+    private fun loadUnsafeTags() {
+        CoroutineScope(context = Dispatchers.Default).launch {
+            val rawResource = context.resources.openRawResource(R.raw.unsafe_tags)
+
+            val stream = withContext(Dispatchers.IO) {
+                GZIPInputStream(rawResource)
+            }
+
+            val text = stream.bufferedReader().use { it.readText() }
+
+            unsafeTags = text.split('\n')
         }
     }
 

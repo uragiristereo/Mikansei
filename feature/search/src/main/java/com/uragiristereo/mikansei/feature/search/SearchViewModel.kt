@@ -11,25 +11,17 @@ import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.domain.entity.tag.TagAutoComplete
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsAutoCompleteUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
-import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
-import com.uragiristereo.mikansei.core.preferences.model.Preferences
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.search.state.SearchWordIndex
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class SearchViewModel(
     savedStateHandle: SavedStateHandle,
-    preferencesRepository: PreferencesRepository,
     private val getTagsAutoCompleteUseCase: GetTagsAutoCompleteUseCase,
 ) : ViewModel() {
     val tags = savedStateHandle.getData(MainRoute.Search()).tags
-
-    var preferences by mutableStateOf(Preferences())
-        private set
 
     var actionsRowExpanded by mutableStateOf(true)
     var searchAllowed by mutableStateOf(true)
@@ -52,12 +44,6 @@ class SearchViewModel(
 
     private var job: Job? = null
     private val keywords = arrayOf(' ', '{', '}', '~')
-
-    init {
-        preferencesRepository.flowData
-            .onEach { preferences = it }
-            .launchIn(viewModelScope)
-    }
 
     fun parseQuery(query: String) {
         parsedQuery = query

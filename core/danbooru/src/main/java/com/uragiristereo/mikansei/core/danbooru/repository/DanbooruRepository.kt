@@ -10,6 +10,8 @@ import com.uragiristereo.mikansei.core.model.result.Result
 import kotlinx.coroutines.flow.Flow
 
 interface DanbooruRepository {
+    val unsafeTags: List<String>
+
     suspend fun getPost(id: Int): Flow<Result<DanbooruPost>>
 
     suspend fun getPosts(tags: String, page: Int): Flow<Result<List<DanbooruPost>>>

@@ -7,6 +7,7 @@ import com.uragiristereo.mikansei.core.domain.entity.tag.TagAutoComplete
 import com.uragiristereo.mikansei.core.domain.entity.tag.toTagAutoCompleteList
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
+import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -18,13 +19,25 @@ class GetTagsAutoCompleteUseCase(
         return danbooruRepository.getTagsAutoComplete(query)
             .mapSuccess { danbooruTags ->
                 val tags = danbooruTags.toTagAutoCompleteList()
-                val filters = userDao.getActive()
+
+                val activeUser = userDao.getActive()
                     .first()
                     .toUser()
-                    .blacklistedTags
+
+                val filters = activeUser.blacklistedTags
+
+                val safeRatings = listOf(
+                    RatingPreference.GENERAL_ONLY,
+                    RatingPreference.SAFE,
+                )
+
+                val unsafeTags = when {
+                    activeUser.safeMode || activeUser.postsRatingFilter in safeRatings -> danbooruRepository.unsafeTags
+                    else -> listOf()
+                }
 
                 val filtered = tags.filter { item ->
-                    item.value !in filters
+                    item.value !in filters && item.value !in unsafeTags
                 }
 
                 filtered
