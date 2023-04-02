@@ -2,6 +2,7 @@ package com.uragiristereo.mikansei.feature.search.core
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeOut
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.github.uragiristereo.safer.compose.navigation.animation.composable
@@ -42,11 +43,9 @@ fun NavGraphBuilder.searchRoute(
                 onNavigate = navController::navigate,
                 onNavigateBack = navController::navigateUp,
                 onSearchSubmit = { tags ->
-                    navController.popBackStack()
-
-                    navController.navigate(
-                        route = HomeRoute.Posts(tags),
-                    )
+                    navController.navigate(route = HomeRoute.Posts(tags)) {
+                        popUpTo(navController.graph.findStartDestination().id)
+                    }
                 },
             )
         }
