@@ -140,6 +140,7 @@ internal fun PostsScreen(
         if (viewModel.loading == PostsLoadingState.DISABLED_REFRESHED) {
             scope.launch {
                 gridState.scrollToItem(index = 0)
+                viewModel.offsetY.snapTo(targetValue = 0f)
                 viewModel.loading = PostsLoadingState.DISABLED
             }
         }
