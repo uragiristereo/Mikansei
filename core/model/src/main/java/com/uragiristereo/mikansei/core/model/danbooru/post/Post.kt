@@ -1,10 +1,12 @@
 package com.uragiristereo.mikansei.core.model.danbooru.post
 
+import androidx.compose.runtime.Stable
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
 import com.uragiristereo.mikansei.core.model.danbooru.Rating
 import kotlinx.serialization.Serializable
 import java.util.*
 
+@Stable
 @Serializable
 data class Post(
     val id: Int,
