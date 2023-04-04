@@ -8,7 +8,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.LinearProgressIndicator
@@ -16,7 +21,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -37,14 +48,22 @@ import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.ShareOption
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
-import com.uragiristereo.mikansei.core.ui.*
+import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
+import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
+import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
+import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.extension.forEach
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.home.posts.core.PostsTopAppBar
 import com.uragiristereo.mikansei.feature.home.posts.grid.PostsGrid
 import com.uragiristereo.mikansei.feature.home.posts.post_dialog.PostDialog
-import com.uragiristereo.mikansei.feature.home.posts.state.*
+import com.uragiristereo.mikansei.feature.home.posts.state.PostsContentState
+import com.uragiristereo.mikansei.feature.home.posts.state.PostsEmpty
+import com.uragiristereo.mikansei.feature.home.posts.state.PostsError
+import com.uragiristereo.mikansei.feature.home.posts.state.PostsLoadingState
+import com.uragiristereo.mikansei.feature.home.posts.state.PostsProgress
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -218,7 +237,6 @@ internal fun PostsScreen(
                         lambdaOnDownload(post)
                     }
                 },
-                onAddToClick = { /*TODO*/ },
                 onShareClick = remember {
                     {
                         viewModel.dialogShown = false
@@ -226,8 +244,6 @@ internal fun PostsScreen(
                         lambdaOnShare(post, ShareOption.COMPRESSED)
                     }
                 },
-                onBlockTagsClick = { /*TODO*/ },
-                onHidePostClick = { /*TODO*/ },
             )
         }
     }

@@ -1,9 +1,16 @@
 package com.uragiristereo.mikansei.feature.home.posts.post_dialog
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Divider
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
@@ -25,9 +32,9 @@ internal fun PostDialog(
     onPostClick: () -> Unit,
     onDowloadClick: () -> Unit,
     onShareClick: () -> Unit,
-    onAddToClick: () -> Unit,
-    onBlockTagsClick: () -> Unit,
-    onHidePostClick: () -> Unit,
+//    onAddToClick: () -> Unit,
+//    onBlockTagsClick: () -> Unit,
+//    onHidePostClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
@@ -86,33 +93,33 @@ internal fun PostDialog(
                         )
                     }
 
-                    item {
-                        ClickableSection(
-                            title = stringResource(id = R.string.add_to_action),
-                            onClick = onAddToClick,
-                            icon = painterResource(id = R.drawable.add_to_photos),
-                        )
-                    }
-
-                    item {
-                        Divider()
-                    }
-
-                    item {
-                        ClickableSection(
-                            title = stringResource(id = R.string.block_tags_post_action),
-                            onClick = onBlockTagsClick,
-                            icon = painterResource(id = R.drawable.label_off),
-                        )
-                    }
-
-                    item {
-                        ClickableSection(
-                            title = stringResource(id = R.string.hide_post_action),
-                            onClick = onHidePostClick,
-                            icon = painterResource(id = R.drawable.visibility_off),
-                        )
-                    }
+//                    item {
+//                        ClickableSection(
+//                            title = stringResource(id = R.string.add_to_action),
+//                            onClick = onAddToClick,
+//                            icon = painterResource(id = R.drawable.add_to_photos),
+//                        )
+//                    }
+//
+//                    item {
+//                        Divider()
+//                    }
+//
+//                    item {
+//                        ClickableSection(
+//                            title = stringResource(id = R.string.block_tags_post_action),
+//                            onClick = onBlockTagsClick,
+//                            icon = painterResource(id = R.drawable.label_off),
+//                        )
+//                    }
+//
+//                    item {
+//                        ClickableSection(
+//                            title = stringResource(id = R.string.hide_post_action),
+//                            onClick = onHidePostClick,
+//                            icon = painterResource(id = R.drawable.visibility_off),
+//                        )
+//                    }
                 }
             }
         }
