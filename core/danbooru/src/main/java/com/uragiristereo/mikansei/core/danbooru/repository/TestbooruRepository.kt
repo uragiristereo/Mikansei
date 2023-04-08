@@ -11,4 +11,5 @@ class TestbooruRepository(
     userDao: UserDao,
 ) : DanbooruRepositoryImpl(context, networkRepository, userDao) {
     override val host = DanbooruHost.Testbooru
+    override val safeHost = DanbooruHost.Testbooru
 }

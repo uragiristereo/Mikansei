@@ -15,6 +15,7 @@ import com.uragiristereo.mikansei.core.model.result.failedResponseFormatter
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import com.uragiristereo.mikansei.core.model.result.resultFlow
 import com.uragiristereo.mikansei.core.model.user.User
+import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
 import com.uragiristereo.mikansei.core.network.NetworkRepository
 import com.uragiristereo.mikansei.core.resources.R
 import kotlinx.coroutines.*
@@ -25,6 +26,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Credentials
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.util.zip.GZIPInputStream
 
@@ -35,25 +37,41 @@ open class DanbooruRepositoryImpl(
     private val userDao: UserDao,
 ) : DanbooruRepository {
     open val host = DanbooruHost.Danbooru
+    open val safeHost = DanbooruHost.Safebooru
 
     private val json = Json {
         ignoreUnknownKeys = true
         explicitNulls = false
     }
 
-    private val activeUser = runBlocking {
+    private var activeUser = runBlocking {
         userDao.getActive().first().toUser()
     }
 
-    private var client = buildClient(user = activeUser, auth = true)
-    private val clientNoAuth = buildClient(auth = false)
+    private lateinit var clientAuth: DanbooruApi
+    private lateinit var clientNoAuth: DanbooruApi
+    private lateinit var clientSafe: DanbooruApi
+
+    private val client: DanbooruApi
+        get() = when {
+            activeUser.safeMode || activeUser.postsRatingFilter == RatingPreference.GENERAL_ONLY -> clientSafe
+            else -> clientAuth
+        }
 
     override var unsafeTags: List<String> = listOf()
 
     init {
+        buildClients(activeUser)
+
         CoroutineScope(context = Dispatchers.IO + SupervisorJob()).launch {
             userDao.getActive().collect { userRow ->
-                client = buildClient(user = userRow.toUser(), auth = true)
+                val user = userRow.toUser()
+
+                if (activeUser.id != user.id) {
+                    buildClients(user)
+                }
+
+                activeUser = user
             }
         }
 
@@ -74,22 +92,33 @@ open class DanbooruRepositoryImpl(
         }
     }
 
-    private fun buildClient(user: User? = null, auth: Boolean): DanbooruApi {
-        val client = networkRepository.okHttpClient
+    private fun buildClients(user: User) {
+        val okHttpClient = networkRepository.okHttpClient
+
+        val okHttpClientWithAuth = okHttpClient
             .newBuilder()
-            .let { builder ->
-                if (user != null && user.apiKey.isNotEmpty() && auth) {
-                    builder.addInterceptor(
-                        DanbooruAuthInterceptor(user.name, user.apiKey)
-                    )
-                }
+            .addInterceptor(
+                DanbooruAuthInterceptor(user.name, user.apiKey)
+            )
+            .build()
 
-                builder
-            }.build()
+        val preferredOkHttpClient = when {
+            user.id != 0 -> okHttpClientWithAuth
+            else -> okHttpClient
+        }
 
+        clientAuth = buildClient(preferredOkHttpClient, host)
+        clientNoAuth = buildClient(okHttpClient, host)
+        clientSafe = buildClient(preferredOkHttpClient, safeHost)
+    }
+
+    private fun buildClient(
+        okHttpClient: OkHttpClient,
+        host: DanbooruHost,
+    ): DanbooruApi {
         return Retrofit.Builder()
             .baseUrl(host.getBaseUrl())
-            .client(client)
+            .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(DanbooruApi::class.java)
@@ -100,7 +129,7 @@ open class DanbooruRepositoryImpl(
     }
 
     override suspend fun getPosts(tags: String, page: Int) = resultFlow {
-        client.getPosts(tags, page)
+        clientAuth.getPosts(tags, page)
     }
 
     override suspend fun getTagsAutoComplete(query: String) = resultFlow {
