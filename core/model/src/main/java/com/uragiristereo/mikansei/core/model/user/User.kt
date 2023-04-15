@@ -22,3 +22,7 @@ data class User(
     val blurExplicitPosts: Boolean = true,
     val nameAlias: String,
 )
+
+fun User.isAnonymous(): Boolean = id == 0
+
+fun User.isNotAnonymous(): Boolean = id != 0

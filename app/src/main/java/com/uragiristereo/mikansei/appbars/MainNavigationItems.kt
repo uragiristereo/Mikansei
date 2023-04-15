@@ -30,7 +30,7 @@ enum class MainNavigationItems(
         route = HomeRoute.Favorites,
         label = R.string.favorites_label,
         unselectedIcon = R.drawable.collections_bookmark,
-        selectedIcon = R.drawable.collections_bookmark,
+        selectedIcon = R.drawable.collections_bookmark_fill,
     ),
     More(
         route = HomeRoute.More,

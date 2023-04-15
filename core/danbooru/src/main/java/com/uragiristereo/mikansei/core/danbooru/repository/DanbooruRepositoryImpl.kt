@@ -204,6 +204,16 @@ open class DanbooruRepositoryImpl(
     override suspend fun updateUserSettings(id: Int, data: DanbooruUserField) = resultFlow {
         client.updateUserSettings(id, data)
     }
+
+    override suspend fun getFavoriteGroups(creatorId: Int) = resultFlow {
+        client.getFavoriteGroups(creatorId)
+    }
+
+    override suspend fun getPostsByIds(ids: List<Int>) = resultFlow {
+        val separated = ids.joinToString(separator = ",")
+
+        client.getPosts(tags = "id:$separated", pageId = 1)
+    }
 }
 
 
