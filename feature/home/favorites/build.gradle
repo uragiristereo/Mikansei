@@ -21,20 +21,21 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:danbooru"))
+    implementation(project(":core:database"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:model"))
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
 
-    // Compose UI
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
+    debugImplementation(libs.bundles.compose.debug)
 
-    // Accompanist Compose Extensions
+    implementation(libs.bundles.core)
+    implementation(libs.bundles.coil)
+    implementation(libs.bundles.koin)
     implementation(libs.accompanist.navigation.animation)
-
-    // Timber Logger
-    implementation(libs.timber)
-
-    // Safer Navigation Compose
     implementation(libs.bundles.safer.navigation)
 }
