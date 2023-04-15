@@ -1,49 +1,130 @@
 package com.uragiristereo.mikansei.feature.home.favorites
 
+import android.widget.Toast
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
-import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
+import androidx.compose.ui.unit.dp
+import com.uragiristereo.mikansei.core.model.user.isNotAnonymous
+import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.LocalNavigationRailPadding
 import com.uragiristereo.mikansei.core.ui.composable.Banner
+import com.uragiristereo.mikansei.core.ui.extension.forEach
+import com.uragiristereo.mikansei.feature.home.favorites.core.FavoritesTopAppBar
+import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingIndicator
+import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
+import com.uragiristereo.mikansei.feature.home.favorites.grid.FavoritesGrid
+import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun FavoritesScreen(
     modifier: Modifier = Modifier,
+    onFavoritesClick: (id: Int, userName: String) -> Unit,
+    viewModel: FavoritesViewModel = koinViewModel(),
 ) {
-    ProductSetSystemBarsColor(
-        navigationBarColor = Color.Transparent,
+    val context = LocalContext.current
+
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = viewModel.loadingState == LoadingState.FROM_REFRESH,
+        onRefresh = viewModel::getFavoritesAndFavoriteGroups,
     )
+
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.errorMessageChannel.forEach { errorMessage ->
+            Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_LONG).show()
+        }
+    }
 
     Scaffold(
         topBar = {
-            ProductTopAppBar(
-                title = {
-                    Text(text = stringResource(id = R.string.favorites_label))
-                },
+            FavoritesTopAppBar(
+                activeUserName = viewModel.activeUser.name,
+                onRefreshClick = viewModel::getFavoritesAndFavoriteGroups,
             )
         },
-        modifier = modifier.statusBarsPadding(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(start = LocalNavigationRailPadding.current)
+            .statusBarsPadding()
+            .displayCutoutPadding()
+            .windowInsetsPadding(
+                WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
+            ),
     ) { innerPadding ->
-        Banner(
-            icon = painterResource(id = R.drawable.construction),
-            text = {
-                Text(
-                    text = stringResource(id = R.string.feature_under_development),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h6,
+        if (viewModel.activeUser.isNotAnonymous()) {
+            Box {
+                AnimatedContent(
+                    targetState = viewModel.loadingState == LoadingState.FROM_LOAD,
+                    transitionSpec = { fadeIn() with fadeOut() },
+                    label = "grid_and_loading",
+                ) { state ->
+                    when {
+                        state -> {
+                            LoadingIndicator(
+                                modifier = Modifier
+                                    .padding(innerPadding)
+                                    .navigationBarsPadding()
+                                    .padding(bottom = 57.dp),
+                            )
+                        }
+
+                        else -> FavoritesGrid(
+                            items = viewModel.favorites,
+                            contentPadding = innerPadding,
+                            onFavoritesClick = { id ->
+                                onFavoritesClick(id, viewModel.activeUser.name)
+                            },
+                            modifier = Modifier.pullRefresh(pullRefreshState),
+                        )
+                    }
+                }
+
+                ProductPullRefreshIndicator(
+                    refreshing = viewModel.loadingState == LoadingState.FROM_REFRESH,
+                    state = pullRefreshState,
+                    modifier = Modifier.align(Alignment.TopCenter),
                 )
-            },
-            modifier = Modifier.padding(innerPadding),
-        )
+            }
+        } else {
+            Banner(
+                icon = painterResource(id = R.drawable.login),
+                text = {
+                    Text(
+                        text = "Please login to use this feature",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h6,
+                    )
+                },
+                modifier = Modifier.padding(innerPadding),
+            )
+        }
     }
 }
