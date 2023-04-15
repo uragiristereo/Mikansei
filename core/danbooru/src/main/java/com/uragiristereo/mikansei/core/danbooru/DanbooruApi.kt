@@ -1,6 +1,7 @@
 package com.uragiristereo.mikansei.core.danbooru
 
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavorite
+import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavoriteGroup
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
@@ -54,4 +55,9 @@ interface DanbooruApi {
         @Path("id") id: Int,
         @Body data: DanbooruUserField,
     ): Response<Unit>
+
+    @GET("/favorite_groups.json")
+    suspend fun getFavoriteGroups(
+        @Query("search[creator_id]") creatorId: Int,
+    ): Response<List<DanbooruFavoriteGroup>>
 }
