@@ -14,6 +14,7 @@ import com.uragiristereo.mikansei.core.download.di.DownloadModule
 import com.uragiristereo.mikansei.core.network.NetworkRepository
 import com.uragiristereo.mikansei.core.network.di.NetworkModule
 import com.uragiristereo.mikansei.core.preferences.PreferencesModule
+import com.uragiristereo.mikansei.feature.home.HomeModule
 import com.uragiristereo.mikansei.feature.image.ImageModule
 import com.uragiristereo.mikansei.feature.user.UserModule
 import org.koin.android.ext.koin.androidContext
@@ -49,6 +50,7 @@ class MikanseiApp : Application(), ImageLoaderFactory, KoinComponent {
                     DownloadModule(),
                     NetworkModule(),
                     PreferencesModule(),
+                    HomeModule(),
                     ImageModule(),
                     UserModule(),
                 )

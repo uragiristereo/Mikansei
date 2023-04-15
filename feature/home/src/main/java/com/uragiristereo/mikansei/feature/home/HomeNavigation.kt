@@ -64,7 +64,7 @@ fun NavGraphBuilder.homeGraph(
             onCurrentTagsChange = onCurrentTagsChange,
         )
 
-        favoritesRoute()
+        favoritesRoute(navController)
 
         moreRoute(navController)
     }
