@@ -39,7 +39,7 @@ internal fun FavoriteItem(
             ProductPostPlaceholder()
 
             AsyncImage(
-                model = remember {
+                model = remember(item.thumbnailUrl) {
                     ImageRequest.Builder(context)
                         .data(item.thumbnailUrl)
                         .crossfade(durationMillis = 170)
