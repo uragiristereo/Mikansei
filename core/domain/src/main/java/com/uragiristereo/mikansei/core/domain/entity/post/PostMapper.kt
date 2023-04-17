@@ -44,7 +44,7 @@ fun DanbooruPost.toPost(): Post {
         ),
         previewImage = PostImage(
             url = previewFileUrl.orEmpty()
-                .replace(oldValue = "preview", newValue = "720x720")
+                .replace(oldValue = "180x180", newValue = "720x720")
                 .replace(oldValue = ".jpg", newValue = ".webp"),
             width = 720 * imageWidth / imageHeight,
             height = 720,
