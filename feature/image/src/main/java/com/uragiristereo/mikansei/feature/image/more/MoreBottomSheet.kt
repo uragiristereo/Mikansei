@@ -108,6 +108,14 @@ internal fun MoreBottomSheet(
                                     )
                                 }
                             },
+                            favoriteCount = viewModel.favoriteCount,
+                            isOnFavorite = viewModel.isPostInFavorites,
+                            onToggleFavorite = viewModel::toggleFavorite,
+                            score = viewModel.score,
+                            scoreState = viewModel.scoreState,
+                            onUpvoteClick = viewModel::upvotePost,
+                            onDownvoteClick = viewModel::downvotePost,
+                            onUnvoteClick = viewModel::unvotePost,
                             modifier = Modifier.padding(bottom = 8.dp),
                         )
                     }
@@ -118,7 +126,7 @@ internal fun MoreBottomSheet(
 
                     item {
                         Text(
-                            text = stringResource(id = R.string.image_details),
+                            text = stringResource(id = R.string.image_information),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colors.primary,

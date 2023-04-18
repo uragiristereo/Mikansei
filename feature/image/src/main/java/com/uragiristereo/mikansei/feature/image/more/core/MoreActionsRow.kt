@@ -24,6 +24,14 @@ internal fun MoreActionsRow(
     onShareClick: () -> Unit,
     onExpandClick: () -> Unit,
     onOpenInExternalClick: () -> Unit,
+    favoriteCount: Int,
+    isOnFavorite: Boolean,
+    onToggleFavorite: (Boolean) -> Unit,
+    score: Int,
+    scoreState: ScoreState,
+    onUpvoteClick: () -> Unit,
+    onDownvoteClick: () -> Unit,
+    onUnvoteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout(modifier = modifier) {
@@ -41,6 +49,29 @@ internal fun MoreActionsRow(
                 }
                 .fillMaxWidth(),
         ) {
+            item {
+                Chips(
+                    selected = isOnFavorite,
+                    text = "$favoriteCount",
+                    selectedIcon = painterResource(id = R.drawable.favorite_fill),
+                    unselectedIcon = painterResource(id = R.drawable.favorite),
+                    elevation = 0.dp,
+                    onSelectedChange = onToggleFavorite,
+                    modifier = Modifier.padding(end = 8.dp),
+                )
+            }
+
+            item {
+                ScoreChips(
+                    score = score,
+                    state = scoreState,
+                    onUpvoteClick = onUpvoteClick,
+                    onDownvoteClick = onDownvoteClick,
+                    onUnvoteClick = onUnvoteClick,
+                    modifier = Modifier.padding(end = 8.dp),
+                )
+            }
+
             item {
                 Chips(
                     text = stringResource(id = R.string.download_action),
