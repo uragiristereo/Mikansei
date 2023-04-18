@@ -3,6 +3,7 @@ package com.uragiristereo.mikansei.core.danbooru
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavoriteGroup
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
+import com.uragiristereo.mikansei.core.danbooru.model.post.vote.DanbooruPostVote
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruProfile
@@ -60,4 +61,31 @@ interface DanbooruApi {
     suspend fun getFavoriteGroups(
         @Query("search[creator_id]") creatorId: Int,
     ): Response<List<DanbooruFavoriteGroup>>
+
+    @POST("/favorites.json")
+    suspend fun addToFavorites(
+        @Query("post_id") postId: Int,
+    ): Response<Unit>
+
+    @DELETE("/favorites/{post_id}.json")
+    suspend fun deleteFromFavorites(
+        @Path("post_id") postId: Int,
+    ): Response<Unit>
+
+    @GET("/post_votes.json")
+    suspend fun getPostVotes(
+        @Query("search[post_id]") postId: Int,
+        @Query("search[user_id]") userId: Int,
+    ): Response<List<DanbooruPostVote>>
+
+    @POST("/posts/{post_id}/votes.json")
+    suspend fun votePost(
+        @Path("post_id") postId: Int,
+        @Query("score") score: Int,
+    ): Response<Unit>
+
+    @DELETE("posts/{post_id}/votes.json")
+    suspend fun unvotePost(
+        @Path("post_id") postId: Int,
+    ): Response<Unit>
 }

@@ -2,6 +2,7 @@ package com.uragiristereo.mikansei.core.danbooru.repository
 
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavoriteGroup
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
+import com.uragiristereo.mikansei.core.danbooru.model.post.vote.DanbooruPostVote
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruProfile
@@ -36,4 +37,14 @@ interface DanbooruRepository {
     suspend fun getFavoriteGroups(creatorId: Int): Flow<Result<List<DanbooruFavoriteGroup>>>
 
     suspend fun getPostsByIds(ids: List<Int>): Flow<Result<List<DanbooruPost>>>
+
+    suspend fun addToFavorites(postId: Int): Flow<Result<Unit>>
+
+    suspend fun deleteFromFavorites(postId: Int): Flow<Result<Unit>>
+
+    suspend fun getPostVote(postId: Int, userId: Int): Flow<Result<DanbooruPostVote?>>
+
+    suspend fun votePost(postId: Int, score: Int): Flow<Result<Unit>>
+
+    suspend fun unvotePost(postId: Int): Flow<Result<Unit>>
 }

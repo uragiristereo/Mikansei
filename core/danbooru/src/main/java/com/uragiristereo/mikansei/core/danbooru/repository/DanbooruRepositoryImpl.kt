@@ -5,6 +5,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.uragiristereo.mikansei.core.danbooru.DanbooruApi
 import com.uragiristereo.mikansei.core.danbooru.DanbooruAuthInterceptor
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
+import com.uragiristereo.mikansei.core.danbooru.model.post.vote.DanbooruPostVote
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
@@ -213,6 +214,28 @@ open class DanbooruRepositoryImpl(
         val separated = ids.joinToString(separator = ",")
 
         client.getPosts(tags = "id:$separated", pageId = 1)
+    }
+
+    override suspend fun addToFavorites(postId: Int) = resultFlow {
+        client.addToFavorites(postId)
+    }
+
+    override suspend fun deleteFromFavorites(postId: Int) = resultFlow {
+        client.deleteFromFavorites(postId)
+    }
+
+    override suspend fun getPostVote(postId: Int, userId: Int): Flow<Result<DanbooruPostVote?>> = resultFlow {
+        client.getPostVotes(postId, userId)
+    }.mapSuccess { postVotes ->
+        postVotes.firstOrNull { it.postId == postId && it.userId == userId }
+    }
+
+    override suspend fun votePost(postId: Int, score: Int) = resultFlow {
+        client.votePost(postId, score)
+    }
+
+    override suspend fun unvotePost(postId: Int) = resultFlow {
+        client.unvotePost(postId)
     }
 }
 
