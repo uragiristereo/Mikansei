@@ -9,12 +9,18 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.github.uragiristereo.safer.compose.navigation.animation.composable
+import com.github.uragiristereo.safer.compose.navigation.core.dialog
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.github.uragiristereo.safer.compose.navigation.core.route
+import com.uragiristereo.mikansei.core.model.ShareOption
+import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
+import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalNavigationRailPadding
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
+import com.uragiristereo.mikansei.feature.home.posts.post_dialog.PostDialog
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.postsRoute(
@@ -22,6 +28,14 @@ fun NavGraphBuilder.postsRoute(
     onNavigatedBackByGesture: (Boolean) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
 ) {
+    val lambdaOnNavigateImage: (Post) -> Unit = { item ->
+        onNavigatedBackByGesture(false)
+
+        navController.navigate(
+            MainRoute.Image(post = item)
+        )
+    }
+
     composable(
         route = HomeRoute.Posts(),
         enterTransition = {
@@ -52,11 +66,10 @@ fun NavGraphBuilder.postsRoute(
 
             PostsScreen(
                 onNavigate = navController::navigate,
-                onNavigateImage = { item ->
-                    onNavigatedBackByGesture(false)
-
+                onNavigateImage = lambdaOnNavigateImage,
+                onNavigateDialog = { post ->
                     navController.navigate(
-                        MainRoute.Image(post = item)
+                        HomeRoute.PostDialog(post)
                     )
                 },
                 modifier = Modifier
@@ -66,6 +79,26 @@ fun NavGraphBuilder.postsRoute(
                         WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
                     ),
             )
+        },
+    )
+
+    dialog(
+        route = HomeRoute.PostDialog::class,
+        content = { data ->
+            val lambdaOnDownload = LocalLambdaOnDownload.current
+            val lambdaOnShare = LocalLambdaOnShare.current
+
+            if (data != null) {
+                PostDialog(
+                    post = data.post,
+                    onDismiss = navController::popBackStack,
+                    onPostClick = lambdaOnNavigateImage,
+                    onDowloadClick = lambdaOnDownload,
+                    onShareClick = { post ->
+                        lambdaOnShare(post, ShareOption.COMPRESSED)
+                    },
+                )
+            }
         },
     )
 }

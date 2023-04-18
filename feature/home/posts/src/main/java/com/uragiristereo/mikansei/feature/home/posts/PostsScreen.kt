@@ -75,6 +75,7 @@ import kotlin.math.roundToInt
 internal fun PostsScreen(
     onNavigate: (MainRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
+    onNavigateDialog: (Post) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = koinViewModel(),
 ) {
@@ -294,9 +295,9 @@ internal fun PostsScreen(
                             onItemClick = onNavigateImage,
                             onItemLongPress = remember {
                                 { post ->
-                                    viewModel.selectedPost = post
-                                    viewModel.dialogShown = true
-
+//                                    viewModel.selectedPost = post
+//                                    viewModel.dialogShown = true
+                                    onNavigateDialog(post)
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                                 }
                             },

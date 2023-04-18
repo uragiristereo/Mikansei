@@ -3,7 +3,12 @@ package com.uragiristereo.mikansei.appbars
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,16 +55,21 @@ fun MainBottomNavigationBar(
             contentColor = MaterialTheme.colors.primary,
         ) {
             MainNavigationItems.values().forEach { item ->
+                val currentRouteIsPostsOrDialog = when (item) {
+                    MainNavigationItems.Posts -> currentRoute in listOf(HomeRoute.PostDialog::class.route, HomeRoute.Posts::class.route)
+                    else -> false
+                }
+
                 BottomNavigationItem(
                     label = {
                         Text(text = stringResource(id = item.label))
                     },
-                    selected = currentRoute == item.route::class.route,
+                    selected = currentRoute == item.route::class.route || currentRouteIsPostsOrDialog,
                     icon = {
                         Icon(
                             painter = painterResource(
-                                id = when (currentRoute) {
-                                    item.route::class.route -> item.selectedIcon
+                                id = when {
+                                    currentRoute == item.route::class.route || currentRouteIsPostsOrDialog -> item.selectedIcon
                                     else -> item.unselectedIcon
                                 },
                             ),

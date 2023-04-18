@@ -29,9 +29,9 @@ import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 internal fun PostDialog(
     post: Post,
     onDismiss: () -> Unit,
-    onPostClick: () -> Unit,
-    onDowloadClick: () -> Unit,
-    onShareClick: () -> Unit,
+    onPostClick: (Post) -> Unit,
+    onDowloadClick: (Post) -> Unit,
+    onShareClick: (Post) -> Unit,
 //    onAddToClick: () -> Unit,
 //    onBlockTagsClick: () -> Unit,
 //    onHidePostClick: () -> Unit,
@@ -53,7 +53,10 @@ internal fun PostDialog(
                 if (windowSize != WindowSize.COMPACT) {
                     PostDialogHeaderResponsive(
                         post = post,
-                        onClick = onPostClick,
+                        onClick = {
+                            onDismiss()
+                            onPostClick(post)
+                        },
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .height(columnHeight),
@@ -72,7 +75,10 @@ internal fun PostDialog(
                         item {
                             PostDialogHeaderResponsive(
                                 post = post,
-                                onClick = onPostClick,
+                                onClick = {
+                                    onDismiss()
+                                    onPostClick(post)
+                                },
                             )
                         }
                     }
@@ -80,7 +86,10 @@ internal fun PostDialog(
                     item {
                         ClickableSection(
                             title = stringResource(id = R.string.download_action),
-                            onClick = onDowloadClick,
+                            onClick = {
+                                onDismiss()
+                                onDowloadClick(post)
+                            },
                             icon = painterResource(id = R.drawable.download),
                         )
                     }
@@ -88,7 +97,10 @@ internal fun PostDialog(
                     item {
                         ClickableSection(
                             title = stringResource(id = R.string.share_action),
-                            onClick = onShareClick,
+                            onClick = {
+                                onDismiss()
+                                onShareClick(post)
+                            },
                             icon = painterResource(id = R.drawable.share),
                         )
                     }
