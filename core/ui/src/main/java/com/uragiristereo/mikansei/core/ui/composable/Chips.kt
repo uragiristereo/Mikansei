@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.core.ui.composable
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
@@ -47,6 +49,27 @@ fun Chips(
     modifier: Modifier = Modifier,
     elevation: Dp = 2.dp,
     icon: Painter? = null,
+    selected: Boolean = false,
+) {
+    Chips(
+        text = text,
+        onSelectedChange = onSelectedChange,
+        elevation = elevation,
+        selectedIcon = icon,
+        unselectedIcon = icon,
+        selected = selected,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun Chips(
+    text: String,
+    onSelectedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    elevation: Dp = 2.dp,
+    selectedIcon: Painter? = null,
+    unselectedIcon: Painter? = null,
     selected: Boolean = false,
 ) {
     Row(
@@ -79,11 +102,16 @@ fun Chips(
                 vertical = 6.dp,
                 horizontal = 10.dp,
             )
-            .widthIn(56.dp)
+            .widthIn(48.dp)
     ) {
         val contentColor = when {
             selected -> MaterialTheme.colors.background
             else -> MaterialTheme.colors.primary.copy(alpha = ContentAlpha.high)
+        }
+
+        val icon = when {
+            selected -> selectedIcon
+            else -> unselectedIcon
         }
 
         icon?.let {
@@ -100,6 +128,9 @@ fun Chips(
         Text(
             text = text,
             color = contentColor,
+            style = MaterialTheme.typography.caption,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.animateContentSize(),
         )
     }
 }
