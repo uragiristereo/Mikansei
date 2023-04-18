@@ -93,7 +93,7 @@
     <string name="image_uploaded_by">Uploaded by</string>
     <string name="image_compressed">Compressed (sample)</string>
     <string name="image_original">Full size (original)</string>
-    <string name="image_details">Details</string>
+    <string name="image_information">Information</string>
     <string name="image_n_tags">%1$d tags</string>
 
     <!-- Search -->
