@@ -39,7 +39,7 @@ class GetPostsUseCase(
                 var canLoadMore = posts.size == Constants.POSTS_PER_PAGE
 
                 val showDeletedPosts = when {
-                    user.showDeletedPosts -> listOf(false, true)
+                    user.showDeletedPosts || tags.contains("status:any") || tags.contains("status:deleted") -> listOf(false, true)
                     else -> listOf(false)
                 }
 
