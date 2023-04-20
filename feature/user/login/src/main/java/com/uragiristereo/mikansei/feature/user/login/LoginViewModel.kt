@@ -42,10 +42,10 @@ class LoginViewModel(
 
             performLoginUseCase(name, apiKey)
                 .collect { result ->
-                    when (result) {
-                        is Result.Success -> forceEnableSafeMode()
-                        is Result.Failed -> loginState = LoginState.Failed(message = result.message)
-                        is Result.Error -> loginState = LoginState.Failed(message = result.t.toString())
+                    loginState = when (result) {
+                        is Result.Success -> LoginState.Success
+                        is Result.Failed -> LoginState.Failed(message = result.message)
+                        is Result.Error -> LoginState.Failed(message = result.t.toString())
                     }
                 }
         }

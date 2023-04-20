@@ -4,6 +4,7 @@ import com.uragiristereo.mikansei.core.danbooru.repository.DanbooruRepository
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.database.dao.user.UserRow
 import com.uragiristereo.mikansei.core.model.result.Result
+import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -33,10 +34,11 @@ class PerformLoginUseCase(
                                             name = name,
                                             apiKey = apiKey,
                                             level = level,
-                                            safeMode = true,
+                                            safeMode = enableSafeMode,
                                             showDeletedPosts = showDeletedPosts,
                                             defaultImageSize = defaultImageSize,
                                             blacklistedTags = blacklistedTags.replace('\n', ' '),
+                                            postsRatingFilter = RatingPreference.GENERAL_ONLY,
                                         )
                                     )
 
