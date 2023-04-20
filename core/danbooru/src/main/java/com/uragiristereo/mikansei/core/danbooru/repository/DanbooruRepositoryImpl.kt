@@ -130,7 +130,7 @@ open class DanbooruRepositoryImpl(
     }
 
     override suspend fun getPosts(tags: String, page: Int) = resultFlow {
-        clientAuth.getPosts(tags, page)
+        client.getPosts(tags, page)
     }
 
     override suspend fun getTagsAutoComplete(query: String) = resultFlow {
