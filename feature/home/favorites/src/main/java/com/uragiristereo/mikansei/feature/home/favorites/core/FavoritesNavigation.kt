@@ -17,8 +17,8 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
             FavoritesScreen(
                 onFavoritesClick = { id, userName ->
                     val tags = when (id) {
-                        0 -> "ordfav:$userName"
-                        else -> "favgroup:$id"
+                        0 -> "ordfav:$userName "
+                        else -> "favgroup:$id "
                     }
 
                     navController.navigate(HomeRoute.Posts(tags)) {
