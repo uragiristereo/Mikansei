@@ -207,6 +207,7 @@ internal fun MoreBottomSheet(
                             scaledImageFileSizeStr = viewModel.scaledImageFileSizeStr,
                             originalImageFileSizeStr = viewModel.originalImageFileSizeStr,
                             expanded = viewModel.infoExpanded,
+                            uploaderName = viewModel.uploaderName,
                             onMoreClick = remember {
                                 {
                                     viewModel.infoExpanded = true

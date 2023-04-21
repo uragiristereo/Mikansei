@@ -12,6 +12,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
+import com.uragiristereo.mikansei.core.danbooru.repository.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.entity.tag.Tag
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFileSizeUseCase
@@ -26,6 +27,7 @@ import timber.log.Timber
 
 class MoreBottomSheetViewModel(
     savedStateHandle: SavedStateHandle,
+    private val danbooruRepository: DanbooruRepository,
     private val getTagsUseCase: GetTagsUseCase,
     private val getFileSizeUseCase: GetFileSizeUseCase,
     private val convertFileSizeUseCase: ConvertFileSizeUseCase,
@@ -45,6 +47,13 @@ class MoreBottomSheetViewModel(
     var originalImageFileSizeStr by mutableStateOf("")
 
     private val customTabsIntentBuilder = CustomTabsIntent.Builder()
+
+    var uploaderName by mutableStateOf(post.uploaderId.toString())
+        private set
+
+    init {
+        getUploaderName()
+    }
 
     fun collapseAll() {
         infoExpanded = false
@@ -150,6 +159,26 @@ class MoreBottomSheetViewModel(
             substring(startIndex = 0, endIndex = https.length) == https -> true
             substring(startIndex = 0, endIndex = http.length) == http -> true
             else -> false
+        }
+    }
+
+    private fun getUploaderName() {
+        viewModelScope.launch {
+            Timber.d("getting uploader name...")
+
+            danbooruRepository.getUser(userId = post.uploaderId).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        val user = result.data
+                        uploaderName = user.name
+
+                        Timber.d("uploader name = $uploaderName")
+                    }
+
+                    is Result.Failed -> Timber.d("Error: ${result.message}")
+                    is Result.Error -> Timber.d("Error: ${result.t}")
+                }
+            }
         }
     }
 }

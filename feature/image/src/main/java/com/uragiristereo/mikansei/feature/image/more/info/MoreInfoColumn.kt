@@ -19,6 +19,7 @@ internal fun MoreInfoColumn(
     scaledImageFileSizeStr: String,
     originalImageFileSizeStr: String,
     expanded: Boolean,
+    uploaderName: String,
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -42,7 +43,7 @@ internal fun MoreInfoColumn(
 
         MoreInfo(
             title = stringResource(id = R.string.image_uploaded_by),
-            subtitle = post.uploaderId.toString(),
+            subtitle = uploaderName,
             modifier = Modifier.padding(bottom = 8.dp),
         )
 
