@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -30,11 +31,13 @@ fun Chips(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     elevation: Dp = 2.dp,
     icon: Painter? = null,
 ) {
     Chips(
         text = text,
+        enabled = enabled,
         elevation = elevation,
         onSelectedChange = { onClick() },
         icon = icon,
@@ -47,6 +50,7 @@ fun Chips(
     text: String,
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     elevation: Dp = 2.dp,
     icon: Painter? = null,
     selected: Boolean = false,
@@ -54,6 +58,7 @@ fun Chips(
     Chips(
         text = text,
         onSelectedChange = onSelectedChange,
+        enabled = enabled,
         elevation = elevation,
         selectedIcon = icon,
         unselectedIcon = icon,
@@ -67,6 +72,7 @@ fun Chips(
     text: String,
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     elevation: Dp = 2.dp,
     selectedIcon: Painter? = null,
     unselectedIcon: Painter? = null,
@@ -81,7 +87,7 @@ fun Chips(
                 border = BorderStroke(
                     width = 1.dp,
                     color = when {
-                        selected -> MaterialTheme.colors.primary
+                        selected -> Color.Transparent
                         else -> MaterialTheme.colors.primary.copy(alpha = ContentAlpha.disabled)
                     },
                 ),
@@ -91,7 +97,12 @@ fun Chips(
                 color = when {
                     selected -> MaterialTheme.colors.primary
                     else -> MaterialTheme.colors.background.backgroundElevation(elevation)
-                }
+                }.copy(
+                    alpha = when {
+                        enabled -> ContentAlpha.high
+                        else -> ContentAlpha.disabled
+                    },
+                ),
             )
             .clickable(
                 onClick = {
@@ -106,8 +117,13 @@ fun Chips(
     ) {
         val contentColor = when {
             selected -> MaterialTheme.colors.background
-            else -> MaterialTheme.colors.primary.copy(alpha = ContentAlpha.high)
-        }
+            else -> MaterialTheme.colors.primary
+        }.copy(
+            alpha = when {
+                enabled -> ContentAlpha.high
+                else -> ContentAlpha.disabled
+            },
+        )
 
         val icon = when {
             selected -> selectedIcon

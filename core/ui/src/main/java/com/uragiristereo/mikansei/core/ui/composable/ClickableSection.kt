@@ -1,9 +1,16 @@
 package com.uragiristereo.mikansei.core.ui.composable
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +28,7 @@ fun ClickableSection(
     modifier: Modifier = Modifier,
     subtitle: AnnotatedString? = null,
     icon: Painter? = null,
+    enabled: Boolean = true,
     padStart: Boolean = true,
     verticalPadding: Dp = 12.dp,
     horizontalPadding: Dp = 16.dp,
@@ -31,6 +39,7 @@ fun ClickableSection(
             .fillMaxWidth()
             .clickable(
                 onClick = onClick,
+                enabled = enabled,
             )
             .padding(
                 horizontal = horizontalPadding,
@@ -42,6 +51,12 @@ fun ClickableSection(
                 Icon(
                     painter = icon,
                     contentDescription = null,
+                    tint = LocalContentColor.current.copy(
+                        alpha = when {
+                            enabled -> ContentAlpha.high
+                            else -> ContentAlpha.disabled
+                        },
+                    ),
                     modifier = Modifier
                         .padding(end = 32.dp)
                         .size(24.dp),
@@ -62,13 +77,24 @@ fun ClickableSection(
             Text(
                 text = title,
                 style = MaterialTheme.typography.body1,
+                color = LocalContentColor.current.copy(
+                    alpha = when {
+                        enabled -> ContentAlpha.high
+                        else -> ContentAlpha.disabled
+                    },
+                ),
             )
 
             if (subtitle != null) {
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium)
+                    color = LocalContentColor.current.copy(
+                        alpha = when {
+                            enabled -> ContentAlpha.medium
+                            else -> ContentAlpha.disabled
+                        },
+                    ),
                 )
             }
         }
