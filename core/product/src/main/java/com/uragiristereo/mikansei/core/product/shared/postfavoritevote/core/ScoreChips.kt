@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.image.more.core
+package com.uragiristereo.mikansei.core.product.shared.postfavoritevote.core
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
@@ -9,10 +9,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
@@ -24,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,9 +30,10 @@ import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 
 @Composable
-internal fun ScoreChips(
+fun ScoreChips(
     score: Int,
     state: ScoreState,
+    enabled: Boolean,
     onUpvoteClick: () -> Unit,
     onDownvoteClick: () -> Unit,
     onUnvoteClick: () -> Unit,
@@ -50,9 +50,8 @@ internal fun ScoreChips(
                 border = BorderStroke(
                     width = 1.dp,
                     color = when (state) {
-                        ScoreState.UPVOTED -> MaterialTheme.colors.primary
-                        ScoreState.DOWNVOTED -> MaterialTheme.colors.error
                         ScoreState.NONE -> MaterialTheme.colors.primary.copy(alpha = ContentAlpha.disabled)
+                        else -> Color.Transparent
                     },
                 ),
                 shape = RoundedCornerShape(percent = 50),
@@ -62,7 +61,12 @@ internal fun ScoreChips(
                     ScoreState.UPVOTED -> MaterialTheme.colors.primary
                     ScoreState.DOWNVOTED -> MaterialTheme.colors.error
                     ScoreState.NONE -> MaterialTheme.colors.background.backgroundElevation(0.dp)
-                }
+                }.copy(
+                    alpha = when {
+                        enabled -> ContentAlpha.high
+                        else -> ContentAlpha.disabled
+                    },
+                )
             )
             .clickable(
                 onClick = {
@@ -73,6 +77,7 @@ internal fun ScoreChips(
                 },
                 interactionSource = interactionSource,
                 indication = LocalIndication.current,
+                enabled = enabled,
             )
             .padding(
                 vertical = 6.dp,
@@ -82,15 +87,23 @@ internal fun ScoreChips(
         val contentColor = when (state) {
             ScoreState.NONE -> MaterialTheme.colors.primary
             else -> MaterialTheme.colors.background
-        }.copy(alpha = ContentAlpha.high)
+        }.copy(
+            alpha = when {
+                enabled -> ContentAlpha.high
+                else -> ContentAlpha.disabled
+            },
+        )
 
         Icon(
             painter = painterResource(id = R.drawable.expand_less),
             contentDescription = null,
-            tint = when (state) {
-                ScoreState.DOWNVOTED -> contentColor.copy(alpha = 0.3f)
-                else -> contentColor
-            },
+            tint = contentColor.copy(
+                alpha = when {
+                    state == ScoreState.DOWNVOTED -> ContentAlpha.disabled
+                    enabled -> ContentAlpha.high
+                    else -> ContentAlpha.disabled
+                },
+            ),
             modifier = Modifier.size(20.dp),
         )
 
@@ -104,18 +117,19 @@ internal fun ScoreChips(
 
         Divider(
             color = contentColor,
-            modifier = Modifier
-                .width(1.dp)
-                .height(16.dp),
+            modifier = Modifier.size(width = 1.dp, height = 16.dp),
         )
 
         Icon(
             painter = painterResource(id = R.drawable.expand_more),
             contentDescription = null,
-            tint = when (state) {
-                ScoreState.UPVOTED -> contentColor.copy(alpha = 0.3f)
-                else -> contentColor
-            },
+            tint = contentColor.copy(
+                alpha = when {
+                    state == ScoreState.UPVOTED -> ContentAlpha.disabled
+                    enabled -> ContentAlpha.high
+                    else -> ContentAlpha.disabled
+                },
+            ),
             modifier = Modifier
                 .size(20.dp)
                 .clickable(
@@ -127,6 +141,7 @@ internal fun ScoreChips(
                     },
                     interactionSource = interactionSource,
                     indication = null,
+                    enabled = enabled,
                 ),
         )
     }

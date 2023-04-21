@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core
+package com.uragiristereo.mikansei.core.product.shared.downloadshare.core
 
 data class DownloadState(
     val downloaded: String = "0 B",
