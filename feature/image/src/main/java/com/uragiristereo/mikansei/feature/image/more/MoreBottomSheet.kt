@@ -1,15 +1,35 @@
 package com.uragiristereo.mikansei.feature.image.more
 
 import android.widget.Toast
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,7 +54,8 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.text.DateFormat
 
-@OptIn(ExperimentalMaterialApi::class)
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun MoreBottomSheet(
     post: Post,
@@ -47,6 +68,7 @@ internal fun MoreBottomSheet(
     val context = LocalContext.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
     val lambdaOnShare = LocalLambdaOnShare.current
+    val hapticFeedback = LocalHapticFeedback.current
 
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
@@ -190,8 +212,12 @@ internal fun MoreBottomSheet(
                                 color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clickable(
+                                    .combinedClickable(
                                         onClick = remember { { viewModel.launchUrl(context = context, url = fixedSource) } },
+                                        onLongClick = {
+                                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                                            viewModel.copyToClipboard(context, fixedSource)
+                                        },
                                     )
                                     .padding(
                                         horizontal = 16.dp,

@@ -1,7 +1,11 @@
 package com.uragiristereo.mikansei.feature.image.more
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.net.Uri
+import android.os.Build
+import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -179,6 +183,18 @@ class MoreBottomSheetViewModel(
                     is Result.Error -> Timber.d("Error: ${result.t}")
                 }
             }
+        }
+    }
+
+    fun copyToClipboard(context: Context, text: String) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(text, text)
+        clipboard.setPrimaryClip(clip)
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            Toast
+                .makeText(context, "Source copied to clipboard!", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 }
