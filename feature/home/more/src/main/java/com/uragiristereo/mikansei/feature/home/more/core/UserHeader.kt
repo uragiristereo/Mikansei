@@ -38,9 +38,11 @@ internal fun UserHeader(
     nameAlias: String,
     userId: Int,
     level: UserLevel,
+    isOnlyAnonUserExist: Boolean,
     onProfileClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onMoreClick: () -> Unit,
+    onLoginClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -111,10 +113,18 @@ internal fun UserHeader(
             )
 
             IconButton(
-                onClick = onMoreClick,
+                onClick = when {
+                    isOnlyAnonUserExist -> onLoginClick
+                    else -> onMoreClick
+                },
                 content = {
                     Icon(
-                        painter = painterResource(id = R.drawable.expand_more),
+                        painter = painterResource(
+                            id = when {
+                                isOnlyAnonUserExist -> R.drawable.login
+                                else -> R.drawable.expand_more
+                            }
+                        ),
                         contentDescription = null,
                         tint = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
                     )
@@ -134,9 +144,11 @@ private fun UserHeaderPreview() {
                 nameAlias = "PR",
                 userId = 101001,
                 level = UserLevel.Member,
+                isOnlyAnonUserExist = true,
                 onProfileClick = { },
                 onSettingsClick = { },
                 onMoreClick = { },
+                onLoginClick = { },
             )
         }
     }

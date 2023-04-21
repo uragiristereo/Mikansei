@@ -94,6 +94,7 @@ internal fun MoreScreen(
                             nameAlias = nameAlias,
                             userId = id,
                             level = level,
+                            isOnlyAnonUserExist = viewModel.isOnlyAnonUserExist,
                             onProfileClick = { },
                             onSettingsClick = {
                                 onNavigate(UserRoute.Settings)
@@ -101,6 +102,9 @@ internal fun MoreScreen(
                             onMoreClick = {
                                 onNavigate(UserRoute.Manage)
                             },
+                            onLoginClick = {
+                                onNavigate(UserRoute.Login)
+                            }
                         )
                     }
                 }

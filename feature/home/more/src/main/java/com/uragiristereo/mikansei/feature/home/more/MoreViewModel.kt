@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.database.dao.user.toUser
+import com.uragiristereo.mikansei.core.database.dao.user.toUserList
 import com.uragiristereo.mikansei.core.model.user.User
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -17,9 +18,19 @@ class MoreViewModel(
     var activeUser by mutableStateOf<User?>(null)
         private set
 
+    var isOnlyAnonUserExist by mutableStateOf(true)
+        private set
+
     init {
         userDao.getActive()
             .onEach { activeUser = it.toUser() }
             .launchIn(viewModelScope)
+
+        userDao.getAll()
+            .onEach { userRows ->
+                val users = userRows.toUserList()
+
+                isOnlyAnonUserExist = users.size == 1
+            }.launchIn(viewModelScope)
     }
 }
