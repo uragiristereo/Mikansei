@@ -20,7 +20,7 @@ private fun dpElevationToFloat(elevation: Dp): Float {
     val result = when (elevation) {
         1.dp -> 0.04f
         2.dp -> 0.08f
-        else -> elevation.value * 0.08f
+        else -> elevation.value * 0.04f
     }
 
     return result.coerceIn(

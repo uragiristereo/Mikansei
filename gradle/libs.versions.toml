@@ -53,6 +53,7 @@ accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
+accompanist-insets-ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
 
 # Koin Dependency Injection
 koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
