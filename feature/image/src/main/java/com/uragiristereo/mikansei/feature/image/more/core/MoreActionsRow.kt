@@ -12,6 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.core.ScoreChips
+import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.core.ScoreState
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.Chips
 import com.uragiristereo.mikansei.core.ui.composable.SidesGradient
@@ -27,11 +29,11 @@ internal fun MoreActionsRow(
     favoriteCount: Int,
     isOnFavorite: Boolean,
     onToggleFavorite: (Boolean) -> Unit,
+    favoriteButtonEnabled: Boolean,
     score: Int,
     scoreState: ScoreState,
-    onUpvoteClick: () -> Unit,
-    onDownvoteClick: () -> Unit,
-    onUnvoteClick: () -> Unit,
+    voteButtonEnabled: Boolean,
+    onVoteChange: (ScoreState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout(modifier = modifier) {
@@ -53,6 +55,7 @@ internal fun MoreActionsRow(
                 Chips(
                     selected = isOnFavorite,
                     text = "$favoriteCount",
+                    enabled = favoriteButtonEnabled,
                     selectedIcon = painterResource(id = R.drawable.favorite_fill),
                     unselectedIcon = painterResource(id = R.drawable.favorite),
                     elevation = 0.dp,
@@ -65,9 +68,16 @@ internal fun MoreActionsRow(
                 ScoreChips(
                     score = score,
                     state = scoreState,
-                    onUpvoteClick = onUpvoteClick,
-                    onDownvoteClick = onDownvoteClick,
-                    onUnvoteClick = onUnvoteClick,
+                    enabled = voteButtonEnabled,
+                    onUpvoteClick = {
+                        onVoteChange(ScoreState.UPVOTED)
+                    },
+                    onDownvoteClick = {
+                        onVoteChange(ScoreState.DOWNVOTED)
+                    },
+                    onUnvoteClick = {
+                        onVoteChange(ScoreState.NONE)
+                    },
                     modifier = Modifier.padding(end = 8.dp),
                 )
             }

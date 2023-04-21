@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.image.more
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,13 +14,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.uragiristereo.mikansei.core.model.ShareOption
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
+import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DragHandle
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
+import com.uragiristereo.mikansei.core.ui.extension.forEach
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.image.more.core.MoreActionsRow
 import com.uragiristereo.mikansei.feature.image.more.core.MoreCloseButton
@@ -42,6 +46,7 @@ internal fun MoreBottomSheet(
 ) {
     val context = LocalContext.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
+    val lambdaOnShare = LocalLambdaOnShare.current
 
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
@@ -58,6 +63,12 @@ internal fun MoreBottomSheet(
     LaunchedEffect(key1 = sheetState.currentValue) {
         if (sheetState.currentValue == ModalBottomSheetValue.Hidden) {
             viewModel.collapseAll()
+        }
+    }
+
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.toastChannel.forEach { (message, duration) ->
+            Toast.makeText(context, message, duration).show()
         }
     }
 
@@ -93,7 +104,13 @@ internal fun MoreBottomSheet(
                                     lambdaOnDownload(post)
                                 }
                             },
-                            onShareClick = { /*TODO*/ },
+                            onShareClick = {
+                                scope.launch {
+                                    sheetState.hide()
+
+                                    lambdaOnShare(post, ShareOption.COMPRESSED)
+                                }
+                            },
                             onExpandClick = {
                                 scope.launch {
                                     sheetState.hide()
@@ -111,11 +128,11 @@ internal fun MoreBottomSheet(
                             favoriteCount = viewModel.favoriteCount,
                             isOnFavorite = viewModel.isPostInFavorites,
                             onToggleFavorite = viewModel::toggleFavorite,
+                            favoriteButtonEnabled = viewModel.favoriteButtonEnabled && viewModel.isPostUpdated,
                             score = viewModel.score,
                             scoreState = viewModel.scoreState,
-                            onUpvoteClick = viewModel::upvotePost,
-                            onDownvoteClick = viewModel::downvotePost,
-                            onUnvoteClick = viewModel::unvotePost,
+                            voteButtonEnabled = viewModel.voteButtonEnabled && viewModel.isPostUpdated,
+                            onVoteChange = viewModel::onVoteChange,
                             modifier = Modifier.padding(bottom = 8.dp),
                         )
                     }
