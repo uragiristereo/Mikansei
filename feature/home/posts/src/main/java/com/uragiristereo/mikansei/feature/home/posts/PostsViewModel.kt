@@ -32,7 +32,7 @@ import java.util.*
 
 @OptIn(SavedStateHandleSaveableApi::class)
 class PostsViewModel(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val getPostsUseCase: GetPostsUseCase,
     private val sessionDao: SessionDao,
 ) : ViewModel() {
@@ -40,7 +40,6 @@ class PostsViewModel(
 
     var topAppBarHeight by mutableStateOf(0.dp)
     val offsetY = Animatable(initialValue = 0f)
-    var dialogShown by mutableStateOf(false)
 
     // posts
     var posts by mutableStateOf<List<Post>>(listOf())
@@ -67,9 +66,6 @@ class PostsViewModel(
             else -> PostsContentState.SHOW_POSTS
         }
     }
-
-    // post
-    var selectedPost by mutableStateOf<Post?>(null)
 
     // session
     private var postsSession = listOf<Post>()

@@ -45,11 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mikansei.core.model.Constants
-import com.uragiristereo.mikansei.core.model.ShareOption
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
-import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
-import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
@@ -58,7 +55,6 @@ import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.home.posts.core.PostsTopAppBar
 import com.uragiristereo.mikansei.feature.home.posts.grid.PostsGrid
-import com.uragiristereo.mikansei.feature.home.posts.post_dialog.PostDialog
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsContentState
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsEmpty
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsError
@@ -83,8 +79,6 @@ internal fun PostsScreen(
     val hapticFeedback = LocalHapticFeedback.current
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val lambdaOnDownload = LocalLambdaOnDownload.current
-    val lambdaOnShare = LocalLambdaOnShare.current
     val scrollToTopChannel = LocalScrollToTopChannel.current
 
     val scope = rememberCoroutineScope()
@@ -216,37 +210,6 @@ internal fun PostsScreen(
                     viewModel.offsetY.animateTo(targetOffsetY)
                 }
             }
-        }
-    }
-
-
-    if (viewModel.dialogShown) {
-        viewModel.selectedPost?.let { post ->
-            PostDialog(
-                post = post,
-                onDismiss = remember { { viewModel.dialogShown = false } },
-                onPostClick = remember {
-                    {
-                        viewModel.dialogShown = false
-
-                        onNavigateImage(post)
-                    }
-                },
-                onDowloadClick = remember {
-                    {
-                        viewModel.dialogShown = false
-
-                        lambdaOnDownload(post)
-                    }
-                },
-                onShareClick = remember {
-                    {
-                        viewModel.dialogShown = false
-
-                        lambdaOnShare(post, ShareOption.COMPRESSED)
-                    }
-                },
-            )
         }
     }
 
