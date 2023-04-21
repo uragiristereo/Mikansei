@@ -1,25 +1,36 @@
 package com.uragiristereo.mikansei
 
 import android.app.Activity
-import android.content.ClipData
-import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
@@ -40,15 +51,20 @@ import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsCol
 import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme
 import com.uragiristereo.mikansei.core.product.theme.Theme
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.core.ui.*
+import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
+import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
+import com.uragiristereo.mikansei.core.ui.LocalMainNavController
+import com.uragiristereo.mikansei.core.ui.LocalNavigationRailPadding
+import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
+import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DimensionSubcomposeLayout
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
-import java.util.*
+import java.util.UUID
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalPermissionsApi::class)
 @Composable
@@ -72,14 +88,7 @@ fun MainScreen(
         },
         onPermissionResult = { isGranted ->
             if (!isGranted) {
-                Toast.makeText(
-                    /* context = */
-                    context,
-                    /* text = */
-                    context.getText(R.string.download_permission_denied),
-                    /* duration = */
-                    Toast.LENGTH_LONG,
-                ).show()
+                Toast.makeText(context, context.getText(R.string.download_permission_denied), Toast.LENGTH_LONG).show()
             }
 
             viewModel.selectedPost?.let {
@@ -105,39 +114,6 @@ fun MainScreen(
                 context = context,
                 post = post,
                 shareOption = shareOption,
-                onDownloadCompleted = { uri ->
-                    Timber.d("download completed")
-
-                    val uriProvider = FileProvider.getUriForFile(
-                        /* context = */
-                        context,
-                        /* authority = */
-                        "${context.packageName}.provider",
-                        /* file = */
-                        uri.toFile(),
-                    )
-
-                    val intent = Intent().apply {
-                        action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_STREAM, uriProvider)
-                        clipData = ClipData.newRawUri(/* label = */ null, /* uri = */ uriProvider)
-                        type = context.contentResolver.getType(uriProvider)
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                    }
-
-                    context.startActivity(
-                        /* intent = */
-                        Intent.createChooser(
-                            /* target = */
-                            intent,
-                            /* title = */
-                            context.getString(R.string.share_label),
-                        ),
-                    )
-                },
-                onDownloadFailed = {
-                    Timber.d("download failed = $it")
-                },
             )
         }
     }
