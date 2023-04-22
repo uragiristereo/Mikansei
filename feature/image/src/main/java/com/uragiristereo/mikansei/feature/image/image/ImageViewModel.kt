@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.image
+package com.uragiristereo.mikansei.feature.image.image
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.runtime.getValue
@@ -11,7 +11,7 @@ import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.database.dao.user.toUser
 import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.feature.image.core.ImageLoadingState
+import com.uragiristereo.mikansei.feature.image.image.core.ImageLoadingState
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -19,28 +19,21 @@ class ImageViewModel(
     savedStateHandle: SavedStateHandle,
     userDao: UserDao,
 ) : ViewModel() {
-    val post = savedStateHandle.getData<MainRoute.Image>()!!.post
+    val post = checkNotNull(savedStateHandle.getData<MainRoute.Image>()).post
 
-    // TODO: avoid using runBlocking here
-    private val activeUser = runBlocking {
-        userDao.getActive()
-            .first()
-            .toUser()
+    val activeUser = runBlocking {
+        userDao.getActive().first().toUser()
     }
 
-    var detailSize by mutableStateOf(activeUser.defaultImageSize)
-
-    var appBarsVisible by mutableStateOf(true)
-    val offsetY = Animatable(initialValue = 0f)
-
-    var showOriginalImage by mutableStateOf(detailSize == DetailSizePreference.ORIGINAL)
-    var originalImageShown by mutableStateOf(false)
-
-    // image post
-    var loading by mutableStateOf(ImageLoadingState.DISABLED)
-    var isPressed by mutableStateOf(false)
-    var fingerCount by mutableStateOf(1)
+    val offsetY = Animatable(0f)
+    var loadingState by mutableStateOf(ImageLoadingState.FROM_LOAD)
+    var expandButtonVisible by mutableStateOf(post.hasScaled && activeUser.defaultImageSize == DetailSizePreference.COMPRESSED)
     var currentZoom by mutableStateOf(1f)
+
+    fun onExpandImage() {
+        expandButtonVisible = false
+        loadingState = ImageLoadingState.FROM_EXPAND
+    }
 
     fun resizeImage(width: Int, height: Int): Pair<Int, Int> {
         val maxSize = 4096f

@@ -41,6 +41,7 @@ dependencies {
     // Accompanist Compose Extensions
     implementation(libs.accompanist.flowlayout)
     implementation(libs.accompanist.navigation.animation)
+    implementation(libs.accompanist.insets.ui)
 
     // Koin Dependency Injection
     implementation(libs.bundles.koin)
