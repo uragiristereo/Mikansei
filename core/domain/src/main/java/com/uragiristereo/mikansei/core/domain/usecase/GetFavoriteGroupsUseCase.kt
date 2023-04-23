@@ -47,6 +47,7 @@ class GetFavoriteGroupsUseCase(
                                     id = favoriteGroup.id,
                                     name = favoriteGroup.name.replace(oldChar = '_', newChar = ' '),
                                     thumbnailUrl = post?.toPost()?.previewImage?.url,
+                                    postIds = favoriteGroup.postIds,
                                 )
                             }
                         }

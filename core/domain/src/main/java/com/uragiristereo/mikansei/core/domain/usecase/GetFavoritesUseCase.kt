@@ -20,9 +20,11 @@ class GetFavoritesUseCase(
             page = 1,
             currentPosts = listOf(),
         ).mapSuccess { postsResult ->
+            val posts = postsResult.posts
+
             val thumbnailUrl = when {
-                postsResult.posts.isNotEmpty() -> {
-                    val firstPost = postsResult.posts.first()
+                posts.isNotEmpty() -> {
+                    val firstPost = posts.first()
 
                     firstPost.previewImage.url
                 }
@@ -34,6 +36,7 @@ class GetFavoritesUseCase(
                 id = 0,
                 name = "My favorites",
                 thumbnailUrl = thumbnailUrl,
+                postIds = posts.map { it.id },
             )
         }
     }
