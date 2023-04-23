@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.areNavigationBarsButtons
 import com.uragiristereo.mikansei.core.ui.extension.hideSystemBars
@@ -33,6 +34,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun ImageScreen(
     onNavigateBack: (Boolean) -> Unit,
+    onNavigateToAddToFavGroup: (Post) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ViewerViewModel = koinViewModel(),
 ) {
@@ -85,7 +87,7 @@ internal fun ImageScreen(
         navigationBarDarkIcons = false,
     )
 
-    Box {
+    Box(modifier = modifier) {
         ImagePost(
             maxOffset = maxOffset,
             onNavigateBack = onNavigateBack,
@@ -99,6 +101,13 @@ internal fun ImageScreen(
             sheetState = sheetState,
             showExpandButton = false,
             onExpandClick = { },
+            onAddToClick = {
+                scope.launch {
+                    sheetState.hide()
+
+                    onNavigateToAddToFavGroup(viewModel.post)
+                }
+            },
         )
     }
 }

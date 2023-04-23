@@ -5,8 +5,10 @@ import androidx.compose.animation.fadeOut
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.github.uragiristereo.safer.compose.navigation.animation.composable
+import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.uragiristereo.mikansei.core.ui.animation.translateYFadeIn
 import com.uragiristereo.mikansei.core.ui.animation.translateYFadeOut
+import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.image.ImageScreen
 
@@ -41,6 +43,9 @@ fun NavGraphBuilder.imageRoute(
 
                 navController.navigateUp()
             },
+            onNavigateToAddToFavGroup = { post ->
+                navController.navigate(HomeRoute.AddToFavGroup(post))
+            }
         )
     }
 }

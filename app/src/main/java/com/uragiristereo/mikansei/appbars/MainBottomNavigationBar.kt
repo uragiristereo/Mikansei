@@ -19,12 +19,14 @@ import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
+import com.uragiristereo.mikansei.core.ui.navigation.HomeDialogRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 
 @Composable
 fun MainBottomNavigationBar(
     currentRoute: String,
+    previousRoute: String?,
     onNavigate: (NavRoute) -> Unit,
     onNavigateSearch: () -> Unit,
     onRequestScrollToTop: () -> Unit,
@@ -55,21 +57,18 @@ fun MainBottomNavigationBar(
             contentColor = MaterialTheme.colors.primary,
         ) {
             MainNavigationItems.values().forEach { item ->
-                val currentRouteIsPostsOrDialog = when (item) {
-                    MainNavigationItems.Posts -> currentRoute in listOf(HomeRoute.PostDialog::class.route, HomeRoute.Posts::class.route)
-                    else -> false
-                }
+                val currentRouteIsDialog = currentRoute in HomeDialogRoutesString && previousRoute == item.route.route
 
                 BottomNavigationItem(
                     label = {
                         Text(text = stringResource(id = item.label))
                     },
-                    selected = currentRoute == item.route::class.route || currentRouteIsPostsOrDialog,
+                    selected = currentRoute == item.route::class.route || currentRouteIsDialog,
                     icon = {
                         Icon(
                             painter = painterResource(
                                 id = when {
-                                    currentRoute == item.route::class.route || currentRouteIsPostsOrDialog -> item.selectedIcon
+                                    currentRoute == item.route::class.route || currentRouteIsDialog -> item.selectedIcon
                                     else -> item.unselectedIcon
                                 },
                             ),

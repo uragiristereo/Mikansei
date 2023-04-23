@@ -62,6 +62,7 @@ internal fun MoreBottomSheet(
     sheetState: ModalBottomSheetState,
     showExpandButton: Boolean,
     onExpandClick: () -> Unit,
+    onAddToClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MoreBottomSheetViewModel = koinViewModel(),
 ) {
@@ -147,6 +148,7 @@ internal fun MoreBottomSheet(
                                     )
                                 }
                             },
+                            onAddToClick = onAddToClick,
                             favoriteCount = viewModel.favoriteCount,
                             isOnFavorite = viewModel.isPostInFavorites,
                             onToggleFavorite = viewModel::toggleFavorite,

@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.user.isNotAnonymous
 import com.uragiristereo.mikansei.core.product.component.ProductDialog
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.WindowSize
@@ -38,11 +39,9 @@ internal fun PostDialog(
     post: Post,
     onDismiss: () -> Unit,
     onPostClick: (Post) -> Unit,
-    onDowloadClick: (Post) -> Unit,
+    onDownloadClick: (Post) -> Unit,
     onShareClick: (Post) -> Unit,
-//    onAddToClick: () -> Unit,
-//    onBlockTagsClick: () -> Unit,
-//    onHidePostClick: () -> Unit,
+    onAddToFavoriteGroupClick: (Post) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostDialogViewModel = koinViewModel(),
 ) {
@@ -118,6 +117,21 @@ internal fun PostDialog(
                     }
 
                     item {
+                        ClickableSection(
+                            title = stringResource(id = R.string.add_to_action),
+                            onClick = {
+                                if (viewModel.activeUser.isNotAnonymous()) {
+                                    onDismiss()
+                                    onAddToFavoriteGroupClick(post)
+                                } else {
+                                    Toast.makeText(context, "Please Login to use this feature!", Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                            icon = painterResource(id = R.drawable.add_to_photos),
+                        )
+                    }
+
+                    item {
                         Divider()
                     }
 
@@ -126,7 +140,7 @@ internal fun PostDialog(
                             title = stringResource(id = R.string.download_action),
                             onClick = {
                                 onDismiss()
-                                onDowloadClick(post)
+                                onDownloadClick(post)
                             },
                             icon = painterResource(id = R.drawable.download),
                         )
@@ -142,14 +156,6 @@ internal fun PostDialog(
                             icon = painterResource(id = R.drawable.share),
                         )
                     }
-
-//                    item {
-//                        ClickableSection(
-//                            title = stringResource(id = R.string.add_to_action),
-//                            onClick = onAddToClick,
-//                            icon = painterResource(id = R.drawable.add_to_photos),
-//                        )
-//                    }
 //
 //                    item {
 //                        Divider()

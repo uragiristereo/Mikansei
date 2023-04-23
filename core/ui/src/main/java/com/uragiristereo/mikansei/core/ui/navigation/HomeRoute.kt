@@ -19,6 +19,11 @@ sealed interface HomeRoute : NavRoute {
     data class PostDialog(
         val post: Post,
     ) : HomeRoute
+
+    @Serializable
+    data class AddToFavGroup(
+        val post: Post,
+    ) : HomeRoute
 }
 
 val HomeRoutesString: List<String>
@@ -26,5 +31,13 @@ val HomeRoutesString: List<String>
         HomeRoute.Posts::class.route,
         HomeRoute.Favorites::class.route,
         HomeRoute.More::class.route,
-        HomeRoute.PostDialog::class.route,
     )
+
+val HomeDialogRoutesString: List<String>
+    get() = listOf(
+        HomeRoute.PostDialog::class.route,
+        HomeRoute.AddToFavGroup::class.route,
+    )
+
+val HomeAndDialogRoutesString: List<String>
+    get() = HomeRoutesString + HomeDialogRoutesString

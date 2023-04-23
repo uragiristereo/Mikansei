@@ -26,6 +26,7 @@ internal fun MoreActionsRow(
     onShareClick: () -> Unit,
     onExpandClick: () -> Unit,
     onOpenInExternalClick: () -> Unit,
+    onAddToClick: () -> Unit,
     favoriteCount: Int,
     isOnFavorite: Boolean,
     onToggleFavorite: (Boolean) -> Unit,
@@ -78,6 +79,16 @@ internal fun MoreActionsRow(
                     onUnvoteClick = {
                         onVoteChange(ScoreState.NONE)
                     },
+                    modifier = Modifier.padding(end = 8.dp),
+                )
+            }
+
+            item {
+                Chips(
+                    text = stringResource(id = R.string.add_to_action),
+                    icon = painterResource(id = R.drawable.add_to_photos),
+                    elevation = 0.dp,
+                    onClick = onAddToClick,
                     modifier = Modifier.padding(end = 8.dp),
                 )
             }

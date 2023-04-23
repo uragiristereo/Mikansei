@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -21,6 +22,9 @@ import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
 import com.uragiristereo.mikansei.feature.home.posts.post_dialog.PostDialog
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.postsRoute(
@@ -88,14 +92,23 @@ fun NavGraphBuilder.postsRoute(
             val lambdaOnDownload = LocalLambdaOnDownload.current
             val lambdaOnShare = LocalLambdaOnShare.current
 
+            val scope = rememberCoroutineScope()
+
             if (data != null) {
                 PostDialog(
                     post = data.post,
                     onDismiss = navController::popBackStack,
                     onPostClick = lambdaOnNavigateImage,
-                    onDowloadClick = lambdaOnDownload,
+                    onDownloadClick = lambdaOnDownload,
                     onShareClick = { post ->
                         lambdaOnShare(post, ShareOption.COMPRESSED)
+                    },
+                    onAddToFavoriteGroupClick = { post ->
+                        scope.launch(SupervisorJob()) {
+                            delay(timeMillis = 300L)
+
+                            navController.navigate(HomeRoute.AddToFavGroup(post))
+                        }
                     },
                 )
             }

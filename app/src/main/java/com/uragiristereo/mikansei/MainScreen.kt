@@ -25,8 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -59,6 +61,7 @@ import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DimensionSubcomposeLayout
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
+import com.uragiristereo.mikansei.core.ui.navigation.HomeAndDialogRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
@@ -80,6 +83,7 @@ fun MainScreen(
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    var previousRoute by remember { mutableStateOf<String?>(null) }
 
     val notificationPermissionState = rememberPermissionState(
         permission = when {
@@ -125,6 +129,7 @@ fun MainScreen(
     }
 
     LaunchedEffect(key1 = currentRoute) {
+        previousRoute = viewModel.currentRoute
         currentRoute?.let { viewModel.currentRoute = it }
     }
 
@@ -214,13 +219,18 @@ fun MainScreen(
                         MainNavGraph(navController = navController)
 
                         AnimatedVisibility(
-                            visible = viewModel.currentRoute in HomeRoutesString,
+                            visible = when {
+                                previousRoute in HomeRoutesString && viewModel.currentRoute in HomeAndDialogRoutesString -> true
+                                viewModel.currentRoute in HomeRoutesString -> true
+                                else -> false
+                            },
                             enter = slideInVertically(initialOffsetY = { it }),
                             exit = slideOutVertically(targetOffsetY = { it }),
                             modifier = Modifier.align(Alignment.BottomCenter),
                         ) {
                             MainBottomNavigationBar(
                                 currentRoute = viewModel.currentRoute,
+                                previousRoute = previousRoute,
                                 onNavigate = lambdaOnNavigate,
                                 onNavigateSearch = lambdaOnNavigateSearch,
                                 onRequestScrollToTop = lambdaOnRequestScrollToTop,
