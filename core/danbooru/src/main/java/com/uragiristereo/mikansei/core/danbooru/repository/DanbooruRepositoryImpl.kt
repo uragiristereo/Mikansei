@@ -256,6 +256,10 @@ open class DanbooruRepositoryImpl(
     override suspend fun unvotePost(postId: Int) = resultFlow {
         client.unvotePost(postId)
     }
+
+    override suspend fun addPostToFavoriteGroup(favoriteGroupId: Int, postId: Int) = resultFlow {
+        client.addPostToFavoriteGroup(favoriteGroupId, postId)
+    }
 }
 
 

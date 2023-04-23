@@ -93,4 +93,10 @@ interface DanbooruApi {
     suspend fun unvotePost(
         @Path("post_id") postId: Int,
     ): Response<Unit>
+
+    @PUT("/favorite_groups/{favorite_group_id}/add_post.json")
+    suspend fun addPostToFavoriteGroup(
+        @Path("favorite_group_id") favoriteGroupId: Int,
+        @Query("post_id") postId: Int,
+    ): Response<Unit>
 }
