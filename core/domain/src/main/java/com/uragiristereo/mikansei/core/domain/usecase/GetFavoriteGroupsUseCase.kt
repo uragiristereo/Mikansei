@@ -18,20 +18,24 @@ class GetFavoriteGroupsUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val userDao: UserDao,
 ) {
-    suspend operator fun invoke(): Flow<Result<List<Favorite>>> {
+    suspend operator fun invoke(forceCache: Boolean, forceRefresh: Boolean): Flow<Result<List<Favorite>>> {
         val activeUser = userDao.getActive().first().toUser()
 
-        return danbooruRepository.getFavoriteGroups(creatorId = activeUser.id)
+        return danbooruRepository.getFavoriteGroups(creatorId = activeUser.id, forceRefresh)
             .flatMapConcat { result ->
                 when (result) {
                     is Result.Success -> {
-                        val favoriteGroups = result.data
+                        val favoriteGroups = result.data.sortedByDescending { it.updatedAt }
 
                         val thumbnailPostIds = favoriteGroups.mapNotNull {
                             it.postIds.maxOrNull()
                         }
 
-                        danbooruRepository.getPostsByIds(thumbnailPostIds).mapSuccess { posts ->
+                        danbooruRepository.getPostsByIds(
+                            ids = thumbnailPostIds,
+                            forceCache = forceCache,
+                            forceRefresh = forceRefresh,
+                        ).mapSuccess { posts ->
                             favoriteGroups.map { favoriteGroup ->
                                 val thumbnailPostId = favoriteGroup.postIds.maxOrNull()
 
