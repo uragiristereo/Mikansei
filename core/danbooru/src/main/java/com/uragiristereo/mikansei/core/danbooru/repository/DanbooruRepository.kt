@@ -34,9 +34,9 @@ interface DanbooruRepository {
 
     suspend fun updateUserSettings(id: Int, data: DanbooruUserField): Flow<Result<Unit>>
 
-    suspend fun getFavoriteGroups(creatorId: Int): Flow<Result<List<DanbooruFavoriteGroup>>>
+    suspend fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean): Flow<Result<List<DanbooruFavoriteGroup>>>
 
-    suspend fun getPostsByIds(ids: List<Int>): Flow<Result<List<DanbooruPost>>>
+    suspend fun getPostsByIds(ids: List<Int>, forceCache: Boolean, forceRefresh: Boolean): Flow<Result<List<DanbooruPost>>>
 
     suspend fun addToFavorites(postId: Int): Flow<Result<Unit>>
 

@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.danbooru
+package com.uragiristereo.mikansei.core.danbooru.interceptor
 
 import okhttp3.Credentials
 import okhttp3.Interceptor

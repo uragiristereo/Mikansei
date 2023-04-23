@@ -10,6 +10,7 @@ import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruProfile
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.model.Constants
+import okhttp3.CacheControl
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -22,6 +23,8 @@ interface DanbooruApi {
         @Query("tags") tags: String,
         @Query("page") pageId: Int,
         @Query("limit") postsPerPage: Int = Constants.POSTS_PER_PAGE,
+        @Header("force-cache") forceCache: Boolean = false,
+        @Header("cache-control") cacheControl: String = "",
     ): Response<List<DanbooruPost>>
 
     @GET("/autocomplete.json")
@@ -60,6 +63,8 @@ interface DanbooruApi {
     @GET("/favorite_groups.json")
     suspend fun getFavoriteGroups(
         @Query("search[creator_id]") creatorId: Int,
+        @Header("cache-control") cacheControl: CacheControl,
+        @Header("force-cache") forceCache: Boolean = true,
     ): Response<List<DanbooruFavoriteGroup>>
 
     @POST("/favorites.json")

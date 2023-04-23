@@ -3,7 +3,8 @@ package com.uragiristereo.mikansei.core.danbooru.repository
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mikansei.core.danbooru.DanbooruApi
-import com.uragiristereo.mikansei.core.danbooru.DanbooruAuthInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruAuthInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceCacheResponseInterceptor
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.post.vote.DanbooruPostVote
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import okhttp3.CacheControl
 import okhttp3.Credentials
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -101,6 +103,7 @@ open class DanbooruRepositoryImpl(
             .addInterceptor(
                 DanbooruAuthInterceptor(user.name, user.apiKey)
             )
+            .addNetworkInterceptor(ForceCacheResponseInterceptor())
             .build()
 
         val preferredOkHttpClient = when {
@@ -123,6 +126,17 @@ open class DanbooruRepositoryImpl(
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(DanbooruApi::class.java)
+    }
+
+    private fun getCacheControl(forceRefresh: Boolean): CacheControl {
+        return CacheControl.Builder()
+            .let { builder ->
+                when {
+                    forceRefresh -> builder.noCache()
+                    else -> builder
+                }
+            }
+            .build()
     }
 
     override suspend fun getPost(id: Int): Flow<Result<DanbooruPost>> = resultFlow {
@@ -206,14 +220,19 @@ open class DanbooruRepositoryImpl(
         client.updateUserSettings(id, data)
     }
 
-    override suspend fun getFavoriteGroups(creatorId: Int) = resultFlow {
-        client.getFavoriteGroups(creatorId)
+    override suspend fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean) = resultFlow {
+        client.getFavoriteGroups(creatorId, getCacheControl(forceRefresh))
     }
 
-    override suspend fun getPostsByIds(ids: List<Int>) = resultFlow {
+    override suspend fun getPostsByIds(ids: List<Int>, forceCache: Boolean, forceRefresh: Boolean) = resultFlow {
         val separated = ids.joinToString(separator = ",")
 
-        client.getPosts(tags = "id:$separated", pageId = 1)
+        client.getPosts(
+            tags = "id:$separated",
+            pageId = 1,
+            forceCache = forceCache,
+            cacheControl = getCacheControl(forceRefresh).toString(),
+        )
     }
 
     override suspend fun addToFavorites(postId: Int) = resultFlow {
