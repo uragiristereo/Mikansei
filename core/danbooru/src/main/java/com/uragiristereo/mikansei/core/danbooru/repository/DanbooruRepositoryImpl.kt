@@ -260,6 +260,10 @@ open class DanbooruRepositoryImpl(
     override suspend fun addPostToFavoriteGroup(favoriteGroupId: Int, postId: Int) = resultFlow {
         client.addPostToFavoriteGroup(favoriteGroupId, postId)
     }
+
+    override suspend fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int) = resultFlow {
+        client.removePostFromFavoriteGroup(favoriteGroupId, postId)
+    }
 }
 
 

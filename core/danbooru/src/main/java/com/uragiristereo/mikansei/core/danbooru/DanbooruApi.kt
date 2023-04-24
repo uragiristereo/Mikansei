@@ -99,4 +99,10 @@ interface DanbooruApi {
         @Path("favorite_group_id") favoriteGroupId: Int,
         @Query("post_id") postId: Int,
     ): Response<Unit>
+
+    @PUT("/favorite_groups/{favorite_group_id}/remove_post.json")
+    suspend fun removePostFromFavoriteGroup(
+        @Path("favorite_group_id") favoriteGroupId: Int,
+        @Query("post_id") postId: Int,
+    ): Response<Unit>
 }

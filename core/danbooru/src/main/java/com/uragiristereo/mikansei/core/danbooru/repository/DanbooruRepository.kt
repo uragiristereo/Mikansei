@@ -49,4 +49,6 @@ interface DanbooruRepository {
     suspend fun unvotePost(postId: Int): Flow<Result<Unit>>
 
     suspend fun addPostToFavoriteGroup(favoriteGroupId: Int, postId: Int): Flow<Result<Unit>>
+
+    suspend fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int): Flow<Result<Unit>>
 }
