@@ -1,9 +1,11 @@
 package com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.column
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ContentAlpha
@@ -11,6 +13,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +25,9 @@ import com.uragiristereo.mikansei.core.resources.R
 @Composable
 internal fun FavoriteGroupItem(
     item: FavoriteGroup,
+    isRemoving: Boolean,
     onClick: (FavoriteGroup) -> Unit,
+    onRemoveClick: (FavoriteGroup) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -35,9 +40,13 @@ internal fun FavoriteGroupItem(
                 },
                 enabled = !item.isPostAlreadyExits,
             )
+            .padding(horizontal = 16.dp)
             .padding(
-                horizontal = 16.dp,
-                vertical = 12.dp,
+                top = 12.dp,
+                bottom = when {
+                    !item.isPostAlreadyExits -> 12.dp
+                    else -> 0.dp
+                }
             ),
     ) {
         Icon(
@@ -56,12 +65,29 @@ internal fun FavoriteGroupItem(
             )
 
             if (item.isPostAlreadyExits) {
-                Text(
-                    text = "Post is already exist in this favorite group",
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-                    fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.caption,
-                )
+                Column {
+                    Text(
+                        text = "Post is already exist in this favorite group",
+                        color = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+                        fontWeight = FontWeight.Medium,
+                        style = MaterialTheme.typography.caption,
+                    )
+
+                    Box(
+                        contentAlignment = Alignment.CenterEnd,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        TextButton(
+                            onClick = {
+                                onRemoveClick(item)
+                            },
+                            enabled = !isRemoving,
+                            content = {
+                                Text(text = "Remove")
+                            },
+                        )
+                    }
+                }
             }
         }
     }

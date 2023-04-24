@@ -98,11 +98,13 @@ internal fun AddToFavGroupDialog(
                 items(viewModel.items) { item ->
                     FavoriteGroupItem(
                         item = item,
+                        isRemoving = viewModel.isRemoving,
                         onClick = {
                             viewModel.addPostToFavoriteGroup(context, item)
 
                             onDismiss()
                         },
+                        onRemoveClick = viewModel::removePostFromFavoriteGroup,
                     )
                 }
             }
