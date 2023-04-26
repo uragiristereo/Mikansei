@@ -58,17 +58,18 @@ fun MainBottomNavigationBar(
         ) {
             MainNavigationItems.values().forEach { item ->
                 val currentRouteIsDialog = currentRoute in HomeDialogRoutesString && previousRoute == item.route.route
+                val selected = currentRoute == item.route::class.route || currentRouteIsDialog
 
                 BottomNavigationItem(
                     label = {
                         Text(text = stringResource(id = item.label))
                     },
-                    selected = currentRoute == item.route::class.route || currentRouteIsDialog,
+                    selected = selected,
                     icon = {
                         Icon(
                             painter = painterResource(
                                 id = when {
-                                    currentRoute == item.route::class.route || currentRouteIsDialog -> item.selectedIcon
+                                    selected -> item.selectedIcon
                                     else -> item.unselectedIcon
                                 },
                             ),

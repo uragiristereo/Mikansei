@@ -213,17 +213,19 @@ fun MainScreen(
                 }
             }
 
+            val navigationBarsVisible = when {
+                previousRoute in HomeRoutesString && viewModel.currentRoute in HomeAndDialogRoutesString -> true
+                viewModel.currentRoute in HomeRoutesString -> true
+                else -> false
+            }
+
             Surface {
                 if (windowSize == WindowSize.COMPACT) {
                     Box(modifier = Modifier.fillMaxSize()) {
                         MainNavGraph(navController = navController)
 
                         AnimatedVisibility(
-                            visible = when {
-                                previousRoute in HomeRoutesString && viewModel.currentRoute in HomeAndDialogRoutesString -> true
-                                viewModel.currentRoute in HomeRoutesString -> true
-                                else -> false
-                            },
+                            visible = navigationBarsVisible,
                             enter = slideInVertically(initialOffsetY = { it }),
                             exit = slideOutVertically(targetOffsetY = { it }),
                             modifier = Modifier.align(Alignment.BottomCenter),
@@ -242,7 +244,7 @@ fun MainScreen(
                         MainNavGraph(navController = navController)
 
                         AnimatedVisibility(
-                            visible = viewModel.currentRoute in HomeRoutesString,
+                            visible = navigationBarsVisible,
                             enter = slideInHorizontally(initialOffsetX = { -it }),
                             exit = slideOutHorizontally(targetOffsetX = { -it }),
                             modifier = Modifier,
@@ -263,6 +265,7 @@ fun MainScreen(
                                     Row {
                                         MainNavigationRail(
                                             currentRoute = viewModel.currentRoute,
+                                            previousRoute = previousRoute,
                                             onNavigate = lambdaOnNavigate,
                                             onNavigateSearch = lambdaOnNavigateSearch,
                                             onRequestScrollToTop = lambdaOnRequestScrollToTop,
