@@ -88,18 +88,16 @@ fun MikanseiTheme(
                 colors.isLight -> colors.copy(
                     primary = primary500,
                     primaryVariant = primary700,
-                    secondary = primary200,
+                    secondary = primary300,
                     secondaryVariant = primary700,
                 )
 
-                else -> {
-                    colors.copy(
-                        primary = primary300,
-                        primaryVariant = primary700,
-                        secondary = primary300,
-                        secondaryVariant = primary200,
-                    )
-                }
+                else -> colors.copy(
+                    primary = primary200,
+                    primaryVariant = primary700,
+                    secondary = primary200,
+                    secondaryVariant = primary200,
+                )
             }
         }
 
