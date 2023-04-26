@@ -25,7 +25,7 @@ class AddToFavGroupViewModel(
     private val danbooruRepository: DanbooruRepository,
     private val getFavoriteGroupsUseCase: GetFavoriteGroupsUseCase,
 ) : ViewModel() {
-    private val post = checkNotNull(savedStateHandle.getData<HomeRoute.AddToFavGroup>()).post
+    val post = checkNotNull(savedStateHandle.getData<HomeRoute.AddToFavGroup>()).post
 
     var items by mutableStateOf<List<FavoriteGroup>>(listOf())
         private set

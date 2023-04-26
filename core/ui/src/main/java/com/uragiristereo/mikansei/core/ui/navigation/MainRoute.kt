@@ -28,4 +28,9 @@ sealed interface MainRoute : NavRoute {
     object About : MainRoute
 
     object User : MainRoute
+
+    @Serializable
+    data class NewFavGroup(
+        val postId: Int? = null,
+    ) : MainRoute
 }
