@@ -1,5 +1,7 @@
 package com.uragiristereo.mikansei.feature.image.image
 
+import android.graphics.drawable.Animatable
+import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -13,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.imageLoader
 import coil.request.Disposable
 import coil.request.ImageRequest
@@ -67,10 +71,19 @@ internal fun ImagePost(
                 width = resizedImageSize.first,
                 height = resizedImageSize.second,
             )
+            .decoderFactory(
+                when {
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.P -> ImageDecoderDecoder.Factory()
+                    else -> GifDecoder.Factory()
+                }
+            )
             .target(
                 onSuccess = { drawable ->
                     Timber.d("success loading image")
                     imageView.setImageDrawable(drawable)
+
+                    val animatable = drawable as? Animatable
+                    animatable?.start()
                 },
             )
     }
