@@ -105,4 +105,10 @@ interface DanbooruApi {
         @Path("favorite_group_id") favoriteGroupId: Int,
         @Query("post_id") postId: Int,
     ): Response<Unit>
+
+    @POST("/favorite_groups.json")
+    suspend fun createNewFavoriteGroup(
+        @Query("favorite_group[name]") name: String,
+        @Query("favorite_group[post_ids_string]") postIds: String,
+    ): Response<DanbooruFavoriteGroup>
 }

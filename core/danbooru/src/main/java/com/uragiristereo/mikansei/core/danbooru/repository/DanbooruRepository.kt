@@ -51,4 +51,6 @@ interface DanbooruRepository {
     suspend fun addPostToFavoriteGroup(favoriteGroupId: Int, postId: Int): Flow<Result<Unit>>
 
     suspend fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int): Flow<Result<Unit>>
+
+    suspend fun createNewFavoriteGroup(name: String, postIds: List<Int>): Flow<Result<DanbooruFavoriteGroup>>
 }

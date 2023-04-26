@@ -264,6 +264,10 @@ open class DanbooruRepositoryImpl(
     override suspend fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int) = resultFlow {
         client.removePostFromFavoriteGroup(favoriteGroupId, postId)
     }
+
+    override suspend fun createNewFavoriteGroup(name: String, postIds: List<Int>) = resultFlow {
+        client.createNewFavoriteGroup(name, postIds.joinToString(separator = " "))
+    }
 }
 
 
