@@ -6,8 +6,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,7 +39,6 @@ internal fun FiltersColumnItem(
     isEven: Boolean,
     selectionMode: Boolean,
     enabled: Boolean,
-    onEnabledChange: (Boolean) -> Unit,
     selected: Boolean,
     onSelectedClick: (Boolean) -> Unit,
     onLongClick: () -> Unit,
@@ -47,8 +56,7 @@ internal fun FiltersColumnItem(
                 .fillMaxWidth()
                 .background(
                     color = when {
-                        isEven -> MaterialTheme.colors.background
-                            .backgroundElevation(1.dp)
+                        isEven -> MaterialTheme.colors.background.backgroundElevation(1.dp)
 
                         else -> MaterialTheme.colors.background
                     }
@@ -75,8 +83,9 @@ internal fun FiltersColumnItem(
                             .combinedClickable(
                                 interactionSource = combinedInteractionSource,
                                 indication = LocalIndication.current,
+                                enabled = enabled,
                                 onClick = {
-                                    onEnabledChange(!enabled)
+//                                    onEnabledChange(!enabled)
                                 },
                                 onLongClick = {
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -93,7 +102,7 @@ internal fun FiltersColumnItem(
                     .align(Alignment.Center)
                     .widthIn(max = 620.dp)
                     .padding(
-                        vertical = 4.dp,
+                        vertical = 12.dp,
                         horizontal = 16.dp,
                     ),
             ) {
@@ -106,22 +115,26 @@ internal fun FiltersColumnItem(
                         }
                     ),
                     contentDescription = null,
-                    modifier = Modifier
-                        .padding(end = 32.dp),
+                    tint = LocalContentColor.current.copy(
+                        alpha = when {
+                            enabled -> ContentAlpha.medium
+                            else -> ContentAlpha.disabled
+                        },
+                    ),
+                    modifier = Modifier.padding(end = 32.dp),
                 )
 
                 Text(
                     text = text,
+                    color = LocalContentColor.current.copy(
+                        alpha = when {
+                            enabled -> ContentAlpha.high
+                            else -> ContentAlpha.disabled
+                        },
+                    ),
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 8.dp),
-                )
-
-                Switch(
-                    enabled = !selectionMode,
-                    checked = enabled,
-                    onCheckedChange = onEnabledChange,
-                    interactionSource = combinedInteractionSource,
                 )
             }
         }

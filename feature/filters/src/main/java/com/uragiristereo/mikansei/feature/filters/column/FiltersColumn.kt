@@ -14,114 +14,81 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
-import com.uragiristereo.mikansei.core.ui.database.FilterItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun FiltersColumn(
     columnState: LazyListState,
     items: List<FilterItem>,
-    onItemChange: (FilterItem) -> Unit,
     onItemSelected: (FilterItem) -> Unit,
     selectionMode: Boolean,
+    enabled: Boolean,
     onOutsideTapped: () -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .padding(paddingValues = contentPadding),
+    LazyColumn(
+        state = columnState,
+        contentPadding = contentPadding,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize(),
     ) {
-        LazyColumn(
-            state = columnState,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            item {
-                SettingTip(
-                    text = stringResource(id = R.string.filters_tip),
-                )
-            }
-
-            item {
-                Divider()
-            }
-
-            itemsIndexed(
-                items = items,
-                key = { _, item ->
-                    item.id
-                },
-            ) { index, item ->
-                FiltersColumnItem(
-                    text = item.tag,
-                    isEven = index % 2 == 0,
-                    selected = item.selected,
-                    selectionMode = selectionMode,
-                    enabled = item.enabled,
-                    onEnabledChange = {
-                        onItemChange(item.copy(enabled = it))
-                    },
-                    onSelectedClick = {
-                        onItemSelected(item.copy(selected = it))
-                    },
-                    onLongClick = {
-                        onItemSelected(item.copy(selected = true))
-                    },
-                    modifier = Modifier
-                        .animateItemPlacement(),
-                )
-            }
-
-            if (items.isNotEmpty()) {
-                item {
-                    NavigationBarSpacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .pointerInput(key1 = Unit) {
-                                detectTapGestures {
-                                    onOutsideTapped()
-                                }
-                            }
-                            .padding(
-                                bottom = 56.dp + 32.dp,
-                            ),
-                    )
-                }
-            }
+        item {
+            SettingTip(text = stringResource(id = R.string.filters_tip))
         }
 
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .pointerInput(key1 = Unit) {
-                    detectTapGestures {
-                        onOutsideTapped()
-                    }
-                }
-                .let {
-                    when {
-                        items.isEmpty() -> it
-                            .windowInsetsPadding(
-                                insets = WindowInsets.navigationBars.only(sides = WindowInsetsSides.Bottom),
-                            )
+        item {
+            Divider()
+        }
 
-                        else -> it
-                    }
+        itemsIndexed(
+            items = items,
+            key = { _, item -> item.tag },
+        ) { index, item ->
+            FiltersColumnItem(
+                text = item.tag,
+                isEven = index % 2 == 0,
+                selected = item.selected,
+                enabled = enabled,
+                selectionMode = selectionMode,
+                onSelectedClick = {
+                    onItemSelected(item.copy(selected = it))
                 },
-        ) {
+                onLongClick = {
+                    onItemSelected(item.copy(selected = true))
+                },
+                modifier = Modifier.animateItemPlacement(),
+            )
+        }
+
+        item {
             if (items.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.filters_no_tags).uppercase(),
                     style = MaterialTheme.typography.overline,
                     fontSize = 14.sp,
                     color = MaterialTheme.colors.primary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
+                )
+            } else {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .pointerInput(key1 = Unit) {
+                            detectTapGestures {
+                                onOutsideTapped()
+                            }
+                        }
+                        .navigationBarsPadding()
+                        .padding(bottom = 56.dp + 32.dp),
                 )
             }
         }

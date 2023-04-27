@@ -37,7 +37,7 @@ fun NavGraphBuilder.homeGraph(
             when (targetState.destination.route) {
                 in HomeRoutesString -> fadeOut(animationSpec = tween(durationMillis = 300))
                 MainRoute.Search::class.route -> holdOut()
-                MainRoute.Image::class.route -> holdOut(durationMillis = 350)
+                MainRoute.Image::class.route -> fadeOut()
                 else -> null
             }
         },

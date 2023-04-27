@@ -48,7 +48,7 @@
     <string name="delete">Delete…</string>
     <string name="select_all">Select all</string>
     <string name="select_inverse">Select inverse</string>
-    <string name="delete_confirmation_message">Are you sure want to delete these items</string>
+    <string name="delete_confirmation_message">Are you sure want to delete these items?</string>
     <string name="delete_confirm">Confirm deletion</string>
     <string name="enabled_action">On</string>
     <string name="disabled_action">Off</string>
@@ -64,7 +64,7 @@
     <string name="download_cancel">Cancel</string>
 
     <!-- Filters -->
-    <string name="filters_tip">Prevent tags from appearing in your search result.\nRefresh your posts to takes effect.</string>
+    <string name="filters_tip">Prevent tags from appearing in your search result.\nRefresh your posts to take effect.</string>
     <string name="filters_no_tags">No tags have been added!</string>
     <string name="filters_add_new_tags">Add new tags</string>
     <string name="filters_separate_tags">Separate tags using space</string>

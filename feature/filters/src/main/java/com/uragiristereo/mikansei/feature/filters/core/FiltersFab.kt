@@ -23,34 +23,37 @@ internal fun FiltersFab(
         enter = fadeIn() + slideInVertically(initialOffsetY = { it }),
         exit = fadeOut() + slideOutVertically(targetOffsetY = { it }),
         content = {
-            FloatingActionButton(
-                onClick = when {
-                    isDeleteButton -> onDelete
-                    else -> onAdd
+            AnimatedContent(
+                targetState = isDeleteButton,
+                transitionSpec = {
+                    scaleIn() with scaleOut()
                 },
-                content = {
-                    AnimatedContent(
-                        targetState = isDeleteButton,
-                        content = { notEmpty ->
-                            when {
-                                notEmpty -> Icon(
+                modifier = modifier.navigationBarsPadding(),
+            ) { state ->
+                when {
+                    state ->
+                        FloatingActionButton(
+                            onClick = onDelete,
+                            content = {
+                                Icon(
                                     painter = painterResource(id = R.drawable.delete),
                                     contentDescription = null,
                                 )
+                            },
+                        )
 
-                                else -> Icon(
+                    else ->
+                        FloatingActionButton(
+                            onClick = onAdd,
+                            content = {
+                                Icon(
                                     painter = painterResource(id = R.drawable.add),
                                     contentDescription = null,
                                 )
-                            }
-                        },
-                    )
-                },
-                modifier = modifier
-                    .windowInsetsPadding(
-                        insets = WindowInsets.navigationBars.only(sides = WindowInsetsSides.Bottom),
-                    ),
-            )
+                            },
+                        )
+                }
+            }
         },
     )
 }

@@ -1,22 +1,24 @@
 package com.uragiristereo.mikansei.feature.filters
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
-import com.uragiristereo.mikansei.feature.filters.appbars.FiltersSelectionTopAppBar
 import com.uragiristereo.mikansei.feature.filters.appbars.FiltersTopAppBar
 import com.uragiristereo.mikansei.feature.filters.column.FiltersColumn
 import com.uragiristereo.mikansei.feature.filters.core.FiltersAddTagsDialog
@@ -32,10 +34,14 @@ internal fun FiltersScreen(
     viewModel: FiltersViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
 ) {
-    val context = LocalContext.current
     val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
+
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = viewModel.isLoading,
+        onRefresh = viewModel::refreshFilters,
+    )
 
     ProductSetSystemBarsColor()
 
@@ -55,30 +61,22 @@ internal fun FiltersScreen(
 
     Scaffold(
         topBar = {
-            Crossfade(
-                targetState = viewModel.selectedItems.isNotEmpty(),
-                content = { notEmpty ->
-                    when {
-                        notEmpty -> FiltersSelectionTopAppBar(
-                            title = when (viewModel.selectedItems.size) {
-                                0 -> stringResource(id = R.string.filters_label)
-                                viewModel.items.size -> stringResource(id = R.string.selected_all)
-                                else -> stringResource(id = R.string.n_selected, viewModel.selectedItems.size)
-                            },
-                            onClose = viewModel::deselectAll,
-                            onDelete = {
-                                scope.launch {
-                                    sheetState.show()
-                                }
-                            },
-                            onSelectAll = viewModel::selectAll,
-                            onSelectInverse = viewModel::selectInverse,
-                        )
-
-                        else -> FiltersTopAppBar(
-                            onNavigateBack = onNavigateBack,
-                            onSelectAll = viewModel::selectAll,
-                        )
+            FiltersTopAppBar(
+                title = when (viewModel.selectedItems.size) {
+                    0 -> stringResource(id = R.string.filters_label)
+                    viewModel.items.size -> stringResource(id = R.string.selected_all)
+                    else -> stringResource(id = R.string.n_selected, viewModel.selectedItems.size)
+                },
+                username = viewModel.username,
+                selectionMode = viewModel.selectedItems.isNotEmpty(),
+                onNavigateBack = onNavigateBack,
+                onClose = viewModel::deselectAll,
+                onSelectAll = viewModel::selectAll,
+                onSelectInverse = viewModel::selectInverse,
+                onRefresh = viewModel::refreshFilters,
+                onDelete = {
+                    scope.launch {
+                        sheetState.show()
                     }
                 },
             )
@@ -100,41 +98,49 @@ internal fun FiltersScreen(
         FiltersColumn(
             columnState = columnState,
             selectionMode = viewModel.selectedItems.isNotEmpty(),
+            enabled = !viewModel.isLoading,
             items = viewModel.items,
-            onItemChange = viewModel::updateItem,
             onItemSelected = viewModel::updateSelectedItem,
             onOutsideTapped = viewModel::deselectAll,
             contentPadding = innerPadding,
+            modifier = Modifier.pullRefresh(pullRefreshState),
         )
+
+        if (viewModel.selectedItems.isEmpty()) {
+            Box(
+                contentAlignment = Alignment.TopCenter,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                ProductPullRefreshIndicator(
+                    refreshing = viewModel.isLoading,
+                    state = pullRefreshState,
+                )
+            }
+        }
     }
 
     FiltersModalBottomSheet(
         sheetState = sheetState,
-        onDeleteClick = remember {
-            {
-                scope.launch {
-                    viewModel.deleteSelectedItems()
+        onDeleteClick = {
+            scope.launch {
+                viewModel.deleteSelectedItems()
 
-                    sheetState.hide()
-                }
+                sheetState.hide()
             }
         },
     )
 
     FiltersAddTagsDialog(
         dialogShown = viewModel.dialogShown,
-        onDialogShownChange = viewModel::changeDialogState,
-        onDone = remember {
-            { tags ->
-                viewModel.changeDialogState(value = false)
+        onDismiss = viewModel::hideDialog,
+        onDone = { tags ->
+            viewModel.hideDialog()
+            viewModel.addTags(tags)
 
-                viewModel.addTags(context, tags)
-
-                scope.launch {
-                    columnState.animateScrollToItem(
-                        index = viewModel.items.size - 1 + 3,
-                    )
-                }
+            scope.launch {
+                columnState.animateScrollToItem(
+                    index = viewModel.items.size - 1 + 3,
+                )
             }
         },
     )
