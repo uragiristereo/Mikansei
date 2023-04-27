@@ -15,7 +15,10 @@ fun UserRow.toUser(): User {
         safeMode = safeMode,
         showDeletedPosts = showDeletedPosts,
         defaultImageSize = DetailSizePreference.values().getEnumFromDanbooru(defaultImageSize),
-        blacklistedTags = blacklistedTags.split(' '),
+        blacklistedTags = when {
+            blacklistedTags.isNotBlank() -> blacklistedTags.split(' ').distinct()
+            else -> listOf()
+        },
         isActive = isActive,
         postsRatingFilter = postsRatingFilter,
         blurQuestionablePosts = blurQuestionablePosts,
