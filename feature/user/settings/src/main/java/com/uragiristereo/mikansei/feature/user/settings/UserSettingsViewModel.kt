@@ -5,10 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserFieldData
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.database.dao.user.toUser
 import com.uragiristereo.mikansei.core.database.dao.user.toUserRow
+import com.uragiristereo.mikansei.core.domain.entity.user.UserField
 import com.uragiristereo.mikansei.core.domain.usecase.SyncUserSettingsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
 import com.uragiristereo.mikansei.core.model.preferences.base.Preference
@@ -63,7 +63,7 @@ class UserSettingsViewModel(
         }
     }
 
-    private fun updateSettings(data: DanbooruUserFieldData) {
+    private fun updateSettings(data: UserField) {
         viewModelScope.launch {
             loading = activeUser?.id != 0
 
@@ -74,21 +74,15 @@ class UserSettingsViewModel(
     }
 
     fun onSafeModeChange(value: Boolean) {
-        updateSettings(
-            DanbooruUserFieldData(enableSafeMode = value)
-        )
+        updateSettings(data = UserField(safeMode = value))
     }
 
     fun onShowDeletedPostsChange(value: Boolean) {
-        updateSettings(
-            DanbooruUserFieldData(showDeletedPosts = value)
-        )
+        updateSettings(data = UserField(showDeletedPosts = value))
     }
 
     fun onDetailSizeChange(value: DetailSizePreference) {
-        updateSettings(
-            DanbooruUserFieldData(defaultImageSize = value.getEnumForDanbooru())
-        )
+        updateSettings(data = UserField(defaultImageSize = value))
     }
 
     fun setBottomSheetPreferenceState(preference: Preference) {

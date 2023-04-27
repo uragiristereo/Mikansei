@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserFieldData
+import com.uragiristereo.mikansei.core.domain.entity.user.UserField
 import com.uragiristereo.mikansei.core.domain.usecase.PerformLoginUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -30,7 +30,7 @@ class LoginViewModel(
     var loginState by mutableStateOf<LoginState>(LoginState.Idle)
         private set
 
-    var job: Job? = null
+    private var job: Job? = null
 
     fun toggleApiKeyVisible() {
         isApiKeyVisible = !isApiKeyVisible
@@ -53,9 +53,7 @@ class LoginViewModel(
 
     private fun forceEnableSafeMode() {
         viewModelScope.launch {
-            updateUserSettingsUseCase(
-                DanbooruUserFieldData(enableSafeMode = true)
-            ).collect { result ->
+            updateUserSettingsUseCase(data = UserField(safeMode = true)).collect { result ->
                 loginState = when (result) {
                     is Result.Success -> LoginState.Success
                     is Result.Failed -> LoginState.Failed(message = result.message)
