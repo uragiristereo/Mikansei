@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace "com.uragiristereo.mikansei"
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.uragiristereo.mikansei"
         minSdk 21
-        targetSdk 33
+        targetSdk 34
         versionName "1.0.0"
         versionCode 1000
 
@@ -44,12 +44,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+        jvmTarget = JavaVersion.VERSION_17
     }
 
     buildFeatures {
