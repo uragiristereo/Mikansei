@@ -1,17 +1,17 @@
 [versions]
-gradle = "7.4.0"
-kotlin = "1.7.21"
-ksp = "1.7.21-1.0.8"
-lifecycle = "2.5.1"
-compose = "1.4.0-alpha03"
-compose-compiler = "1.4.0-alpha02"
-room = "2.5.0"
-accompanist = "0.28.0"
+gradle = "8.1.1"
+kotlin = "1.9.10"
+ksp = "1.9.10-1.0.13"
+lifecycle = "2.6.2"
+compose = "1.4.3"
+compose-compiler = "1.5.1"
+room = "2.5.2"
+accompanist = "0.30.1"
 koin = "3.3.2"
-coil = "2.2.2"
+coil = "2.4.0"
 okhttp = "5.0.0-alpha.11"
 retrofit = "2.9.0"
-safer-navigation-compose = "041334a2bf"
+safer-navigation-compose = "51559dfee5"
 
 
 [plugins]
@@ -26,12 +26,12 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [libraries]
 # AndroidX
-androidx-core = { module = "androidx.core:core-ktx", version = "1.9.0" }
+androidx-core = { module = "androidx.core:core-ktx", version = "1.12.0" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
-androidx-savedstate = { module = "androidx.savedstate:savedstate-ktx", version = "1.2.0" }
-androidx-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.0.0" }
+androidx-savedstate = { module = "androidx.savedstate:savedstate-ktx", version = "1.2.1" }
+androidx-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.0.1" }
 androidx-datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
-androidx-browser = { module = "androidx.browser:browser", version = "1.4.0" }
+androidx-browser = { module = "androidx.browser:browser", version = "1.6.0" }
 
 # Compose
 compose = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -39,7 +39,7 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.6.1" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.7.2" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1" }
 
@@ -78,7 +78,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit-converter-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version = "0.8.0" }
 
 # Kotlinx.Serialization JSON Serialization
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.4.1" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.5.1" }
 
 # Gson JSON Serialization
 gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
@@ -101,4 +101,4 @@ koin = ["koin", "koin-androidx-navigation", "koin-androidx-compose"]
 retrofit = ["okhttp", "retrofit", "retrofit-converter-kotlinx-serialization"]
 coil = ["coil", "coil-compose"]
 core = ["koin", "timber"]
-safer-navigation = ["safer-navigation-core", "safer-navigation-animation"]
+safer-navigation = ["safer-navigation-animation"]
