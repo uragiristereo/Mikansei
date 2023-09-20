@@ -13,7 +13,6 @@ fun NavGraphBuilder.aboutRoute(
 ) {
     composable(
         route = MainRoute.About,
-        disableDeserialization = true,
         content = {
             AboutScreen(
                 onNavigateBack = navController::navigateUp,

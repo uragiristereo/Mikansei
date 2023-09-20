@@ -3,7 +3,13 @@ package com.uragiristereo.mikansei.feature.home.posts.core
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -86,32 +92,29 @@ fun NavGraphBuilder.postsRoute(
         },
     )
 
-    dialog(
-        route = HomeRoute.PostDialog::class,
-        content = { data ->
-            val lambdaOnDownload = LocalLambdaOnDownload.current
-            val lambdaOnShare = LocalLambdaOnShare.current
+    dialog<HomeRoute.PostDialog> { data ->
+        val lambdaOnDownload = LocalLambdaOnDownload.current
+        val lambdaOnShare = LocalLambdaOnShare.current
 
-            val scope = rememberCoroutineScope()
+        val scope = rememberCoroutineScope()
 
-            if (data != null) {
-                PostDialog(
-                    post = data.post,
-                    onDismiss = navController::popBackStack,
-                    onPostClick = lambdaOnNavigateImage,
-                    onDownloadClick = lambdaOnDownload,
-                    onShareClick = { post ->
-                        lambdaOnShare(post, ShareOption.COMPRESSED)
-                    },
-                    onAddToFavoriteGroupClick = { post ->
-                        scope.launch(SupervisorJob()) {
-                            delay(timeMillis = 300L)
+        if (data != null) {
+            PostDialog(
+                post = data.post,
+                onDismiss = navController::popBackStack,
+                onPostClick = lambdaOnNavigateImage,
+                onDownloadClick = lambdaOnDownload,
+                onShareClick = { post ->
+                    lambdaOnShare(post, ShareOption.COMPRESSED)
+                },
+                onAddToFavoriteGroupClick = { post ->
+                    scope.launch(SupervisorJob()) {
+                        delay(timeMillis = 300L)
 
-                            navController.navigate(HomeRoute.AddToFavGroup(post))
-                        }
-                    },
-                )
-            }
-        },
-    )
+                        navController.navigate(HomeRoute.AddToFavGroup(post))
+                    }
+                },
+            )
+        }
+    }
 }

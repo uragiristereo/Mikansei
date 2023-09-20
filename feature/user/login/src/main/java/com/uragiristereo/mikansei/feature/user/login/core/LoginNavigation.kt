@@ -7,14 +7,12 @@ import com.github.uragiristereo.safer.compose.navigation.animation.composable
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.login.LoginScreen
 
-
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.loginRoute(
     navController: NavHostController,
 ) {
     composable(
         route = UserRoute.Login,
-        disableDeserialization = true
     ) {
         LoginScreen(
             onNavigateBack = navController::navigateUp,

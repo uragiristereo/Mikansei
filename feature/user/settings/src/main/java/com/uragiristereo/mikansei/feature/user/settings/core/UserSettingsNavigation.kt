@@ -13,7 +13,6 @@ fun NavGraphBuilder.userSettingsRoute(
 ) {
     composable(
         route = UserRoute.Settings,
-        disableDeserialization = true,
         content = {
             UserSettingsScreen(
                 onNavigateBack = navController::navigateUp,

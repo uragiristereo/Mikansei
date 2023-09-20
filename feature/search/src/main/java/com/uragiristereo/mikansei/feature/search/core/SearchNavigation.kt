@@ -19,7 +19,6 @@ fun NavGraphBuilder.searchRoute(
 ) {
     composable(
         route = MainRoute.Search(),
-        disableDeserialization = true,
         enterTransition = {
             holdIn()
         },

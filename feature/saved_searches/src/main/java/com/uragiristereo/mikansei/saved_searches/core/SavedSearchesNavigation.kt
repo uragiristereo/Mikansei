@@ -13,7 +13,6 @@ fun NavGraphBuilder.savedSearchesRoute(
 ) {
     composable(
         route = MainRoute.SavedSearches,
-        disableDeserialization = true,
         content = {
             SavedSearchesScreen(
                 onNavigateBack = navController::navigateUp,

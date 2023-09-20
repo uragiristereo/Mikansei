@@ -13,7 +13,6 @@ fun NavGraphBuilder.searchHistoryRoute(
 ) {
     composable(
         route = MainRoute.SearchHistory,
-        disableDeserialization = true,
         content = {
             SearchHistoryScreen(
                 onNavigateBack = navController::navigateUp,

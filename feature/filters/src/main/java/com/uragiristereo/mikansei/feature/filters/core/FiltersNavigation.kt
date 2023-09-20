@@ -13,7 +13,6 @@ fun NavGraphBuilder.filtersRoute(
 ) {
     composable(
         route = MainRoute.Filters,
-        disableDeserialization = true,
         content = {
             FiltersScreen(
                 onNavigateBack = navController::navigateUp,

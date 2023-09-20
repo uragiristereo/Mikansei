@@ -29,7 +29,7 @@ fun NavGraphBuilder.homeGraph(
         enterTransition = {
             when (initialState.destination.route) {
                 in HomeRoutesString -> fadeIn(animationSpec = tween(durationMillis = 300))
-                MainRoute.Search::class.route -> fadeIn()
+                MainRoute.Search::class.route -> holdIn()
                 else -> null
             }
         },
@@ -37,7 +37,7 @@ fun NavGraphBuilder.homeGraph(
             when (targetState.destination.route) {
                 in HomeRoutesString -> fadeOut(animationSpec = tween(durationMillis = 300))
                 MainRoute.Search::class.route -> holdOut()
-                MainRoute.Image::class.route -> fadeOut()
+                MainRoute.Image::class.route -> holdOut()
                 else -> null
             }
         },
@@ -45,7 +45,7 @@ fun NavGraphBuilder.homeGraph(
             when (initialState.destination.route) {
                 in HomeRoutesString -> fadeIn(animationSpec = tween(durationMillis = 300))
                 MainRoute.Search::class.route -> fadeIn()
-                MainRoute.Image::class.route -> holdIn(durationMillis = 350)
+                MainRoute.Image::class.route -> holdIn()
                 else -> null
             }
         },
@@ -53,7 +53,7 @@ fun NavGraphBuilder.homeGraph(
             when (targetState.destination.route) {
                 in HomeRoutesString -> fadeOut(animationSpec = tween(durationMillis = 300))
                 MainRoute.Search::class.route -> holdOut()
-                MainRoute.Image::class.route -> holdOut(durationMillis = 350)
+                MainRoute.Image::class.route -> holdOut()
                 else -> null
             }
         }

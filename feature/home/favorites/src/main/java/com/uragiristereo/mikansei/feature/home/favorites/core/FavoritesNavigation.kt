@@ -36,17 +36,14 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
         },
     )
 
-    dialog(
-        route = HomeRoute.AddToFavGroup::class,
-        content = {
-            AddToFavGroupDialog(
-                onDismiss = navController::popBackStack,
-                onNewFavoriteGroupClick = { postId ->
-                    navController.navigate(MainRoute.NewFavGroup(postId))
-                },
-            )
-        },
-    )
+    dialog<HomeRoute.AddToFavGroup> {
+        AddToFavGroupDialog(
+            onDismiss = navController::popBackStack,
+            onNewFavoriteGroupClick = { postId ->
+                navController.navigate(MainRoute.NewFavGroup(postId))
+            },
+        )
+    }
 
     composable(
         route = MainRoute.NewFavGroup(),

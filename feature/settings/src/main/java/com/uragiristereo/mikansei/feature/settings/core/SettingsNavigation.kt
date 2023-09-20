@@ -19,7 +19,6 @@ fun NavGraphBuilder.settingsGraph(
     ) {
         composable(
             route = SettingsRoute.Index,
-            disableDeserialization = true,
             content = {
                 SettingsScreen(
                     onNavigateBack = navController::navigateUp,

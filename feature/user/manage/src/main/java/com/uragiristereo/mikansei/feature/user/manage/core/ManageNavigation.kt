@@ -8,14 +8,12 @@ import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.manage.ManageUserScreen
 
-
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.manageRoute(
     navController: NavHostController,
 ) {
     composable(
         route = UserRoute.Manage,
-        disableDeserialization = true
     ) {
         ManageUserScreen(
             onNavigate = navController::navigate,

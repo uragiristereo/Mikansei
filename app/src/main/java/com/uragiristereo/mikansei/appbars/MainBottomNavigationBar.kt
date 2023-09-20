@@ -8,7 +8,6 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,14 +55,11 @@ fun MainBottomNavigationBar(
             backgroundColor = Color.Transparent,
             contentColor = MaterialTheme.colors.primary,
         ) {
-            MainNavigationItems.values().forEach { item ->
+            MainNavigationItems.entries.forEach { item ->
                 val currentRouteIsDialog = currentRoute in HomeDialogRoutesString && previousRoute == item.route.route
                 val selected = currentRoute == item.route::class.route || currentRouteIsDialog
 
                 BottomNavigationItem(
-                    label = {
-                        Text(text = stringResource(id = item.label))
-                    },
                     selected = selected,
                     icon = {
                         Icon(
@@ -86,7 +82,6 @@ fun MainBottomNavigationBar(
                             else -> onNavigate(item.route)
                         }
                     },
-                    alwaysShowLabel = false,
                     unselectedContentColor = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
                 )
             }
