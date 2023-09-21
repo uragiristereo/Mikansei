@@ -151,9 +151,7 @@ internal fun NewFavGroupScreen(
             DisposableEffect(key1 = viewModel) {
                 focusRequester.requestFocus()
 
-                onDispose {
-                    focusRequester.freeFocus()
-                }
+                onDispose { }
             }
         }
     }
