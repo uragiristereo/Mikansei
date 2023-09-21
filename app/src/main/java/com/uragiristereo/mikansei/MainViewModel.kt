@@ -20,6 +20,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class MainViewModel(
     savedStateHandle: SavedStateHandle,
@@ -31,8 +32,7 @@ class MainViewModel(
 
     var confirmExit by mutableStateOf(true)
 
-    var navigatedBackByGesture by mutableStateOf(false)
-        private set
+    val navigatedBackByGesture = mutableStateOf(false)
 
     var currentRoute by mutableStateOf(HomeRoute.Posts::class.route)
 
@@ -61,7 +61,8 @@ class MainViewModel(
 
     @JvmName(name = "setNavigatedBackByGesture2")
     fun setNavigatedBackByGesture(value: Boolean) {
-        navigatedBackByGesture = value
+        Timber.d("navigatedBackByGesture $value")
+        navigatedBackByGesture.value = value
     }
 
     @JvmName(name = "setCurrentTags2")
