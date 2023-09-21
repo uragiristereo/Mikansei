@@ -1,7 +1,15 @@
 package com.uragiristereo.mikansei.feature.filters.core
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -11,11 +19,12 @@ import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheetState2
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun FiltersModalBottomSheet(
-    sheetState: ModalBottomSheetState,
+    sheetState: ModalBottomSheetState2,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

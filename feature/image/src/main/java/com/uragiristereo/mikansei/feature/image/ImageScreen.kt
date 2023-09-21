@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -25,6 +24,7 @@ import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.areNavigationBarsButtons
 import com.uragiristereo.mikansei.core.ui.extension.hideSystemBars
 import com.uragiristereo.mikansei.core.ui.extension.showSystemBars
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState2
 import com.uragiristereo.mikansei.feature.image.image.ImagePost
 import com.uragiristereo.mikansei.feature.image.more.MoreBottomSheet
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ internal fun ImageScreen(
     val hapticFeedback = LocalHapticFeedback.current
 
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val sheetState = rememberModalBottomSheetState2(initialValue = ModalBottomSheetValue.Hidden)
 
     val maxOffset = remember { with(density) { 100.dp.toPx() } }
 
@@ -81,7 +81,9 @@ internal fun ImageScreen(
         statusBarColor = Color.Transparent,
         statusBarDarkIcons = false,
         navigationBarColor = when {
-            WindowInsets.navigationBarsIgnoringVisibility.areNavigationBarsButtons() -> Color.Black.copy(alpha = 0.6f)
+            WindowInsets.navigationBarsIgnoringVisibility.areNavigationBarsButtons() -> Color.Black.copy(
+                alpha = 0.7f
+            )
             else -> Color.Transparent
         },
         navigationBarDarkIcons = false,

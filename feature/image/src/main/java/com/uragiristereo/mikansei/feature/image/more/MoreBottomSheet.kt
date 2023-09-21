@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,7 +17,6 @@ import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -44,6 +44,7 @@ import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DragHandle
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.extension.forEach
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheetState2
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.image.more.core.MoreActionsRow
 import com.uragiristereo.mikansei.feature.image.more.core.MoreCloseButton
@@ -59,7 +60,7 @@ import java.text.DateFormat
 @Composable
 internal fun MoreBottomSheet(
     post: Post,
-    sheetState: ModalBottomSheetState,
+    sheetState: ModalBottomSheetState2,
     showExpandButton: Boolean,
     onExpandClick: () -> Unit,
     onAddToClick: () -> Unit,
@@ -215,7 +216,14 @@ internal fun MoreBottomSheet(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .combinedClickable(
-                                        onClick = remember { { viewModel.launchUrl(context = context, url = fixedSource) } },
+                                        onClick = remember {
+                                            {
+                                                viewModel.launchUrl(
+                                                    context = context,
+                                                    url = fixedSource
+                                                )
+                                            }
+                                        },
                                         onLongClick = {
                                             hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                                             viewModel.copyToClipboard(context, fixedSource)
@@ -323,7 +331,7 @@ internal fun MoreBottomSheet(
                     onHeightChanged = remember { { viewModel.closeButtonHeight = it } },
                     onClick = {
                         scope.launch {
-                            sheetState.animateTo(ModalBottomSheetValue.Hidden)
+                            sheetState.hide()
                         }
                     },
                 )
@@ -332,4 +340,20 @@ internal fun MoreBottomSheet(
             }
         },
     )
+}
+
+@Composable
+fun A(
+    modifier: Modifier = Modifier,
+) {
+    Box {
+        val boxScope = this
+        Row {
+            Divider(
+                modifier = with(boxScope) {
+                    Modifier.matchParentSize()
+                },
+            )
+        }
+    }
 }

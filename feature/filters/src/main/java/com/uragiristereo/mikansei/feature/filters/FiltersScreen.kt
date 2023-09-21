@@ -9,7 +9,6 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -19,6 +18,7 @@ import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndic
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState2
 import com.uragiristereo.mikansei.feature.filters.appbars.FiltersTopAppBar
 import com.uragiristereo.mikansei.feature.filters.column.FiltersColumn
 import com.uragiristereo.mikansei.feature.filters.core.FiltersAddTagsDialog
@@ -34,7 +34,7 @@ internal fun FiltersScreen(
     viewModel: FiltersViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val sheetState = rememberModalBottomSheetState2(initialValue = ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
 
