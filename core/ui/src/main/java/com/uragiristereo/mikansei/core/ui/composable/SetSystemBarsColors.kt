@@ -2,7 +2,7 @@ package com.uragiristereo.mikansei.core.ui.composable
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -15,7 +15,7 @@ fun SetSystemBarsColors(
 ) {
     val systemUiController = rememberSystemUiController()
 
-    LaunchedEffect(
+    DisposableEffect(
         key1 = statusBarColor,
         key2 = navigationBarColor,
     ) {
@@ -29,6 +29,8 @@ fun SetSystemBarsColors(
             darkIcons = navigationBarDarkIcons,
             navigationBarContrastEnforced = false,
         )
+
+        onDispose { }
     }
 }
 
