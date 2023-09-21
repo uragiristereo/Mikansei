@@ -59,7 +59,7 @@ internal fun FavoritesGrid(
                     .navigationBarsPadding()
                     .height(
                         when (windowSize) {
-                            WindowSize.COMPACT -> 57.dp
+                            WindowSize.COMPACT -> 57.dp + 48.dp
                             else -> 0.dp
                         }
                     ),

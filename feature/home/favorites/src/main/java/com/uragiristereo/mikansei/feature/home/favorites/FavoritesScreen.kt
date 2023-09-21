@@ -86,7 +86,7 @@ internal fun FavoritesScreen(
                         contentDescription = null,
                     )
                 },
-                modifier = Modifier.padding(bottom = 57.dp + 32.dp),
+                modifier = Modifier.padding(bottom = 57.dp + 16.dp),
             )
         },
         modifier = modifier
