@@ -35,7 +35,7 @@ internal fun PostItem(
     Box(
         modifier = modifier
             .aspectRatio(post.aspectRatio)
-            .clip(RoundedCornerShape(size = 4.dp))
+            .clip(RoundedCornerShape(size = 8.dp))
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongPress,

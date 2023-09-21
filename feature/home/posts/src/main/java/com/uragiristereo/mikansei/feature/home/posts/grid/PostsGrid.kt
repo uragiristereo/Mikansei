@@ -1,7 +1,14 @@
 package com.uragiristereo.mikansei.feature.home.posts.grid
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -13,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.ui.WindowSize
+import com.uragiristereo.mikansei.core.ui.extension.plus
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -36,11 +44,9 @@ internal fun PostsGrid(
                 else -> 4
             }
         ),
-        contentPadding = PaddingValues(
-            start = 8.dp,
-            end = 8.dp,
-            top = 8.dp + topAppBarHeight,
-            bottom = 8.dp + 1.dp +
+        contentPadding = PaddingValues(all = 8.dp) + PaddingValues(
+            top = topAppBarHeight,
+            bottom = 1.dp +
                     WindowInsets.navigationBars
                         .asPaddingValues()
                         .calculateBottomPadding() +
@@ -49,7 +55,7 @@ internal fun PostsGrid(
                         else -> 0.dp
                     },
         ),
-        verticalArrangement = Arrangement.spacedBy(space = 8.dp),
+        verticalItemSpacing = 8.dp,
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
         modifier = modifier.fillMaxSize(),
     ) {
