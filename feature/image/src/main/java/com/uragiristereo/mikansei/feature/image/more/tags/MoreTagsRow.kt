@@ -1,23 +1,23 @@
 package com.uragiristereo.mikansei.feature.image.more.tags
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.flowlayout.FlowCrossAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
 import com.uragiristereo.mikansei.core.domain.entity.tag.Tag
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun MoreTagsRow(
     tags: SnapshotStateList<Tag>,
     modifier: Modifier = Modifier,
 ) {
     FlowRow(
-        crossAxisAlignment = FlowCrossAxisAlignment.Center,
-        mainAxisSpacing = 8.dp,
-        crossAxisSpacing = 12.dp,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.padding(horizontal = 16.dp),
     ) {
         tags.forEach { tag ->
@@ -25,6 +25,7 @@ internal fun MoreTagsRow(
                 tag = tag,
                 selected = false,
                 onSelectedChange = { },
+                modifier = Modifier.padding(bottom = 12.dp),
             )
         }
     }
