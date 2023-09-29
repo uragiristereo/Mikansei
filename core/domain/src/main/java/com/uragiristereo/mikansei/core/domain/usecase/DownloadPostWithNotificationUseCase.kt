@@ -51,14 +51,28 @@ class DownloadPostWithNotificationUseCase(
             .addAction(R.drawable.close, context.getString(R.string.download_cancel), cancelDownloadPendingIntent)
 
         val file = File(post.image.url)
+        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
 
         val values = ContentValues().apply {
+            val directory = when {
+                mimeType?.contains("video") == true -> Environment.DIRECTORY_MOVIES
+                else -> Environment.DIRECTORY_PICTURES
+            }
+
             put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-            put(MediaStore.MediaColumns.MIME_TYPE, MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension))
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + File.separator + context.getString(R.string.app_name))
+            put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
+            put(
+                MediaStore.MediaColumns.RELATIVE_PATH,
+                directory + File.separator + context.getString(R.string.app_name)
+            )
         }
 
-        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)!!
+        val location = when {
+            mimeType?.contains("video") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            else -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+
+        val uri = resolver.insert(location, values)!!
 
         Timber.d(uri.toString())
 
