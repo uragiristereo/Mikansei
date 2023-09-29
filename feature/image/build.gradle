@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":core:danbooru"))
     implementation(project(":core:database"))
     implementation(project(":core:model"))
+    implementation(project(":core:network"))
     implementation(project(":core:preferences"))
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
@@ -68,5 +69,6 @@ dependencies {
     // Safer Navigation Compose
     implementation(libs.bundles.safer.navigation)
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
+    // AndroidX Media3
+    implementation(libs.bundles.media3)
 }

@@ -19,4 +19,8 @@ class ViewerViewModel(
     fun setAppBarsVisible(value: Boolean) {
         areAppBarsVisible = value
     }
+
+    fun toggleAppBarsVisible() {
+        areAppBarsVisible = !areAppBarsVisible
+    }
 }

@@ -5,15 +5,12 @@ import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
@@ -29,18 +26,16 @@ import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
+import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageBottomAppBar
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageTopAppBar
 import com.uragiristereo.mikansei.feature.image.image.core.ImageLoadingState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
 import kotlin.math.abs
 
 @Composable
 internal fun ImagePost(
-    maxOffset: Float,
     onNavigateBack: (Boolean) -> Unit,
     onMoreClick: () -> Unit,
     areAppBarsVisible: Boolean,
@@ -52,7 +47,6 @@ internal fun ImagePost(
     val lambdaOnDownload = LocalLambdaOnDownload.current
     val lambdaOnShare = LocalLambdaOnShare.current
 
-    val scope = rememberCoroutineScope()
     val windowSize = rememberWindowSize()
 
     val post = remember { viewModel.post }
@@ -237,37 +231,14 @@ internal fun ImagePost(
                 .graphicsLayer {
                     translationY = viewModel.offsetY.value
                 }
-                .pointerInput(key1 = viewModel.currentZoom) {
-                    if (viewModel.currentZoom == 1f) {
-                        detectDragGestures(
-                            onDragEnd = {
-                                scope.launch {
-                                    delay(timeMillis = 50L)
-
-                                    if (abs(viewModel.offsetY.value) >= maxOffset * 0.7) {
-                                        onAppBarsVisibleChange(true)
-                                        onNavigateBack(true)
-                                    } else {
-                                        viewModel.offsetY.animateTo(targetValue = 0f)
-                                    }
-                                }
-                            },
-                            onDrag = { change, dragAmount ->
-                                change.consume()
-
-                                val deceleratedDragAmount = dragAmount.y * 0.7f
-
-                                if (abs(viewModel.offsetY.value + deceleratedDragAmount) <= maxOffset) {
-                                    scope.launch {
-                                        viewModel.offsetY.snapTo(
-                                            targetValue = viewModel.offsetY.value + deceleratedDragAmount,
-                                        )
-                                    }
-                                }
-                            },
-                        )
-                    }
-                },
+                .verticallyDraggable(
+                    key1 = viewModel.currentZoom,
+                    offsetY = viewModel.offsetY,
+                    onDragExit = {
+                        onAppBarsVisibleChange(true)
+                        onNavigateBack(true)
+                    },
+                ),
         )
     }
 }

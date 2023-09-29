@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -340,20 +339,4 @@ internal fun MoreBottomSheet(
             }
         },
     )
-}
-
-@Composable
-fun A(
-    modifier: Modifier = Modifier,
-) {
-    Box {
-        val boxScope = this
-        Row {
-            Divider(
-                modifier = with(boxScope) {
-                    Modifier.matchParentSize()
-                },
-            )
-        }
-    }
 }

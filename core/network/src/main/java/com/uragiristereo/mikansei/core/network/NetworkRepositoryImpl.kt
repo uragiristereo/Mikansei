@@ -1,6 +1,12 @@
 package com.uragiristereo.mikansei.core.network
 
 import android.content.Context
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.database.StandaloneDatabaseProvider
+import androidx.media3.datasource.cache.CacheDataSource
+import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor
+import androidx.media3.datasource.cache.SimpleCache
+import androidx.media3.datasource.okhttp.OkHttpDataSource
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mikansei.core.network.api.MejiboardApi
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
@@ -15,7 +21,9 @@ import okhttp3.OkHttpClient
 import okhttp3.dnsoverhttps.DnsOverHttps
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import java.io.File
 
+@androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalSerializationApi::class)
 class NetworkRepositoryImpl(
     context: Context,
@@ -56,6 +64,16 @@ class NetworkRepositoryImpl(
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create(MejiboardApi::class.java)
+
+    override val exoPlayerCacheFactory = CacheDataSource.Factory()
+        .setCache(
+            SimpleCache(
+                File(context.cacheDir, "video_cache"),
+                LeastRecentlyUsedCacheEvictor(1024 * 1024 * 256L),
+                StandaloneDatabaseProvider(context),
+            )
+        )
+        .setUpstreamDataSourceFactory(OkHttpDataSource.Factory(okHttpClient))
 
     init {
         CoroutineScope(Dispatchers.Main).launch {
