@@ -10,6 +10,6 @@ object Constants {
     const val POSTS_PER_PAGE = 100
 
     val SUPPORTED_TYPES_IMAGE = listOf("jpg", "jpeg", "png", "gif")
-    val SUPPORTED_TYPES_VIDEO = listOf("webm", "mp4")
+    val SUPPORTED_TYPES_VIDEO = listOf("webm", "mp4", "zip")
     val SUPPORTED_TYPES_ANIMATED = SUPPORTED_TYPES_VIDEO + listOf("gif")
 }
