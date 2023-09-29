@@ -1,14 +1,15 @@
 package com.uragiristereo.mikansei.core.domain.entity.post
 
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
+import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruVariant
 import com.uragiristereo.mikansei.core.domain.entity.UnitConverter
 import com.uragiristereo.mikansei.core.model.danbooru.Rating
 import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.model.danbooru.post.PostImage
-import java.io.File
-import java.util.*
 
 fun DanbooruPost.toPost(): Post {
+    val image = mediaAsset.variants!!.first { it.type == "original" }.toPostImage()
+
     return Post(
         id = id ?: 0,
         createdAt = createdAt,
@@ -30,26 +31,12 @@ fun DanbooruPost.toPost(): Post {
         isDeleted = isDeleted,
         isBanned = isBanned,
         hasScaled = hasLarge,
-        image = PostImage(
-            url = fileUrl.orEmpty(),
-            width = imageWidth,
-            height = imageHeight,
-            fileType = fileUrl?.let { File(it).extension }.orEmpty(),
-        ),
-        scaledImage = PostImage(
-            url = largeFileUrl.orEmpty(),
-            width = 850,
-            height = 850 * imageWidth / imageHeight,
-            fileType = largeFileUrl?.let { File(it).extension }.orEmpty(),
-        ),
-        previewImage = PostImage(
-            url = previewFileUrl.orEmpty()
-                .replace(oldValue = "180x180", newValue = "720x720")
-                .replace(oldValue = ".jpg", newValue = ".webp"),
-            width = 720 * imageWidth / imageHeight,
-            height = 720,
-            fileType = "webp",
-        ),
+        image = image,
+        scaledImage = when {
+            hasLarge -> mediaAsset.variants!!.first { it.type == "sample" }.toPostImage()
+            else -> image
+        },
+        previewImage = mediaAsset.variants!!.first { it.type == "720x720" }.toPostImage(),
         aspectRatio = UnitConverter.coerceAspectRatio(imageWidth, imageHeight),
         tags = tagString.split(' '),
     )
@@ -57,6 +44,16 @@ fun DanbooruPost.toPost(): Post {
 
 @JvmName("DanbooruPostListToPostList")
 fun List<DanbooruPost>.toPostList(): List<Post> {
-    return map { item -> item.toPost() }
-        .filter { item -> item.id != 0 }
+    return filter { item ->
+        item.id != null && item.mediaAsset.variants != null
+    }.map { item -> item.toPost() }
+}
+
+private fun DanbooruVariant.toPostImage(): PostImage {
+    return PostImage(
+        url = url,
+        width = width,
+        height = height,
+        fileType = fileExt,
+    )
 }

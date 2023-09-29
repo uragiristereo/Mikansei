@@ -5,7 +5,7 @@ import androidx.annotation.Keep
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.*
+import java.util.Date
 
 @Keep
 @Serializable
@@ -122,6 +122,9 @@ data class DanbooruPost(
 
     @SerialName("has_visible_children")
     val hasVisibleChildren: Boolean,
+
+    @SerialName("media_asset")
+    val mediaAsset: DanbooruMediaAsset,
 
     @SerialName("tag_string_general")
     val tagStringGeneral: String,
