@@ -64,8 +64,16 @@ internal fun PostItem(
         val fileType = remember(post) { post.image.fileType }
 
         if (fileType in Constants.SUPPORTED_TYPES_ANIMATED) {
+            val hasSound = remember(post) {
+                "sound" in post.tags
+            }
+
             PostLabel(
-                fileType = fileType,
+                fileType = when {
+                    fileType == "zip" -> "ugoira"
+                    else -> fileType
+                },
+                hasSound = hasSound,
                 modifier = Modifier.align(Alignment.BottomStart),
             )
         }
