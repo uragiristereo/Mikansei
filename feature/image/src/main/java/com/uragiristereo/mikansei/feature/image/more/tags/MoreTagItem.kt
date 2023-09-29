@@ -44,14 +44,27 @@ internal fun MoreTagItem(
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val tagColor = remember(tag) {
-        when (tag.category) {
-            TagCategory.GENERAL -> Color(0xFF47A4FD)
-            TagCategory.CHARACTER -> Color(0xFF8052FF)
-            TagCategory.COPYRIGHT -> Color(0xFF00B26F)
-            TagCategory.ARTIST -> Color(0xFFFF6C6D)
-            TagCategory.META -> Color(0xFFFF9E53)
-            TagCategory.UNKNOWN -> Color(0xFF47A4FD)
+    val isLight = MaterialTheme.colors.isLight
+
+    val tagColor = remember(tag, isLight) {
+        when {
+            isLight -> when (tag.category) {
+                TagCategory.GENERAL -> Color(0xFF0075F8)
+                TagCategory.CHARACTER -> Color(0xFF00AB2C)
+                TagCategory.COPYRIGHT -> Color(0xFFA800AA)
+                TagCategory.ARTIST -> Color(0xFFC00004)
+                TagCategory.META -> Color(0xFFFD9200)
+                TagCategory.UNKNOWN -> Color(0xFF0075F8)
+            }
+
+            else -> when (tag.category) {
+                TagCategory.GENERAL -> Color(0xFF009BE6)
+                TagCategory.CHARACTER -> Color(0xFF35C64A)
+                TagCategory.COPYRIGHT -> Color(0xFFC797FF)
+                TagCategory.ARTIST -> Color(0xFFFF8A8B)
+                TagCategory.META -> Color(0xFFEAD084)
+                TagCategory.UNKNOWN -> Color(0xFF009BE6)
+            }
         }
     }
 
@@ -68,7 +81,7 @@ internal fun MoreTagItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .width(IntrinsicSize.Min)
-            .clip(RoundedCornerShape(size = 16.dp))
+            .clip(RoundedCornerShape(size = 8.dp))
             .background(backgroundColor)
             .clickable(
                 onClick = {
@@ -82,7 +95,7 @@ internal fun MoreTagItem(
     ) {
         Text(
             text = tag.name,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Medium,
             color = contentColor,
             modifier = Modifier
                 .weight(1f)
@@ -92,6 +105,7 @@ internal fun MoreTagItem(
         Text(
             text = tag.postCountFormatted,
             color = contentColor,
+            fontWeight = FontWeight.Light,
         )
     }
 }
