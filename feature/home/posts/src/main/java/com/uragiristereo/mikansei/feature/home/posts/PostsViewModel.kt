@@ -28,7 +28,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
-import java.util.*
+import java.util.UUID
 
 @OptIn(SavedStateHandleSaveableApi::class)
 class PostsViewModel(

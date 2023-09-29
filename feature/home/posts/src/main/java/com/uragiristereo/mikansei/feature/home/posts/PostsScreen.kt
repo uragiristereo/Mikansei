@@ -1,22 +1,16 @@
 package com.uragiristereo.mikansei.feature.home.posts
 
 import android.app.Activity
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -223,7 +217,10 @@ internal fun PostsScreen(
             .nestedScroll(
                 connection = remember {
                     object : NestedScrollConnection {
-                        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                        override fun onPreScroll(
+                            available: Offset,
+                            source: NestedScrollSource
+                        ): Offset {
                             val delta = available.y
                             val newOffset = viewModel.offsetY.value + delta
 
@@ -274,7 +271,10 @@ internal fun PostsScreen(
                                 contentColor = MaterialTheme.colors.primary,
                                 modifier = Modifier
                                     .padding(top = viewModel.topAppBarHeight)
-                                    .align(Alignment.TopCenter),
+                                    .align(Alignment.TopCenter)
+                                    .graphicsLayer {
+                                        translationY = viewModel.offsetY.value
+                                    },
                             )
                         }
                     }
@@ -338,27 +338,6 @@ internal fun PostsScreen(
                 .graphicsLayer {
                     translationY = viewModel.offsetY.value
                 },
-        )
-
-        AnimatedVisibility(
-            visible = viewModel.loading == PostsLoadingState.FROM_LOAD_MORE,
-            enter = fadeIn(),
-            exit = fadeOut(),
-            modifier = Modifier.align(Alignment.BottomCenter),
-            content = {
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(MaterialTheme.colors.background)
-                        .navigationBarsPadding()
-                        .padding(
-                            bottom = when (windowSize) {
-                                WindowSize.COMPACT -> 56.dp + 1.dp
-                                else -> 0.dp
-                            },
-                        ),
-                )
-            },
         )
     }
 }
