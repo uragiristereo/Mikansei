@@ -9,7 +9,7 @@ fun UserField.toDanbooruUserField(): DanbooruUserField {
             enableSafeMode = safeMode,
             showDeletedPosts = showDeletedPosts,
             defaultImageSize = defaultImageSize?.getEnumForDanbooru(),
-            blacklistedTags = blacklistedTags?.joinToString(separator = " "),
+            blacklistedTags = blacklistedTags?.joinToString(separator = "\n"),
         )
     )
 }
