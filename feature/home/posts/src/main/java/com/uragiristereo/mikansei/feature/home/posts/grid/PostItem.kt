@@ -60,17 +60,15 @@ internal fun PostItem(
             modifier = Modifier.fillMaxSize(),
         )
 
-        if (post.type in arrayOf(Post.Type.VIDEO, Post.Type.UGOIRA)) {
-            val hasSound = remember(post) {
-                "sound" in post.tags
-            }
-
+        if (post.type in arrayOf(Post.Type.ANIMATED_GIF, Post.Type.VIDEO, Post.Type.UGOIRA)) {
             PostLabel(
                 fileType = when {
                     post.type == Post.Type.UGOIRA -> "ugoira"
                     else -> post.medias.original.fileType
                 },
-                hasSound = hasSound,
+                hasSound = remember(post) {
+                    "sound" in post.tags
+                },
                 modifier = Modifier.align(Alignment.BottomStart),
             )
         }
