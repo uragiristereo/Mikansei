@@ -6,16 +6,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.database.dao.user.toUserRow
-import com.uragiristereo.mikansei.core.domain.entity.user.UserField
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.domain.module.database.model.toUserRow
 import com.uragiristereo.mikansei.core.domain.usecase.SyncUserSettingsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
 import com.uragiristereo.mikansei.core.model.preferences.base.Preference
+import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
-import com.uragiristereo.mikansei.core.model.user.User
-import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
-import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
 import com.uragiristereo.mikansei.core.product.preference.BottomSheetPreferenceData
 import com.uragiristereo.mikansei.core.resources.R
 import kotlinx.coroutines.flow.launchIn
@@ -27,7 +27,7 @@ class UserSettingsViewModel(
     private val syncUserSettingsUseCase: SyncUserSettingsUseCase,
     private val updateUserSettingsUseCase: UpdateUserSettingsUseCase,
 ) : ViewModel() {
-    var activeUser by mutableStateOf<User?>(null)
+    var activeUser by mutableStateOf<Profile?>(null)
         private set
 
     var loading by mutableStateOf(true)
@@ -36,8 +36,8 @@ class UserSettingsViewModel(
     var ratingFilters by mutableStateOf(
         value = BottomSheetPreferenceData(
             preferenceTextResId = R.string.settings_booru_listing_mode_select,
-            items = RatingPreference.values().toList(),
-            selectedItem = activeUser?.postsRatingFilter,
+            items = RatingPreference.entries,
+            selectedItem = activeUser?.mikansei?.postsRatingFilter,
         ),
     )
         private set
@@ -45,7 +45,7 @@ class UserSettingsViewModel(
     init {
         userDao.getActive()
             .onEach {
-                activeUser = it.toUser()
+                activeUser = it.toProfile()
                 ratingFilters = ratingFilters.copy(selectedItem = it.postsRatingFilter)
             }
             .launchIn(viewModelScope)
@@ -63,7 +63,7 @@ class UserSettingsViewModel(
         }
     }
 
-    private fun updateSettings(data: UserField) {
+    private fun updateSettings(data: ProfileSettingsField) {
         viewModelScope.launch {
             loading = activeUser?.id != 0
 
@@ -74,15 +74,15 @@ class UserSettingsViewModel(
     }
 
     fun onSafeModeChange(value: Boolean) {
-        updateSettings(data = UserField(safeMode = value))
+        updateSettings(data = ProfileSettingsField(enableSafeMode = value))
     }
 
     fun onShowDeletedPostsChange(value: Boolean) {
-        updateSettings(data = UserField(showDeletedPosts = value))
+        updateSettings(data = ProfileSettingsField(showDeletedPosts = value))
     }
 
     fun onDetailSizeChange(value: DetailSizePreference) {
-        updateSettings(data = UserField(defaultImageSize = value))
+        updateSettings(data = ProfileSettingsField(defaultImageSize = value))
     }
 
     fun setBottomSheetPreferenceState(preference: Preference) {

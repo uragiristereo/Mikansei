@@ -33,8 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mikansei.core.model.ShareOption
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
@@ -53,7 +53,6 @@ import com.uragiristereo.mikansei.feature.image.more.tags.MoreTagsRow
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.text.DateFormat
-
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -198,18 +197,9 @@ internal fun MoreBottomSheet(
                     }
 
                     post.source?.let { source ->
-                        val pixivSource = post.pixivId?.let {
-                            "https://pixiv.net/en/artworks/$it"
-                        }
-
-                        val fixedSource = when {
-                            pixivSource != null -> pixivSource
-                            else -> source
-                        }
-
                         item {
                             Text(
-                                text = fixedSource,
+                                text = source,
                                 fontSize = 14.sp,
                                 color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                                 modifier = Modifier
@@ -219,13 +209,13 @@ internal fun MoreBottomSheet(
                                             {
                                                 viewModel.launchUrl(
                                                     context = context,
-                                                    url = fixedSource
+                                                    url = source
                                                 )
                                             }
                                         },
                                         onLongClick = {
                                             hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                            viewModel.copyToClipboard(context, fixedSource)
+                                            viewModel.copyToClipboard(context, source)
                                         },
                                     )
                                     .padding(

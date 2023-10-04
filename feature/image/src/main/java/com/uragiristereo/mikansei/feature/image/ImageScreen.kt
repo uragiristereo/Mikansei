@@ -16,9 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import com.uragiristereo.mikansei.core.model.Constants
-import com.uragiristereo.mikansei.core.model.ShareOption
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
@@ -92,8 +91,8 @@ internal fun ImageScreen(
     )
 
     Box(modifier = modifier) {
-        when (val postType = viewModel.post.image.fileType) {
-            in Constants.SUPPORTED_TYPES_IMAGE -> {
+        when (val postType = viewModel.post.type) {
+            Post.Type.IMAGE, Post.Type.ANIMATED_GIF -> {
                 ImagePost(
                     onNavigateBack = onNavigateBack,
                     onMoreClick = lambdaOnMoreClick,
@@ -102,7 +101,7 @@ internal fun ImageScreen(
                 )
             }
 
-            in Constants.SUPPORTED_TYPES_VIDEO -> {
+            Post.Type.VIDEO, Post.Type.UGOIRA -> {
                 VideoPost(
                     areAppBarsVisible = viewModel.areAppBarsVisible,
                     onAppBarsVisibleChange = viewModel::setAppBarsVisible,
@@ -115,7 +114,7 @@ internal fun ImageScreen(
                         lambdaOnShare(
                             viewModel.post,
                             when (postType) {
-                                "zip" -> ShareOption.COMPRESSED
+                                Post.Type.UGOIRA -> ShareOption.COMPRESSED
                                 else -> ShareOption.ORIGINAL
                             },
                         )

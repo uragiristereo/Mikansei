@@ -1,15 +1,20 @@
 package com.uragiristereo.mikansei.feature.image.more.info
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.Rating
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
 import com.uragiristereo.mikansei.core.resources.R
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -59,8 +64,8 @@ internal fun MoreInfoColumn(
                 when {
                     stateExpanded -> {
                         Column {
-                            if (post.hasScaled) {
-                                post.scaledImage.apply {
+                            post.medias.scaled?.let {
+                                it.apply {
                                     MoreInfo(
                                         title = stringResource(id = R.string.image_compressed),
                                         subtitle = "$width x $height\n$scaledImageFileSizeStr・$fileType",
@@ -69,7 +74,7 @@ internal fun MoreInfoColumn(
                                 }
                             }
 
-                            post.image.apply {
+                            post.medias.original.apply {
                                 MoreInfo(
                                     title = stringResource(id = R.string.image_original),
                                     subtitle = "$width x $height\n$originalImageFileSizeStr・$fileType",

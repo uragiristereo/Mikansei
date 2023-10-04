@@ -31,6 +31,7 @@ android {
 
 dependencies {
     implementation(project(":core:database"))
+    implementation(project(":core:domain"))
     implementation(project(":core:model"))
     implementation(project(":core:preferences"))
     implementation(project(":core:product"))

@@ -5,16 +5,28 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
-import com.uragiristereo.mikansei.core.product.preference.*
+import com.uragiristereo.mikansei.core.product.preference.BottomSheetPreference
+import com.uragiristereo.mikansei.core.product.preference.DropDownPreference
+import com.uragiristereo.mikansei.core.product.preference.RegularPreference
+import com.uragiristereo.mikansei.core.product.preference.SwitchPreference
+import com.uragiristereo.mikansei.core.product.preference.getTitleString
+import com.uragiristereo.mikansei.core.product.preference.rememberBottomSheetPreferenceState
+import com.uragiristereo.mikansei.core.product.preference.rememberDropDownPreferenceState
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
@@ -72,7 +84,7 @@ internal fun UserSettingsScreen(
                 SwitchPreference(
                     title = "Safe mode",
                     subtitle = "Show only safe (general) images. Hide sensitive, questionable and explicit images.",
-                    selected = viewModel.activeUser?.safeMode ?: false,
+                    selected = viewModel.activeUser?.danbooru?.safeMode ?: false,
                     onSelectedChange = viewModel::onSafeModeChange,
                     icon = null,
                     enabled = !viewModel.loading,
@@ -80,7 +92,7 @@ internal fun UserSettingsScreen(
             }
 
             item {
-                val safeMode = viewModel.activeUser?.safeMode
+                val safeMode = viewModel.activeUser?.danbooru?.safeMode
 
                 val showPreference = when {
                     safeMode == null -> false
@@ -88,7 +100,10 @@ internal fun UserSettingsScreen(
                     else -> true
                 }
 
-                AnimatedContent(targetState = showPreference) { state ->
+                AnimatedContent(
+                    targetState = showPreference,
+                    label = "PostRatingFilter",
+                ) { state ->
                     if (state) {
                         RegularPreference(
                             title = "Posts rating listing filters (*)",
@@ -108,7 +123,7 @@ internal fun UserSettingsScreen(
                 SwitchPreference(
                     title = "Show deleted posts",
                     subtitle = null,
-                    selected = viewModel.activeUser?.showDeletedPosts ?: false,
+                    selected = viewModel.activeUser?.danbooru?.showDeletedPosts ?: false,
                     onSelectedChange = viewModel::onShowDeletedPostsChange,
                     icon = null,
                     enabled = !viewModel.loading,
@@ -118,8 +133,8 @@ internal fun UserSettingsScreen(
             item {
                 DropDownPreference(
                     state = rememberDropDownPreferenceState(
-                        items = DetailSizePreference.values(),
-                        selectedItem = viewModel.activeUser?.defaultImageSize,
+                        items = DetailSizePreference.entries.toTypedArray(),
+                        selectedItem = viewModel.activeUser?.danbooru?.defaultImageSize,
                         onItemSelected = viewModel::onDetailSizeChange,
                     ),
                     title = stringResource(id = R.string.settings_image_detail_size),

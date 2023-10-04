@@ -17,8 +17,8 @@ import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostWithNotificationUseCase
 import com.uragiristereo.mikansei.core.download.DownloadRepository
 import com.uragiristereo.mikansei.core.download.model.DownloadResource
-import com.uragiristereo.mikansei.core.model.ShareOption
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.core.DownloadState
 import com.uragiristereo.mikansei.core.resources.R
 import kotlinx.coroutines.delay
@@ -73,8 +73,8 @@ open class DownloadShareViewModelImpl : ViewModel(), DownloadShareViewModel, Koi
             }
 
         val url = when {
-            post.hasScaled && shareOption == ShareOption.COMPRESSED -> post.scaledImage.url
-            else -> post.image.url
+            post.medias.hasScaled && shareOption == ShareOption.COMPRESSED -> post.medias.scaled!!.url
+            else -> post.medias.original.url
         }
 
         val fileName = File(url).name

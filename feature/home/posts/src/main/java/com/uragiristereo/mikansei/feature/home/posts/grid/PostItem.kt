@@ -19,8 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.uragiristereo.mikansei.core.model.Constants
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -48,11 +47,11 @@ internal fun PostItem(
         AsyncImage(
             model = remember {
                 ImageRequest.Builder(context)
-                    .data(post.previewImage.url)
+                    .data(post.medias.preview.url)
                     .crossfade(durationMillis = 170)
                     .size(
-                        width = post.previewImage.width,
-                        height = post.previewImage.height,
+                        width = post.medias.preview.width,
+                        height = post.medias.preview.height,
                     )
                     .build()
             },
@@ -61,17 +60,15 @@ internal fun PostItem(
             modifier = Modifier.fillMaxSize(),
         )
 
-        val fileType = remember(post) { post.image.fileType }
-
-        if (fileType in Constants.SUPPORTED_TYPES_ANIMATED) {
+        if (post.type in arrayOf(Post.Type.VIDEO, Post.Type.UGOIRA)) {
             val hasSound = remember(post) {
                 "sound" in post.tags
             }
 
             PostLabel(
                 fileType = when {
-                    fileType == "zip" -> "ugoira"
-                    else -> fileType
+                    post.type == Post.Type.UGOIRA -> "ugoira"
+                    else -> post.medias.original.fileType
                 },
                 hasSound = hasSound,
                 modifier = Modifier.align(Alignment.BottomStart),

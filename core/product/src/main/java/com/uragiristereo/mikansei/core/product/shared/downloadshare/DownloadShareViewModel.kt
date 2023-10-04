@@ -1,8 +1,8 @@
 package com.uragiristereo.mikansei.core.product.shared.downloadshare
 
 import android.content.Context
-import com.uragiristereo.mikansei.core.model.ShareOption
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.core.DownloadState
 
 interface DownloadShareViewModel {

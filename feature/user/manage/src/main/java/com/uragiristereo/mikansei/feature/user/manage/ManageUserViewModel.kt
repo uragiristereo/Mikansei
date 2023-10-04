@@ -6,10 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.database.dao.user.toUserList
-import com.uragiristereo.mikansei.core.database.dao.user.toUserRow
-import com.uragiristereo.mikansei.core.model.user.User
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfileList
+import com.uragiristereo.mikansei.core.domain.module.database.model.toUserRow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -17,29 +17,29 @@ import kotlinx.coroutines.launch
 class ManageUserViewModel(
     private val userDao: UserDao,
 ) : ViewModel() {
-    var activeUser by mutableStateOf<User?>(null)
+    var activeUser by mutableStateOf<Profile?>(null)
         private set
 
-    var inactiveUsers by mutableStateOf(emptyList<User>())
+    var inactiveUsers by mutableStateOf(emptyList<Profile>())
         private set
 
     init {
         userDao.getActive()
-            .onEach { activeUser = it.toUser() }
+            .onEach { activeUser = it.toProfile() }
             .launchIn(viewModelScope)
 
         userDao.getInactive()
-            .onEach { inactiveUsers = it.toUserList() }
+            .onEach { inactiveUsers = it.toProfileList() }
             .launchIn(viewModelScope)
     }
 
-    fun switchActiveUser(user: User) {
+    fun switchActiveUser(user: Profile) {
         viewModelScope.launch {
             userDao.switchActiveUser(user.id)
         }
     }
 
-    fun logoutUser(user: User) {
+    fun logoutUser(user: Profile) {
         viewModelScope.launch {
             userDao.delete(user.toUserRow())
         }

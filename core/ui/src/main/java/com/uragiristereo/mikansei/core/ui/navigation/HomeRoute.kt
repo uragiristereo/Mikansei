@@ -2,7 +2,7 @@ package com.uragiristereo.mikansei.core.ui.navigation
 
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.github.uragiristereo.safer.compose.navigation.core.route
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import kotlinx.serialization.Serializable
 
 sealed interface HomeRoute : NavRoute {

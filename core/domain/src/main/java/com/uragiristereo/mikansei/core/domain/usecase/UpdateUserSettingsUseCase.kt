@@ -1,13 +1,9 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
-import com.uragiristereo.mikansei.core.danbooru.repository.DanbooruRepository
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.database.dao.user.toUserRow
-import com.uragiristereo.mikansei.core.domain.entity.user.UserField
-import com.uragiristereo.mikansei.core.domain.entity.user.toDanbooruUserField
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
 import com.uragiristereo.mikansei.core.model.result.Result
-import com.uragiristereo.mikansei.core.model.user.isAnonymous
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -16,17 +12,17 @@ class UpdateUserSettingsUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val userDao: UserDao,
 ) {
-    suspend operator fun invoke(data: UserField): Flow<Result<Unit>> {
-        val activeUser = userDao.getActive().first().toUser()
+    suspend operator fun invoke(data: ProfileSettingsField): Flow<Result<Unit>> {
+        val activeUser = userDao.getActive().first()
 
         return when {
-            activeUser.isAnonymous() -> flow {
+            activeUser.id == 0 -> flow {
                 val changes = activeUser.copy(
-                    safeMode = data.safeMode ?: activeUser.safeMode,
+                    safeMode = data.enableSafeMode ?: activeUser.safeMode,
                     showDeletedPosts = data.showDeletedPosts ?: activeUser.showDeletedPosts,
-                    defaultImageSize = data.defaultImageSize ?: activeUser.defaultImageSize,
-                    blacklistedTags = data.blacklistedTags ?: activeUser.blacklistedTags,
-                ).toUserRow()
+                    defaultImageSize = data.defaultImageSize?.getEnumForDanbooru() ?: activeUser.defaultImageSize,
+                    blacklistedTags = data.blacklistedTags?.joinToString("\n") ?: activeUser.blacklistedTags,
+                )
 
                 userDao.update(changes)
 
@@ -35,7 +31,7 @@ class UpdateUserSettingsUseCase(
 
             else -> danbooruRepository.updateUserSettings(
                 id = activeUser.id,
-                data = data.toDanbooruUserField(),
+                field = data,
             )
         }
     }

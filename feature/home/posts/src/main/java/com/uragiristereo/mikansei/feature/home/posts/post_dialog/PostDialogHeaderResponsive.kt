@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 
@@ -39,11 +39,11 @@ internal fun PostDialogHeaderResponsive(
     fun PostThumbnail(modifier: Modifier = Modifier) {
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(context)
-                .data(post.previewImage.url)
+                .data(post.medias.preview.url)
                 .crossfade(durationMillis = 170)
                 .size(
-                    width = post.previewImage.width,
-                    height = post.previewImage.height,
+                    width = post.medias.preview.width,
+                    height = post.medias.preview.height,
                 )
                 .build(),
             contentDescription = "#${post.id}",

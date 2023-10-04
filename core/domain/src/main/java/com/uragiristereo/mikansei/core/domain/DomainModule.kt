@@ -7,8 +7,6 @@ import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFileSizeUseCase
-import com.uragiristereo.mikansei.core.domain.usecase.GetPostUseCase
-import com.uragiristereo.mikansei.core.domain.usecase.GetPostVoteUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsAutoCompleteUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsUseCase
@@ -21,7 +19,6 @@ import org.koin.dsl.module
 
 object DomainModule {
     operator fun invoke(): Module = module {
-        factoryOf(::GetPostUseCase)
         factoryOf(::GetPostsUseCase)
         factoryOf(::GetTagsAutoCompleteUseCase)
         factoryOf(::GetTagsUseCase)
@@ -35,6 +32,5 @@ object DomainModule {
         factoryOf(::GetFavoritesUseCase)
         factoryOf(::GetFavoriteGroupsUseCase)
         factoryOf(::GetFavoritesAndFavoriteGroupsUseCase)
-        factoryOf(::GetPostVoteUseCase)
     }
 }

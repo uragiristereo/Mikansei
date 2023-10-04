@@ -19,8 +19,8 @@ import com.github.uragiristereo.safer.compose.navigation.animation.composable
 import com.github.uragiristereo.safer.compose.navigation.core.dialog
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.github.uragiristereo.safer.compose.navigation.core.route
-import com.uragiristereo.mikansei.core.model.ShareOption
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalNavigationRailPadding
@@ -75,7 +75,9 @@ fun NavGraphBuilder.postsRoute(
             }
 
             PostsScreen(
-                onNavigate = navController::navigate,
+                onNavigate = {
+                    navController.navigate(route = it)
+                },
                 onNavigateImage = lambdaOnNavigateImage,
                 onNavigateDialog = { post ->
                     navController.navigate(

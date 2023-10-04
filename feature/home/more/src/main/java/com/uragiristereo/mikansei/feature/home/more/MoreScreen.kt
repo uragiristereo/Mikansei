@@ -21,6 +21,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,10 +55,13 @@ internal fun MoreScreen(
 ) {
     val context = LocalContext.current
     val windowSize = rememberWindowSize()
-    val gridSize = remember { 2 }
+    val gridSize = 2
     val span: (LazyGridItemSpanScope.() -> GridItemSpan) = {
         GridItemSpan(currentLineSpan = gridSize)
     }
+
+    val activeUser by viewModel.activeUser.collectAsState()
+    val isOnlyAnonUserExist by viewModel.isOnlyAnonUserExist.collectAsState()
 
     ProductSetSystemBarsColor(
         navigationBarColor = Color.Transparent,
@@ -85,15 +90,15 @@ internal fun MoreScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            viewModel.activeUser?.let { activeUser ->
+            activeUser?.let { activeUser ->
                 item(span = span) {
                     activeUser.apply {
                         UserHeader(
                             name = name,
-                            nameAlias = nameAlias,
+                            nameAlias = mikansei?.nameAlias.orEmpty(),
                             userId = id,
                             level = level,
-                            isOnlyAnonUserExist = viewModel.isOnlyAnonUserExist,
+                            isOnlyAnonUserExist = isOnlyAnonUserExist,
                             onProfileClick = { },
                             onSettingsClick = {
                                 onNavigate(UserRoute.Settings)

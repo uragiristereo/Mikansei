@@ -26,13 +26,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 
 @Composable
 fun ScoreChips(
     score: Int,
-    state: ScoreState,
+    state: PostVote.Status,
     enabled: Boolean,
     onUpvoteClick: () -> Unit,
     onDownvoteClick: () -> Unit,
@@ -50,7 +51,7 @@ fun ScoreChips(
                 border = BorderStroke(
                     width = 1.dp,
                     color = when (state) {
-                        ScoreState.NONE -> MaterialTheme.colors.primary.copy(alpha = ContentAlpha.disabled)
+                        PostVote.Status.NONE -> MaterialTheme.colors.primary.copy(alpha = ContentAlpha.disabled)
                         else -> Color.Transparent
                     },
                 ),
@@ -58,9 +59,9 @@ fun ScoreChips(
             )
             .background(
                 color = when (state) {
-                    ScoreState.UPVOTED -> MaterialTheme.colors.primary
-                    ScoreState.DOWNVOTED -> MaterialTheme.colors.error
-                    ScoreState.NONE -> MaterialTheme.colors.background.backgroundElevation(0.dp)
+                    PostVote.Status.UPVOTED -> MaterialTheme.colors.primary
+                    PostVote.Status.DOWNVOTED -> MaterialTheme.colors.error
+                    PostVote.Status.NONE -> MaterialTheme.colors.background.backgroundElevation(0.dp)
                 }.copy(
                     alpha = when {
                         enabled -> ContentAlpha.high
@@ -71,7 +72,7 @@ fun ScoreChips(
             .clickable(
                 onClick = {
                     when (state) {
-                        ScoreState.NONE -> onUpvoteClick()
+                        PostVote.Status.NONE -> onUpvoteClick()
                         else -> onUnvoteClick()
                     }
                 },
@@ -85,7 +86,7 @@ fun ScoreChips(
             ),
     ) {
         val contentColor = when (state) {
-            ScoreState.NONE -> MaterialTheme.colors.primary
+            PostVote.Status.NONE -> MaterialTheme.colors.primary
             else -> MaterialTheme.colors.background
         }.copy(
             alpha = when {
@@ -99,7 +100,7 @@ fun ScoreChips(
             contentDescription = null,
             tint = contentColor.copy(
                 alpha = when {
-                    state == ScoreState.DOWNVOTED -> ContentAlpha.disabled
+                    state == PostVote.Status.DOWNVOTED -> ContentAlpha.disabled
                     enabled -> ContentAlpha.high
                     else -> ContentAlpha.disabled
                 },
@@ -125,7 +126,7 @@ fun ScoreChips(
             contentDescription = null,
             tint = contentColor.copy(
                 alpha = when {
-                    state == ScoreState.UPVOTED -> ContentAlpha.disabled
+                    state == PostVote.Status.UPVOTED -> ContentAlpha.disabled
                     enabled -> ContentAlpha.high
                     else -> ContentAlpha.disabled
                 },
@@ -135,7 +136,7 @@ fun ScoreChips(
                 .clickable(
                     onClick = {
                         when (state) {
-                            ScoreState.NONE -> onDownvoteClick()
+                            PostVote.Status.NONE -> onDownvoteClick()
                             else -> onUnvoteClick()
                         }
                     },

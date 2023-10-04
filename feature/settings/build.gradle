@@ -30,7 +30,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:danbooru"))
     implementation(project(":core:database"))
     implementation(project(":core:domain"))
     implementation(project(":core:model"))

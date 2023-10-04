@@ -6,12 +6,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.domain.entity.favorite.Favorite
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
-import com.uragiristereo.mikansei.core.model.user.isAnonymous
-import com.uragiristereo.mikansei.core.model.user.isNotAnonymous
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
@@ -24,7 +22,7 @@ class FavoritesViewModel(
 ) : ViewModel() {
     var activeUser by mutableStateOf(
         runBlocking {
-            userDao.getActive().first().toUser()
+            userDao.getActive().first().toProfile()
         }
     )
         private set
@@ -40,7 +38,7 @@ class FavoritesViewModel(
     init {
         viewModelScope.launch {
             userDao.getActive().collect {
-                val newUser = it.toUser()
+                val newUser = it.toProfile()
 
                 when {
                     newUser.isAnonymous() -> favorites = listOf()

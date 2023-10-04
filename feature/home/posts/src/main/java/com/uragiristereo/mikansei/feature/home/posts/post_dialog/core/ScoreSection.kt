@@ -21,15 +21,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.core.ScoreState
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.resources.R
 
 @Composable
 internal fun ScoreSection(
     score: Int,
-    state: ScoreState,
+    state: PostVote.Status,
     enabled: Boolean,
-    onVoteChange: (ScoreState) -> Unit,
+    onVoteChange: (PostVote.Status) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -41,8 +41,8 @@ internal fun ScoreSection(
             .clickable(
                 onClick = {
                     when (state) {
-                        ScoreState.NONE -> onVoteChange(ScoreState.UPVOTED)
-                        else -> onVoteChange(ScoreState.NONE)
+                        PostVote.Status.NONE -> onVoteChange(PostVote.Status.UPVOTED)
+                        else -> onVoteChange(PostVote.Status.NONE)
                     }
                 },
                 enabled = enabled,
@@ -57,13 +57,13 @@ internal fun ScoreSection(
         IconButton(
             enabled = enabled,
             interactionSource = when (state) {
-                ScoreState.NONE -> interactionSource
+                PostVote.Status.NONE -> interactionSource
                 else -> remember { MutableInteractionSource() }
             },
             onClick = {
                 when (state) {
-                    ScoreState.NONE -> onVoteChange(ScoreState.UPVOTED)
-                    else -> onVoteChange(ScoreState.NONE)
+                    PostVote.Status.NONE -> onVoteChange(PostVote.Status.UPVOTED)
+                    else -> onVoteChange(PostVote.Status.NONE)
                 }
             },
             modifier = Modifier.padding(end = 20.dp),
@@ -73,8 +73,8 @@ internal fun ScoreSection(
                     contentDescription = null,
                     tint = when {
                         !enabled -> LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-                        state == ScoreState.UPVOTED -> MaterialTheme.colors.primary
-                        state == ScoreState.DOWNVOTED -> LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                        state == PostVote.Status.UPVOTED -> MaterialTheme.colors.primary
+                        state == PostVote.Status.DOWNVOTED -> LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         else -> LocalContentColor.current.copy(alpha = ContentAlpha.high)
                     },
                 )
@@ -86,15 +86,15 @@ internal fun ScoreSection(
         ) {
             val textColor = when {
                 !enabled -> LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-                state == ScoreState.UPVOTED -> MaterialTheme.colors.primary
-                state == ScoreState.DOWNVOTED -> MaterialTheme.colors.error
+                state == PostVote.Status.UPVOTED -> MaterialTheme.colors.primary
+                state == PostVote.Status.DOWNVOTED -> MaterialTheme.colors.error
                 else -> LocalContentColor.current.copy(alpha = ContentAlpha.high)
             }
 
             Text(
                 text = when (state) {
-                    ScoreState.UPVOTED -> "Upvoted"
-                    ScoreState.DOWNVOTED -> "Downvoted"
+                    PostVote.Status.UPVOTED -> "Upvoted"
+                    PostVote.Status.DOWNVOTED -> "Downvoted"
                     else -> "Upvote"
                 },
                 style = MaterialTheme.typography.body1,
@@ -122,8 +122,8 @@ internal fun ScoreSection(
             enabled = enabled,
             onClick = {
                 when (state) {
-                    ScoreState.NONE -> onVoteChange(ScoreState.DOWNVOTED)
-                    else -> onVoteChange(ScoreState.NONE)
+                    PostVote.Status.NONE -> onVoteChange(PostVote.Status.DOWNVOTED)
+                    else -> onVoteChange(PostVote.Status.NONE)
                 }
             },
             content = {
@@ -132,8 +132,8 @@ internal fun ScoreSection(
                     contentDescription = null,
                     tint = when {
                         !enabled -> LocalContentColor.current.copy(alpha = ContentAlpha.disabled)
-                        state == ScoreState.DOWNVOTED -> MaterialTheme.colors.error
-                        state == ScoreState.UPVOTED -> LocalContentColor.current.copy(alpha = ContentAlpha.medium)
+                        state == PostVote.Status.DOWNVOTED -> MaterialTheme.colors.error
+                        state == PostVote.Status.UPVOTED -> LocalContentColor.current.copy(alpha = ContentAlpha.medium)
                         else -> LocalContentColor.current.copy(alpha = ContentAlpha.high)
                     },
                 )

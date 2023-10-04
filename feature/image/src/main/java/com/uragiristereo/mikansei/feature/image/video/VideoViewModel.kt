@@ -16,6 +16,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import com.github.uragiristereo.safer.compose.navigation.core.getData
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.network.NetworkRepository
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import kotlin.math.floor
@@ -82,8 +83,8 @@ class VideoViewModel(
             .apply {
                 val mediaItem = MediaItem.fromUri(
                     when {
-                        post.image.fileType == "zip" -> post.scaledImage.url // ugoira
-                        else -> post.image.url
+                        post.type == Post.Type.UGOIRA -> post.medias.scaled!!.url
+                        else -> post.medias.original.url
                     }
                 )
 

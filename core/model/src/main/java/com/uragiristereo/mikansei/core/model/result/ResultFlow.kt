@@ -42,7 +42,7 @@ inline fun <reified A> resultFlow(
     }
 }
 
-suspend inline fun <reified A, reified B> Flow<Result<A>>.mapSuccess(
+inline fun <reified A, reified B> Flow<Result<A>>.mapSuccess(
     crossinline block: suspend (A) -> B,
 ): Flow<Result<B>> = map { result ->
     when (result) {

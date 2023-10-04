@@ -8,8 +8,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.image.image.core.ImageLoadingState
 import kotlinx.coroutines.flow.first
@@ -22,12 +22,12 @@ class ImageViewModel(
     val post = checkNotNull(savedStateHandle.getData<MainRoute.Image>()).post
 
     val activeUser = runBlocking {
-        userDao.getActive().first().toUser()
+        userDao.getActive().first().toProfile()
     }
 
     val offsetY = Animatable(0f)
     var loadingState by mutableStateOf(ImageLoadingState.FROM_LOAD)
-    var expandButtonVisible by mutableStateOf(post.hasScaled && activeUser.defaultImageSize == DetailSizePreference.COMPRESSED)
+    var expandButtonVisible by mutableStateOf(post.medias.hasScaled && activeUser.danbooru.defaultImageSize == DetailSizePreference.COMPRESSED)
     var currentZoom by mutableStateOf(1f)
 
     fun onExpandImage() {

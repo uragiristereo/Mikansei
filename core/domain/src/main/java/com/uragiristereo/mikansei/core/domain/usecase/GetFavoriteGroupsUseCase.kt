@@ -1,10 +1,9 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
-import com.uragiristereo.mikansei.core.danbooru.repository.DanbooruRepository
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.domain.entity.favorite.Favorite
-import com.uragiristereo.mikansei.core.domain.entity.post.toPost
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import kotlinx.coroutines.FlowPreview
@@ -19,13 +18,13 @@ class GetFavoriteGroupsUseCase(
     private val userDao: UserDao,
 ) {
     suspend operator fun invoke(forceCache: Boolean, forceRefresh: Boolean): Flow<Result<List<Favorite>>> {
-        val activeUser = userDao.getActive().first().toUser()
+        val activeUser = userDao.getActive().first().toProfile()
 
         return danbooruRepository.getFavoriteGroups(creatorId = activeUser.id, forceRefresh)
             .flatMapConcat { result ->
                 when (result) {
                     is Result.Success -> {
-                        val favoriteGroups = result.data.sortedByDescending { it.updatedAt }
+                        val favoriteGroups = result.data
 
                         val thumbnailPostIds = favoriteGroups.mapNotNull {
                             it.postIds.maxOrNull()
@@ -43,11 +42,8 @@ class GetFavoriteGroupsUseCase(
                                     it.id == thumbnailPostId
                                 }
 
-                                Favorite(
-                                    id = favoriteGroup.id,
-                                    name = favoriteGroup.name.replace(oldChar = '_', newChar = ' '),
-                                    thumbnailUrl = post?.toPost()?.previewImage?.url,
-                                    postIds = favoriteGroup.postIds,
+                                favoriteGroup.copy(
+                                    thumbnailUrl = post?.medias?.preview?.url,
                                 )
                             }
                         }

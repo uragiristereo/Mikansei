@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.domain.entity.tag.Tag
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

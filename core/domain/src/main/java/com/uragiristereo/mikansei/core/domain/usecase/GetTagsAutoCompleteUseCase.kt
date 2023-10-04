@@ -1,13 +1,12 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
-import com.uragiristereo.mikansei.core.danbooru.repository.DanbooruRepository
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.domain.entity.tag.TagAutoComplete
-import com.uragiristereo.mikansei.core.domain.entity.tag.toTagAutoCompleteList
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
-import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -15,16 +14,14 @@ class GetTagsAutoCompleteUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val userDao: UserDao,
 ) {
-    suspend operator fun invoke(query: String): Flow<Result<List<TagAutoComplete>>> {
+    suspend operator fun invoke(query: String): Flow<Result<List<Tag>>> {
         return danbooruRepository.getTagsAutoComplete(query)
-            .mapSuccess { danbooruTags ->
-                val tags = danbooruTags.toTagAutoCompleteList()
-
+            .mapSuccess { tags ->
                 val activeUser = userDao.getActive()
                     .first()
-                    .toUser()
+                    .toProfile()
 
-                val filters = activeUser.blacklistedTags
+                val filters = activeUser.danbooru.blacklistedTags
 
                 val safeRatings = listOf(
                     RatingPreference.GENERAL_ONLY,
@@ -32,12 +29,12 @@ class GetTagsAutoCompleteUseCase(
                 )
 
                 val unsafeTags = when {
-                    activeUser.safeMode || activeUser.postsRatingFilter in safeRatings -> danbooruRepository.unsafeTags
+                    activeUser.danbooru.safeMode || activeUser.mikansei!!.postsRatingFilter in safeRatings -> danbooruRepository.unsafeTags
                     else -> listOf()
                 }
 
                 val filtered = tags.filter { item ->
-                    item.value !in filters && item.value !in unsafeTags
+                    item.name !in filters && item.name !in unsafeTags
                 }
 
                 filtered

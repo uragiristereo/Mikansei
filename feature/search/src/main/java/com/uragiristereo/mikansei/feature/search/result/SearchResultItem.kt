@@ -2,7 +2,11 @@ package com.uragiristereo.mikansei.feature.search.result
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -17,13 +21,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.domain.entity.tag.TagAutoComplete
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.resources.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SearchResultItem(
-    tag: TagAutoComplete,
+    tag: Tag,
     delimiter: String,
     boldWord: String,
     onClick: () -> Unit,
@@ -56,7 +60,7 @@ internal fun SearchResultItem(
 
             Text(
                 text = buildAnnotatedString {
-                    val newTag = "$delimiter${tag.value}".lowercase()
+                    val newTag = "$delimiter${tag.name}".lowercase()
 
                     val boldStartIndex = newTag.indexOf(string = boldWord)
                     val boldEndIndex = boldStartIndex + boldWord.length

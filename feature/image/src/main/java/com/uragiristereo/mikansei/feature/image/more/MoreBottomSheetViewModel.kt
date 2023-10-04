@@ -16,12 +16,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
-import com.uragiristereo.mikansei.core.danbooru.repository.DanbooruRepository
-import com.uragiristereo.mikansei.core.domain.entity.tag.Tag
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFileSizeUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsUseCase
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVote
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVoteImpl
@@ -100,9 +100,9 @@ class MoreBottomSheetViewModel(
     fun getImagesFileSize(post: Post) {
         viewModelScope.launch {
             launch {
-                if (post.hasScaled) {
+                post.medias.scaled?.let { media ->
                     getFileSizeUseCase(
-                        url = post.scaledImage.url,
+                        url = media.url,
                         onLoading = { loading ->
                             if (loading) {
                                 scaledImageFileSizeStr = "Loading..."
@@ -123,7 +123,7 @@ class MoreBottomSheetViewModel(
 
             launch {
                 getFileSizeUseCase(
-                    url = post.image.url,
+                    url = post.medias.original.url,
                     onLoading = { loading ->
                         if (loading) {
                             originalImageFileSizeStr = "Loading..."
@@ -170,7 +170,7 @@ class MoreBottomSheetViewModel(
         viewModelScope.launch {
             Timber.d("getting uploader name...")
 
-            danbooruRepository.getUser(userId = post.uploaderId).collect { result ->
+            danbooruRepository.getUser(id = post.uploaderId).collect { result ->
                 when (result) {
                     is Result.Success -> {
                         val user = result.data

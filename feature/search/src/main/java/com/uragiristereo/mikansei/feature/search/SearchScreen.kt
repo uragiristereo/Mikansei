@@ -213,7 +213,7 @@ internal fun SearchScreen(
                                     val result = query.text.replaceRange(
                                         startIndex = viewModel.searchWord.startIndex,
                                         endIndex = viewModel.searchWord.endIndex,
-                                        replacement = "${viewModel.delimiter}${item.value} ",
+                                        replacement = "${viewModel.delimiter}${item.name} ",
                                     )
 
                                     val newQuery = "$result ".replace(regex = "\\s+".toRegex(), replacement = " ")

@@ -7,8 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.domain.entity.user.UserField
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
 import com.uragiristereo.mikansei.core.domain.usecase.SyncUserSettingsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -44,10 +44,10 @@ class FiltersViewModel(
     init {
         viewModelScope.launch {
             userDao.getActive().collect { userRow ->
-                val user = userRow.toUser()
+                val user = userRow.toProfile()
                 username = user.name
 
-                items = user.blacklistedTags.map { tag ->
+                items = user.danbooru.blacklistedTags.map { tag ->
                     FilterItem(tag)
                 }
             }
@@ -118,7 +118,7 @@ class FiltersViewModel(
             deselectAll()
 
             val updateUserFlow = updateUserSettingsUseCase(
-                UserField(blacklistedTags = updatedItems.map { it.tag })
+                ProfileSettingsField(blacklistedTags = updatedItems.map { it.tag })
             )
 
             val delayFlow = flow<Result<Unit>> {

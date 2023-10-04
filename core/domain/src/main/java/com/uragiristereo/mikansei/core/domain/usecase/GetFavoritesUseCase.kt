@@ -1,8 +1,8 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.domain.entity.favorite.Favorite
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ class GetFavoritesUseCase(
     private val getPostsUseCase: GetPostsUseCase,
 ) {
     suspend operator fun invoke(): Flow<Result<Favorite>> {
-        val activeUser = userDao.getActive().first().toUser()
+        val activeUser = userDao.getActive().first().toProfile()
 
         return getPostsUseCase(
             tags = "ordfav:${activeUser.name}",
@@ -26,7 +26,7 @@ class GetFavoritesUseCase(
                 posts.isNotEmpty() -> {
                     val firstPost = posts.first()
 
-                    firstPost.previewImage.url
+                    firstPost.medias.preview.url
                 }
 
                 else -> null

@@ -8,7 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
-import com.uragiristereo.mikansei.core.domain.entity.tag.TagAutoComplete
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsAutoCompleteUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
@@ -29,7 +29,7 @@ class SearchViewModel(
 
     var parsedQuery by mutableStateOf("")
 
-    val searches = mutableStateListOf<TagAutoComplete>()
+    val searches = mutableStateListOf<Tag>()
 
     var loading by mutableStateOf(false)
         private set

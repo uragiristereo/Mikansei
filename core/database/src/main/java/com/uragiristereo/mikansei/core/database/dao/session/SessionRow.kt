@@ -2,7 +2,7 @@ package com.uragiristereo.mikansei.core.database.dao.session
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 
 @Entity(tableName = "sessions")
 data class SessionRow(

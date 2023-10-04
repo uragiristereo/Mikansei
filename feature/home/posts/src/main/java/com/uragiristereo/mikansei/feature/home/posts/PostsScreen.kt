@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mikansei.core.model.Constants
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
 import com.uragiristereo.mikansei.core.ui.WindowSize

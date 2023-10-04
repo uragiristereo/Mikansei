@@ -2,9 +2,19 @@ package com.uragiristereo.mikansei.feature.user.manage.core
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -18,15 +28,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mikansei.core.model.user.User
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.resources.R
 
 @Composable
 internal fun ProfileItem(
-    user: User,
+    user: Profile,
     onSettingsClick: () -> Unit,
-    onActivateClick: (User) -> Unit,
-    onLogoutClick: (User) -> Unit,
+    onActivateClick: (Profile) -> Unit,
+    onLogoutClick: (Profile) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var isDropDownExpanded by rememberSaveable { mutableStateOf(false) }
@@ -38,7 +48,7 @@ internal fun ProfileItem(
             .fillMaxWidth()
             .let {
                 when {
-                    user.isActive -> it
+                    user.mikansei!!.isActive -> it
                     else -> it.clickable {
                         onActivateClick(user)
                     }
@@ -58,7 +68,7 @@ internal fun ProfileItem(
                 ),
         ) {
             Text(
-                text = user.nameAlias,
+                text = user.mikansei!!.nameAlias,
                 style = MaterialTheme.typography.subtitle1,
                 fontSize = 20.sp,
             )
@@ -95,7 +105,7 @@ internal fun ProfileItem(
                 }
 
                 when {
-                    user.isActive -> IconButton(
+                    user.mikansei!!.isActive -> IconButton(
                         onClick = onSettingsClick,
                         content = {
                             Icon(

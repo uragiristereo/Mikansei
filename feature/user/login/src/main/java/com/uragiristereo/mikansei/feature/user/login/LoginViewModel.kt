@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import com.uragiristereo.mikansei.core.domain.entity.user.UserField
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
 import com.uragiristereo.mikansei.core.domain.usecase.PerformLoginUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -53,7 +53,7 @@ class LoginViewModel(
 
     private fun forceEnableSafeMode() {
         viewModelScope.launch {
-            updateUserSettingsUseCase(data = UserField(safeMode = true)).collect { result ->
+            updateUserSettingsUseCase(data = ProfileSettingsField(enableSafeMode = true)).collect { result ->
                 loginState = when (result) {
                     is Result.Success -> LoginState.Success
                     is Result.Failed -> LoginState.Failed(message = result.message)

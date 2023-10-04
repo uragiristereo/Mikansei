@@ -8,16 +8,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
-import com.uragiristereo.mikansei.core.danbooru.repository.DanbooruRepository
 import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.toUser
-import com.uragiristereo.mikansei.core.domain.entity.post.vote.PostVoteState
-import com.uragiristereo.mikansei.core.domain.usecase.GetPostUseCase
-import com.uragiristereo.mikansei.core.domain.usecase.GetPostVoteUseCase
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
+import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
 import com.uragiristereo.mikansei.core.model.result.Result
-import com.uragiristereo.mikansei.core.model.user.isAnonymous
-import com.uragiristereo.mikansei.core.model.user.isNotAnonymous
-import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.core.ScoreState
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
@@ -31,12 +26,10 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     private val savedStateHandle: SavedStateHandle by inject()
     private val danbooruRepository: DanbooruRepository by inject()
     private val userDao: UserDao by inject()
-    private val getPostUseCase: GetPostUseCase by inject()
-    private val getPostVoteUseCase: GetPostVoteUseCase by inject()
 
     // TODO: avoid using runBlocking here
     private val activeUser = runBlocking {
-        userDao.getActive().first().toUser()
+        userDao.getActive().first().toProfile()
     }
 
     override var post = savedStateHandle.getData<MainRoute.Image>()!!.post
@@ -44,8 +37,8 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     private val post2 by lazy { post }
 
     override var isPostInFavorites by mutableStateOf(false)
-    override var favoriteCount by mutableStateOf(post2.favoriteCount)
-    override var scoreState by mutableStateOf(ScoreState.NONE)
+    override var favoriteCount by mutableStateOf(post2.favorites)
+    override var scoreState by mutableStateOf(PostVote.Status.NONE)
     override var score by mutableStateOf(post2.score)
     override var isPostUpdated by mutableStateOf(false)
     override var favoriteButtonEnabled by mutableStateOf(false)
@@ -55,11 +48,11 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
 
     init {
         viewModelScope.launch {
-            getPostUseCase(id = post.id).collect { result ->
+            danbooruRepository.getPost(id = post.id).collect { result ->
                 when (result) {
                     is Result.Success -> {
                         post = result.data
-                        favoriteCount = post.favoriteCount
+                        favoriteCount = post.favorites
                         score = post.score
 
                         Timber.d("post updated")
@@ -98,21 +91,14 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
 
         viewModelScope.launch {
             if (activeUser.isNotAnonymous()) {
-                getPostVoteUseCase(
+                danbooruRepository.getPostVote(
                     postId = post.id,
                     userId = activeUser.id,
                 ).collect { result ->
                     when (result) {
                         is Result.Success -> {
-                            val postVote = result.data
                             voteButtonEnabled = true
-
-                            if (postVote != null) {
-                                scoreState = when (postVote.state) {
-                                    PostVoteState.UPVOTED -> ScoreState.UPVOTED
-                                    else -> ScoreState.DOWNVOTED
-                                }
-                            }
+                            scoreState = result.data.status
 
                             Timber.d("score state = $scoreState")
                         }
@@ -141,8 +127,8 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
                 isPostInFavorites -> {
                     favoriteCount += 1
 
-                    if (scoreState == ScoreState.NONE) {
-                        scoreState = ScoreState.UPVOTED
+                    if (scoreState == PostVote.Status.NONE) {
+                        scoreState = PostVote.Status.UPVOTED
                         updateScore()
                     }
 
@@ -158,8 +144,8 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
                 else -> {
                     favoriteCount -= 1
 
-                    if (scoreState == ScoreState.UPVOTED) {
-                        scoreState = ScoreState.NONE
+                    if (scoreState == PostVote.Status.UPVOTED) {
+                        scoreState = PostVote.Status.NONE
                         score -= 1
                     }
 
@@ -177,9 +163,9 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
 
     private fun updateScore() {
         score = when (scoreState) {
-            ScoreState.UPVOTED -> post.score + 1
-            ScoreState.DOWNVOTED -> post.score - 1
-            ScoreState.NONE -> post.score
+            PostVote.Status.UPVOTED -> post.score + 1
+            PostVote.Status.DOWNVOTED -> post.score - 1
+            PostVote.Status.NONE -> post.score
         }
     }
 
@@ -191,7 +177,7 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
                 return@launch
             }
 
-            scoreState = ScoreState.UPVOTED
+            scoreState = PostVote.Status.UPVOTED
             votePost()
         }
     }
@@ -204,7 +190,7 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
                 return@launch
             }
 
-            scoreState = ScoreState.DOWNVOTED
+            scoreState = PostVote.Status.DOWNVOTED
             votePost()
         }
     }
@@ -212,15 +198,9 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     private suspend fun votePost() {
         updateScore()
 
-        val scoreToVote = when (scoreState) {
-            ScoreState.UPVOTED -> 1
-            ScoreState.DOWNVOTED -> -1
-            ScoreState.NONE -> 0
-        }
-
         danbooruRepository.votePost(
             postId = post.id,
-            score = scoreToVote,
+            score = scoreState,
         ).collect { result ->
             when (result) {
                 is Result.Success -> Timber.d("post ${post.id} successfully ${scoreState.name}")
@@ -239,14 +219,17 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
             }
 
             score = when (scoreState) {
-                ScoreState.UPVOTED -> score - 1
-                ScoreState.DOWNVOTED -> score + 1
+                PostVote.Status.UPVOTED -> score - 1
+                PostVote.Status.DOWNVOTED -> score + 1
                 else -> score
             }
 
-            scoreState = ScoreState.NONE
+            scoreState = PostVote.Status.NONE
 
-            danbooruRepository.unvotePost(postId = post.id).collect { result ->
+            danbooruRepository.votePost(
+                postId = post.id,
+                score = PostVote.Status.NONE,
+            ).collect { result ->
                 when (result) {
                     is Result.Success -> Timber.d("post ${post.id} successfully unvoted")
                     is Result.Failed -> Timber.d(result.message)
@@ -256,11 +239,11 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
         }
     }
 
-    override fun onVoteChange(value: ScoreState) {
+    override fun onVoteChange(value: PostVote.Status) {
         when (value) {
-            ScoreState.UPVOTED -> upvotePost()
-            ScoreState.DOWNVOTED -> downvotePost()
-            ScoreState.NONE -> unvotePost()
+            PostVote.Status.UPVOTED -> upvotePost()
+            PostVote.Status.DOWNVOTED -> downvotePost()
+            PostVote.Status.NONE -> unvotePost()
         }
     }
 }

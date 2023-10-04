@@ -28,7 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mikansei.core.model.danbooru.UserLevel
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme
 import com.uragiristereo.mikansei.core.resources.R
 
@@ -37,7 +37,7 @@ internal fun UserHeader(
     name: String,
     nameAlias: String,
     userId: Int,
-    level: UserLevel,
+    level: Profile.Level,
     isOnlyAnonUserExist: Boolean,
     onProfileClick: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -143,7 +143,7 @@ private fun UserHeaderPreview() {
                 name = "proximity",
                 nameAlias = "PR",
                 userId = 101001,
-                level = UserLevel.Member,
+                level = Profile.Level.Member,
                 isOnlyAnonUserExist = true,
                 onProfileClick = { },
                 onSettingsClick = { },

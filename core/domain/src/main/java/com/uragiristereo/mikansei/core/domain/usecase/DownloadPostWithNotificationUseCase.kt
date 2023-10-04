@@ -12,7 +12,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.uragiristereo.mikansei.core.download.DownloadBroadcastReceiver
 import com.uragiristereo.mikansei.core.download.DownloadRepository
 import com.uragiristereo.mikansei.core.download.model.DownloadResource
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.resources.R
 import timber.log.Timber
 import java.io.File
@@ -50,7 +50,7 @@ class DownloadPostWithNotificationUseCase(
             .setOnlyAlertOnce(true)
             .addAction(R.drawable.close, context.getString(R.string.download_cancel), cancelDownloadPendingIntent)
 
-        val file = File(post.image.url)
+        val file = File(post.medias.original.url)
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
 
         val values = ContentValues().apply {
@@ -78,7 +78,7 @@ class DownloadPostWithNotificationUseCase(
 
         downloadRepository.download(
             postId = post.id,
-            url = post.image.url,
+            url = post.medias.original.url,
             uri = uri,
             sample = 1200L,
         )

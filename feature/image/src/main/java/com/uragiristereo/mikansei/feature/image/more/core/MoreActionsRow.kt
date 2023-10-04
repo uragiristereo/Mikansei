@@ -12,8 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.core.ScoreChips
-import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.core.ScoreState
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.Chips
 import com.uragiristereo.mikansei.core.ui.composable.SidesGradient
@@ -32,9 +32,9 @@ internal fun MoreActionsRow(
     onToggleFavorite: (Boolean) -> Unit,
     favoriteButtonEnabled: Boolean,
     score: Int,
-    scoreState: ScoreState,
+    scoreState: PostVote.Status,
     voteButtonEnabled: Boolean,
-    onVoteChange: (ScoreState) -> Unit,
+    onVoteChange: (PostVote.Status) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConstraintLayout(modifier = modifier) {
@@ -71,13 +71,13 @@ internal fun MoreActionsRow(
                     state = scoreState,
                     enabled = voteButtonEnabled,
                     onUpvoteClick = {
-                        onVoteChange(ScoreState.UPVOTED)
+                        onVoteChange(PostVote.Status.UPVOTED)
                     },
                     onDownvoteClick = {
-                        onVoteChange(ScoreState.DOWNVOTED)
+                        onVoteChange(PostVote.Status.DOWNVOTED)
                     },
                     onUnvoteClick = {
-                        onVoteChange(ScoreState.NONE)
+                        onVoteChange(PostVote.Status.NONE)
                     },
                     modifier = Modifier.padding(end = 8.dp),
                 )

@@ -13,11 +13,10 @@ import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.database.dao.session.SessionDao
-import com.uragiristereo.mikansei.core.database.dao.session.toPostList
 import com.uragiristereo.mikansei.core.database.dao.session.toSessionList
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.model.Constants
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsContentState
@@ -159,7 +158,7 @@ class PostsViewModel(
             savedState = savedState.copy(loadFromSession = false)
 
             val postsSession = withContext(Dispatchers.IO) {
-                sessionDao.get(sessionUuid).toPostList()
+                sessionDao.get(sessionUuid).map { it.post }
             }
 
             when {

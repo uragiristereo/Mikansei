@@ -20,8 +20,8 @@ import coil.request.ImageRequest
 import com.google.accompanist.insets.ui.Scaffold
 import com.ortiz.touchview.OnTouchImageViewListener
 import com.ortiz.touchview.TouchImageView
-import com.uragiristereo.mikansei.core.model.ShareOption
-import com.uragiristereo.mikansei.core.model.user.preference.DetailSizePreference
+import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
+import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.WindowSize
@@ -52,12 +52,12 @@ internal fun ImagePost(
     val post = remember { viewModel.post }
     val imageView = remember(viewModel) { TouchImageView(context) }
     var imageDisposable: Disposable? = remember(viewModel) { null }
-    val expandLoadingVisible = viewModel.loadingState == ImageLoadingState.FROM_EXPAND && post.hasScaled
+    val expandLoadingVisible = viewModel.loadingState == ImageLoadingState.FROM_EXPAND && post.medias.hasScaled
 
     val imageRequestBuilder = remember(viewModel) {
         val resizedImageSize = viewModel.resizeImage(
-            width = post.image.width,
-            height = post.image.height
+            width = post.medias.original.width,
+            height = post.medias.original.height
         )
 
         ImageRequest.Builder(context)
@@ -84,7 +84,7 @@ internal fun ImagePost(
 
     val originalImageRequest = remember(viewModel) {
         imageRequestBuilder
-            .data(post.image.url)
+            .data(post.medias.original.url)
             .listener(
                 onStart = {
                     viewModel.onExpandImage()
@@ -100,7 +100,7 @@ internal fun ImagePost(
 
     val scaledImageRequest = remember(viewModel) {
         imageRequestBuilder
-            .data(post.scaledImage.url)
+            .data(post.medias.scaled?.url)
             .listener(
                 onSuccess = { _, _ ->
                     Timber.d("scaled image loaded")
@@ -111,10 +111,10 @@ internal fun ImagePost(
 
     val previewImageRequest = remember(viewModel) {
         imageRequestBuilder
-            .data(post.previewImage.url)
+            .data(post.medias.preview.url)
             .size(
-                width = post.scaledImage.width,
-                height = post.scaledImage.height,
+                width = post.medias.original.width,
+                height = post.medias.original.height,
             )
             .listener(
                 onSuccess = { _, _ ->
@@ -122,8 +122,8 @@ internal fun ImagePost(
 
                     imageDisposable = context.imageLoader.enqueue(
                         request = when {
-                            post.hasScaled && viewModel.activeUser.defaultImageSize == DetailSizePreference.ORIGINAL -> originalImageRequest
-                            post.hasScaled -> scaledImageRequest
+                            post.medias.hasScaled && viewModel.activeUser.danbooru.defaultImageSize == DetailSizePreference.ORIGINAL -> originalImageRequest
+                            post.medias.hasScaled -> scaledImageRequest
                             else -> originalImageRequest
                         }
                     )

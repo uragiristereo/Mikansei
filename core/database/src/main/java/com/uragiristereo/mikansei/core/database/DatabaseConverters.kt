@@ -1,11 +1,10 @@
 package com.uragiristereo.mikansei.core.database
 
 import androidx.room.TypeConverter
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
-import kotlinx.serialization.decodeFromString
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.util.*
+import java.util.Date
 
 class DatabaseConverters {
     private val json = Json {

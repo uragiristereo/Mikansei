@@ -46,8 +46,8 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.uragiristereo.mikansei.appbars.MainBottomNavigationBar
 import com.uragiristereo.mikansei.appbars.MainNavigationRail
 import com.uragiristereo.mikansei.core.ShareDownloadDialog
-import com.uragiristereo.mikansei.core.model.ShareOption
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
 import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
 import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme

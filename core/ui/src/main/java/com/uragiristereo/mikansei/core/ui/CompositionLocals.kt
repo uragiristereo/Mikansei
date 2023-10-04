@@ -3,8 +3,8 @@ package com.uragiristereo.mikansei.core.ui
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
-import com.uragiristereo.mikansei.core.model.ShareOption
-import com.uragiristereo.mikansei.core.model.danbooru.post.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import kotlinx.coroutines.channels.Channel
 
 val LocalMainNavController = compositionLocalOf<NavHostController> { error("no LocalMainNavController provided") }

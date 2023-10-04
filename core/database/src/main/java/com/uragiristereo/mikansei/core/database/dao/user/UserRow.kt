@@ -2,7 +2,7 @@ package com.uragiristereo.mikansei.core.database.dao.user
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.uragiristereo.mikansei.core.model.user.preference.RatingPreference
+import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 
 @Entity(tableName = "users")
 data class UserRow(
@@ -14,7 +14,7 @@ data class UserRow(
     val safeMode: Boolean = true,
     val showDeletedPosts: Boolean = false,
     val defaultImageSize: String = "large",
-    val blacklistedTags: String = "guro scat furry",
+    val blacklistedTags: String = "guro\nscat\nfurry",
 
     // Mikansei
     val isActive: Boolean = false,
