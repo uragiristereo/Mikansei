@@ -79,7 +79,7 @@ internal fun MoreTagItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .width(IntrinsicSize.Min)
+            .width(IntrinsicSize.Max)
             .clip(RoundedCornerShape(size = 8.dp))
             .background(backgroundColor)
             .clickable(
