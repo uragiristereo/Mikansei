@@ -112,10 +112,6 @@ internal fun ImagePost(
     val previewImageRequest = remember(viewModel) {
         imageRequestBuilder
             .data(post.medias.preview.url)
-            .size(
-                width = post.medias.original.width,
-                height = post.medias.original.height,
-            )
             .listener(
                 onSuccess = { _, _ ->
                     viewModel.loadingState = ImageLoadingState.DISABLED
