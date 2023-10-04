@@ -179,6 +179,7 @@ fun VideoPost(
                     }
                     .background(Color.Black)
                     .verticallyDraggable(
+                        enabled = true,
                         offsetY = viewModel.offsetY,
                         onDragExit = {
                             onAppBarsVisibleChange(true)

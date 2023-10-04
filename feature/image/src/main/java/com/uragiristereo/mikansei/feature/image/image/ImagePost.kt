@@ -232,7 +232,7 @@ internal fun ImagePost(
                     translationY = viewModel.offsetY.value
                 }
                 .verticallyDraggable(
-                    key1 = viewModel.currentZoom,
+                    enabled = viewModel.isGesturesAllowed,
                     offsetY = viewModel.offsetY,
                     onDragExit = {
                         onAppBarsVisibleChange(true)

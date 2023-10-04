@@ -1,6 +1,7 @@
 package com.uragiristereo.mikansei.feature.image.image
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -29,6 +30,10 @@ class ImageViewModel(
     var loadingState by mutableStateOf(ImageLoadingState.FROM_LOAD)
     var expandButtonVisible by mutableStateOf(post.medias.hasScaled && activeUser.danbooru.defaultImageSize == DetailSizePreference.COMPRESSED)
     var currentZoom by mutableStateOf(1f)
+
+    val isGesturesAllowed by derivedStateOf {
+        currentZoom == 1f
+    }
 
     fun onExpandImage() {
         expandButtonVisible = false
