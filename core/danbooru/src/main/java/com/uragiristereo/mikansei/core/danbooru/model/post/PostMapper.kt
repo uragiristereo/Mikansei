@@ -11,7 +11,10 @@ fun DanbooruPost.toPost(): Post {
         id = id!!,
         createdAt = createdAt,
         uploaderId = uploaderId,
-        source = source,
+        source = when {
+            pixivId != null -> "https://pixiv.net/artworks/$pixivId"
+            else -> source
+        },
         rating = when (rating) {
             "g" -> Rating.GENERAL
             "s" -> Rating.SENSITIVE
