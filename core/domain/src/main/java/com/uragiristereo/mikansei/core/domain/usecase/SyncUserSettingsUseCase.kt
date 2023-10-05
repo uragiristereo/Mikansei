@@ -1,8 +1,7 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
-import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -11,14 +10,13 @@ import kotlinx.coroutines.flow.map
 
 class SyncUserSettingsUseCase(
     private val danbooruRepository: DanbooruRepository,
-    private val userDao: UserDao,
+    private val userRepository: UserRepository,
 ) {
-    suspend operator fun invoke(): Flow<Result<Unit>> {
-        val activeUser = userDao.getActive().first()
-        val isUserAnonymous = activeUser.id == 0
+    operator fun invoke(): Flow<Result<Unit>> {
+        val activeUser = userRepository.active.value
 
         return when {
-            isUserAnonymous -> flow {
+            activeUser.isAnonymous() -> flow {
                 emit(Result.Success(Unit))
             }
 
@@ -26,25 +24,16 @@ class SyncUserSettingsUseCase(
                 .map { result ->
                     when (result) {
                         is Result.Success -> {
-                            val profile = result.data
-                            val user = userDao.get(profile.id).first()
+                            val netProfile = result.data
+                            val localProfile = userRepository.get(netProfile.id).first()
 
-                            profile.apply {
-                                userDao.update(
-                                    user.copy(
-                                        name = name,
-                                        level = level.id,
-                                        safeMode = danbooru.safeMode,
-                                        showDeletedPosts = danbooru.showDeletedPosts,
-                                        defaultImageSize = danbooru.defaultImageSize.getEnumForDanbooru(),
-                                        blacklistedTags = danbooru.blacklistedTags.joinToString("\n"),
-                                        postsRatingFilter = when {
-                                            danbooru.safeMode -> RatingPreference.GENERAL_ONLY
-                                            else -> user.postsRatingFilter
-                                        },
-                                    )
+                            userRepository.update(
+                                localProfile.copy(
+                                    name = netProfile.name,
+                                    level = netProfile.level,
+                                    danbooru = netProfile.danbooru,
                                 )
-                            }
+                            )
 
                             Result.Success(Unit)
                         }

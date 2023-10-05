@@ -8,27 +8,25 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.github.uragiristereo.safer.compose.navigation.core.getData
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.image.image.core.ImageLoadingState
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.StateFlow
 
 class ImageViewModel(
     savedStateHandle: SavedStateHandle,
-    userDao: UserDao,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     val post = checkNotNull(savedStateHandle.getData<MainRoute.Image>()).post
 
-    val activeUser = runBlocking {
-        userDao.getActive().first().toProfile()
-    }
+    val activeUser: StateFlow<Profile>
+        get() = userRepository.active
 
     val offsetY = Animatable(0f)
     var loadingState by mutableStateOf(ImageLoadingState.FROM_LOAD)
-    var expandButtonVisible by mutableStateOf(post.medias.hasScaled && activeUser.danbooru.defaultImageSize == DetailSizePreference.COMPRESSED)
+    var expandButtonVisible by mutableStateOf(post.medias.hasScaled && activeUser.value.danbooru.defaultImageSize == DetailSizePreference.COMPRESSED)
     var currentZoom by mutableStateOf(1f)
 
     val isGesturesAllowed by derivedStateOf {

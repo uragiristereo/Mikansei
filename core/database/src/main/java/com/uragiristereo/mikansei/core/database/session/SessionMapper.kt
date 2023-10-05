@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.database.dao.session
+package com.uragiristereo.mikansei.core.database.session
 
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import java.util.UUID

@@ -5,11 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
-import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
-import com.uragiristereo.mikansei.core.domain.module.database.model.toUserRow
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.usecase.SyncUserSettingsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
 import com.uragiristereo.mikansei.core.model.preferences.base.Preference
@@ -18,17 +16,16 @@ import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.product.preference.BottomSheetPreferenceData
 import com.uragiristereo.mikansei.core.resources.R
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class UserSettingsViewModel(
-    private val userDao: UserDao,
+    private val userRepository: UserRepository,
     private val syncUserSettingsUseCase: SyncUserSettingsUseCase,
     private val updateUserSettingsUseCase: UpdateUserSettingsUseCase,
 ) : ViewModel() {
-    var activeUser by mutableStateOf<Profile?>(null)
-        private set
+    val activeUser: StateFlow<Profile>
+        get() = userRepository.active
 
     var loading by mutableStateOf(true)
         private set
@@ -37,18 +34,17 @@ class UserSettingsViewModel(
         value = BottomSheetPreferenceData(
             preferenceTextResId = R.string.settings_booru_listing_mode_select,
             items = RatingPreference.entries,
-            selectedItem = activeUser?.mikansei?.postsRatingFilter,
+            selectedItem = activeUser.value.mikansei.postsRatingFilter,
         ),
     )
         private set
 
     init {
-        userDao.getActive()
-            .onEach {
-                activeUser = it.toProfile()
-                ratingFilters = ratingFilters.copy(selectedItem = it.postsRatingFilter)
+        viewModelScope.launch {
+            userRepository.active.collect {
+                ratingFilters = ratingFilters.copy(selectedItem = it.mikansei.postsRatingFilter)
             }
-            .launchIn(viewModelScope)
+        }
 
         requestSync()
     }
@@ -65,7 +61,7 @@ class UserSettingsViewModel(
 
     private fun updateSettings(data: ProfileSettingsField) {
         viewModelScope.launch {
-            loading = activeUser?.id != 0
+            loading = activeUser.value.id != 0
 
             updateUserSettingsUseCase(data).collect {
                 requestSync()
@@ -89,11 +85,11 @@ class UserSettingsViewModel(
         when (preference) {
             is RatingPreference -> {
                 viewModelScope.launch {
-                    activeUser?.let { user ->
-                        userDao.update(
-                            user.toUserRow().copy(postsRatingFilter = preference)
-                        )
-                    }
+                    userRepository.update(
+                        user = activeUser.value.copy(
+                            mikansei = activeUser.value.mikansei.copy(postsRatingFilter = preference),
+                        ),
+                    )
                 }
             }
         }

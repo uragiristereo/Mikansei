@@ -118,7 +118,7 @@ internal fun ImagePost(
 
                     imageDisposable = context.imageLoader.enqueue(
                         request = when {
-                            post.medias.hasScaled && viewModel.activeUser.danbooru.defaultImageSize == DetailSizePreference.ORIGINAL -> originalImageRequest
+                            post.medias.hasScaled && viewModel.activeUser.value.danbooru.defaultImageSize == DetailSizePreference.ORIGINAL -> originalImageRequest
                             post.medias.hasScaled -> scaledImageRequest
                             else -> originalImageRequest
                         }

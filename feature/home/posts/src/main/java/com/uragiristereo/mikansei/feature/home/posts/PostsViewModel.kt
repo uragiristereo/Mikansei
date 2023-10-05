@@ -12,8 +12,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.github.uragiristereo.safer.compose.navigation.core.getData
-import com.uragiristereo.mikansei.core.database.dao.session.SessionDao
-import com.uragiristereo.mikansei.core.database.dao.session.toSessionList
+import com.uragiristereo.mikansei.core.database.session.SessionDao
+import com.uragiristereo.mikansei.core.database.session.toSessionList
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post

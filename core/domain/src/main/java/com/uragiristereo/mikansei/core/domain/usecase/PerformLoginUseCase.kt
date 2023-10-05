@@ -1,18 +1,16 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.database.dao.user.UserRow
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
-import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PerformLoginUseCase(
     private val danbooruRepository: DanbooruRepository,
-    private val userDao: UserDao,
+    private val userRepository: UserRepository,
 ) {
-    suspend operator fun invoke(
+    operator fun invoke(
         name: String,
         apiKey: String,
     ): Flow<Result<Boolean>> {
@@ -21,29 +19,17 @@ class PerformLoginUseCase(
                 when (result) {
                     is Result.Success -> {
                         val profile = result.data
-                        val userExists = userDao.isUserExists(profile.id)
+                        val userExists = userRepository.isUserExists(profile.id)
 
                         when {
                             profile.name != name -> Result.Failed(message = "Invalid name/API key.")
                             userExists -> Result.Failed("User is already logged in.")
                             else -> {
-                                profile.apply {
-                                    userDao.add(
-                                        UserRow(
-                                            id = id,
-                                            name = name,
-                                            apiKey = apiKey,
-                                            level = level.id,
-                                            safeMode = danbooru.safeMode,
-                                            showDeletedPosts = danbooru.showDeletedPosts,
-                                            defaultImageSize = danbooru.defaultImageSize.getEnumForDanbooru(),
-                                            blacklistedTags = danbooru.blacklistedTags.joinToString("\n"),
-                                            postsRatingFilter = RatingPreference.GENERAL_ONLY,
-                                        )
-                                    )
+                                userRepository.add(
+                                    user = profile.copy(apiKey = apiKey)
+                                )
 
-                                    userDao.switchActiveUser(id)
-                                }
+                                userRepository.switchActive(profile.id)
 
                                 Result.Success(true)
                             }

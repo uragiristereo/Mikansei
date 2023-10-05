@@ -1,11 +1,25 @@
 package com.uragiristereo.mikansei.feature.user.manage
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -28,6 +42,9 @@ internal fun ManageUserScreen(
     modifier: Modifier = Modifier,
     viewModel: ManageUserViewModel = koinViewModel(),
 ) {
+    val activeUser by viewModel.activeUser.collectAsState()
+    val inactiveUsers by viewModel.inactiveUsers.collectAsState()
+
     Scaffold(
         topBar = {
             ProductTopAppBar(
@@ -77,20 +94,19 @@ internal fun ManageUserScreen(
                 )
             }
 
-            viewModel.activeUser?.let { user ->
-                item(key = user.id) {
-                    ProfileItem(
-                        user = user,
-                        onSettingsClick = {
-                            onNavigate(UserRoute.Settings)
-                        },
-                        onActivateClick = { },
-                        onLogoutClick = { },
-                        modifier = Modifier
-                            .padding(bottom = 16.dp)
-                            .animateItemPlacement(),
-                    )
-                }
+            item(key = activeUser.id) {
+                ProfileItem(
+                    user = activeUser,
+                    onSettingsClick = {
+                        onNavigate(UserRoute.Settings)
+                    },
+                    onActivateClick = { },
+                    onLogoutClick = { },
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .animateItemPlacement(),
+                )
+
             }
 
             item(key = "inactive_title") {
@@ -101,7 +117,7 @@ internal fun ManageUserScreen(
             }
 
             items(
-                items = viewModel.inactiveUsers,
+                items = inactiveUsers,
                 key = { it.id },
             ) { user ->
                 ProfileItem(

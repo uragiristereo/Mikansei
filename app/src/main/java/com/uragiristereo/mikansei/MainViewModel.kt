@@ -8,7 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.route
-import com.uragiristereo.mikansei.core.database.dao.session.SessionDao
+import com.uragiristereo.mikansei.core.database.session.SessionDao
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.preferences.model.Preferences

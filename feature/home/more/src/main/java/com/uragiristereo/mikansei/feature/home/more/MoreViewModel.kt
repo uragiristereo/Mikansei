@@ -2,26 +2,20 @@ package com.uragiristereo.mikansei.feature.home.more
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
-import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class MoreViewModel(
-    userDao: UserDao,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
-    val activeUser = userDao.getActive()
-        .map {
-            it.toProfile()
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 2_000L),
-            initialValue = null,
-        )
+    val activeUser: StateFlow<Profile>
+        get() = userRepository.active
 
-    val isOnlyAnonUserExist = userDao.getAll()
+    val isOnlyAnonUserExist = userRepository.getAll()
         .map {
             it.size == 1
         }

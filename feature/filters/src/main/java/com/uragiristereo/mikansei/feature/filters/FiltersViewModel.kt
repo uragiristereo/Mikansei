@@ -6,9 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
-import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.usecase.SyncUserSettingsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -21,7 +20,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class FiltersViewModel(
-    userDao: UserDao,
+    private val userRepository: UserRepository,
     private val updateUserSettingsUseCase: UpdateUserSettingsUseCase,
     private val syncUserSettingsUseCase: SyncUserSettingsUseCase,
 ) : ViewModel() {
@@ -43,8 +42,7 @@ class FiltersViewModel(
 
     init {
         viewModelScope.launch {
-            userDao.getActive().collect { userRow ->
-                val user = userRow.toProfile()
+            userRepository.active.collect { user ->
                 username = user.name
 
                 items = user.danbooru.blacklistedTags.map { tag ->

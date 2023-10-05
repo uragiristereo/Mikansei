@@ -119,7 +119,7 @@ internal fun PostDialog(
                         ClickableSection(
                             title = stringResource(id = R.string.add_to_action),
                             onClick = {
-                                if (viewModel.activeUser.isNotAnonymous()) {
+                                if (viewModel.activeUser.value.isNotAnonymous()) {
                                     onDismiss()
                                     onAddToFavoriteGroupClick(post)
                                 } else {

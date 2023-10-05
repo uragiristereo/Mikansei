@@ -8,10 +8,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
+import com.uragiristereo.mikansei.core.database.user.UserDao
+import com.uragiristereo.mikansei.core.database.user.toProfile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
-import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import kotlinx.coroutines.channels.Channel

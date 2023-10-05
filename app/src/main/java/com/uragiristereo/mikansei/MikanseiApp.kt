@@ -44,7 +44,7 @@ class MikanseiApp : Application(), ImageLoaderFactory, KoinComponent {
             androidContext(this@MikanseiApp)
             modules(
                 listOf(
-                    MikanseiAppModule(),
+                    MikanseiModule(),
                     DanbooruModule(),
                     DatabaseModule(),
                     DomainModule(),

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "75853b3763b76e7f3859828e1db85242",
+    "identityHash": "7d0aa8bda3764fceedebca724f1bd3cb",
     "entities": [
       {
         "tableName": "sessions",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `apiKey` TEXT NOT NULL, `level` INTEGER NOT NULL, `safeMode` INTEGER NOT NULL, `showDeletedPosts` INTEGER NOT NULL, `defaultImageSize` TEXT NOT NULL, `blacklistedTags` TEXT NOT NULL, `isActive` INTEGER NOT NULL, `postsRatingFilter` TEXT NOT NULL, `blurQuestionablePosts` INTEGER NOT NULL, `blurExplicitPosts` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `api_key` TEXT NOT NULL DEFAULT '', `level` INTEGER NOT NULL, `safe_mode` INTEGER NOT NULL DEFAULT 1, `show_deleted_posts` INTEGER NOT NULL DEFAULT 0, `default_image_size` TEXT NOT NULL DEFAULT 'large', `blacklisted_tags` TEXT NOT NULL DEFAULT 'guro\nscat\nfurry', `is_active` INTEGER NOT NULL DEFAULT false, `posts_rating_filter` TEXT NOT NULL DEFAULT 'GENERAL_ONLY', `blur_questionable_posts` INTEGER NOT NULL DEFAULT 1, `blur_explicit_posts` INTEGER NOT NULL DEFAULT 1, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -60,9 +60,10 @@
           },
           {
             "fieldPath": "apiKey",
-            "columnName": "apiKey",
+            "columnName": "api_key",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "''"
           },
           {
             "fieldPath": "level",
@@ -72,51 +73,59 @@
           },
           {
             "fieldPath": "safeMode",
-            "columnName": "safeMode",
+            "columnName": "safe_mode",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "1"
           },
           {
             "fieldPath": "showDeletedPosts",
-            "columnName": "showDeletedPosts",
+            "columnName": "show_deleted_posts",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "0"
           },
           {
             "fieldPath": "defaultImageSize",
-            "columnName": "defaultImageSize",
+            "columnName": "default_image_size",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "'large'"
           },
           {
             "fieldPath": "blacklistedTags",
-            "columnName": "blacklistedTags",
+            "columnName": "blacklisted_tags",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "'guro\nscat\nfurry'"
           },
           {
             "fieldPath": "isActive",
-            "columnName": "isActive",
+            "columnName": "is_active",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "false"
           },
           {
             "fieldPath": "postsRatingFilter",
-            "columnName": "postsRatingFilter",
+            "columnName": "posts_rating_filter",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "'GENERAL_ONLY'"
           },
           {
             "fieldPath": "blurQuestionablePosts",
-            "columnName": "blurQuestionablePosts",
+            "columnName": "blur_questionable_posts",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "1"
           },
           {
             "fieldPath": "blurExplicitPosts",
-            "columnName": "blurExplicitPosts",
+            "columnName": "blur_explicit_posts",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": true,
+            "defaultValue": "1"
           }
         ],
         "primaryKey": {
@@ -132,7 +141,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '75853b3763b76e7f3859828e1db85242')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7d0aa8bda3764fceedebca724f1bd3cb')"
     ]
   }
 }

@@ -48,7 +48,7 @@ internal fun ProfileItem(
             .fillMaxWidth()
             .let {
                 when {
-                    user.mikansei!!.isActive -> it
+                    user.mikansei.isActive -> it
                     else -> it.clickable {
                         onActivateClick(user)
                     }
@@ -68,7 +68,7 @@ internal fun ProfileItem(
                 ),
         ) {
             Text(
-                text = user.mikansei!!.nameAlias,
+                text = user.mikansei.nameAlias,
                 style = MaterialTheme.typography.subtitle1,
                 fontSize = 20.sp,
             )
@@ -105,7 +105,7 @@ internal fun ProfileItem(
                 }
 
                 when {
-                    user.mikansei!!.isActive -> IconButton(
+                    user.mikansei.isActive -> IconButton(
                         onClick = onSettingsClick,
                         content = {
                             Icon(

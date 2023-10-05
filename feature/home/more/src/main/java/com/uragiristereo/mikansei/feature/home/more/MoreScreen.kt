@@ -90,27 +90,25 @@ internal fun MoreScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
-            activeUser?.let { activeUser ->
-                item(span = span) {
-                    activeUser.apply {
-                        UserHeader(
-                            name = name,
-                            nameAlias = mikansei?.nameAlias.orEmpty(),
-                            userId = id,
-                            level = level,
-                            isOnlyAnonUserExist = isOnlyAnonUserExist,
-                            onProfileClick = { },
-                            onSettingsClick = {
-                                onNavigate(UserRoute.Settings)
-                            },
-                            onMoreClick = {
-                                onNavigate(UserRoute.Manage)
-                            },
-                            onLoginClick = {
-                                onNavigate(UserRoute.Login)
-                            }
-                        )
-                    }
+            item(span = span) {
+                activeUser.apply {
+                    UserHeader(
+                        name = name,
+                        nameAlias = mikansei.nameAlias,
+                        userId = id,
+                        level = level,
+                        isOnlyAnonUserExist = isOnlyAnonUserExist,
+                        onProfileClick = { },
+                        onSettingsClick = {
+                            onNavigate(UserRoute.Settings)
+                        },
+                        onMoreClick = {
+                            onNavigate(UserRoute.Manage)
+                        },
+                        onLoginClick = {
+                            onNavigate(UserRoute.Login)
+                        }
+                    )
                 }
             }
 

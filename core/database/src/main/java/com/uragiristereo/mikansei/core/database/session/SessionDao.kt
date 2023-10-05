@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.database.dao.session
+package com.uragiristereo.mikansei.core.database.session
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -9,7 +9,7 @@ class GetFavoritesAndFavoriteGroupsUseCase(
     private val getFavoritesUseCase: GetFavoritesUseCase,
     private val getFavoriteGroupsUseCase: GetFavoriteGroupsUseCase,
 ) {
-    suspend operator fun invoke(): Flow<Result<List<Favorite>>> {
+    operator fun invoke(): Flow<Result<List<Favorite>>> {
         return getFavoritesUseCase()
             .combineSuccess(
                 resultFlow = getFavoriteGroupsUseCase(

@@ -1,21 +1,19 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
-import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 
 class GetPostsUseCase(
     private val danbooruRepository: DanbooruRepository,
-    private val userDao: UserDao,
+    private val userRepository: UserRepository,
 ) {
-    suspend operator fun invoke(
+    operator fun invoke(
         tags: String,
         page: Int,
         currentPosts: List<Post>,
@@ -28,11 +26,9 @@ class GetPostsUseCase(
                     else -> currentPosts
                 }
 
-                val profile = userDao.getActive()
-                    .first()
-                    .toProfile()
+                val profile = userRepository.active.value
 
-                val ratingFilters = profile.mikansei!!.postsRatingFilter.getFilteredRatings()
+                val ratingFilters = profile.mikansei.postsRatingFilter.getFilteredRatings()
 
                 var posts = postsResult
                 var canLoadMore = posts.size == Constants.POSTS_PER_PAGE

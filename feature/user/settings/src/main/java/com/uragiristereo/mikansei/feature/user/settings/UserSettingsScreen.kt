@@ -13,6 +13,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -42,6 +44,7 @@ internal fun UserSettingsScreen(
     viewModel: UserSettingsViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
+    val activeUser by viewModel.activeUser.collectAsState()
 
     val bottomSheetPreferenceState = rememberBottomSheetPreferenceState(
         onItemSelected = viewModel::setBottomSheetPreferenceState,
@@ -55,7 +58,7 @@ internal fun UserSettingsScreen(
                         Text(text = "Account settings")
 
                         Text(
-                            text = viewModel.activeUser?.name.orEmpty(),
+                            text = activeUser.name,
                             fontSize = 14.sp,
                             color = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
                         )
@@ -84,7 +87,7 @@ internal fun UserSettingsScreen(
                 SwitchPreference(
                     title = "Safe mode",
                     subtitle = "Show only safe (general) images. Hide sensitive, questionable and explicit images.",
-                    selected = viewModel.activeUser?.danbooru?.safeMode ?: false,
+                    selected = activeUser.danbooru.safeMode,
                     onSelectedChange = viewModel::onSafeModeChange,
                     icon = null,
                     enabled = !viewModel.loading,
@@ -92,16 +95,8 @@ internal fun UserSettingsScreen(
             }
 
             item {
-                val safeMode = viewModel.activeUser?.danbooru?.safeMode
-
-                val showPreference = when {
-                    safeMode == null -> false
-                    safeMode -> false
-                    else -> true
-                }
-
                 AnimatedContent(
-                    targetState = showPreference,
+                    targetState = !activeUser.danbooru.safeMode,
                     label = "PostRatingFilter",
                 ) { state ->
                     if (state) {
@@ -123,7 +118,7 @@ internal fun UserSettingsScreen(
                 SwitchPreference(
                     title = "Show deleted posts",
                     subtitle = null,
-                    selected = viewModel.activeUser?.danbooru?.showDeletedPosts ?: false,
+                    selected = activeUser.danbooru.showDeletedPosts,
                     onSelectedChange = viewModel::onShowDeletedPostsChange,
                     icon = null,
                     enabled = !viewModel.loading,
@@ -134,7 +129,7 @@ internal fun UserSettingsScreen(
                 DropDownPreference(
                     state = rememberDropDownPreferenceState(
                         items = DetailSizePreference.entries.toTypedArray(),
-                        selectedItem = viewModel.activeUser?.danbooru?.defaultImageSize,
+                        selectedItem = activeUser.danbooru.defaultImageSize,
                         onItemSelected = viewModel::onDetailSizeChange,
                     ),
                     title = stringResource(id = R.string.settings_image_detail_size),

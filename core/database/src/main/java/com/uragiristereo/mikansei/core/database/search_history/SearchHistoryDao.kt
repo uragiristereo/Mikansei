@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.database.dao.search_history
+package com.uragiristereo.mikansei.core.database.search_history
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -17,6 +17,6 @@ interface SearchHistoryDao {
     @Delete
     suspend fun delete(items: List<SearchHistoryRow>)
 
-    @Query("delete * from search_history")
+    @Query("delete from search_history")
     suspend fun clear()
 }

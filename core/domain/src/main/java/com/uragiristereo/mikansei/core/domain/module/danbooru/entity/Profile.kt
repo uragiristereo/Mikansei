@@ -6,10 +6,10 @@ import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 data class Profile(
     val id: Int,
     val name: String,
-    val apiKey: String? = null,
+    val apiKey: String = "",
     val level: Level,
     val danbooru: DanbooruSettings,
-    val mikansei: MikanseiSettings? = null,
+    val mikansei: MikanseiSettings = MikanseiSettings(),
 ) {
     enum class Level(val id: Int) {
         Unknown(id = -1),
@@ -45,7 +45,7 @@ data class Profile(
         val postsRatingFilter: RatingPreference = RatingPreference.GENERAL_ONLY,
         val blurQuestionablePosts: Boolean = true,
         val blurExplicitPosts: Boolean = true,
-        val nameAlias: String,
+        val nameAlias: String = "",
     )
 
     fun isAnonymous(): Boolean {

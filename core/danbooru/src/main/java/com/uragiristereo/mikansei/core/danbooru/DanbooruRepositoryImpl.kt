@@ -15,13 +15,12 @@ import com.uragiristereo.mikansei.core.danbooru.model.user.toUser
 import com.uragiristereo.mikansei.core.danbooru.retrofit.DanbooruApi
 import com.uragiristereo.mikansei.core.danbooru.retrofit.DanbooruAuthInterceptor
 import com.uragiristereo.mikansei.core.danbooru.retrofit.ForceCacheResponseInterceptor
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
-import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
@@ -34,9 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -51,7 +48,7 @@ import java.util.zip.GZIPInputStream
 open class DanbooruRepositoryImpl(
     private val context: Context,
     private val networkRepository: NetworkRepository,
-    private val userDao: UserDao,
+    private val userRepository: UserRepository,
 ) : DanbooruRepository {
     override val isProd = true
     override var unsafeTags: List<String> = listOf()
@@ -64,9 +61,7 @@ open class DanbooruRepositoryImpl(
         explicitNulls = false
     }
 
-    private var activeUser = runBlocking {
-        userDao.getActive().first().toProfile()
-    }
+    private var activeUser = userRepository.active.value
 
     private lateinit var clientAuth: DanbooruApi
     private lateinit var clientNoAuth: DanbooruApi
@@ -74,7 +69,7 @@ open class DanbooruRepositoryImpl(
 
     private val client: DanbooruApi
         get() = when {
-            activeUser.danbooru.safeMode || activeUser.mikansei!!.postsRatingFilter == RatingPreference.GENERAL_ONLY -> clientSafe
+            activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY -> clientSafe
             else -> clientAuth
         }
 
@@ -82,9 +77,7 @@ open class DanbooruRepositoryImpl(
         buildClients(activeUser)
 
         CoroutineScope(context = Dispatchers.IO + SupervisorJob()).launch {
-            userDao.getActive().collect { userRow ->
-                val user = userRow.toProfile()
-
+            userRepository.active.collect { user ->
                 if (activeUser.id != user.id) {
                     buildClients(user)
                 }
@@ -116,7 +109,7 @@ open class DanbooruRepositoryImpl(
         val okHttpClientWithAuth = okHttpClient
             .newBuilder()
             .addInterceptor(
-                DanbooruAuthInterceptor(profile.name, profile.apiKey!!)
+                DanbooruAuthInterceptor(profile.name, profile.apiKey)
             )
             .addNetworkInterceptor(ForceCacheResponseInterceptor())
             .build()

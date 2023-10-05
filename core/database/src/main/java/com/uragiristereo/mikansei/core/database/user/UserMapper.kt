@@ -1,9 +1,7 @@
-package com.uragiristereo.mikansei.core.domain.module.database.model
+package com.uragiristereo.mikansei.core.database.user
 
-import com.uragiristereo.mikansei.core.database.dao.user.UserRow
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
-import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.preferences.user.getEnumFromDanbooru
 
 fun UserRow.toProfile(): Profile {
@@ -17,7 +15,7 @@ fun UserRow.toProfile(): Profile {
             showDeletedPosts = showDeletedPosts,
             defaultImageSize = DetailSizePreference.entries.getEnumFromDanbooru(defaultImageSize),
             blacklistedTags = when {
-                blacklistedTags.isNotBlank() -> blacklistedTags.split(' ').distinct()
+                blacklistedTags.isNotBlank() -> blacklistedTags.split('\n').distinct()
                 else -> listOf()
             },
         ),
@@ -40,13 +38,14 @@ fun Profile.toUserRow(): UserRow {
     return UserRow(
         id = id,
         name = name,
-        apiKey = apiKey.orEmpty(),
+        apiKey = apiKey,
         level = level.id,
         safeMode = danbooru.safeMode,
         showDeletedPosts = danbooru.showDeletedPosts,
         defaultImageSize = danbooru.defaultImageSize.getEnumForDanbooru(),
         blacklistedTags = danbooru.blacklistedTags.joinToString("\n"),
-        postsRatingFilter = RatingPreference.GENERAL_ONLY,
+        postsRatingFilter = mikansei.postsRatingFilter,
+        isActive = mikansei.isActive,
     )
 }
 

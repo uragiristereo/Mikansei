@@ -5,26 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mikansei.core.database.dao.user.UserDao
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
-import com.uragiristereo.mikansei.core.domain.module.database.model.toProfile
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class FavoritesViewModel(
-    userDao: UserDao,
+    private val userRepository: UserRepository,
     private val getFavoritesAndFavoriteGroupsUseCase: GetFavoritesAndFavoriteGroupsUseCase,
 ) : ViewModel() {
-    var activeUser by mutableStateOf(
-        runBlocking {
-            userDao.getActive().first().toProfile()
-        }
-    )
+    var activeUser by mutableStateOf(userRepository.active.value)
         private set
 
     var loadingState by mutableStateOf(LoadingState.FROM_LOAD)
@@ -37,9 +30,7 @@ class FavoritesViewModel(
 
     init {
         viewModelScope.launch {
-            userDao.getActive().collect {
-                val newUser = it.toProfile()
-
+            userRepository.active.collect { newUser ->
                 when {
                     newUser.isAnonymous() -> favorites = listOf()
 
