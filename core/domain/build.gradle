@@ -31,23 +31,14 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:download"))
     implementation(project(":core:model"))
-    implementation(project(":core:network"))
     implementation(project(":core:preferences"))
     implementation(project(":core:resources"))
 
-    // Koin Dependency Injection & Timber Logger
     implementation(libs.bundles.core)
-
-    // Compose UI
     implementation(libs.compose)
-
-    // Accompanist Compose Extensions - Navigation Animation
     implementation(libs.accompanist.navigation.animation)
-
-    // Retrofit HTTP Client
-    implementation(libs.retrofit)
-
+    implementation(libs.bundles.retrofit)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.media3.exoplayer)
 }

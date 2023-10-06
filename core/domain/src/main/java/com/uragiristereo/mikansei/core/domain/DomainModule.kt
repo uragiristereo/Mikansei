@@ -6,7 +6,6 @@ import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostWithNotificati
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesUseCase
-import com.uragiristereo.mikansei.core.domain.usecase.GetFileSizeUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsAutoCompleteUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsUseCase
@@ -22,7 +21,6 @@ object DomainModule {
         factoryOf(::GetPostsUseCase)
         factoryOf(::GetTagsAutoCompleteUseCase)
         factoryOf(::GetTagsUseCase)
-        factoryOf(::GetFileSizeUseCase)
         factoryOf(::DownloadPostUseCase)
         factoryOf(::DownloadPostWithNotificationUseCase)
         factoryOf(::ConvertFileSizeUseCase)

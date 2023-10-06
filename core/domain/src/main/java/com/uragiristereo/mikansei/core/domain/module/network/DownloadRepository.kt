@@ -1,7 +1,7 @@
-package com.uragiristereo.mikansei.core.download
+package com.uragiristereo.mikansei.core.domain.module.network
 
 import android.net.Uri
-import com.uragiristereo.mikansei.core.download.model.DownloadResource
+import com.uragiristereo.mikansei.core.domain.module.network.entity.DownloadResource
 import kotlinx.coroutines.flow.Flow
 
 interface DownloadRepository {

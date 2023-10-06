@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei
+package com.uragiristereo.mikansei.ui
 
 import android.app.Activity
 import android.os.Build
@@ -24,6 +24,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,9 +44,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import com.uragiristereo.mikansei.appbars.MainBottomNavigationBar
-import com.uragiristereo.mikansei.appbars.MainNavigationRail
-import com.uragiristereo.mikansei.core.ShareDownloadDialog
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
@@ -65,6 +63,9 @@ import com.uragiristereo.mikansei.core.ui.navigation.HomeAndDialogRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.rememberWindowSize
+import com.uragiristereo.mikansei.ui.appbars.MainBottomNavigationBar
+import com.uragiristereo.mikansei.ui.appbars.MainNavigationRail
+import com.uragiristereo.mikansei.ui.core.ShareDownloadDialog
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
@@ -84,6 +85,8 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var previousRoute by remember { mutableStateOf<String?>(null) }
+
+    val preferences by viewModel.preferences.collectAsState()
 
     val notificationPermissionState = rememberPermissionState(
         permission = when {
@@ -163,13 +166,13 @@ fun MainScreen(
     )
 
     MikanseiTheme(
-        theme = when (viewModel.preferences.theme) {
+        theme = when (preferences.theme) {
             ThemePreference.LIGHT -> Theme.LIGHT
             ThemePreference.DARK -> Theme.DARK
             else -> Theme.SYSTEM
         },
-        blackTheme = viewModel.preferences.blackTheme,
-        monetEnabled = viewModel.preferences.monetEnabled,
+        blackTheme = preferences.blackTheme,
+        monetEnabled = preferences.monetEnabled,
     ) {
         CompositionLocalProvider(
             values = arrayOf(

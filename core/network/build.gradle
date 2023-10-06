@@ -22,24 +22,15 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":core:model"))
     implementation(project(":core:preferences"))
 
-    // Koin Dependency Injection & Timber Logger
     implementation(libs.bundles.core)
-
-    // Okhttp HTTP Client
-    implementation(libs.okhttp)
+    implementation(libs.bundles.retrofit)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.okhttp.dnsoverhttps)
-
-    // Retrofit HTTP Client
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.kotlinx.serialization)
-
-    // Kotlinx.Serialization JSON Serialization
     implementation(libs.kotlinx.serialization.json)
-
-    // AndroidX Media3
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.okhttp)
 }

@@ -12,11 +12,11 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.uragiristereo.mikansei.core.domain.module.network.DownloadRepository
+import com.uragiristereo.mikansei.core.domain.module.network.entity.DownloadResource
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostWithNotificationUseCase
-import com.uragiristereo.mikansei.core.download.DownloadRepository
-import com.uragiristereo.mikansei.core.download.model.DownloadResource
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.core.DownloadState

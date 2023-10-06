@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -16,7 +17,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
-import com.uragiristereo.mikansei.core.product.preference.*
+import com.uragiristereo.mikansei.core.product.preference.DropDownPreference
+import com.uragiristereo.mikansei.core.product.preference.PreferenceCategory
+import com.uragiristereo.mikansei.core.product.preference.SwitchPreference
+import com.uragiristereo.mikansei.core.product.preference.rememberDropDownPreferenceState
+import com.uragiristereo.mikansei.core.product.preference.rememberSwitchPreferenceState
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import kotlinx.coroutines.delay
@@ -30,29 +35,26 @@ internal fun SettingsColumn(
     viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val scope = rememberCoroutineScope()
+    val preferences by viewModel.preferences.collectAsState()
 
     val themeState = rememberDropDownPreferenceState(
-        items = ThemePreference.values(),
-        selectedItem = viewModel.preferences.theme,
-        onItemSelected = remember {
-            { theme ->
-                scope.launch {
-                    delay(timeMillis = 100L)
+        items = ThemePreference.entries.toTypedArray(),
+        selectedItem = preferences.theme,
+        onItemSelected = { theme ->
+            scope.launch {
+                delay(timeMillis = 100L)
 
-                    viewModel.updatePreferences {
-                        it.copy(theme = theme)
-                    }
+                viewModel.updatePreferences {
+                    it.copy(theme = theme)
                 }
             }
         }
     )
 
     val dohState = rememberSwitchPreferenceState(
-        selected = viewModel.preferences.dohEnabled,
-        onSelectedChange = remember {
-            { selected ->
-                viewModel.updatePreferences { it.copy(dohEnabled = selected) }
-            }
+        selected = preferences.dohEnabled,
+        onSelectedChange = { selected ->
+            viewModel.updatePreferences { it.copy(dohEnabled = selected) }
         },
     )
 
@@ -69,7 +71,7 @@ internal fun SettingsColumn(
                 title = stringResource(id = R.string.settings_theme),
                 state = themeState,
                 icon = painterResource(
-                    id = when (viewModel.preferences.theme) {
+                    id = when (preferences.theme) {
                         ThemePreference.LIGHT -> R.drawable.dark_mode
                         ThemePreference.DARK -> R.drawable.dark_mode_fill
                         else -> when {
@@ -85,15 +87,13 @@ internal fun SettingsColumn(
             SwitchPreference(
                 title = stringResource(id = R.string.settings_black_dark_theme),
                 subtitle = null,
-                selected = viewModel.preferences.blackTheme,
-                onSelectedChange = remember {
-                    { selected ->
+                selected = preferences.blackTheme,
+                onSelectedChange = { selected ->
                         viewModel.updatePreferences { data -> data.copy(blackTheme = selected) }
-                    }
                 },
                 enabled = when {
-                    viewModel.preferences.theme == ThemePreference.LIGHT -> false
-                    viewModel.preferences.theme == ThemePreference.DARK -> true
+                    preferences.theme == ThemePreference.LIGHT -> false
+                    preferences.theme == ThemePreference.DARK -> true
                     isSystemInDarkTheme() -> true
                     else -> false
                 },
@@ -104,11 +104,9 @@ internal fun SettingsColumn(
             SwitchPreference(
                 title = stringResource(id = R.string.settings_dynamic_accent_colors),
                 subtitle = stringResource(id = R.string.settings_dynamic_accent_colors_desc),
-                selected = viewModel.preferences.monetEnabled,
-                onSelectedChange = remember {
-                    { selected ->
+                selected = preferences.monetEnabled,
+                onSelectedChange = { selected ->
                         viewModel.updatePreferences { data -> data.copy(monetEnabled = selected) }
-                    }
                 },
                 icon = painterResource(id = R.drawable.format_color_fill),
                 enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,

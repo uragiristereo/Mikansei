@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.appbars
+package com.uragiristereo.mikansei.ui.appbars
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

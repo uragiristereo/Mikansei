@@ -4,28 +4,33 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import com.uragiristereo.mikansei.core.preferences.model.Preferences
-import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.runBlocking
 
-class PreferencesRepositoryImpl(context: Context) : PreferencesRepository {
-    override val Context.protoDataStore by dataStore(
+class PreferencesRepositoryImpl(
+    context: Context,
+    coroutineScope: CoroutineScope,
+) : PreferencesRepository {
+    private val Context.protoDataStore by dataStore(
         fileName = "preferences.json",
         serializer = PreferencesSerializer,
     )
 
-    override val dataStore: DataStore<Preferences> = context.protoDataStore
-    override val flowData: Flow<Preferences> = context.protoDataStore.data
+    private val dataStore: DataStore<Preferences> = context.protoDataStore
 
-    override val data: Preferences
-        get() = runBlocking { flowData.first() }
+    override val data = dataStore.data
+        .stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.Eagerly,
+            initialValue = runBlocking {
+                dataStore.data.first()
+            },
+        )
 
-    override suspend fun update(newData: Preferences) {
-        dataStore.updateData { newData }
-    }
-
-    override fun getInitialTheme(): ThemePreference {
-        return data.theme
+    override suspend fun update(block: suspend (Preferences) -> Preferences) {
+        dataStore.updateData(block)
     }
 }

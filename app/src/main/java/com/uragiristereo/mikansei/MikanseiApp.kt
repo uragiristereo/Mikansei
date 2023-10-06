@@ -7,17 +7,7 @@ import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import coil.ImageLoader
 import coil.ImageLoaderFactory
-import com.uragiristereo.mikansei.core.danbooru.DanbooruModule
-import com.uragiristereo.mikansei.core.database.DatabaseModule
-import com.uragiristereo.mikansei.core.domain.DomainModule
-import com.uragiristereo.mikansei.core.download.di.DownloadModule
-import com.uragiristereo.mikansei.core.network.NetworkRepository
-import com.uragiristereo.mikansei.core.network.di.NetworkModule
-import com.uragiristereo.mikansei.core.preferences.PreferencesModule
-import com.uragiristereo.mikansei.core.product.ProductModule
-import com.uragiristereo.mikansei.feature.home.HomeModule
-import com.uragiristereo.mikansei.feature.image.ImageModule
-import com.uragiristereo.mikansei.feature.user.UserModule
+import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.component.KoinComponent
@@ -42,21 +32,7 @@ class MikanseiApp : Application(), ImageLoaderFactory, KoinComponent {
         startKoin {
             androidLogger()
             androidContext(this@MikanseiApp)
-            modules(
-                listOf(
-                    MikanseiModule(),
-                    DanbooruModule(),
-                    DatabaseModule(),
-                    DomainModule(),
-                    DownloadModule(),
-                    NetworkModule(),
-                    PreferencesModule(),
-                    HomeModule(),
-                    ImageModule(),
-                    UserModule(),
-                    ProductModule(),
-                )
-            )
+            modules(MikanseiModule())
         }
     }
 

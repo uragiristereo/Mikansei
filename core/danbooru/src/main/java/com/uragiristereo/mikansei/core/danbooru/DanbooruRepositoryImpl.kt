@@ -21,13 +21,13 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
+import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import com.uragiristereo.mikansei.core.model.result.resultFlow
-import com.uragiristereo.mikansei.core.network.NetworkRepository
 import com.uragiristereo.mikansei.core.resources.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

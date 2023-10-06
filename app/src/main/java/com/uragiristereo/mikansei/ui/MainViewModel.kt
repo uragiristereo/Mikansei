@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei
+package com.uragiristereo.mikansei.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,14 +11,11 @@ import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.database.session.SessionDao
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
-import com.uragiristereo.mikansei.core.preferences.model.Preferences
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.DownloadShareViewModel
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.DownloadShareViewModelImpl
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -27,8 +24,7 @@ class MainViewModel(
     preferencesRepository: PreferencesRepository,
     sessionDao: SessionDao,
 ) : ViewModel(), DownloadShareViewModel by DownloadShareViewModelImpl() {
-    var preferences by mutableStateOf(Preferences(theme = preferencesRepository.getInitialTheme()))
-        private set
+    val preferences = preferencesRepository.data
 
     var confirmExit by mutableStateOf(true)
 
@@ -53,10 +49,6 @@ class MainViewModel(
                 sessionDao.reset()
             }
         }
-
-        preferencesRepository.flowData.onEach {
-            preferences = it
-        }.launchIn(viewModelScope)
     }
 
     @JvmName(name = "setNavigatedBackByGesture2")

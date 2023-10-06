@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.download
+package com.uragiristereo.mikansei.core.domain.module.network
 
 import android.content.BroadcastReceiver
 import android.content.Context

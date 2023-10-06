@@ -1,15 +1,20 @@
-package com.uragiristereo.mikansei.core.download
+package com.uragiristereo.mikansei.core.network
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import com.uragiristereo.mikansei.core.download.model.DownloadResource
-import com.uragiristereo.mikansei.core.network.NetworkRepository
+import com.uragiristereo.mikansei.core.domain.module.network.DownloadRepository
+import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
+import com.uragiristereo.mikansei.core.domain.module.network.entity.DownloadResource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @SuppressLint("MissingPermission")
 class DownloadRepositoryImpl(
@@ -95,7 +100,7 @@ class DownloadRepositoryImpl(
             try {
                 var length: Long
 
-                val result = networkRepository.api.downloadFile(url)
+                val result = networkRepository.downloadFile(url)
 
                 result.byteStream().use { inputStream ->
                     resolver.openOutputStream(uri)!!.use { outputStream ->

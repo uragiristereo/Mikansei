@@ -4,7 +4,6 @@ import androidx.datastore.core.Serializer
 import com.uragiristereo.mikansei.core.preferences.model.Preferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.InputStream

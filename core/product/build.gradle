@@ -32,9 +32,7 @@ android {
 
 dependencies {
     implementation(project(":core:danbooru"))
-    implementation(project(":core:database"))
     implementation(project(":core:domain"))
-    implementation(project(":core:download"))
     implementation(project(":core:model"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))

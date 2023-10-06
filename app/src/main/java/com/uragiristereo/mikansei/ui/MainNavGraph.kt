@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei
+package com.uragiristereo.mikansei.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize

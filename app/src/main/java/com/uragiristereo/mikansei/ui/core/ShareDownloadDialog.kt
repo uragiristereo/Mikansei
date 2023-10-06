@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core
+package com.uragiristereo.mikansei.ui.core
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement

@@ -9,9 +9,9 @@ import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.uragiristereo.mikansei.core.download.DownloadBroadcastReceiver
-import com.uragiristereo.mikansei.core.download.DownloadRepository
-import com.uragiristereo.mikansei.core.download.model.DownloadResource
+import com.uragiristereo.mikansei.core.domain.module.network.DownloadBroadcastReceiver
+import com.uragiristereo.mikansei.core.domain.module.network.DownloadRepository
+import com.uragiristereo.mikansei.core.domain.module.network.entity.DownloadResource
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.resources.R
 import timber.log.Timber

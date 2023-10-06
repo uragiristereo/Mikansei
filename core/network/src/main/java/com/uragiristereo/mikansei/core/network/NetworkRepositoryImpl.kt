@@ -8,29 +8,30 @@ import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.uragiristereo.mikansei.core.network.api.MejiboardApi
+import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
+import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.dnsoverhttps.DnsOverHttps
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.io.File
+import kotlin.coroutines.cancellation.CancellationException
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalSerializationApi::class)
 class NetworkRepositoryImpl(
     context: Context,
-    private val preferencesRepository: PreferencesRepository,
+    preferencesRepository: PreferencesRepository,
 ) : NetworkRepository {
-
-    private var dohEnabled = preferencesRepository.data.dohEnabled
+    private var isDohEnabled = preferencesRepository.data.value.dohEnabled
 
     private val bootstrapOkHttpClient = OkHttpClient.Builder()
         .cache(CacheUtil.createDefaultCache(context = context, path = "image_cache"))
@@ -46,6 +47,12 @@ class NetworkRepositoryImpl(
         }
         .build()
 
+    override val okHttpClient: OkHttpClient
+        get() = when {
+            isDohEnabled -> okHttpClientDoh
+            else -> bootstrapOkHttpClient
+        }
+
     private val dns = DnsOverHttps.Builder()
         .client(bootstrapOkHttpClient)
         .url("https://cloudflare-dns.com/dns-query".toHttpUrl())
@@ -54,16 +61,6 @@ class NetworkRepositoryImpl(
     private val okHttpClientDoh = bootstrapOkHttpClient.newBuilder()
         .dns(dns)
         .build()
-
-    override val okHttpClient
-        get() = getPreferredOkHttpClient(dohEnabled)
-
-    override val api: MejiboardApi = Retrofit.Builder()
-        .baseUrl("https://github.com")
-        .client(okHttpClient)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-        .build()
-        .create(MejiboardApi::class.java)
 
     override val exoPlayerCacheFactory = CacheDataSource.Factory()
         .setCache(
@@ -75,18 +72,35 @@ class NetworkRepositoryImpl(
         )
         .setUpstreamDataSourceFactory(OkHttpDataSource.Factory(okHttpClient))
 
-    init {
-        CoroutineScope(Dispatchers.Main).launch {
-            preferencesRepository.flowData.collect { preferences ->
-                dohEnabled = preferences.dohEnabled
+    private val client: MikanseiApi = Retrofit.Builder()
+        .baseUrl("https://github.com")
+        .client(okHttpClient)
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .build()
+        .create(MikanseiApi::class.java)
+
+    override fun getFileSize(url: String): Flow<Result<Long>> {
+        return flow {
+            try {
+                val response = client.checkFile(url)
+
+                if (response.isSuccessful) {
+                    val size = response.headers()["content-length"]?.toLongOrNull() ?: 0L
+
+                    Result.Success(size)
+                } else {
+                    Result.Failed(response.raw().body.toString())
+                }
+            } catch (t: Throwable) {
+                when (t) {
+                    is CancellationException -> {}
+                    else -> emit(Result.Error(t))
+                }
             }
         }
     }
 
-    override fun getPreferredOkHttpClient(doh: Boolean): OkHttpClient {
-        return when {
-            doh -> okHttpClientDoh
-            else -> bootstrapOkHttpClient
-        }
+    override suspend fun downloadFile(url: String): ResponseBody {
+        return client.downloadFile(url)
     }
 }

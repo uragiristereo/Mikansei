@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.uragiristereo.mikansei.core.download.DownloadBroadcastReceiver" />
+        <receiver android:name="com.uragiristereo.mikansei.core.domain.module.network.DownloadBroadcastReceiver" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

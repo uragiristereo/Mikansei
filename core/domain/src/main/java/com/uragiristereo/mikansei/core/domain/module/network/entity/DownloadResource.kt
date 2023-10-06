@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.download.model
+package com.uragiristereo.mikansei.core.domain.module.network.entity
 
 sealed class DownloadResource {
     object Starting : DownloadResource()

@@ -8,16 +8,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
-import com.uragiristereo.mikansei.core.database.user.UserDao
-import com.uragiristereo.mikansei.core.database.user.toProfile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -25,12 +23,10 @@ import timber.log.Timber
 open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     private val savedStateHandle: SavedStateHandle by inject()
     private val danbooruRepository: DanbooruRepository by inject()
-    private val userDao: UserDao by inject()
+    private val userRepository: UserRepository by inject()
 
-    // TODO: avoid using runBlocking here
-    private val activeUser = runBlocking {
-        userDao.getActive().first().toProfile()
-    }
+    private val activeUser: Profile
+        get() = userRepository.active.value
 
     override var post = savedStateHandle.getData<MainRoute.Image>()!!.post
 

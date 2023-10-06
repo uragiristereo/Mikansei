@@ -18,8 +18,8 @@ import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
+import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
-import com.uragiristereo.mikansei.core.domain.usecase.GetFileSizeUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsUseCase
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -32,8 +32,8 @@ import timber.log.Timber
 class MoreBottomSheetViewModel(
     savedStateHandle: SavedStateHandle,
     private val danbooruRepository: DanbooruRepository,
+    private val networkRepository: NetworkRepository,
     private val getTagsUseCase: GetTagsUseCase,
-    private val getFileSizeUseCase: GetFileSizeUseCase,
     private val convertFileSizeUseCase: ConvertFileSizeUseCase,
 ) : ViewModel(),
     PostFavoriteVote by PostFavoriteVoteImpl() {
@@ -101,44 +101,26 @@ class MoreBottomSheetViewModel(
         viewModelScope.launch {
             launch {
                 post.medias.scaled?.let { media ->
-                    getFileSizeUseCase(
-                        url = media.url,
-                        onLoading = { loading ->
-                            if (loading) {
-                                scaledImageFileSizeStr = "Loading..."
-                            }
-                        },
-                        onSuccess = { size ->
-                            scaledImageFileSizeStr = convertFileSizeUseCase(size)
-                        },
-                        onFailed = {
-                            scaledImageFileSizeStr = "Error!"
-                        },
-                        onError = {
-                            scaledImageFileSizeStr = "Error!"
+                    scaledImageFileSizeStr = "Loading..."
+
+                    networkRepository.getFileSize(media.url).collect { result ->
+                        scaledImageFileSizeStr = when (result) {
+                            is Result.Success -> convertFileSizeUseCase(result.data)
+                            else -> "Error!"
                         }
-                    )
+                    }
                 }
             }
 
             launch {
-                getFileSizeUseCase(
-                    url = post.medias.original.url,
-                    onLoading = { loading ->
-                        if (loading) {
-                            originalImageFileSizeStr = "Loading..."
-                        }
-                    },
-                    onSuccess = { size ->
-                        originalImageFileSizeStr = convertFileSizeUseCase(size)
-                    },
-                    onFailed = {
-                        originalImageFileSizeStr = "Error!"
-                    },
-                    onError = {
-                        originalImageFileSizeStr = "Error!"
+                originalImageFileSizeStr = "Loading..."
+
+                networkRepository.getFileSize(post.medias.original.url).collect { result ->
+                    originalImageFileSizeStr = when (result) {
+                        is Result.Success -> convertFileSizeUseCase(result.data)
+                        else -> "Error!"
                     }
-                )
+                }
             }
         }
     }

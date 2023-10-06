@@ -1,8 +1,8 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
 import android.net.Uri
-import com.uragiristereo.mikansei.core.download.DownloadRepository
-import com.uragiristereo.mikansei.core.download.model.DownloadResource
+import com.uragiristereo.mikansei.core.domain.module.network.DownloadRepository
+import com.uragiristereo.mikansei.core.domain.module.network.entity.DownloadResource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
