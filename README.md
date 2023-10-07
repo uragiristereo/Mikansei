@@ -1,5 +1,7 @@
 # 🍊 Mikansei
 
+[![Discord](https://img.shields.io/discord/1084015982198145065?logo=discord&logoColor=white&label=discord)](https://discord.gg/YMyVNsFvpC)
+
 **Mikansei 未完成** _(lit. unfinished)_ is a [Danbooru](https://danbooru.donmai.us/posts?tags=rating:general) client for Android. Made with Jetpack Compose 🚀.
 
 The name is inspired from my favorite [vocaloid](https://vocaloid.fandom.com/wiki/Vocaloid_Wiki) producer, [Orangestar](https://twitter.com/mikanseip)'s Japanese name version (蜜柑星, which is read _mikansei_).
@@ -17,34 +19,48 @@ _(taken from the website's [home wiki](https://danbooru.donmai.us/wiki_pages/hel
 
 ## Screenshots
 
-here
+<p align="center">
+  <img src="./.github/assets/home.jpg?raw=true" alt="Home screen" width="30%" />
+  <img src="./.github/assets/viewer.jpg?raw=true" alt="Viewer screen" width="30%" />
+  <img src="./.github/assets/more_info.jpg?raw=true" alt="More info on viewer screen" width="30%" />
+
+  <img src="./.github/assets/search.jpg?raw=true" alt="Search screen" width="30%" />
+  <img src="./.github/assets/favorites.jpg?raw=true" alt="Favorites screen" width="30%" />
+  <img src="./.github/assets/manage_accounts.jpg?raw=true" alt="Manage accounts screen" width="30%" />
+</p>
+
+> _Note: the screenshots don't indicate the final product._
 
 ## Features
 
 - Sync and switch multiple Danbooru accounts with ease
 - System-based theme with dynamic colors support and 3 themes available (light, dark & black)
 - Optimized for one-handed operation
-- Landscape/wide screen friendly navigation
-- Image viewer with zoom, pan & gesture support
-- Download and share image
+- Image viewer with zoom, pan & gestures support
+- Video player with controls & gestures support
+- Download and share posts
 - DNS over HTTPS enabled by default
 - Using latest Android tech stacks
 
 **Features that are currently supported and synced with Danbooru:**
 
-- View posts
+- View, favorite and vote posts
 - Searching with autocomplete
 - Favorites and favorite groups
-- Tags blacklisting
+- Tags filtering/blacklisting
 - Safe mode toggle
 - Show deleted posts toggle
 - Image detail size switch
 
 ## Download
 
-Available on: [Github Releases](https://) or [Direct APK](https://).
+**🚧 PROJECT IS UNDER DEVELOPMENT (~90% finished) 🚧**
+
+The signed APK is currently not yet available, please [build](#building) it yourself to test.
 
 ## Tech Stacks
+
+This project is trying to use the latest Android tech stacks.
 
 - Language: [Kotlin](https://kotlinlang.org)
 - Architecture: [Android App Architecture](https://developer.android.com/topic/architecture)
@@ -59,14 +75,32 @@ Available on: [Github Releases](https://) or [Direct APK](https://).
   - [Accompanist](https://google.github.io/accompanist) (Jetpack Compose Extensions)
   - [Safer Navigation Compose](https://github.com/uragiristereo/safer-navigation-compose) (Navigation)
   - [Timber](https://github.com/JakeWharton/timber) (Logger)
-  - [ExoPlayer](https://github.com/google/ExoPlayer) (Video Loading)
+  - [Media3 ExoPlayer](https://github.com/androidx/media) (Video Loading)
 
 ## Resources Used
 
 - API: [Danbooru API](https://danbooru.donmai.us/wiki_pages/help:api)
 - Design Specs: [Figma](https://www.figma.com/file/R0d905PNBuPabrtoXwYxoC/Mikansei?t=jIm0pHq82qmC7S5z-1)
-- Design System: [Material Design 2](https://m2.material.io)
+- Design System: [Noctiluca](https://github.com/uragiristereo/noctiluca)
 - Icons: [Material Symbols](https://fonts.google.com/icons)
+
+## Building
+
+To build this project, you need the latest stable
+of [Android Studio](https://developer.android.com/studio) and a signing key `*.jks`.
+
+1. Clone the project and open in Android Studio.
+2. Create a file named `signing.properties` inside the root directory, then add this signing
+   information:
+
+```properties
+STORE_FILE=<PATH TO STORE FILE>
+STORE_PASSWORD=<STORE PASSWORD>
+KEY_ALIAS=<KEY ALIAS>
+KEY_PASSWORD=<KEY PASSWORD>
+```
+
+3. Sync project with Gradle then Run 'app'.
 
 ## License
 
