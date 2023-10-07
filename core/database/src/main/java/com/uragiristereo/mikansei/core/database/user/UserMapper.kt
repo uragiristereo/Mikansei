@@ -15,7 +15,7 @@ fun UserRow.toProfile(): Profile {
             showDeletedPosts = showDeletedPosts,
             defaultImageSize = DetailSizePreference.entries.getEnumFromDanbooru(defaultImageSize),
             blacklistedTags = when {
-                blacklistedTags.isNotBlank() -> blacklistedTags.split('\n').distinct()
+                blacklistedTags.isNotBlank() -> blacklistedTags.split("\n").distinct()
                 else -> listOf()
             },
         ),

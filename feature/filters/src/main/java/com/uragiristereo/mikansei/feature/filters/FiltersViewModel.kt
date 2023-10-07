@@ -11,7 +11,6 @@ import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.usecase.SyncUserSettingsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
-import com.uragiristereo.mikansei.core.ui.extension.strip
 import com.uragiristereo.mikansei.feature.filters.column.FilterItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
@@ -24,21 +23,14 @@ class FiltersViewModel(
     private val updateUserSettingsUseCase: UpdateUserSettingsUseCase,
     private val syncUserSettingsUseCase: SyncUserSettingsUseCase,
 ) : ViewModel() {
-    var username by mutableStateOf<String?>(null)
-        private set
-
-    var dialogShown by mutableStateOf(false)
-        private set
-
-    var items by mutableStateOf(listOf<FilterItem>())
-        private set
+    var username by mutableStateOf(userRepository.active.value.name); private set
+    var dialogShown by mutableStateOf(false); private set
+    var items by mutableStateOf(listOf<FilterItem>()); private set
+    var isLoading by mutableStateOf(false); private set
 
     val selectedItems by derivedStateOf {
         items.filter { it.selected }
     }
-
-    var isLoading by mutableStateOf(false)
-        private set
 
     init {
         viewModelScope.launch {
@@ -55,12 +47,19 @@ class FiltersViewModel(
     }
 
     fun addTags(tags: String) {
-        val split = tags.strip(splitter = "").split(' ').distinct()
+        val split = tags
+            .lowercase()
+            .replace(oldValue = "\r", newValue = "")
+            .split("\n")
+            .map {
+                it.replace("\\s+".toRegex(), " ").trim()
+            }
+            .distinct()
 
         val newItems = split.map { item ->
-            FilterItem(tag = item)
+            FilterItem(tags = item)
         }.filter { newItem ->
-            newItem.tag !in items.map { it.tag }
+            newItem.tags !in items.map { it.tags }
         }
 
         updateUserFilters(updatedItems = items + newItems)
@@ -86,8 +85,8 @@ class FiltersViewModel(
 
     fun updateSelectedItem(item: FilterItem) {
         items = items.map {
-            when (it.tag) {
-                item.tag -> item
+            when (it.tags) {
+                item.tags -> item
                 else -> it
             }
         }
@@ -95,7 +94,7 @@ class FiltersViewModel(
 
     fun deleteSelectedItems() {
         val updatedItems = items.filter { item ->
-            item.tag !in selectedItems.map { it.tag }
+            item.tags !in selectedItems.map { it.tags }
         }
 
         updateUserFilters(updatedItems)
@@ -116,11 +115,11 @@ class FiltersViewModel(
             deselectAll()
 
             val updateUserFlow = updateUserSettingsUseCase(
-                ProfileSettingsField(blacklistedTags = updatedItems.map { it.tag })
+                ProfileSettingsField(blacklistedTags = updatedItems.map { it.tags })
             )
 
             val delayFlow = flow<Result<Unit>> {
-                delay(timeMillis = 1000L)
+                delay(timeMillis = 2_000L)
             }
 
             merge(updateUserFlow, delayFlow, syncUserSettingsUseCase()).collect { result ->

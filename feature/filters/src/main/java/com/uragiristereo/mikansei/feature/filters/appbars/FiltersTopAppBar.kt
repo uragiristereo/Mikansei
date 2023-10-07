@@ -34,7 +34,7 @@ import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 @Composable
 internal fun FiltersTopAppBar(
     title: String,
-    username: String?,
+    username: String,
     selectionMode: Boolean,
     onNavigateBack: () -> Unit,
     onRefresh: () -> Unit,
@@ -51,7 +51,8 @@ internal fun FiltersTopAppBar(
                 selectionMode -> 5.dp
                 else -> 2.dp
             },
-        )
+        ),
+        label = "BackgroundColor",
     )
 
     ProductTopAppBar(
@@ -60,10 +61,13 @@ internal fun FiltersTopAppBar(
             Column {
                 Text(text = title)
 
-                AnimatedContent(targetState = selectionMode) { state ->
+                AnimatedContent(
+                    targetState = selectionMode,
+                    label = "SelectionMode",
+                ) { state ->
                     if (!state) {
                         Text(
-                            text = "$username",
+                            text = username,
                             fontSize = 14.sp,
                             color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                             modifier = Modifier.animateContentSize(),
@@ -79,6 +83,7 @@ internal fun FiltersTopAppBar(
                 transitionSpec = {
                     scaleIn() with scaleOut()
                 },
+                label = "CloseBackButton",
             ) { state ->
                 when {
                     state ->

@@ -2,7 +2,12 @@ package com.uragiristereo.mikansei.feature.filters.column
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -48,10 +53,10 @@ internal fun FiltersColumn(
 
         itemsIndexed(
             items = items,
-            key = { _, item -> item.tag },
+            key = { _, item -> item.tags },
         ) { index, item ->
             FiltersColumnItem(
-                text = item.tag,
+                text = item.tags,
                 isEven = index % 2 == 0,
                 selected = item.selected,
                 enabled = enabled,

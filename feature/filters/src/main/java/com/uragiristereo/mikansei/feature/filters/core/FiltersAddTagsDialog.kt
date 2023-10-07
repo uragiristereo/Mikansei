@@ -68,7 +68,7 @@ internal fun FiltersAddTagsDialog(
                         value = textField,
                         onValueChange = { textField = it },
                         keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done,
+                            imeAction = ImeAction.Default,
                             keyboardType = KeyboardType.Uri,
                             autoCorrect = false,
                         ),
@@ -79,10 +79,6 @@ internal fun FiltersAddTagsDialog(
                                 }
                             },
                         ),
-                        placeholder = {
-                            Text(text = stringResource(id = R.string.field_placeholder_example))
-                        },
-                        singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
                             .focusRequester(focusRequester),

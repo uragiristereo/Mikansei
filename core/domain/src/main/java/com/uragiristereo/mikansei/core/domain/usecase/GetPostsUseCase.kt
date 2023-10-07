@@ -5,6 +5,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.model.danbooru.Rating
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import kotlinx.coroutines.flow.Flow
@@ -39,9 +40,35 @@ class GetPostsUseCase(
                 }
 
                 posts = posts.filter { post ->
-                    !profile.danbooru.blacklistedTags.any { tag ->
-                        post.tags.contains(tag.lowercase())
-                    } && post.rating !in ratingFilters && post.status != Post.Status.BANNED && (post.status == Post.Status.DELETED) in showDeletedPosts
+                    !profile.danbooru.blacklistedTags.any { tags ->
+                        tags.split(' ')
+                            .map { tag ->
+                                val isTagWhitelist = tag.take(1) == "-"
+
+                                val tagWithoutHyphen = when {
+                                    isTagWhitelist -> tag.substring(startIndex = 1)
+                                    else -> tag
+                                }
+
+                                val result = when (tagWithoutHyphen) {
+                                    "rating:g", "rating:general" -> post.rating == Rating.GENERAL
+                                    "rating:s", "rating:sensitive" -> post.rating == Rating.SENSITIVE
+                                    "rating:q", "rating:questionable" -> post.rating == Rating.QUESTIONABLE
+                                    "rating:e", "rating:explicit" -> post.rating == Rating.EXPLICIT
+                                    "status:pending" -> post.status == Post.Status.PENDING
+
+                                    else -> post.tags.contains(tagWithoutHyphen.lowercase())
+                                }
+
+                                when {
+                                    isTagWhitelist -> !result
+                                    else -> result
+                                }
+                            }.none { !it }
+                    }
+                            && post.rating !in ratingFilters
+                            && post.status != Post.Status.BANNED
+                            && (post.status == Post.Status.DELETED) in showDeletedPosts
                 }
 
                 if (canLoadMore && posts.isEmpty()) {
