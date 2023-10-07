@@ -17,11 +17,13 @@ import com.uragiristereo.mikansei.core.danbooru.retrofit.DanbooruAuthInterceptor
 import com.uragiristereo.mikansei.core.danbooru.retrofit.ForceCacheResponseInterceptor
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
+import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
@@ -156,7 +158,10 @@ open class DanbooruRepositoryImpl(
     override fun getPosts(tags: String, page: Int) = resultFlow {
         client.getPosts(tags, page)
     }.mapSuccess {
-        it.toPostList()
+        PostsResult(
+            posts = it.toPostList(),
+            canLoadMore = it.size == Constants.POSTS_PER_PAGE,
+        )
     }
 
     override fun getTagsAutoComplete(query: String) = resultFlow {

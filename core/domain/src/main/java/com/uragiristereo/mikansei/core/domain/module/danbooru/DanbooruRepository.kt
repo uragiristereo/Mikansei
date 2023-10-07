@@ -2,6 +2,7 @@ package com.uragiristereo.mikansei.core.domain.module.danbooru
 
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
@@ -16,7 +17,7 @@ interface DanbooruRepository {
 
     fun getPost(id: Int): Flow<Result<Post>>
 
-    fun getPosts(tags: String, page: Int): Flow<Result<List<Post>>>
+    fun getPosts(tags: String, page: Int): Flow<Result<PostsResult>>
 
     fun getTagsAutoComplete(query: String): Flow<Result<List<Tag>>>
 

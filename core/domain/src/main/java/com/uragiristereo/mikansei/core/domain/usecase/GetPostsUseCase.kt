@@ -3,7 +3,6 @@ package com.uragiristereo.mikansei.core.domain.usecase
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
-import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.Rating
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -31,8 +30,8 @@ class GetPostsUseCase(
 
                 val ratingFilters = profile.mikansei.postsRatingFilter.getFilteredRatings()
 
-                var posts = postsResult
-                var canLoadMore = posts.size == Constants.POSTS_PER_PAGE
+                var posts = postsResult.posts
+                var canLoadMore = postsResult.canLoadMore
 
                 val showDeletedPosts = when {
                     profile.danbooru.showDeletedPosts || tags.contains("status:any") || tags.contains("status:deleted") -> listOf(false, true)
