@@ -4,9 +4,9 @@ import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavoriteGroup
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.post.vote.DanbooruPostVote
+import com.uragiristereo.mikansei.core.danbooru.model.profile.DanbooruProfile
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
-import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruProfile
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.model.Constants

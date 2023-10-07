@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.core.danbooru.model.profile
 
-import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruProfile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.model.preferences.user.getEnumFromDanbooru
@@ -15,7 +14,7 @@ fun DanbooruProfile.toProfile(): Profile {
             showDeletedPosts = showDeletedPosts,
             defaultImageSize = DetailSizePreference.entries.getEnumFromDanbooru(defaultImageSize),
             blacklistedTags = when {
-                blacklistedTags.isNotBlank() -> blacklistedTags.split(' ').distinct()
+                blacklistedTags.isNotBlank() -> blacklistedTags.split("\n").distinct()
                 else -> listOf()
             },
         ),

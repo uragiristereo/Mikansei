@@ -1,11 +1,11 @@
-package com.uragiristereo.mikansei.core.danbooru.model.user
+package com.uragiristereo.mikansei.core.danbooru.model.profile
 
 
 import androidx.annotation.Keep
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.*
+import java.util.Date
 
 @Keep
 @Serializable
