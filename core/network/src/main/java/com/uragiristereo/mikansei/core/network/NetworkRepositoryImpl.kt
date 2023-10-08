@@ -87,9 +87,9 @@ class NetworkRepositoryImpl(
                 if (response.isSuccessful) {
                     val size = response.headers()["content-length"]?.toLongOrNull() ?: 0L
 
-                    Result.Success(size)
+                    emit(Result.Success(size))
                 } else {
-                    Result.Failed(response.raw().body.toString())
+                    emit(Result.Failed(response.raw().body.toString()))
                 }
             } catch (t: Throwable) {
                 when (t) {
