@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
@@ -53,14 +54,21 @@ class DownloadPostWithNotificationUseCase(
             .setOnlyAlertOnce(true)
             .addAction(R.drawable.close, context.getString(R.string.download_cancel), cancelDownloadPendingIntent)
 
-        val file = File(post.medias.original.url)
+        val file = File(
+            when (post.type) {
+                Post.Type.UGOIRA -> post.medias.scaled!!.url
+                else -> post.medias.original.url
+            }
+        )
+
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
         val tempFileUri = File(FileUtil.getTempDir(context), file.name).toUri()
 
         val values = ContentValues().apply {
             val directory = when {
                 mimeType?.contains("video") == true -> Environment.DIRECTORY_MOVIES
-                else -> Environment.DIRECTORY_PICTURES
+                mimeType?.contains("image") == true -> Environment.DIRECTORY_PICTURES
+                else -> Environment.DIRECTORY_DOWNLOADS
             }
 
             put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
@@ -73,7 +81,11 @@ class DownloadPostWithNotificationUseCase(
 
         val location = when {
             mimeType?.contains("video") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            else -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            mimeType?.contains("image") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            else -> when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                else -> Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toUri()
+            }
         }
 
         val uri = resolver.insert(location, values)!!
@@ -119,7 +131,7 @@ class DownloadPostWithNotificationUseCase(
                                     /* progress = */ progressPercentage,
                                     /* indeterminate = */ resource.downloaded == 0L,
                                 )
-                                .setSubText("$progressPercentage% - $downloadSpeedFmt/s")
+                                .setSubText("$progressPercentage% • $downloadSpeedFmt/s")
                                 .setContentText("$downloadedFmt / $lengthFmt")
 
                             notificationManager.notify(
