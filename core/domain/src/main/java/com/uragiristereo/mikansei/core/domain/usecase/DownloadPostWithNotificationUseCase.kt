@@ -9,9 +9,12 @@ import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import com.uragiristereo.mikansei.core.domain.module.network.DownloadBroadcastReceiver
 import com.uragiristereo.mikansei.core.domain.module.network.DownloadRepository
 import com.uragiristereo.mikansei.core.domain.module.network.entity.DownloadResource
+import com.uragiristereo.mikansei.core.model.FileUtil
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.resources.R
 import timber.log.Timber
@@ -52,6 +55,7 @@ class DownloadPostWithNotificationUseCase(
 
         val file = File(post.medias.original.url)
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
+        val tempFileUri = File(FileUtil.getTempDir(context), file.name).toUri()
 
         val values = ContentValues().apply {
             val directory = when {
@@ -79,7 +83,7 @@ class DownloadPostWithNotificationUseCase(
         downloadRepository.download(
             postId = post.id,
             url = post.medias.original.url,
-            uri = uri,
+            uri = tempFileUri,
             sample = 1200L,
         )
             .collect { resource ->
@@ -126,6 +130,9 @@ class DownloadPostWithNotificationUseCase(
                     }
 
                     is DownloadResource.Completed -> {
+                        FileUtil.copyFile(context = context, sourceUri = tempFileUri, destinationUri = uri)
+                        tempFileUri.toFile().delete()
+
                         val openDownloadedFileIntent = Intent().apply {
                             action = Intent.ACTION_VIEW
                             setDataAndType(uri, resolver.getType(uri))

@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.ui
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.database.session.SessionDao
 import com.uragiristereo.mikansei.core.model.Constants
+import com.uragiristereo.mikansei.core.model.FileUtil
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.DownloadShareViewModel
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.DownloadShareViewModelImpl
@@ -23,6 +25,7 @@ class MainViewModel(
     savedStateHandle: SavedStateHandle,
     preferencesRepository: PreferencesRepository,
     sessionDao: SessionDao,
+    private val applicationContext: Context,
 ) : ViewModel(), DownloadShareViewModel by DownloadShareViewModelImpl() {
     val preferences = preferencesRepository.data
 
@@ -49,6 +52,8 @@ class MainViewModel(
                 sessionDao.reset()
             }
         }
+
+        removeTempFiles()
     }
 
     @JvmName(name = "setNavigatedBackByGesture2")
@@ -60,5 +65,11 @@ class MainViewModel(
     @JvmName(name = "setCurrentTags2")
     fun setCurrentTags(value: String) {
         currentTags = value
+    }
+
+    private fun removeTempFiles() {
+        viewModelScope.launch {
+            FileUtil.getTempDir(applicationContext).deleteRecursively()
+        }
     }
 }

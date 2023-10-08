@@ -17,6 +17,7 @@ import com.uragiristereo.mikansei.core.domain.module.network.entity.DownloadReso
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostWithNotificationUseCase
+import com.uragiristereo.mikansei.core.model.FileUtil
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.core.DownloadState
@@ -65,12 +66,7 @@ open class DownloadShareViewModelImpl : ViewModel(), DownloadShareViewModel, Koi
     ) {
         selectedPost = post
 
-        val tempDir = File(context.cacheDir, "temp")
-            .also { dir ->
-                if (!dir.isDirectory) {
-                    dir.mkdir()
-                }
-            }
+        val tempDir = FileUtil.getTempDir(context)
 
         val url = when {
             post.medias.hasScaled && shareOption == ShareOption.COMPRESSED -> post.medias.scaled!!.url
