@@ -19,9 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.extension.plus
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -34,14 +34,15 @@ internal fun PostsGrid(
     onItemLongPress: (Post) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val windowSize = rememberWindowSize()
+    val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
     LazyVerticalStaggeredGrid(
         state = gridState,
         columns = StaggeredGridCells.Fixed(
-            count = when (windowSize) {
+            count = when (windowSizeHorizontal) {
                 WindowSize.COMPACT -> 2
-                else -> 4
+                WindowSize.MEDIUM -> 4
+                WindowSize.EXPANDED -> 5
             }
         ),
         contentPadding = contentPadding + PaddingValues(all = 8.dp),
