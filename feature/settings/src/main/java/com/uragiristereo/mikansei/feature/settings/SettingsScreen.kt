@@ -1,31 +1,44 @@
 package com.uragiristereo.mikansei.feature.settings
 
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
+import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.ui.Scaffold
+import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
+import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.product.preference.LocalIconPadding
-import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
 import com.uragiristereo.mikansei.feature.settings.core.SettingsTopAppBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun SettingsScreen(
     onNavigateBack: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: SettingsViewModel = koinViewModel(),
 ) {
-    ProductSetSystemBarsColor()
-
     Scaffold(
         topBar = {
-            SettingsTopAppBar(
-                onNavigateBack = onNavigateBack,
-                onMoreClick = { /*TODO*/ },
-            )
+            ProductStatusBarSpacer {
+                SettingsTopAppBar(
+                    onNavigateBack = onNavigateBack,
+                    onMoreClick = { /*TODO*/ },
+                )
+            }
         },
-        modifier = modifier.defaultPaddings(),
+        bottomBar = {
+            ProductNavigationBarSpacer()
+        },
+        contentPadding = PaddingValues(0.dp),
+        modifier = Modifier
+            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
+            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     ) { innerPadding ->
         CompositionLocalProvider(
             values = arrayOf(

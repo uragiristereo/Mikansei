@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
@@ -39,13 +40,12 @@ internal fun ImageBottomAppBar(
         backgroundColor = Color.Transparent,
         contentColor = Color.White,
         modifier = modifier
-            .windowInsetsPadding(
-                WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
-            )
+            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
             .background(
                 brush = Brush.verticalGradient(colors = listOf(Color.Transparent, Color.Black)),
                 alpha = 0.7f,
             )
+            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
             .navigationBarsPadding(),
         content = {
             Row(

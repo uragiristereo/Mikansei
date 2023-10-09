@@ -2,12 +2,8 @@ package com.uragiristereo.mikansei.feature.home.favorites.grid
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
@@ -37,7 +33,7 @@ internal fun FavoritesGrid(
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = gridSize),
-        contentPadding = contentPadding + PaddingValues(all = 16.dp),
+        contentPadding = contentPadding + PaddingValues(all = 16.dp) + PaddingValues(bottom = 56.dp + 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier.fillMaxSize(),
@@ -48,21 +44,6 @@ internal fun FavoritesGrid(
                 onClick = {
                     onFavoritesClick(item.id)
                 },
-            )
-        }
-
-        item(
-            span = { GridItemSpan(currentLineSpan = gridSize) },
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .height(
-                        when (windowSize) {
-                            WindowSize.COMPACT -> 57.dp + 48.dp
-                            else -> 0.dp
-                        }
-                    ),
             )
         }
     }

@@ -1,16 +1,21 @@
 package com.uragiristereo.mikansei.feature.search
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -20,19 +25,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
+import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.ui.Scaffold
+import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
+import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
-import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.search.core.SearchBar
 import com.uragiristereo.mikansei.feature.search.core.SearchBrowseButton
@@ -48,7 +56,6 @@ internal fun SearchScreen(
     onNavigate: (MainRoute) -> Unit,
     onNavigateBack: () -> Unit,
     onSearchSubmit: (String) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: SearchViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
@@ -116,17 +123,11 @@ internal fun SearchScreen(
         }
     }
 
-    ProductSetSystemBarsColor(
-        navigationBarColor = MaterialTheme.colors.background.backgroundElevation(),
-    )
+    SetSystemBarsColors(Color.Transparent)
 
-    Box(
-        modifier = modifier
-            .navigationBarsPadding()
-            .defaultPaddings(),
-    ) {
-        Scaffold(
-            topBar = {
+    Scaffold(
+        topBar = {
+            ProductStatusBarSpacer {
                 SearchBar(
                     query = query,
                     placeholder = stringResource(id = R.string.field_placeholder_example),
@@ -145,106 +146,83 @@ internal fun SearchScreen(
                     },
                     onActionsRowExpandedChange = viewModel::onActionsRowExpandedChange,
                 )
-            },
-        ) { innerPadding ->
-            LazyColumn(
-                state = columnState,
-                contentPadding = innerPadding,
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                // workaround for column not scrolling back to index 0
-//                item {
-//                    Spacer(modifier = Modifier.height(1.dp))
-//                }
-//
-//                item {
-//                    AnimatedVisibility(
-//                        visible = viewModel.actionsRowExpanded,
-//                        enter = expandVertically(),
-//                        exit = shrinkVertically(),
-//                    ) {
-//                        SearchActionRow(
-//                            historyEnabled = true,
-//                            onSelectedBooruClick = {
-//                                onNavigate(MainRoute.Settings)
-//                            },
-//                            onSavedSearchesClick = {
-//                                keyboardController?.hide()
-//                                onNavigate(MainRoute.SavedSearches)
-//                            },
-//                            onFiltersClick = {
-//                                keyboardController?.hide()
-//                                onNavigate(MainRoute.Filters)
-//                            },
-//                            onHistoryClick = {
-//                                keyboardController?.hide()
-//                                onNavigate(MainRoute.SearchHistory)
-//                            },
-//                        )
-//                    }
-//                }
+            }
+        },
+        bottomBar = {
+            Column {
+                SearchQuickShortcutBar(
+                    query = query,
+                    onQueryChange = {
+                        query = it
+                    },
+                )
 
-                item {
-                    SearchBrowseButton(
-                        text = viewModel.parsedQuery,
-                        onClick = {
-                            onSearchSubmit(viewModel.parsedQuery)
+                ProductNavigationBarSpacer(
+                    color = MaterialTheme.colors.background.backgroundElevation(),
+                    modifier = Modifier.imePadding(),
+                )
+            }
+        },
+        contentPadding = PaddingValues(0.dp),
+        modifier = Modifier
+            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
+            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
+    ) { innerPadding ->
+        LazyColumn(
+            state = columnState,
+            contentPadding = innerPadding,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            item {
+                SearchBrowseButton(
+                    text = viewModel.parsedQuery,
+                    onClick = {
+                        onSearchSubmit(viewModel.parsedQuery)
+                    },
+                )
+            }
+
+            item {
+                Divider()
+            }
+
+            if (viewModel.searchWord.word.isNotEmpty()) {
+                items(
+                    items = viewModel.searches,
+                    key = { it.toString() },
+                ) { item ->
+                    SearchResultItem(
+                        tag = item,
+                        delimiter = viewModel.delimiter,
+                        boldWord = viewModel.boldWord,
+                        onClick = remember {
+                            {
+                                viewModel.searchAllowed = false
+
+                                val result = query.text.replaceRange(
+                                    startIndex = viewModel.searchWord.startIndex,
+                                    endIndex = viewModel.searchWord.endIndex,
+                                    replacement = "${viewModel.delimiter}${item.name} ",
+                                )
+
+                                val newQuery = "$result ".replace(regex = "\\s+".toRegex(), replacement = " ")
+
+                                query = TextFieldValue(
+                                    text = newQuery,
+                                    selection = TextRange(index = newQuery.length)
+                                )
+
+                                viewModel.searchAllowed = true
+
+                                focusRequester.requestFocus()
+                                keyboardController?.show()
+                            }
                         },
+                        onLongClick = { /*TODO*/ },
                     )
-                }
-
-                item {
-                    Divider()
-                }
-
-                if (viewModel.searchWord.word.isNotEmpty()) {
-                    items(
-                        items = viewModel.searches,
-                        key = { it.toString() },
-                    ) { item ->
-                        SearchResultItem(
-                            tag = item,
-                            delimiter = viewModel.delimiter,
-                            boldWord = viewModel.boldWord,
-                            onClick = remember {
-                                {
-                                    viewModel.searchAllowed = false
-
-                                    val result = query.text.replaceRange(
-                                        startIndex = viewModel.searchWord.startIndex,
-                                        endIndex = viewModel.searchWord.endIndex,
-                                        replacement = "${viewModel.delimiter}${item.name} ",
-                                    )
-
-                                    val newQuery = "$result ".replace(regex = "\\s+".toRegex(), replacement = " ")
-
-                                    query = TextFieldValue(
-                                        text = newQuery,
-                                        selection = TextRange(index = newQuery.length)
-                                    )
-
-                                    viewModel.searchAllowed = true
-
-                                    focusRequester.requestFocus()
-                                    keyboardController?.show()
-                                }
-                            },
-                            onLongClick = { /*TODO*/ },
-                        )
-                    }
                 }
             }
         }
-
-        SearchQuickShortcutBar(
-            query = query,
-            onQueryChange = {
-                query = it
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .imePadding(),
-        )
     }
 
     DisposableEffect(key1 = viewModel) {

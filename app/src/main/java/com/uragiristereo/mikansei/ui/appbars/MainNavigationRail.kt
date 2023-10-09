@@ -7,7 +7,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.NavigationRail
 import androidx.compose.material.NavigationRailItem
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -38,14 +37,11 @@ fun MainNavigationRail(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxHeight(),
         ) {
-            MainNavigationItems.values().forEach { item ->
+            MainNavigationItems.entries.forEach { item ->
                 val currentRouteIsDialog = currentRoute in HomeDialogRoutesString && previousRoute == item.route.route
                 val selected = currentRoute == item.route::class.route || currentRouteIsDialog
 
                 NavigationRailItem(
-                    label = {
-                        Text(text = stringResource(id = item.label))
-                    },
                     selected = selected,
                     icon = {
                         Icon(

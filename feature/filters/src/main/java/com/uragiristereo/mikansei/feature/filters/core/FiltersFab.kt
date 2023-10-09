@@ -1,7 +1,15 @@
 package com.uragiristereo.mikansei.feature.filters.core
 
-import androidx.compose.animation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.with
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -25,10 +33,11 @@ internal fun FiltersFab(
         content = {
             AnimatedContent(
                 targetState = isDeleteButton,
+                label = "FabAddDelete",
                 transitionSpec = {
                     scaleIn() with scaleOut()
                 },
-                modifier = modifier.navigationBarsPadding(),
+                modifier = modifier,
             ) { state ->
                 when {
                     state ->

@@ -4,7 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
@@ -54,14 +54,12 @@ internal fun ViewerTopAppBar(
         actions = actions,
         modifier = modifier
             .navigationBarsPadding()
-            .consumeWindowInsets(WindowInsets.navigationBars)
             .background(
                 brush = Brush.verticalGradient(colors = listOf(Color.Black, Color.Transparent)),
                 alpha = 0.7f,
             )
-            .windowInsetsPadding(
-                WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
-            )
+            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
+            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal))
             .statusBarsPadding(),
     )
 }
