@@ -5,9 +5,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavGraphBuilder
@@ -67,13 +64,9 @@ fun NavGraphBuilder.postsRoute(
             }
         },
         content = { data ->
-            val currentBackStack by navController.currentBackStack.collectAsState()
-
-            val isRouteFirstEntry by remember {
-                derivedStateOf {
-                    // 3 from list of null, MainRoute.Home, HomeRoute.Posts
-                    currentBackStack.size == 3
-                }
+            val isRouteFirstEntry = remember {
+                // 3 from list of null, MainRoute.Home, HomeRoute.Posts
+                navController.currentBackStack.value.size == 3
             }
 
             LaunchedEffect(key1 = data.tags) {
