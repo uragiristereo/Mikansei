@@ -49,6 +49,9 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeVertical
+import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DimensionSubcomposeLayout
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
@@ -82,6 +85,8 @@ internal fun PostsScreen(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val scrollToTopChannel = LocalScrollToTopChannel.current
+    val windowSizeVertical = LocalWindowSizeVertical.current
+    val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
     val scope = rememberCoroutineScope()
     val gridState = rememberLazyStaggeredGridState()
@@ -110,9 +115,25 @@ internal fun PostsScreen(
         }
     }
 
+    val shouldEnableTopAppBarScroll by remember {
+        derivedStateOf {
+            when {
+                windowSizeVertical == WindowSize.COMPACT && windowSizeHorizontal == WindowSize.MEDIUM -> true
+                windowSizeVertical == WindowSize.MEDIUM && windowSizeHorizontal == WindowSize.COMPACT -> true
+                else -> false
+            }
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         scope.launch {
             viewModel.offsetY.snapTo(targetValue = 0f)
+        }
+    }
+
+    LaunchedEffect(key1 = shouldEnableTopAppBarScroll) {
+        scope.launch {
+            viewModel.offsetY.animateTo(targetValue = 0f)
         }
     }
 
@@ -255,7 +276,7 @@ internal fun PostsScreen(
         Box(
             modifier = Modifier
                 .nestedScroll(
-                    connection = remember {
+                    connection = remember(shouldEnableTopAppBarScroll) {
                         object : NestedScrollConnection {
                             override fun onPreScroll(
                                 available: Offset,
@@ -265,7 +286,7 @@ internal fun PostsScreen(
                                 val newOffset = viewModel.offsetY.value + delta
 
                                 scope.launch {
-                                    if (pullRefreshState.progress == 0f && !areAllItemsVisible) {
+                                    if (pullRefreshState.progress == 0f && !areAllItemsVisible && shouldEnableTopAppBarScroll) {
                                         viewModel.offsetY.snapTo(
                                             targetValue = newOffset.coerceIn(
                                                 minimumValue = density.run { -viewModel.topAppBarHeight.toPx() },
