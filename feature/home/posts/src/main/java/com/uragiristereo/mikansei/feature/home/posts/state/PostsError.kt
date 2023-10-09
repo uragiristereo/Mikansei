@@ -1,9 +1,18 @@
 package com.uragiristereo.mikansei.feature.home.posts.state
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,8 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.core.ui.WindowSize
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 
 @Composable
 internal fun PostsError(
@@ -23,22 +30,9 @@ internal fun PostsError(
     onRetryClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val windowSize = rememberWindowSize()
-
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
-            .fillMaxSize()
-            .padding(
-                bottom = when (windowSize) {
-                    WindowSize.COMPACT -> 56.dp + 1.dp
-                    else -> 0.dp
-                },
-                start = when (windowSize) {
-                    WindowSize.COMPACT -> 0.dp
-                    else -> 56.dp + 1.dp
-                },
-            ),
+        modifier = modifier.fillMaxSize(),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

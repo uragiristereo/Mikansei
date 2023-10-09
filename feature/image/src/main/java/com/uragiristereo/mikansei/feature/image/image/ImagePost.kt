@@ -26,8 +26,8 @@ import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageBottomAppBar
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageTopAppBar
@@ -49,7 +49,7 @@ internal fun ImagePost(
     val lambdaOnDownload = LocalLambdaOnDownload.current
     val lambdaOnShare = LocalLambdaOnShare.current
 
-    val windowSize = rememberWindowSize()
+    val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
     val post = remember { viewModel.post }
     val imageView = remember(viewModel) { TouchImageView(context) }
@@ -196,7 +196,7 @@ internal fun ImagePost(
         },
         bottomBar = {
             AnimatedVisibility(
-                visible = areAppBarsVisible && windowSize == WindowSize.COMPACT,
+                visible = areAppBarsVisible && windowSizeHorizontal == WindowSize.COMPACT,
                 enter = fadeIn(),
                 exit = fadeOut(),
                 modifier = Modifier

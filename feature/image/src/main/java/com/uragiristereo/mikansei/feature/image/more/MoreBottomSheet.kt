@@ -39,12 +39,12 @@ import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DragHandle
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.extension.forEach
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheetState2
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.image.more.core.MoreActionsRow
 import com.uragiristereo.mikansei.feature.image.more.core.MoreCloseButton
 import com.uragiristereo.mikansei.feature.image.more.core.MoreTagsButton
@@ -72,13 +72,13 @@ internal fun MoreBottomSheet(
 
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
-    val windowSize = rememberWindowSize()
+    val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
     val tagsCount = remember(post) { post.tags.size }
 
     val closeButtonVisible by remember {
         derivedStateOf {
-            viewModel.tagsExpanded && windowSize == WindowSize.COMPACT && viewModel.tags.isNotEmpty()
+            viewModel.tagsExpanded && windowSizeHorizontal == WindowSize.COMPACT && viewModel.tags.isNotEmpty()
         }
     }
 
@@ -108,7 +108,7 @@ internal fun MoreBottomSheet(
                         },
                     ),
                 ) {
-                    if (windowSize == WindowSize.COMPACT && closeButtonVisible) {
+                    if (windowSizeHorizontal == WindowSize.COMPACT && closeButtonVisible) {
                         item {
                             Spacer(
                                 modifier = Modifier.height(viewModel.closeButtonHeight),

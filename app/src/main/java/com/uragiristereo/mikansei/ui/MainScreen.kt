@@ -65,6 +65,8 @@ import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeVertical
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DimensionSubcomposeLayout
 import com.uragiristereo.mikansei.core.ui.composable.RailScaffold
@@ -75,7 +77,8 @@ import com.uragiristereo.mikansei.core.ui.navigation.HomeAndDialogRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
+import com.uragiristereo.mikansei.core.ui.rememberWindowSizeHorizontal
+import com.uragiristereo.mikansei.core.ui.rememberWindowSizeVertical
 import com.uragiristereo.mikansei.ui.appbars.MainBottomNavigationBar
 import com.uragiristereo.mikansei.ui.appbars.MainNavigationRail
 import com.uragiristereo.mikansei.ui.core.ShareDownloadDialog
@@ -93,7 +96,6 @@ fun MainScreen(
     val navController = rememberAnimatedNavController()
     val homeScaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    val windowSize = rememberWindowSize()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -184,6 +186,8 @@ fun MainScreen(
                 LocalLambdaOnDownload provides lambdaOnDownload,
                 LocalLambdaOnShare provides lambdaOnShare,
                 LocalScrollToTopChannel provides viewModel.scrollToTopChannel,
+                LocalWindowSizeHorizontal provides rememberWindowSizeHorizontal(),
+                LocalWindowSizeVertical provides rememberWindowSizeVertical(),
             ),
         ) {
             SetSystemBarsColors(Color.Transparent)
@@ -219,7 +223,7 @@ fun MainScreen(
             }
 
             Surface {
-                if (windowSize == WindowSize.COMPACT) {
+                if (LocalWindowSizeHorizontal.current == WindowSize.COMPACT) {
                     Scaffold(
                         bottomBar = {
                             AnimatedVisibility(

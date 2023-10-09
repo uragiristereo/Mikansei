@@ -1,7 +1,10 @@
 package com.uragiristereo.mikansei.core.ui.composable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -12,8 +15,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.uragiristereo.mikansei.core.ui.WindowSize
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 
 @Composable
 fun Banner(
@@ -21,18 +22,8 @@ fun Banner(
     text: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val windowSize = rememberWindowSize()
-
     ConstraintLayout(
-        modifier
-            .fillMaxSize()
-            .padding(
-                bottom = when (windowSize) {
-                    WindowSize.COMPACT -> 56.dp + 1.dp
-                    else -> 0.dp
-                },
-            )
-            .navigationBarsPadding(),
+        modifier.fillMaxSize(),
     ) {
         val (iconRef, textRef) = createRefs()
 

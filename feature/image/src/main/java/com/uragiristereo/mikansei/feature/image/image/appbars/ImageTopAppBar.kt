@@ -14,8 +14,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.image.core.ViewerTopAppBar
 
 @Composable
@@ -30,7 +30,7 @@ internal fun ImageTopAppBar(
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val windowSize = rememberWindowSize()
+    val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
     ViewerTopAppBar(
         postId = post.id,
@@ -40,7 +40,7 @@ internal fun ImageTopAppBar(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (windowSize != WindowSize.COMPACT) {
+                if (windowSizeHorizontal != WindowSize.COMPACT) {
                     if (expandButtonVisible) {
                         IconButton(
                             onClick = onExpandClick,

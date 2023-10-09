@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 
 @Composable
 internal fun PostDialogHeaderResponsive(
@@ -33,7 +33,7 @@ internal fun PostDialogHeaderResponsive(
 ) {
     val context = LocalContext.current
 
-    val windowSize = rememberWindowSize()
+    val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
     @Composable
     fun PostThumbnail(modifier: Modifier = Modifier) {
@@ -52,7 +52,7 @@ internal fun PostDialogHeaderResponsive(
         )
     }
 
-    if (windowSize == WindowSize.COMPACT) {
+    if (windowSizeHorizontal == WindowSize.COMPACT) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier

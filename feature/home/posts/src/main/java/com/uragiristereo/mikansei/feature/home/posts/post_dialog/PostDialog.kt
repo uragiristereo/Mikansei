@@ -25,10 +25,10 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.component.ProductDialog
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
 import com.uragiristereo.mikansei.core.ui.extension.forEach
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.home.posts.post_dialog.core.FavoriteSection
 import com.uragiristereo.mikansei.feature.home.posts.post_dialog.core.ScoreSection
 import org.koin.androidx.compose.koinViewModel
@@ -47,7 +47,7 @@ internal fun PostDialog(
     val context = LocalContext.current
     val density = LocalDensity.current
 
-    val windowSize = rememberWindowSize()
+    val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
     var columnHeight by remember { mutableStateOf(0.dp) }
 
@@ -64,7 +64,7 @@ internal fun PostDialog(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (windowSize != WindowSize.COMPACT) {
+                if (windowSizeHorizontal != WindowSize.COMPACT) {
                     PostDialogHeaderResponsive(
                         post = post,
                         onClick = {
@@ -85,7 +85,7 @@ internal fun PostDialog(
                             columnHeight = with(density) { size.height.toDp() }
                         },
                 ) {
-                    if (windowSize == WindowSize.COMPACT) {
+                    if (windowSizeHorizontal == WindowSize.COMPACT) {
                         item {
                             PostDialogHeaderResponsive(
                                 post = post,
