@@ -32,6 +32,8 @@ import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 @Composable
 internal fun PostsTopAppBar(
     searchTags: String,
+    isRouteFirstEntry: Boolean,
+    onNavigateBack: () -> Unit,
     onRefreshClick: () -> Unit,
     onExitClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -44,6 +46,23 @@ internal fun PostsTopAppBar(
         ProductTopAppBar(
             title = {
                 Text(text = stringResource(id = R.string.app_name))
+            },
+            navigationIcon = when {
+                !isRouteFirstEntry -> {
+                    {
+                        IconButton(
+                            onClick = onNavigateBack,
+                            content = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.arrow_back),
+                                    contentDescription = null,
+                                )
+                            },
+                        )
+                    }
+                }
+
+                else -> null
             },
             actions = {
                 IconButton(

@@ -1,9 +1,14 @@
 package com.uragiristereo.mikansei.feature.home.posts.core
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -23,6 +28,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@SuppressLint("RestrictedApi")
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.postsRoute(
     navController: NavHostController,
@@ -61,14 +67,22 @@ fun NavGraphBuilder.postsRoute(
             }
         },
         content = { data ->
+            val currentBackStack by navController.currentBackStack.collectAsState()
+
+            val isRouteFirstEntry by remember {
+                derivedStateOf {
+                    // 3 from list of null, MainRoute.Home, HomeRoute.Posts
+                    currentBackStack.size == 3
+                }
+            }
+
             LaunchedEffect(key1 = data.tags) {
                 onCurrentTagsChange(data.tags)
             }
 
             PostsScreen(
-                onNavigate = {
-                    navController.navigate(route = it)
-                },
+                isRouteFirstEntry = isRouteFirstEntry,
+                onNavigateBack = navController::navigateUp,
                 onNavigateImage = lambdaOnNavigateImage,
                 onNavigateDialog = { post ->
                     navController.navigate(

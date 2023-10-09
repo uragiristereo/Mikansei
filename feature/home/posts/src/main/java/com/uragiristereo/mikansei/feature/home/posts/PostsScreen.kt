@@ -58,7 +58,6 @@ import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.extension.forEach
 import com.uragiristereo.mikansei.core.ui.extension.horizontalOnly
 import com.uragiristereo.mikansei.core.ui.extension.verticalOnly
-import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.home.posts.core.PostsTopAppBar
 import com.uragiristereo.mikansei.feature.home.posts.grid.PostsGrid
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsContentState
@@ -75,7 +74,8 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun PostsScreen(
-    onNavigate: (MainRoute) -> Unit,
+    isRouteFirstEntry: Boolean,
+    onNavigateBack: () -> Unit,
     onNavigateImage: (Post) -> Unit,
     onNavigateDialog: (Post) -> Unit,
     viewModel: PostsViewModel = koinViewModel(),
@@ -229,6 +229,8 @@ internal fun PostsScreen(
 
                 PostsTopAppBar(
                     searchTags = viewModel.tags,
+                    isRouteFirstEntry = isRouteFirstEntry,
+                    onNavigateBack = onNavigateBack,
                     onRefreshClick = {
                         scope.launch {
                             gridState.animateScrollToItem(index = 0)
