@@ -4,11 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -19,7 +16,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
@@ -33,7 +29,7 @@ internal fun PostsGrid(
     posts: List<Post>,
     gridState: LazyStaggeredGridState,
     canLoadMore: Boolean,
-    topAppBarHeight: Dp,
+    contentPadding: PaddingValues,
     onItemClick: (Post) -> Unit,
     onItemLongPress: (Post) -> Unit,
     modifier: Modifier = Modifier,
@@ -48,17 +44,7 @@ internal fun PostsGrid(
                 else -> 4
             }
         ),
-        contentPadding = PaddingValues(all = 8.dp) + PaddingValues(
-            top = topAppBarHeight,
-            bottom = 1.dp +
-                    WindowInsets.navigationBars
-                        .asPaddingValues()
-                        .calculateBottomPadding() +
-                    when (windowSize) {
-                        WindowSize.COMPACT -> 56.dp
-                        else -> 0.dp
-                    },
-        ),
+        contentPadding = contentPadding + PaddingValues(all = 8.dp),
         verticalItemSpacing = 8.dp,
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
         modifier = modifier.fillMaxSize(),

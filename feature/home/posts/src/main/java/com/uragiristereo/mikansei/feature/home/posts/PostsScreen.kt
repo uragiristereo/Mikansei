@@ -6,9 +6,15 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -35,18 +41,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
-import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
+import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
+import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
-import com.uragiristereo.mikansei.core.ui.WindowSize
+import com.uragiristereo.mikansei.core.ui.composable.DimensionSubcomposeLayout
+import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.extension.forEach
+import com.uragiristereo.mikansei.core.ui.extension.horizontalOnly
+import com.uragiristereo.mikansei.core.ui.extension.verticalOnly
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.core.ui.rememberWindowSize
 import com.uragiristereo.mikansei.feature.home.posts.core.PostsTopAppBar
 import com.uragiristereo.mikansei.feature.home.posts.grid.PostsGrid
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsContentState
@@ -66,7 +75,6 @@ internal fun PostsScreen(
     onNavigate: (MainRoute) -> Unit,
     onNavigateImage: (Post) -> Unit,
     onNavigateDialog: (Post) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: PostsViewModel = koinViewModel(),
 ) {
     val density = LocalDensity.current
@@ -77,7 +85,6 @@ internal fun PostsScreen(
 
     val scope = rememberCoroutineScope()
     val gridState = rememberLazyStaggeredGridState()
-    val windowSize = rememberWindowSize()
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
         onRefresh = viewModel::retryGetPosts,
@@ -184,160 +191,166 @@ internal fun PostsScreen(
         }
     }
 
-    LaunchedEffect(key1 = gridState.isScrollInProgress) {
-        if (!gridState.isScrollInProgress) {
-            val topAppBarHeightPx = with(density) { viewModel.topAppBarHeight.toPx() }
+    SetSystemBarsColors(Color.Transparent)
 
-            if (viewModel.offsetY.value.roundToInt() != -topAppBarHeightPx.roundToInt() && viewModel.offsetY.value != 0f) {
-                val half = topAppBarHeightPx / 2
-                val oldOffsetY = viewModel.offsetY.value
-                val targetOffsetY = when {
-                    kotlin.math.abs(viewModel.offsetY.value) >= half -> -topAppBarHeightPx
-                    else -> 0f
+    Scaffold(
+        topBar = {
+            DimensionSubcomposeLayout(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .graphicsLayer {
+                        translationY = viewModel.offsetY.value
+                    },
+            ) {
+                LaunchedEffect(key1 = size.height) {
+                    viewModel.topAppBarHeight = size.height
                 }
 
-                launch {
-                    gridState.animateScrollBy(value = oldOffsetY - targetOffsetY)
-                }
+                PostsTopAppBar(
+                    searchTags = viewModel.tags,
+                    onRefreshClick = {
+                        scope.launch {
+                            gridState.animateScrollToItem(index = 0)
 
-                launch {
-                    viewModel.offsetY.animateTo(targetOffsetY)
+                            viewModel.retryGetPosts()
+                        }
+                    },
+                    onExitClick = {
+                        (context as Activity).finishAffinity()
+                    },
+                )
+            }
+
+            ProductStatusBarSpacer()
+        },
+        contentPadding = LocalMainScaffoldPadding.current.verticalOnly,
+        modifier = Modifier
+            .padding(LocalMainScaffoldPadding.current.horizontalOnly)
+            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.End))
+            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.End)),
+    ) { innerPadding ->
+        LaunchedEffect(key1 = gridState.isScrollInProgress) {
+            if (!gridState.isScrollInProgress) {
+                val topAppBarHeightPx = density.run { viewModel.topAppBarHeight.toPx() }
+
+                if (viewModel.offsetY.value.roundToInt() != -topAppBarHeightPx.roundToInt() && viewModel.offsetY.value != 0f) {
+                    val half = topAppBarHeightPx / 2
+                    val oldOffsetY = viewModel.offsetY.value
+                    val targetOffsetY = when {
+                        kotlin.math.abs(viewModel.offsetY.value) >= half -> -topAppBarHeightPx
+                        else -> 0f
+                    }
+
+                    launch {
+                        gridState.animateScrollBy(value = oldOffsetY - targetOffsetY)
+                    }
+
+                    launch {
+                        viewModel.offsetY.animateTo(targetOffsetY)
+                    }
                 }
             }
         }
-    }
 
-    ProductSetSystemBarsColor(
-        navigationBarColor = Color.Transparent,
-    )
+        Box(
+            modifier = Modifier
+                .nestedScroll(
+                    connection = remember {
+                        object : NestedScrollConnection {
+                            override fun onPreScroll(
+                                available: Offset,
+                                source: NestedScrollSource
+                            ): Offset {
+                                val delta = available.y
+                                val newOffset = viewModel.offsetY.value + delta
 
-    Box(
-        modifier = modifier
-            .statusBarsPadding()
-            .nestedScroll(
-                connection = remember {
-                    object : NestedScrollConnection {
-                        override fun onPreScroll(
-                            available: Offset,
-                            source: NestedScrollSource
-                        ): Offset {
-                            val delta = available.y
-                            val newOffset = viewModel.offsetY.value + delta
-
-                            scope.launch {
-                                if (pullRefreshState.progress == 0f && !areAllItemsVisible) {
-                                    viewModel.offsetY.snapTo(
-                                        targetValue = newOffset.coerceIn(
-                                            minimumValue = with(density) { -viewModel.topAppBarHeight.toPx() },
-                                            maximumValue = 0f,
-                                        ),
-                                    )
+                                scope.launch {
+                                    if (pullRefreshState.progress == 0f && !areAllItemsVisible) {
+                                        viewModel.offsetY.snapTo(
+                                            targetValue = newOffset.coerceIn(
+                                                minimumValue = density.run { -viewModel.topAppBarHeight.toPx() },
+                                                maximumValue = 0f,
+                                            ),
+                                        )
+                                    }
                                 }
-                            }
 
-                            return Offset.Zero
+                                return Offset.Zero
+                            }
                         }
                     }
-                }
-            ),
-    ) {
-        Crossfade(targetState = viewModel.contentState, label = "PostsContent") { target ->
-            when (target) {
-                PostsContentState.SHOW_POSTS -> {
-                    Box(
-                        modifier = Modifier.pullRefresh(pullRefreshState),
-                    ) {
-                        PostsGrid(
-                            posts = viewModel.posts,
-                            gridState = gridState,
-                            canLoadMore = viewModel.canLoadMore,
-                            topAppBarHeight = viewModel.topAppBarHeight,
-                            onItemClick = onNavigateImage,
-                            onItemLongPress = remember {
-                                { post ->
-//                                    viewModel.selectedPost = post
-//                                    viewModel.dialogShown = true
+                ),
+        ) {
+            Crossfade(
+                targetState = viewModel.contentState,
+                label = "PostsContent",
+            ) { target ->
+                when (target) {
+                    PostsContentState.SHOW_POSTS -> {
+                        Box(
+                            modifier = Modifier.pullRefresh(pullRefreshState),
+                        ) {
+                            PostsGrid(
+                                posts = viewModel.posts,
+                                gridState = gridState,
+                                canLoadMore = viewModel.canLoadMore,
+                                contentPadding = innerPadding,
+                                onItemClick = onNavigateImage,
+                                onItemLongPress = { post ->
                                     onNavigateDialog(post)
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                }
-                            },
-                        )
+                                },
+                            )
 
-                        if (viewModel.loading == PostsLoadingState.FROM_REFRESH || isScrollIndexZero) {
-                            PullRefreshIndicator(
-                                refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
-                                state = pullRefreshState,
-                                backgroundColor = MaterialTheme.colors.background.backgroundElevation(),
-                                contentColor = MaterialTheme.colors.primary,
-                                modifier = Modifier
-                                    .padding(top = viewModel.topAppBarHeight)
-                                    .align(Alignment.TopCenter)
-                                    .graphicsLayer {
-                                        translationY = viewModel.offsetY.value
-                                    },
+                            if (viewModel.loading == PostsLoadingState.FROM_REFRESH || isScrollIndexZero) {
+                                PullRefreshIndicator(
+                                    refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
+                                    state = pullRefreshState,
+                                    backgroundColor = MaterialTheme.colors.background.backgroundElevation(),
+                                    contentColor = MaterialTheme.colors.primary,
+                                    modifier = Modifier
+                                        .padding(innerPadding)
+                                        .align(Alignment.TopCenter)
+                                        .graphicsLayer {
+                                            translationY = viewModel.offsetY.value
+                                        },
+                                )
+                            }
+                        }
+                    }
+
+                    PostsContentState.SHOW_MAIN_LOADING -> {
+                        PostsProgress(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding),
+                        )
+                    }
+
+                    PostsContentState.SHOW_EMPTY -> {
+                        PostsEmpty(
+                            modifier = Modifier.padding(innerPadding),
+                        )
+                    }
+
+                    PostsContentState.SHOW_ERROR -> {
+                        viewModel.errorMessage?.let {
+                            PostsError(
+                                message = it,
+                                onRetryClick = viewModel::retryGetPosts,
                             )
                         }
                     }
-                }
 
-                PostsContentState.SHOW_MAIN_LOADING -> {
-                    PostsProgress(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(
-                                bottom = when (windowSize) {
-                                    WindowSize.COMPACT -> 56.dp + 1.dp
-                                    else -> 0.dp
-                                },
-                            ),
-                    )
-                }
-
-                PostsContentState.SHOW_EMPTY -> {
-                    PostsEmpty(
-                        modifier = Modifier.padding(top = 56.dp + 1.dp),
-                    )
-                }
-
-                PostsContentState.SHOW_ERROR -> {
-                    viewModel.errorMessage?.let {
-                        PostsError(
-                            message = it,
-                            onRetryClick = viewModel::retryGetPosts,
+                    PostsContentState.SHOW_NOTHING -> {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.background),
                         )
                     }
                 }
-
-                PostsContentState.SHOW_NOTHING -> {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colors.background),
-                    )
-                }
             }
         }
-
-        PostsTopAppBar(
-            searchTags = viewModel.tags,
-            onHeightChange = { viewModel.topAppBarHeight = it },
-            onSearchClick = { tags ->
-                onNavigate(MainRoute.Search(tags))
-            },
-            onRefreshClick = {
-                scope.launch {
-                    gridState.animateScrollToItem(index = 0)
-
-                    viewModel.retryGetPosts()
-                }
-            },
-            onExitClick = {
-                (context as Activity).finishAffinity()
-            },
-            modifier = Modifier
-                .graphicsLayer {
-                    translationY = viewModel.offsetY.value
-                },
-        )
     }
 }

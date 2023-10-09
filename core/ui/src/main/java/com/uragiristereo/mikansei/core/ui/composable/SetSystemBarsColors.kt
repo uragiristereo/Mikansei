@@ -16,8 +16,10 @@ fun SetSystemBarsColors(
     val systemUiController = rememberSystemUiController()
 
     DisposableEffect(
-        key1 = statusBarColor,
-        key2 = navigationBarColor,
+        statusBarColor,
+        navigationBarColor,
+        statusBarDarkIcons,
+        navigationBarDarkIcons,
     ) {
         systemUiController.setStatusBarColor(
             color = statusBarColor,
@@ -66,8 +68,12 @@ fun SetSystemBarsColors(
 fun SetSystemBarsColors(
     color: Color,
 ) {
+    val isLight = MaterialTheme.colors.isLight
+
     SetSystemBarsColors(
         statusBarColor = color,
         navigationBarColor = color,
+        statusBarDarkIcons = isLight,
+        navigationBarDarkIcons = isLight,
     )
 }

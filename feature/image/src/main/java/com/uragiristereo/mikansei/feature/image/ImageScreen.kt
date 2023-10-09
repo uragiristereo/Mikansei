@@ -2,7 +2,6 @@ package com.uragiristereo.mikansei.feature.image
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
@@ -11,7 +10,6 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -36,7 +34,6 @@ import org.koin.androidx.compose.koinViewModel
 internal fun ImageScreen(
     onNavigateBack: (Boolean) -> Unit,
     onNavigateToAddToFavGroup: (Post) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: ViewerViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
@@ -90,51 +87,49 @@ internal fun ImageScreen(
         navigationBarDarkIcons = false,
     )
 
-    Box(modifier = modifier) {
-        when (val postType = viewModel.post.type) {
-            Post.Type.IMAGE, Post.Type.ANIMATED_GIF -> {
-                ImagePost(
-                    onNavigateBack = onNavigateBack,
-                    onMoreClick = lambdaOnMoreClick,
-                    areAppBarsVisible = viewModel.areAppBarsVisible,
-                    onAppBarsVisibleChange = viewModel::setAppBarsVisible,
-                )
-            }
-
-            Post.Type.VIDEO, Post.Type.UGOIRA -> {
-                VideoPost(
-                    areAppBarsVisible = viewModel.areAppBarsVisible,
-                    onAppBarsVisibleChange = viewModel::setAppBarsVisible,
-                    onNavigateBack = onNavigateBack,
-                    onMoreClick = lambdaOnMoreClick,
-                    onDownloadClick = {
-                        lambdaOnDownload(viewModel.post)
-                    },
-                    onShareClick = {
-                        lambdaOnShare(
-                            viewModel.post,
-                            when (postType) {
-                                Post.Type.UGOIRA -> ShareOption.COMPRESSED
-                                else -> ShareOption.ORIGINAL
-                            },
-                        )
-                    }
-                )
-            }
+    when (val postType = viewModel.post.type) {
+        Post.Type.IMAGE, Post.Type.ANIMATED_GIF -> {
+            ImagePost(
+                onNavigateBack = onNavigateBack,
+                onMoreClick = lambdaOnMoreClick,
+                areAppBarsVisible = viewModel.areAppBarsVisible,
+                onAppBarsVisibleChange = viewModel::setAppBarsVisible,
+            )
         }
 
-        MoreBottomSheet(
-            post = viewModel.post,
-            sheetState = sheetState,
-            showExpandButton = false,
-            onExpandClick = { },
-            onAddToClick = {
-                scope.launch {
-                    sheetState.hide()
-
-                    onNavigateToAddToFavGroup(viewModel.post)
+        Post.Type.VIDEO, Post.Type.UGOIRA -> {
+            VideoPost(
+                areAppBarsVisible = viewModel.areAppBarsVisible,
+                onAppBarsVisibleChange = viewModel::setAppBarsVisible,
+                onNavigateBack = onNavigateBack,
+                onMoreClick = lambdaOnMoreClick,
+                onDownloadClick = {
+                    lambdaOnDownload(viewModel.post)
+                },
+                onShareClick = {
+                    lambdaOnShare(
+                        viewModel.post,
+                        when (postType) {
+                            Post.Type.UGOIRA -> ShareOption.COMPRESSED
+                            else -> ShareOption.ORIGINAL
+                        },
+                    )
                 }
-            },
-        )
+            )
+        }
     }
+
+    MoreBottomSheet(
+        post = viewModel.post,
+        sheetState = sheetState,
+        showExpandButton = false,
+        onExpandClick = { },
+        onAddToClick = {
+            scope.launch {
+                sheetState.hide()
+
+                onNavigateToAddToFavGroup(viewModel.post)
+            }
+        },
+    )
 }

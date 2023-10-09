@@ -4,8 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,11 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
+import com.google.accompanist.insets.ui.Scaffold
+import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
+import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.composable.SectionTitle
-import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
 import com.uragiristereo.mikansei.core.ui.extension.plus
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.manage.core.ProfileItem
@@ -39,7 +39,6 @@ import org.koin.androidx.compose.koinViewModel
 internal fun ManageUserScreen(
     onNavigate: (NavRoute) -> Unit,
     onNavigateBack: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: ManageUserViewModel = koinViewModel(),
 ) {
     val activeUser by viewModel.activeUser.collectAsState()
@@ -47,22 +46,24 @@ internal fun ManageUserScreen(
 
     Scaffold(
         topBar = {
-            ProductTopAppBar(
-                title = {
-                    Text(text = "Manage accounts")
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = onNavigateBack,
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.arrow_back),
-                                contentDescription = null,
-                            )
-                        },
-                    )
-                },
-            )
+            ProductStatusBarSpacer {
+                ProductTopAppBar(
+                    title = {
+                        Text(text = "Manage accounts")
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = onNavigateBack,
+                            content = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.arrow_back),
+                                    contentDescription = null,
+                                )
+                            },
+                        )
+                    },
+                )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -75,16 +76,18 @@ internal fun ManageUserScreen(
                         contentDescription = null,
                     )
                 },
-                modifier = Modifier
-                    .windowInsetsPadding(
-                        WindowInsets.navigationBars.only(sides = WindowInsetsSides.Bottom),
-                    ),
             )
         },
-        modifier = modifier.defaultPaddings(),
+        bottomBar = {
+            ProductNavigationBarSpacer()
+        },
+        contentPadding = PaddingValues(0.dp),
+        modifier = Modifier
+            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
+            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     ) { innerPadding ->
         LazyColumn(
-            contentPadding = innerPadding + PaddingValues(vertical = 16.dp),
+            contentPadding = innerPadding + PaddingValues(vertical = 16.dp) + PaddingValues(bottom = 56.dp + 16.dp),
             modifier = Modifier.fillMaxSize(),
         ) {
             item(key = "active_title") {
@@ -130,16 +133,6 @@ internal fun ManageUserScreen(
                     modifier = Modifier
                         .padding(bottom = 8.dp)
                         .animateItemPlacement(),
-                )
-            }
-
-            item {
-                NavigationBarSpacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            bottom = 56.dp + 32.dp,
-                        ),
                 )
             }
         }

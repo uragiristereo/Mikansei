@@ -2,7 +2,6 @@ package com.uragiristereo.mikansei.feature.image.image.appbars
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -40,7 +39,6 @@ internal fun ImageTopAppBar(
             Row(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.displayCutoutPadding(),
             ) {
                 if (windowSize != WindowSize.COMPACT) {
                     if (expandButtonVisible) {

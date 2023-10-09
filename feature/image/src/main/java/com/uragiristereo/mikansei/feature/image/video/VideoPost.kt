@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.common.C
@@ -159,13 +161,14 @@ fun VideoPost(
                 )
             }
         },
+        contentPadding = PaddingValues(0.dp),
         modifier = modifier.fillMaxSize(),
         content = {
             VideoPlayer(
                 playerView = playerView,
                 isBuffering = viewModel.isBuffering,
                 onTap = {
-                    onAppBarsVisibleChange(!areAppBarsVisible)
+                    // onAppBarsVisibleChange(!areAppBarsVisible)
                 },
                 onDoubleTap = {
                     viewModel.onPlayPauseToggle(!viewModel.isPlaying)

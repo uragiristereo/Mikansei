@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.statusBars
@@ -85,7 +84,7 @@ fun ProductModalBottomSheet(
                 content = content,
             )
         },
-        modifier = modifier.displayCutoutPadding(),
+        modifier = modifier,
         content = { },
     )
 }

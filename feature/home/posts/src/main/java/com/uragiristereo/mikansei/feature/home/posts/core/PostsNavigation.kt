@@ -3,16 +3,8 @@ package com.uragiristereo.mikansei.feature.home.posts.core
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.displayCutoutPadding
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.github.uragiristereo.safer.compose.navigation.animation.composable
@@ -23,7 +15,6 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
-import com.uragiristereo.mikansei.core.ui.LocalNavigationRailPadding
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
@@ -84,12 +75,6 @@ fun NavGraphBuilder.postsRoute(
                         HomeRoute.PostDialog(post)
                     )
                 },
-                modifier = Modifier
-                    .padding(start = LocalNavigationRailPadding.current)
-                    .displayCutoutPadding()
-                    .windowInsetsPadding(
-                        WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
-                    ),
             )
         },
     )

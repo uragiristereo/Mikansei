@@ -2,7 +2,6 @@ package com.uragiristereo.mikansei.feature.image.video
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
@@ -27,7 +26,6 @@ internal fun VideoTopAppBar(
             Row(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.displayCutoutPadding(),
             ) {
                 IconButton(
                     onClick = onMoreClick,

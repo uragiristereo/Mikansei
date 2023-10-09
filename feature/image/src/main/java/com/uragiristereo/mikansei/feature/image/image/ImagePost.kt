@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -12,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.imageLoader
@@ -214,6 +216,7 @@ internal fun ImagePost(
                 )
             }
         },
+        contentPadding = PaddingValues(0.dp),
         modifier = modifier,
     ) {
         ImageViewer(

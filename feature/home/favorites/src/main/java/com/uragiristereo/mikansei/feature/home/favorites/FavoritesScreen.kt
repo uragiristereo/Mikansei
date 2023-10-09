@@ -9,19 +9,16 @@ import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.displayCutoutPadding
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -34,12 +31,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
-import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
+import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.core.ui.LocalNavigationRailPadding
+import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.composable.Banner
+import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.forEach
+import com.uragiristereo.mikansei.core.ui.extension.horizontalOnly
+import com.uragiristereo.mikansei.core.ui.extension.verticalOnly
 import com.uragiristereo.mikansei.feature.home.favorites.core.FavoritesTopAppBar
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingIndicator
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
@@ -49,7 +50,6 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 internal fun FavoritesScreen(
-    modifier: Modifier = Modifier,
     onFavoritesClick: (id: Int, userName: String) -> Unit,
     onAddClick: () -> Unit,
     viewModel: FavoritesViewModel = koinViewModel(),
@@ -67,35 +67,35 @@ internal fun FavoritesScreen(
         }
     }
 
-    ProductSetSystemBarsColor(navigationBarColor = Color.Transparent)
+    SetSystemBarsColors(Color.Transparent)
 
     Scaffold(
         topBar = {
-            FavoritesTopAppBar(
-                activeUserName = viewModel.activeUser.name,
-                onRefreshClick = viewModel::getFavoritesAndFavoriteGroups,
-            )
+            ProductStatusBarSpacer {
+                FavoritesTopAppBar(
+                    activeUserName = viewModel.activeUser.name,
+                    onRefreshClick = viewModel::getFavoritesAndFavoriteGroups,
+                )
+            }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onAddClick,
-                content = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.add),
-                        contentDescription = null,
-                    )
-                },
-                modifier = Modifier.padding(bottom = 57.dp + 16.dp),
-            )
+            if (viewModel.activeUser.isNotAnonymous()) {
+                FloatingActionButton(
+                    onClick = onAddClick,
+                    content = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.add),
+                            contentDescription = null,
+                        )
+                    },
+                )
+            }
         },
-        modifier = modifier
-            .fillMaxSize()
-            .padding(start = LocalNavigationRailPadding.current)
-            .statusBarsPadding()
-            .displayCutoutPadding()
-            .windowInsetsPadding(
-                WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal)
-            ),
+        contentPadding = LocalMainScaffoldPadding.current.verticalOnly,
+        modifier = Modifier
+            .padding(LocalMainScaffoldPadding.current.horizontalOnly)
+            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.End))
+            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.End)),
     ) { innerPadding ->
         if (viewModel.activeUser.isNotAnonymous()) {
             Box {
