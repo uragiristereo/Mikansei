@@ -49,10 +49,6 @@ internal fun PostItem(
                 ImageRequest.Builder(context)
                     .data(post.medias.preview.url)
                     .crossfade(durationMillis = 170)
-                    .size(
-                        width = post.medias.preview.width,
-                        height = post.medias.preview.height,
-                    )
                     .build()
             },
             contentDescription = null,
