@@ -150,7 +150,7 @@ open class DanbooruRepositoryImpl(
     }
 
     override fun getPost(id: Int) = resultFlow {
-        client.getPost(id)
+        clientAuth.getPost(id)
     }.mapSuccess {
         it.toPost()
     }
