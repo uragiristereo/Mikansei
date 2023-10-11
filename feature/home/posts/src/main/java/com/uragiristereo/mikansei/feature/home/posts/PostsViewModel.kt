@@ -18,6 +18,8 @@ import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.result.Result
+import com.uragiristereo.mikansei.core.ui.entity.ImmutableList
+import com.uragiristereo.mikansei.core.ui.entity.immutableListOf
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsContentState
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsLoadingState
@@ -41,7 +43,7 @@ class PostsViewModel(
     val offsetY = Animatable(initialValue = 0f)
 
     // posts
-    var posts by mutableStateOf<List<Post>>(listOf())
+    var posts by mutableStateOf<ImmutableList<Post>>(immutableListOf())
         private set
 
     private var page by savedStateHandle.saveable { mutableStateOf(1) }
@@ -57,8 +59,8 @@ class PostsViewModel(
         val loadingDisabled = loading == PostsLoadingState.DISABLED || loading == PostsLoadingState.DISABLED_REFRESHED
 
         when {
-            loadingDisabled && posts.isNotEmpty() -> PostsContentState.SHOW_POSTS
-            loadingDisabled && posts.isEmpty() && errorMessage == null -> PostsContentState.SHOW_EMPTY
+            loadingDisabled && posts.value.isNotEmpty() -> PostsContentState.SHOW_POSTS
+            loadingDisabled && posts.value.isEmpty() && errorMessage == null -> PostsContentState.SHOW_EMPTY
             loadingDisabled && errorMessage != null -> PostsContentState.SHOW_ERROR
             loading == PostsLoadingState.FROM_LOAD -> PostsContentState.SHOW_MAIN_LOADING
             loading == PostsLoadingState.FROM_RESTORE_SESSION -> PostsContentState.SHOW_NOTHING
@@ -102,8 +104,8 @@ class PostsViewModel(
             }
 
             loading = when {
-                posts.isNotEmpty() && refresh -> PostsLoadingState.FROM_REFRESH
-                posts.isNotEmpty() && page > 1 -> PostsLoadingState.FROM_LOAD_MORE
+                posts.value.isNotEmpty() && refresh -> PostsLoadingState.FROM_REFRESH
+                posts.value.isNotEmpty() && page > 1 -> PostsLoadingState.FROM_LOAD_MORE
                 else -> PostsLoadingState.FROM_LOAD
             }
 
@@ -112,11 +114,11 @@ class PostsViewModel(
             getPostsUseCase(
                 tags = tags,
                 page = page,
-                currentPosts = posts,
+                currentPosts = posts.value,
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
-                        posts = result.data.posts
+                        posts = immutableListOf(result.data.posts)
                         canLoadMore = result.data.canLoadMore
                         errorMessage = null
 
@@ -143,7 +145,7 @@ class PostsViewModel(
 
     private fun disableLoadingState(refresh: Boolean) {
         loading = when {
-            posts.isNotEmpty() && refresh -> PostsLoadingState.DISABLED_REFRESHED
+            posts.value.isNotEmpty() && refresh -> PostsLoadingState.DISABLED_REFRESHED
             else -> PostsLoadingState.DISABLED
         }
     }
@@ -163,7 +165,7 @@ class PostsViewModel(
 
             when {
                 postsSession.isNotEmpty() -> {
-                    posts = postsSession
+                    posts = immutableListOf(postsSession)
 
                     jumpToPosition = true
                     loading = PostsLoadingState.DISABLED
@@ -176,7 +178,7 @@ class PostsViewModel(
 
     fun updatePostsSession() {
         viewModelScope.launch(Dispatchers.IO) {
-            val postsAsList = posts.toList()
+            val postsAsList = posts.value.toList()
 
             if (postsAsList != postsSession) {
                 postsSession = postsAsList

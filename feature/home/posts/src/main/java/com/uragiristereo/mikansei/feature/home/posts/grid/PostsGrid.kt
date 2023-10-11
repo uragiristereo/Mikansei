@@ -1,6 +1,8 @@
 package com.uragiristereo.mikansei.feature.home.posts.grid
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,20 +15,24 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
+import com.uragiristereo.mikansei.core.ui.entity.ImmutableList
 import com.uragiristereo.mikansei.core.ui.extension.plus
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun PostsGrid(
-    posts: List<Post>,
+    posts: ImmutableList<Post>,
     gridState: LazyStaggeredGridState,
     canLoadMore: Boolean,
     contentPadding: PaddingValues,
@@ -51,7 +57,7 @@ internal fun PostsGrid(
         modifier = modifier.fillMaxSize(),
     ) {
         items(
-            items = posts,
+            items = posts.value,
             key = { it.id },
         ) { item ->
             PostItem(
@@ -62,10 +68,20 @@ internal fun PostsGrid(
                 onLongPress = {
                     onItemLongPress(item)
                 },
+                modifier = Modifier.combinedClickable(
+                    onClick = {
+                        onItemClick(item)
+                    },
+                    onLongClick = {
+                        onItemLongPress(item)
+                    },
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = Color.Black),
+                ),
             )
         }
 
-        if (canLoadMore && posts.isNotEmpty()) {
+        if (canLoadMore && posts.value.isNotEmpty()) {
             item(
                 key = Constants.KEY_LOAD_MORE_PROGRESS,
                 span = StaggeredGridItemSpan.FullLine,

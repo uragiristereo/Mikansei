@@ -105,7 +105,7 @@ internal fun PostsScreen(
 
     val areAllItemsVisible by remember {
         derivedStateOf {
-            gridState.layoutInfo.visibleItemsInfo.size == viewModel.posts.size
+            gridState.layoutInfo.visibleItemsInfo.size == viewModel.posts.value.size
         }
     }
 
@@ -278,7 +278,7 @@ internal fun PostsScreen(
         Box(
             modifier = Modifier
                 .nestedScroll(
-                    connection = remember(shouldEnableTopAppBarScroll) {
+                    connection = remember {
                         object : NestedScrollConnection {
                             override fun onPreScroll(
                                 available: Offset,
