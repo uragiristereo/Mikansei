@@ -50,5 +50,5 @@ dependencies {
     implementation(libs.timber)
 
     // Safer Navigation Compose
-    implementation(libs.bundles.safer.navigation)
+    implementation(libs.safer.navigation.animation)
 }

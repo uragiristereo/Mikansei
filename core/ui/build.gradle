@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.noarg)
     alias(libs.plugins.kotlinx.serialization)
 }
 
@@ -52,5 +51,5 @@ dependencies {
     implementation(libs.timber)
 
     // Safer Navigation Compose
-    implementation(libs.bundles.safer.navigation)
+    implementation(libs.safer.navigation.animation)
 }

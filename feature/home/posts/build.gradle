@@ -63,5 +63,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     // Safer Navigation Compose
-    implementation(libs.bundles.safer.navigation)
+    implementation(libs.safer.navigation.animation)
 }

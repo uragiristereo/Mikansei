@@ -19,7 +19,6 @@ android-application = { id = "com.android.application", version.ref = "gradle" }
 android-library = { id = "com.android.library", version.ref = "gradle" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
@@ -33,7 +32,7 @@ androidx-splashscreen = { module = "androidx.core:core-splashscreen", version = 
 androidx-datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
 androidx-browser = { module = "androidx.browser:browser", version = "1.6.0" }
 
-# Compose
+# Jetpack Compose
 compose = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
@@ -43,14 +42,12 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1" }
 
-# AndroidX Room Database
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
 # Accompanist Compose Extensions
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
-accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version.ref = "accompanist" }
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 accompanist-insets-ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
@@ -80,14 +77,10 @@ retrofit-converter-kotlinx-serialization = { module = "com.jakewharton.retrofit:
 # Kotlinx.Serialization JSON Serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.5.1" }
 
-# Gson JSON Serialization
-gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
-
 # Timber Logger
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 
 # Safer Navigation Compose
-safer-navigation-core = { module = "com.github.uragiristereo.safer-navigation-compose:core", version.ref = "safer-navigation-compose" }
 safer-navigation-animation = { module = "com.github.uragiristereo.safer-navigation-compose:navigation-animation", version.ref = "safer-navigation-compose" }
 
 # AndroidX Media3
@@ -106,5 +99,4 @@ koin = ["koin", "koin-androidx-navigation", "koin-androidx-compose"]
 retrofit = ["okhttp", "retrofit", "retrofit-converter-kotlinx-serialization"]
 coil = ["coil", "coil-compose"]
 core = ["koin", "timber"]
-safer-navigation = ["safer-navigation-animation"]
 media3 = ["media3-exoplayer", "media3-okhttp", "media3-ui"]

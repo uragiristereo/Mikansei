@@ -44,5 +44,5 @@ dependencies {
     implementation(libs.bundles.coil)
     implementation(libs.bundles.koin)
     implementation(libs.accompanist.navigation.animation)
-    implementation(libs.bundles.safer.navigation)
+    implementation(libs.safer.navigation.animation)
 }

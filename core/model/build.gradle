@@ -47,7 +47,4 @@ dependencies {
 
     // Kotlinx.Serialization JSON Serialization
     implementation(libs.kotlinx.serialization.json)
-
-    // Gson JSON Serialization
-    implementation(libs.gson)
 }
