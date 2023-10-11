@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -30,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
@@ -107,10 +105,7 @@ internal fun FavoritesScreen(
                     when {
                         state -> {
                             LoadingIndicator(
-                                modifier = Modifier
-                                    .padding(innerPadding)
-                                    .navigationBarsPadding()
-                                    .padding(bottom = 57.dp),
+                                modifier = Modifier.padding(innerPadding),
                             )
                         }
 
@@ -128,7 +123,9 @@ internal fun FavoritesScreen(
                 ProductPullRefreshIndicator(
                     refreshing = viewModel.loadingState == LoadingState.FROM_REFRESH,
                     state = pullRefreshState,
-                    modifier = Modifier.align(Alignment.TopCenter),
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(innerPadding),
                 )
             }
         } else {
