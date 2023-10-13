@@ -106,10 +106,23 @@ fun MainScreen(
     val context = LocalContext.current
     val homeScaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val backStack by navController.currentBackStack.collectAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    var previousRoute by remember { mutableStateOf<String?>(null) }
+
+    val previousRoute by remember {
+        derivedStateOf {
+            val backStackWithoutNested = backStack.filter {
+                it.destination.route !in NestedNavigationRoutes
+            }
+
+            runCatching {
+                backStackWithoutNested[backStackWithoutNested.size - 2].destination.route
+            }.getOrElse {
+                null
+            }
+        }
+    }
 
     val preferences by viewModel.preferences.collectAsState()
 
@@ -146,11 +159,6 @@ fun MainScreen(
         scope.launch {
             viewModel.scrollToTopChannel.send(UUID.randomUUID().toString())
         }
-    }
-
-    LaunchedEffect(key1 = currentRoute) {
-        previousRoute = viewModel.currentRoute
-        currentRoute?.let { viewModel.currentRoute = it }
     }
 
     BackHandler(
@@ -227,8 +235,9 @@ fun MainScreen(
             }
 
             val navigationBarsVisible = when {
-                previousRoute in HomeRoutesString && viewModel.currentRoute in HomeAndDialogRoutesString -> true
-                viewModel.currentRoute in HomeRoutesString -> true
+                previousRoute in HomeRoutesString && currentRoute in (HomeDialogRoutesString + listOf(UserRoute.Switch.route)) -> true
+                currentRoute in HomeRoutesString -> true
+                currentRoute == null -> true
                 else -> false
             }
 

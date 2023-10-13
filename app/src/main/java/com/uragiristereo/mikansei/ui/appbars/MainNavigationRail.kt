@@ -15,13 +15,13 @@ import androidx.compose.ui.unit.dp
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
-import com.uragiristereo.mikansei.core.ui.navigation.HomeDialogRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
+import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 
 @Composable
 fun MainNavigationRail(
-    currentRoute: String,
+    currentRoute: String?,
     previousRoute: String?,
     onNavigate: (NavRoute) -> Unit,
     onNavigateSearch: () -> Unit,
@@ -38,8 +38,15 @@ fun MainNavigationRail(
             modifier = Modifier.fillMaxHeight(),
         ) {
             MainNavigationItems.entries.forEach { item ->
-                val currentRouteIsDialog = currentRoute in HomeDialogRoutesString && previousRoute == item.route.route
-                val selected = currentRoute == item.route::class.route || currentRouteIsDialog
+                val itemRouteString = item.route::class.route
+                val currentRouteIsItem = currentRoute == itemRouteString
+                val previousRouteIsItem = previousRoute == itemRouteString
+
+                val selected = when {
+                    currentRouteIsItem -> true
+                    currentRoute !in HomeRoutesString && previousRouteIsItem -> true
+                    else -> false
+                }
 
                 NavigationRailItem(
                     selected = selected,

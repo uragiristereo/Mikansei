@@ -8,14 +8,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.database.session.SessionDao
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.FileUtil
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.DownloadShareViewModel
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.DownloadShareViewModelImpl
-import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -32,8 +30,6 @@ class MainViewModel(
     var confirmExit by mutableStateOf(true)
 
     val navigatedBackByGesture = mutableStateOf(false)
-
-    var currentRoute by mutableStateOf(HomeRoute.Posts::class.route)
 
     var currentTags by mutableStateOf("")
         private set
