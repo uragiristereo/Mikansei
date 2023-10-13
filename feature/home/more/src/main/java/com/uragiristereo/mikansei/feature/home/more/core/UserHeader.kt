@@ -105,7 +105,7 @@ internal fun UserHeader(
                 onClick = onSettingsClick,
                 content = {
                     Icon(
-                        painter = painterResource(id = R.drawable.settings),
+                        painter = painterResource(id = R.drawable.settings_account_box),
                         contentDescription = null,
                         tint = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
                     )

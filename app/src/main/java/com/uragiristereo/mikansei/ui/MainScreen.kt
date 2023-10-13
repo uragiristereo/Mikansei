@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import android.widget.Toast
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsStartWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -34,17 +36,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
@@ -59,6 +61,7 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
 import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme
+import com.uragiristereo.mikansei.core.product.theme.ScrimColor
 import com.uragiristereo.mikansei.core.product.theme.Theme
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
@@ -73,10 +76,16 @@ import com.uragiristereo.mikansei.core.ui.composable.RailScaffold
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.extension.copy
-import com.uragiristereo.mikansei.core.ui.navigation.HomeAndDialogRoutesString
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigation.BottomSheetNavigator
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigation.ExperimentalMaterialNavigationApi
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigation.ModalBottomSheetLayout2
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigation.rememberBottomSheetNavigator
+import com.uragiristereo.mikansei.core.ui.navigation.HomeDialogRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.navigation.NestedNavigationRoutes
+import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.core.ui.rememberWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.rememberWindowSizeVertical
 import com.uragiristereo.mikansei.ui.appbars.MainBottomNavigationBar
@@ -86,14 +95,15 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
+@SuppressLint("RestrictedApi")
 @Composable
 fun MainScreen(
+    bottomSheetNavigator: BottomSheetNavigator = rememberBottomSheetNavigator(),
+    navController: NavHostController = rememberAnimatedNavController(bottomSheetNavigator),
     viewModel: MainViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
-
-    val navController = rememberAnimatedNavController()
     val homeScaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
@@ -223,110 +233,121 @@ fun MainScreen(
             }
 
             Surface {
-                if (LocalWindowSizeHorizontal.current == WindowSize.COMPACT) {
-                    Scaffold(
-                        bottomBar = {
-                            AnimatedVisibility(
-                                visible = navigationBarsVisible,
-                                enter = slideInVertically(initialOffsetY = { it }),
-                                exit = slideOutVertically(targetOffsetY = { it }),
-                            ) {
-                                MainBottomNavigationBar(
-                                    currentRoute = viewModel.currentRoute,
-                                    previousRoute = previousRoute,
-                                    onNavigate = lambdaOnNavigate,
-                                    onNavigateSearch = lambdaOnNavigateSearch,
-                                    onRequestScrollToTop = lambdaOnRequestScrollToTop,
-                                )
-                            }
-                        },
-                        modifier = Modifier.fillMaxSize(),
-                        content = { innerPadding ->
-                            CompositionLocalProvider(LocalMainScaffoldPadding provides innerPadding) {
-                                MainNavGraph(navController = navController)
-                            }
-                        },
-                    )
-                } else {
-                    RailScaffold(
-                        startBar = {
-                            AnimatedVisibility(
-                                visible = navigationBarsVisible,
-                                enter = slideInHorizontally(initialOffsetX = { -it }),
-                                exit = slideOutHorizontally(targetOffsetX = { -it }),
-                            ) {
-                                DimensionSubcomposeLayout {
-                                    LaunchedEffect(key1 = size.width) {
-                                        viewModel.navigationRailPadding = size.width
-                                    }
+                ModalBottomSheetLayout2(
+                    bottomSheetNavigator = bottomSheetNavigator,
+                    sheetElevation = 0.dp,
+                    sheetBackgroundColor = MaterialTheme.colors.background.backgroundElevation(),
+                    sheetShape = RoundedCornerShape(
+                        topStart = 12.dp,
+                        topEnd = 12.dp,
+                    ),
+                    scrimColor = ScrimColor,
+                ) {
+                    if (LocalWindowSizeHorizontal.current == WindowSize.COMPACT) {
+                        Scaffold(
+                            bottomBar = {
+                                AnimatedVisibility(
+                                    visible = navigationBarsVisible,
+                                    enter = slideInVertically(initialOffsetY = { it }),
+                                    exit = slideOutVertically(targetOffsetY = { it }),
+                                ) {
+                                    MainBottomNavigationBar(
+                                        currentRoute = currentRoute,
+                                        previousRoute = previousRoute,
+                                        onNavigate = lambdaOnNavigate,
+                                        onNavigateSearch = lambdaOnNavigateSearch,
+                                        onRequestScrollToTop = lambdaOnRequestScrollToTop,
+                                    )
+                                }
+                            },
+                            modifier = Modifier.fillMaxSize(),
+                            content = { innerPadding ->
+                                CompositionLocalProvider(LocalMainScaffoldPadding provides innerPadding) {
+                                    MainNavGraph(navController = navController)
+                                }
+                            },
+                        )
+                    } else {
+                        RailScaffold(
+                            startBar = {
+                                AnimatedVisibility(
+                                    visible = navigationBarsVisible,
+                                    enter = slideInHorizontally(initialOffsetX = { -it }),
+                                    exit = slideOutHorizontally(targetOffsetX = { -it }),
+                                ) {
+                                    DimensionSubcomposeLayout {
+                                        LaunchedEffect(key1 = size.width) {
+                                            viewModel.navigationRailPadding = size.width
+                                        }
 
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .background(MaterialTheme.colors.background.backgroundElevation())
-                                    ) {
-                                        Spacer(
+                                        Row(
                                             modifier = Modifier
-                                                .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Start))
-                                                .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Start)),
-                                        )
-
-                                        MainNavigationRail(
-                                            currentRoute = viewModel.currentRoute,
-                                            previousRoute = previousRoute,
-                                            onNavigate = lambdaOnNavigate,
-                                            onNavigateSearch = lambdaOnNavigateSearch,
-                                            onRequestScrollToTop = lambdaOnRequestScrollToTop,
-                                        )
-
-                                        Divider(
-                                            modifier = Modifier
-                                                .width(1.dp)
                                                 .fillMaxHeight()
-                                                .statusBarsPadding(),
-                                        )
+                                                .background(MaterialTheme.colors.background.backgroundElevation())
+                                        ) {
+                                            Spacer(
+                                                modifier = Modifier
+                                                    .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Start))
+                                                    .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Start)),
+                                            )
+
+                                            MainNavigationRail(
+                                                currentRoute = currentRoute,
+                                                previousRoute = previousRoute,
+                                                onNavigate = lambdaOnNavigate,
+                                                onNavigateSearch = lambdaOnNavigateSearch,
+                                                onRequestScrollToTop = lambdaOnRequestScrollToTop,
+                                            )
+
+                                            Divider(
+                                                modifier = Modifier
+                                                    .width(1.dp)
+                                                    .fillMaxHeight()
+                                                    .statusBarsPadding(),
+                                            )
+                                        }
                                     }
                                 }
-                            }
-                        },
-                        content = { innerPadding ->
-                            CompositionLocalProvider(
-                                values = arrayOf(
-                                    LocalMainScaffoldPadding provides innerPadding.copy(start = viewModel.navigationRailPadding),
-                                ),
-                            ) {
-                                Box {
-                                    Spacer(
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .width(viewModel.navigationRailPadding)
-                                            .background(Color.Black)
-                                            .align(Alignment.CenterStart),
-                                    )
-
-                                    MainNavGraph(navController = navController)
-
-                                    if (currentRoute !in listOf(MainRoute.Image::class.route, HomeRoute.Posts::class.route)) {
+                            },
+                            content = { innerPadding ->
+                                CompositionLocalProvider(
+                                    values = arrayOf(
+                                        LocalMainScaffoldPadding provides innerPadding.copy(start = viewModel.navigationRailPadding),
+                                    ),
+                                ) {
+                                    Box {
                                         Spacer(
                                             modifier = Modifier
                                                 .fillMaxHeight()
-                                                .windowInsetsStartWidth(WindowInsets.displayCutout)
+                                                .width(viewModel.navigationRailPadding)
                                                 .background(Color.Black)
                                                 .align(Alignment.CenterStart),
                                         )
 
-                                        Spacer(
-                                            modifier = Modifier
-                                                .fillMaxHeight()
-                                                .windowInsetsEndWidth(WindowInsets.displayCutout)
-                                                .background(Color.Black)
-                                                .align(Alignment.CenterEnd),
-                                        )
+                                        MainNavGraph(navController = navController)
+
+                                        if (currentRoute !in listOf(MainRoute.Image::class.route, HomeRoute.Posts::class.route)) {
+                                            Spacer(
+                                                modifier = Modifier
+                                                    .fillMaxHeight()
+                                                    .windowInsetsStartWidth(WindowInsets.displayCutout)
+                                                    .background(Color.Black)
+                                                    .align(Alignment.CenterStart),
+                                            )
+
+                                            Spacer(
+                                                modifier = Modifier
+                                                    .fillMaxHeight()
+                                                    .windowInsetsEndWidth(WindowInsets.displayCutout)
+                                                    .background(Color.Black)
+                                                    .align(Alignment.CenterEnd),
+                                            )
+                                        }
                                     }
                                 }
-                            }
-                        },
-                    )
+                            },
+                        )
+                    }
                 }
             }
         }

@@ -28,6 +28,13 @@ class ManageUserViewModel(
             initialValue = emptyList(),
         )
 
+    val allUsers = userRepository.getAll()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 2_000L),
+            initialValue = emptyList(),
+        )
+
     fun switchActiveUser(user: Profile) {
         viewModelScope.launch {
             userRepository.switchActive(user.id)
