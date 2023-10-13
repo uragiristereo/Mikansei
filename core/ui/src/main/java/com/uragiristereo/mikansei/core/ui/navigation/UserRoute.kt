@@ -8,4 +8,6 @@ sealed interface UserRoute : NavRoute {
     object Manage : UserRoute
 
     object Settings : UserRoute
+
+    object Switch : UserRoute
 }

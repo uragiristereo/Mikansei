@@ -38,6 +38,3 @@ val HomeDialogRoutesString: List<String>
         HomeRoute.PostDialog::class.route,
         HomeRoute.AddToFavGroup::class.route,
     )
-
-val HomeAndDialogRoutesString: List<String>
-    get() = HomeRoutesString + HomeDialogRoutesString

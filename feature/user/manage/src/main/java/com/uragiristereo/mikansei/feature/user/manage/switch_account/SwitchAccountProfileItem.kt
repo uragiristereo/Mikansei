@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.user.manage.core
+package com.uragiristereo.mikansei.feature.user.manage.switch_account
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,14 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,15 +27,11 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.resources.R
 
 @Composable
-internal fun ProfileItem(
+internal fun SwitchAccountProfileItem(
     user: Profile,
-    onSettingsClick: () -> Unit,
     onActivateClick: (Profile) -> Unit,
-    onLogoutClick: (Profile) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isDropDownExpanded by rememberSaveable { mutableStateOf(false) }
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -104,47 +95,12 @@ internal fun ProfileItem(
                     )
                 }
 
-                when {
-                    user.mikansei.isActive -> IconButton(
-                        onClick = onSettingsClick,
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.settings_account_box),
-                                contentDescription = null,
-                                tint = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
-                            )
-                        },
+                if (user.mikansei.isActive) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.done),
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.primary,
                     )
-                    else -> Box {
-                        IconButton(
-                            onClick = {
-                                isDropDownExpanded = true
-                            },
-                            content = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.more_vert),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.74f),
-                                )
-                            },
-                        )
-
-                        ProfileDropDownMenu(
-                            isExpanded = isDropDownExpanded,
-                            showLogout = user.id != 0,
-                            onSetActiveClick = {
-                                isDropDownExpanded = false
-                                onActivateClick(user)
-                            },
-                            onLogoutClick = {
-                                isDropDownExpanded = false
-                                onLogoutClick(user)
-                            },
-                            onDismiss = {
-                                isDropDownExpanded = false
-                            },
-                        )
-                    }
                 }
             }
 

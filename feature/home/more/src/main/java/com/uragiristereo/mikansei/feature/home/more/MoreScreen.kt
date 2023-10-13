@@ -102,7 +102,7 @@ internal fun MoreScreen(
                             onNavigate(UserRoute.Settings)
                         },
                         onMoreClick = {
-                            onNavigate(UserRoute.Manage)
+                            onNavigate(UserRoute.Switch)
                         },
                         onLoginClick = {
                             onNavigate(UserRoute.Login)

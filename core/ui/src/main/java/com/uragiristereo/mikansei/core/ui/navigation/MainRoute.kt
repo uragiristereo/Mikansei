@@ -1,6 +1,7 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
+import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import kotlinx.serialization.Serializable
 
@@ -34,3 +35,9 @@ sealed interface MainRoute : NavRoute {
         val postId: Int? = null,
     ) : MainRoute
 }
+
+val NestedNavigationRoutes = listOf(
+    MainRoute.Home.route,
+    MainRoute.Settings.route,
+    MainRoute.User.route,
+)
