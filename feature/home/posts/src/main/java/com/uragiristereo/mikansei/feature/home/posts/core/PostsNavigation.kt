@@ -4,38 +4,36 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.github.uragiristereo.safer.compose.navigation.animation.composable
-import com.github.uragiristereo.safer.compose.navigation.core.dialog
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
-import com.uragiristereo.mikansei.feature.home.posts.post_dialog.PostDialog
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreContent
 
 @SuppressLint("RestrictedApi")
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.postsRoute(
-    navController: NavHostController,
+    mainNavController: NavHostController,
     onNavigatedBackByGesture: (Boolean) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
 ) {
     val lambdaOnNavigateImage: (Post) -> Unit = { item ->
         onNavigatedBackByGesture(false)
 
-        navController.navigate(
+        mainNavController.navigate(
             MainRoute.Image(post = item)
         )
     }
@@ -64,51 +62,63 @@ fun NavGraphBuilder.postsRoute(
             }
         },
         content = { data ->
+            val bottomSheetNavigator = LocalBottomSheetNavigator.current
+
             val isRouteFirstEntry = remember {
                 // 3 from list of null, MainRoute.Home, HomeRoute.Posts
-                navController.currentBackStack.value.size == 3
+                mainNavController.currentBackStack.value.size == 3
             }
 
             LaunchedEffect(key1 = data.tags) {
                 onCurrentTagsChange(data.tags)
             }
 
+            InterceptBackGestureForBottomSheetNavigator()
+
             PostsScreen(
                 isRouteFirstEntry = isRouteFirstEntry,
-                onNavigateBack = navController::navigateUp,
+                onNavigateBack = mainNavController::navigateUp,
                 onNavigateImage = lambdaOnNavigateImage,
-                onNavigateDialog = { post ->
-                    navController.navigate(
-                        HomeRoute.PostDialog(post)
-                    )
+                onNavigateMore = { post ->
+                    bottomSheetNavigator.navigate {
+                        it.navigate(HomeRoute.PostMore(post))
+                    }
                 },
             )
         },
     )
+}
 
-    dialog<HomeRoute.PostDialog> { data ->
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+fun NavGraphBuilder.postsBottomRoute(
+    mainNavController: NavHostController,
+    onNavigatedBackByGesture: (Boolean) -> Unit,
+) {
+    composable<HomeRoute.PostMore> {
         val lambdaOnDownload = LocalLambdaOnDownload.current
         val lambdaOnShare = LocalLambdaOnShare.current
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
-        val scope = rememberCoroutineScope()
+        PostMoreContent(
+            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            onPostClick = { post ->
+                bottomSheetNavigator.runHiding {
+                    onNavigatedBackByGesture(false)
 
-        if (data != null) {
-            PostDialog(
-                post = data.post,
-                onDismiss = navController::popBackStack,
-                onPostClick = lambdaOnNavigateImage,
-                onDownloadClick = lambdaOnDownload,
-                onShareClick = { post ->
-                    lambdaOnShare(post, ShareOption.COMPRESSED)
-                },
-                onAddToFavoriteGroupClick = { post ->
-                    scope.launch(SupervisorJob()) {
-                        delay(timeMillis = 300L)
-
-                        navController.navigate(HomeRoute.AddToFavGroup(post))
-                    }
-                },
-            )
-        }
+                    mainNavController.navigate(
+                        MainRoute.Image(post)
+                    )
+                }
+            },
+            onDownloadClick = lambdaOnDownload,
+            onShareClick = { post ->
+                lambdaOnShare(post, ShareOption.COMPRESSED)
+            },
+            onAddToFavoriteGroupClick = { post ->
+                bottomSheetNavigator.navigate {
+                    it.navigate(HomeRoute.AddToFavGroup(post))
+                }
+            },
+        )
     }
 }

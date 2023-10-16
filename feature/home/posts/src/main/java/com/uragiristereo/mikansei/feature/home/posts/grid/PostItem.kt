@@ -1,15 +1,19 @@
 package com.uragiristereo.mikansei.feature.home.posts.grid
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -28,10 +32,15 @@ internal fun PostItem(
     val context = LocalContext.current
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .aspectRatio(post.aspectRatio)
             .clip(RoundedCornerShape(size = 8.dp))
-            .then(modifier),
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongPress,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = Color.Black),
+            ),
     ) {
         PostPlaceholder()
 

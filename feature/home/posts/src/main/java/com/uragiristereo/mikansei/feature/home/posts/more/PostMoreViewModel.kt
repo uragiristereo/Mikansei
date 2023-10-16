@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.posts.post_dialog
+package com.uragiristereo.mikansei.feature.home.posts.more
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,11 +11,11 @@ import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavor
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import kotlinx.coroutines.flow.StateFlow
 
-class PostDialogViewModel(
+class PostMoreViewModel(
     savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
 ) : ViewModel(), PostFavoriteVote by PostFavoriteVoteImpl() {
-    override val post: Post = savedStateHandle.getData<HomeRoute.PostDialog>()!!.post
+    override val post: Post = savedStateHandle.getData<HomeRoute.PostMore>()!!.post
 
     val activeUser: StateFlow<Profile>
         get() = userRepository.active

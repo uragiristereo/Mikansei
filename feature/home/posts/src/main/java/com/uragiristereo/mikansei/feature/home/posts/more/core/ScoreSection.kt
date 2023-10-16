@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.posts.post_dialog.core
+package com.uragiristereo.mikansei.feature.home.posts.more.core
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.LocalIndication
