@@ -35,9 +35,9 @@ dependencies {
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
-    implementation(project(":feature:user:login"))
-    implementation(project(":feature:user:manage"))
-    implementation(project(":feature:user:settings"))
+    api(project(":feature:user:login"))
+    api(project(":feature:user:manage"))
+    api(project(":feature:user:settings"))
 
     // Compose UI
     implementation(libs.bundles.compose)
