@@ -19,7 +19,7 @@ package com.uragiristereo.mikansei.core.ui.modalbottomsheet
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -36,15 +35,18 @@ import androidx.compose.material.Surface
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
@@ -307,8 +309,15 @@ fun ModalBottomSheetLayout2(
     BoxWithConstraints(modifier) {
         val fullHeight = constraints.maxHeight.toFloat()
         val sheetHeightState = remember { mutableStateOf<Float?>(null) }
+        val visible by remember {
+            derivedStateOf {
+                sheetState.targetValue != ModalBottomSheetValue.Hidden
+            }
+        }
+
         Box(Modifier.fillMaxSize()) {
             content()
+
             Scrim(
                 color = scrimColor,
                 onDismiss = {
@@ -316,7 +325,7 @@ fun ModalBottomSheetLayout2(
                         scope.launch { sheetState.hide() }
                     }
                 },
-                visible = sheetState.targetValue != ModalBottomSheetValue.Hidden
+                visible = visible,
             )
         }
 
@@ -331,7 +340,7 @@ fun ModalBottomSheetLayout2(
 
         Surface(
             Modifier
-                .fillMaxWidth()
+                .align(Alignment.TopCenter)
                 .nestedScroll(sheetState.nestedScrollConnection)
                 .offset {
                     val y = if (sheetState.anchors.isEmpty()) {
@@ -422,13 +431,15 @@ private fun Modifier.bottomSheetSwipeable(
 private fun Scrim(
     color: Color,
     onDismiss: () -> Unit,
-    visible: Boolean
+    visible: Boolean,
 ) {
     if (color.isSpecified) {
         val alpha by animateFloatAsState(
+            label = "ScrimAlpha",
             targetValue = if (visible) 1f else 0f,
-            animationSpec = TweenSpec()
+            animationSpec = TweenSpec(),
         )
+
         val dismissModifier = if (visible) {
             Modifier
                 .pointerInput(onDismiss) { detectTapGestures { onDismiss() } }
@@ -440,13 +451,15 @@ private fun Scrim(
             Modifier
         }
 
-        Canvas(
-            Modifier
+        Box(
+            modifier = Modifier
                 .fillMaxSize()
-                .then(dismissModifier)
-        ) {
-            drawRect(color = color, alpha = alpha)
-        }
+                .graphicsLayer {
+                    this.alpha = alpha
+                }
+                .background(color)
+                .then(dismissModifier),
+        )
     }
 }
 
