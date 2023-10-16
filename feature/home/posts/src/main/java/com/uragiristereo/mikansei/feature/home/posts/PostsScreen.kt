@@ -77,7 +77,7 @@ internal fun PostsScreen(
     isRouteFirstEntry: Boolean,
     onNavigateBack: () -> Unit,
     onNavigateImage: (Post) -> Unit,
-    onNavigateDialog: (Post) -> Unit,
+    onNavigateMore: (Post) -> Unit,
     viewModel: PostsViewModel = koinViewModel(),
 ) {
     val density = LocalDensity.current
@@ -320,7 +320,7 @@ internal fun PostsScreen(
                                 contentPadding = innerPadding,
                                 onItemClick = onNavigateImage,
                                 onItemLongPress = { post ->
-                                    onNavigateDialog(post)
+                                    onNavigateMore(post)
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                                 },
                             )

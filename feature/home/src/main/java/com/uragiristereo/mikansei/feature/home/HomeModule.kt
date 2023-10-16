@@ -4,7 +4,7 @@ import com.uragiristereo.mikansei.feature.home.favorites.FavoritesViewModel
 import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.AddToFavGroupViewModel
 import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.NewFavGroupViewModel
 import com.uragiristereo.mikansei.feature.home.posts.PostsViewModel
-import com.uragiristereo.mikansei.feature.home.posts.post_dialog.PostDialogViewModel
+import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -13,7 +13,7 @@ object HomeModule {
     operator fun invoke(): Module = module {
         viewModelOf(::PostsViewModel)
         viewModelOf(::FavoritesViewModel)
-        viewModelOf(::PostDialogViewModel)
+        viewModelOf(::PostMoreViewModel)
         viewModelOf(::AddToFavGroupViewModel)
         viewModelOf(::NewFavGroupViewModel)
     }

@@ -59,7 +59,7 @@ fun NavGraphBuilder.homeGraph(
         }
     ) {
         postsRoute(
-            navController = navController,
+            mainNavController = navController,
             onNavigatedBackByGesture = onNavigatedBackByGesture,
             onCurrentTagsChange = onCurrentTagsChange,
         )

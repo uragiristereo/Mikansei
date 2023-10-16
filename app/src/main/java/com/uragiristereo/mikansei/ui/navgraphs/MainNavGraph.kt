@@ -1,7 +1,8 @@
-package com.uragiristereo.mikansei.ui
+package com.uragiristereo.mikansei.ui.navgraphs
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -18,9 +19,10 @@ import com.uragiristereo.mikansei.feature.search_history.core.searchHistoryRoute
 import com.uragiristereo.mikansei.feature.settings.core.settingsGraph
 import com.uragiristereo.mikansei.feature.user.userGraph
 import com.uragiristereo.mikansei.saved_searches.core.savedSearchesRoute
+import com.uragiristereo.mikansei.ui.MainViewModel
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
