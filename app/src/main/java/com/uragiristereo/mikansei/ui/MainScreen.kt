@@ -27,8 +27,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsStartWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
@@ -60,8 +60,8 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
+import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheetLayout
 import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme
-import com.uragiristereo.mikansei.core.product.theme.ScrimColor
 import com.uragiristereo.mikansei.core.product.theme.Theme
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
@@ -76,36 +76,35 @@ import com.uragiristereo.mikansei.core.ui.composable.RailScaffold
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.extension.copy
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigation.BottomSheetNavigator
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigation.ExperimentalMaterialNavigationApi
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigation.ModalBottomSheetLayout2
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigation.rememberBottomSheetNavigator
-import com.uragiristereo.mikansei.core.ui.navigation.HomeDialogRoutesString
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.rememberBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.navigation.NestedNavigationRoutes
-import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.core.ui.rememberWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.rememberWindowSizeVertical
 import com.uragiristereo.mikansei.ui.appbars.MainBottomNavigationBar
 import com.uragiristereo.mikansei.ui.appbars.MainNavigationRail
 import com.uragiristereo.mikansei.ui.core.ShareDownloadDialog
+import com.uragiristereo.mikansei.ui.navgraphs.BottomNavGraph
+import com.uragiristereo.mikansei.ui.navgraphs.MainNavGraph
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @SuppressLint("RestrictedApi")
 @Composable
 fun MainScreen(
-    bottomSheetNavigator: BottomSheetNavigator = rememberBottomSheetNavigator(),
-    navController: NavHostController = rememberAnimatedNavController(bottomSheetNavigator),
+    navController: NavHostController = rememberAnimatedNavController(),
     viewModel: MainViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val homeScaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    val bottomNavController = rememberAnimatedNavController()
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val backStack by navController.currentBackStack.collectAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -206,6 +205,7 @@ fun MainScreen(
                 LocalScrollToTopChannel provides viewModel.scrollToTopChannel,
                 LocalWindowSizeHorizontal provides rememberWindowSizeHorizontal(),
                 LocalWindowSizeVertical provides rememberWindowSizeVertical(),
+                LocalBottomSheetNavigator provides rememberBottomSheetNavigator(navController = bottomNavController),
             ),
         ) {
             SetSystemBarsColors(Color.Transparent)
@@ -235,22 +235,18 @@ fun MainScreen(
             }
 
             val navigationBarsVisible = when {
-                previousRoute in HomeRoutesString && currentRoute in (HomeDialogRoutesString + listOf(UserRoute.Switch.route)) -> true
+                previousRoute in HomeRoutesString -> true
                 currentRoute in HomeRoutesString -> true
                 currentRoute == null -> true
                 else -> false
             }
 
             Surface {
-                ModalBottomSheetLayout2(
-                    bottomSheetNavigator = bottomSheetNavigator,
-                    sheetElevation = 0.dp,
-                    sheetBackgroundColor = MaterialTheme.colors.background.backgroundElevation(),
-                    sheetShape = RoundedCornerShape(
-                        topStart = 12.dp,
-                        topEnd = 12.dp,
-                    ),
-                    scrimColor = ScrimColor,
+                ProductModalBottomSheetLayout(
+                    sheetState = LocalBottomSheetNavigator.current.bottomSheetState,
+                    sheetContent = {
+                        BottomNavGraph(mainNavController = navController)
+                    }
                 ) {
                     if (LocalWindowSizeHorizontal.current == WindowSize.COMPACT) {
                         Scaffold(
