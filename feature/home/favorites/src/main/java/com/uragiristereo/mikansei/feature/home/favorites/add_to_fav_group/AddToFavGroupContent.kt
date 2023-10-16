@@ -93,15 +93,15 @@ fun AddToFavGroupContent(
                     onRemoveClick = viewModel::removePostFromFavoriteGroup,
                     modifier = Modifier.weight(1f, fill = false),
                 )
-
-                Divider()
-
-                CreateNewFavGroupButton(
-                    postId = post.id,
-                    enabled = !viewModel.isRemoving,
-                    onClick = onNewFavoriteGroupClick,
-                )
             }
         }
+
+        Divider()
+
+        CreateNewFavGroupButton(
+            postId = post.id,
+            enabled = !viewModel.isRemoving,
+            onClick = onNewFavoriteGroupClick,
+        )
     }
 }
