@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -35,10 +34,10 @@ import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.composable.Banner
-import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.forEach
 import com.uragiristereo.mikansei.core.ui.extension.horizontalOnly
 import com.uragiristereo.mikansei.core.ui.extension.verticalOnly
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
 import com.uragiristereo.mikansei.feature.home.favorites.core.FavoritesTopAppBar
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingIndicator
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
@@ -65,7 +64,7 @@ internal fun FavoritesScreen(
         }
     }
 
-    SetSystemBarsColors(Color.Transparent)
+    InterceptBackGestureForBottomSheetNavigator()
 
     Scaffold(
         topBar = {

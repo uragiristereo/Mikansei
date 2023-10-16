@@ -14,7 +14,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
-import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.column.FavoriteGroup
+import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core.FavoriteGroup
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -37,7 +37,7 @@ class AddToFavGroupViewModel(
         private set
 
     init {
-        loadFavoriteGroups(refresh = false)
+        loadFavoriteGroups()
     }
 
     private fun mapResult(items: List<Favorite>): List<FavoriteGroup> {
@@ -51,13 +51,13 @@ class AddToFavGroupViewModel(
         }.sortedByDescending { it.isPostAlreadyExits }
     }
 
-    private fun loadFavoriteGroups(refresh: Boolean) {
+    private fun loadFavoriteGroups() {
         viewModelScope.launch {
             isLoading = true
 
             getFavoriteGroupsUseCase(
                 forceCache = true,
-                forceRefresh = refresh,
+                forceRefresh = false,
             ).collect { result ->
                 when (result) {
                     is Result.Success -> {
@@ -73,10 +73,6 @@ class AddToFavGroupViewModel(
         }
     }
 
-    fun refreshFavoriteGroups() {
-        loadFavoriteGroups(refresh = true)
-    }
-
     fun addPostToFavoriteGroup(context: Context, item: FavoriteGroup) {
         viewModelScope.launch(SupervisorJob()) {
             danbooruRepository.addPostToFavoriteGroup(
@@ -85,11 +81,7 @@ class AddToFavGroupViewModel(
             ).collect { result ->
                 val message = when (result) {
                     is Result.Success -> {
-//                        val itemIsNotFirst = item.id != items.firstOrNull()?.id
-
-//                        if (itemIsNotFirst) {
                         updateAndCacheFavoriteGroups(showLoading = false)
-//                        }
 
                         "Added to favorite group: ${item.name}"
                     }
