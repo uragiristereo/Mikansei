@@ -22,6 +22,7 @@ import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.areNavigationBarsButtons
 import com.uragiristereo.mikansei.core.ui.extension.hideSystemBars
 import com.uragiristereo.mikansei.core.ui.extension.showSystemBars
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState2
 import com.uragiristereo.mikansei.feature.image.image.ImagePost
 import com.uragiristereo.mikansei.feature.image.more.MoreBottomSheet
@@ -73,6 +74,8 @@ internal fun ImageScreen(
             }
         },
     )
+
+    InterceptBackGestureForBottomSheetNavigator()
 
     SetSystemBarsColors(
         statusBarColor = Color.Transparent,

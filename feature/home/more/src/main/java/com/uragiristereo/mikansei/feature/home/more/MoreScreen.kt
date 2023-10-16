@@ -51,6 +51,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun MoreScreen(
     onNavigate: (NavRoute) -> Unit,
+    onNavigateBottom: (NavRoute) -> Unit,
     viewModel: MoreViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
@@ -102,7 +103,7 @@ internal fun MoreScreen(
                             onNavigate(UserRoute.Settings)
                         },
                         onMoreClick = {
-                            onNavigate(UserRoute.Switch)
+                            onNavigateBottom(UserRoute.Switch)
                         },
                         onLoginClick = {
                             onNavigate(UserRoute.Login)

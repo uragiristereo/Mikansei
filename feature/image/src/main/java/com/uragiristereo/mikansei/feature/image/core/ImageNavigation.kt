@@ -9,6 +9,7 @@ import com.github.uragiristereo.safer.compose.navigation.animation.composable
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.uragiristereo.mikansei.core.ui.animation.translateYFadeIn
 import com.uragiristereo.mikansei.core.ui.animation.translateYFadeOut
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.image.ImageScreen
@@ -38,6 +39,8 @@ fun NavGraphBuilder.imageRoute(
             }
         },
     ) {
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
+
         ImageScreen(
             onNavigateBack = {
                 onNavigatedBackByGesture(it)
@@ -45,7 +48,9 @@ fun NavGraphBuilder.imageRoute(
                 navController.navigateUp()
             },
             onNavigateToAddToFavGroup = { post ->
-                navController.navigate(HomeRoute.AddToFavGroup(post))
+                bottomSheetNavigator.navigate {
+                    it.navigate(HomeRoute.AddToFavGroup(post))
+                }
             }
         )
     }

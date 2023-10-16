@@ -235,7 +235,6 @@ fun MainScreen(
             }
 
             val navigationBarsVisible = when {
-                previousRoute in HomeRoutesString -> true
                 currentRoute in HomeRoutesString -> true
                 currentRoute == null -> true
                 else -> false
