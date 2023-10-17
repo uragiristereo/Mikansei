@@ -15,7 +15,6 @@ import com.uragiristereo.mikansei.feature.image.ImageModule
 import com.uragiristereo.mikansei.feature.search.SearchViewModel
 import com.uragiristereo.mikansei.feature.settings.SettingsViewModel
 import com.uragiristereo.mikansei.feature.user.UserModule
-import com.uragiristereo.mikansei.saved_searches.SavedSearchesViewModel
 import com.uragiristereo.mikansei.ui.MainViewModel
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
@@ -52,6 +51,5 @@ object MikanseiModule {
         viewModelOf(::MoreViewModel)
         viewModelOf(::FiltersViewModel)
         viewModelOf(::SettingsViewModel)
-        viewModelOf(::SavedSearchesViewModel)
     }
 }
