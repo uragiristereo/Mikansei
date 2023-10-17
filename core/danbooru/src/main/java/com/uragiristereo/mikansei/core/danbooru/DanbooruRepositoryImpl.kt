@@ -261,9 +261,8 @@ open class DanbooruRepositoryImpl(
     }
 
     override fun votePost(postId: Int, score: PostVote.Status) = resultFlow {
-        when {
-            score == PostVote.Status.NONE -> client.unvotePost(postId)
-
+        when (score) {
+            PostVote.Status.NONE -> client.unvotePost(postId)
             else -> client.votePost(
                 postId = postId,
                 score = when (score) {

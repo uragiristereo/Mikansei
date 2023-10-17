@@ -1,7 +1,6 @@
 package com.uragiristereo.mikansei.feature.user.settings
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -44,7 +43,7 @@ import com.uragiristereo.mikansei.core.ui.composable.SettingTip
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun UserSettingsScreen(
     onNavigateBack: () -> Unit,

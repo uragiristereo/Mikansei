@@ -34,17 +34,8 @@ android {
 dependencies {
     implementation(project(":core:resources"))
 
-    // Koin Dependency Injection & Timber Logger
     implementation(libs.bundles.core)
-
-    // Compose UI
     implementation(libs.compose)
-
-    // Accompanist Compose Extensions
-    implementation(libs.accompanist.navigation.animation)
-
     implementation(libs.bundles.retrofit)
-
-    // Kotlinx.Serialization JSON Serialization
     implementation(libs.kotlinx.serialization.json)
 }

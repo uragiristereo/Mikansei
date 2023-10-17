@@ -1,11 +1,10 @@
 package com.uragiristereo.mikansei.feature.image.core
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.State
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.animation.composable
+import com.github.uragiristereo.safer.compose.navigation.compose.composable
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.uragiristereo.mikansei.core.ui.animation.translateYFadeIn
 import com.uragiristereo.mikansei.core.ui.animation.translateYFadeOut
@@ -15,7 +14,6 @@ import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.image.ImageScreen
 import timber.log.Timber
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.imageRoute(
     navController: NavHostController,
     navigatedBackByGesture: State<Boolean>,

@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.uragiristereo.mikansei.ui.MainScreen
+import org.koin.compose.KoinContext
 
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +18,9 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            MainScreen()
+            KoinContext {
+                MainScreen()
+            }
         }
     }
 }

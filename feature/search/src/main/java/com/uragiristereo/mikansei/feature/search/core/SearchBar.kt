@@ -10,7 +10,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,13 +37,11 @@ import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 @Composable
 internal fun SearchBar(
     query: TextFieldValue,
-    actionsRowExpanded: Boolean,
     loading: Boolean,
     onQueryChange: (TextFieldValue) -> Unit,
     onQuerySubmit: (TextFieldValue) -> Unit,
     onNavigateBack: () -> Unit,
     onClearClick: () -> Unit,
-    onActionsRowExpandedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String = "",
     focusRequester: FocusRequester = remember { FocusRequester() },

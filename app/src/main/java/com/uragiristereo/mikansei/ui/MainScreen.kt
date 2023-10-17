@@ -5,7 +5,6 @@ import android.app.Activity
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
@@ -47,11 +46,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.google.accompanist.insets.ui.Scaffold
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -94,17 +93,17 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class)
 @SuppressLint("RestrictedApi")
 @Composable
 fun MainScreen(
-    navController: NavHostController = rememberAnimatedNavController(),
+    navController: NavHostController = rememberNavController(),
     viewModel: MainViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    val bottomNavController = rememberAnimatedNavController()
+    val bottomNavController = rememberNavController()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val backStack by navController.currentBackStack.collectAsState()

@@ -45,5 +45,5 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.bundles.koin)
-    implementation(libs.safer.navigation.animation)
+    implementation(libs.safer.navigation.compose)
 }

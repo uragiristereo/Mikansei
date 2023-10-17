@@ -38,33 +38,15 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:domain"))
 
-    // AndroidX
     implementation(libs.androidx.browser)
-
-    // Compose UI
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
     implementation(libs.androidx.constraintlayout.compose)
-
-    // Accompanist Compose Extensions
-    implementation(libs.accompanist.navigation.animation)
-
-    // Koin Dependency Injection
     implementation(libs.bundles.koin)
-
-    // Coil Image Loader
     implementation(libs.bundles.coil)
     implementation(libs.coil.gif)
-
-    // TouchImageView
     implementation(libs.touchimageview)
-
-    // Core
     implementation(libs.bundles.core)
-
-    // Safer Navigation Compose
-    implementation(libs.safer.navigation.animation)
-
-    // AndroidX Media3
+    implementation(libs.safer.navigation.compose)
     implementation(libs.bundles.media3)
 }

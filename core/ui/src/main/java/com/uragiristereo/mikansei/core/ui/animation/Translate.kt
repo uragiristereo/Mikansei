@@ -30,7 +30,6 @@ fun translateYFadeOut(
 
 fun translateXFadeIn(
     forward: Boolean,
-    durationMillis: Int = 300,
 ): EnterTransition = slideInHorizontally(
     initialOffsetX = {
         when {
@@ -48,7 +47,6 @@ fun translateXFadeIn(
 
 fun translateXFadeOut(
     forward: Boolean,
-    durationMillis: Int = 300,
 ): ExitTransition = slideOutHorizontally(
     targetOffsetX = {
         when {

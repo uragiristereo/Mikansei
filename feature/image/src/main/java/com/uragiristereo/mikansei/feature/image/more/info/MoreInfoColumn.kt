@@ -6,7 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -55,8 +55,8 @@ internal fun MoreInfoColumn(
         AnimatedContent(
             targetState = expanded,
             transitionSpec = {
-                fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
-                        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
+                (fadeIn(animationSpec = tween(durationMillis = 220, delayMillis = 90)) +
+                        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))) togetherWith
                         fadeOut(animationSpec = tween(durationMillis = 0))
             },
             label = "",

@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.home.posts.grid
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,7 +23,6 @@ import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.entity.ImmutableList
 import com.uragiristereo.mikansei.core.ui.extension.plus
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun PostsGrid(
     posts: ImmutableList<Post>,

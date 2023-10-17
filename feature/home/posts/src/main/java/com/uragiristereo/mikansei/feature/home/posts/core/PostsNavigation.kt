@@ -1,15 +1,14 @@
 package com.uragiristereo.mikansei.feature.home.posts.core
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.animation.composable
+import com.github.uragiristereo.safer.compose.navigation.compose.composable
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.model.danbooru.Post
@@ -24,7 +23,6 @@ import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
 import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreContent
 
 @SuppressLint("RestrictedApi")
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.postsRoute(
     mainNavController: NavHostController,
     onNavigatedBackByGesture: (Boolean) -> Unit,
@@ -43,7 +41,7 @@ fun NavGraphBuilder.postsRoute(
         enterTransition = {
             when (initialState.destination.route) {
                 HomeRoute.Posts::class.route -> slideIntoContainer(
-                    towards = AnimatedContentScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(durationMillis = 350),
                 )
 
@@ -54,7 +52,7 @@ fun NavGraphBuilder.postsRoute(
         exitTransition = {
             when (targetState.destination.route) {
                 HomeRoute.Posts::class.route -> slideOutOfContainer(
-                    towards = AnimatedContentScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(durationMillis = 350),
                 )
 
@@ -89,7 +87,7 @@ fun NavGraphBuilder.postsRoute(
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 fun NavGraphBuilder.postsBottomRoute(
     mainNavController: NavHostController,
     onNavigatedBackByGesture: (Boolean) -> Unit,

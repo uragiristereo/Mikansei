@@ -1,12 +1,11 @@
 package com.uragiristereo.mikansei.feature.filters.appbars
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Divider
@@ -30,7 +29,6 @@ import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun FiltersTopAppBar(
     title: String,
@@ -81,7 +79,7 @@ internal fun FiltersTopAppBar(
             AnimatedContent(
                 targetState = selectionMode,
                 transitionSpec = {
-                    scaleIn() with scaleOut()
+                    scaleIn() togetherWith scaleOut()
                 },
                 label = "CloseBackButton",
             ) { state ->

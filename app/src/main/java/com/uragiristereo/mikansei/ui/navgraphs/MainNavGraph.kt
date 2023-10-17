@@ -1,12 +1,10 @@
 package com.uragiristereo.mikansei.ui.navgraphs
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.animation.AnimatedNavHost
+import com.github.uragiristereo.safer.compose.navigation.compose.NavHost
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeIn
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeOut
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
@@ -15,21 +13,18 @@ import com.uragiristereo.mikansei.feature.filters.core.filtersRoute
 import com.uragiristereo.mikansei.feature.home.homeGraph
 import com.uragiristereo.mikansei.feature.image.core.imageRoute
 import com.uragiristereo.mikansei.feature.search.core.searchRoute
-import com.uragiristereo.mikansei.feature.search_history.core.searchHistoryRoute
 import com.uragiristereo.mikansei.feature.settings.core.settingsGraph
 import com.uragiristereo.mikansei.feature.user.userGraph
-import com.uragiristereo.mikansei.saved_searches.core.savedSearchesRoute
 import com.uragiristereo.mikansei.ui.MainViewModel
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: MainViewModel = koinViewModel(),
 ) {
-    AnimatedNavHost(
+    NavHost(
         navController = navController,
         startDestination = MainRoute.Home::class,
         enterTransition = {
@@ -63,10 +58,6 @@ fun MainNavGraph(
         settingsGraph(navController)
 
         filtersRoute(navController)
-
-        savedSearchesRoute(navController)
-
-        searchHistoryRoute(navController)
 
         aboutRoute(navController)
 

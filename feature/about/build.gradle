@@ -34,16 +34,8 @@ dependencies {
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
 
-    // Compose UI
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
-
-    // Accompanist Compose Extensions
-    implementation(libs.accompanist.navigation.animation)
-
-    // Timber Logger
     implementation(libs.timber)
-
-    // Safer Navigation Compose
-    implementation(libs.safer.navigation.animation)
+    implementation(libs.safer.navigation.compose)
 }

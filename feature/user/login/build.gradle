@@ -41,6 +41,5 @@ dependencies {
     debugImplementation(libs.bundles.compose.debug)
     implementation(libs.bundles.core)
     implementation(libs.bundles.koin)
-    implementation(libs.accompanist.navigation.animation)
-    implementation(libs.safer.navigation.animation)
+    implementation(libs.safer.navigation.compose)
 }

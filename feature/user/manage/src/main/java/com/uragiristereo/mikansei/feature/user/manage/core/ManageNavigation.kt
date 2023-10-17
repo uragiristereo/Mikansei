@@ -1,17 +1,15 @@
 package com.uragiristereo.mikansei.feature.user.manage.core
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.animation.composable
+import com.github.uragiristereo.safer.compose.navigation.compose.composable
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.manage.ManageUserScreen
 import com.uragiristereo.mikansei.feature.user.manage.switch_account.SwitchAccountContent
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.manageRoute(
     navController: NavHostController,
 ) {
@@ -25,7 +23,7 @@ fun NavGraphBuilder.manageRoute(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 fun NavGraphBuilder.manageBottomRoute(mainNavController: NavHostController) {
     composable(UserRoute.Switch) {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current

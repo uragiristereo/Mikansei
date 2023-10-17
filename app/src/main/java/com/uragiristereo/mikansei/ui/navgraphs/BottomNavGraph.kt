@@ -2,12 +2,11 @@ package com.uragiristereo.mikansei.ui.navgraphs
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
+import androidx.navigation.compose.NavHost
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.BottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.NavigateToIndexWhenBottomSheetNavigatorHidden
@@ -17,7 +16,6 @@ import com.uragiristereo.mikansei.feature.user.manage.core.manageBottomRoute
 import com.uragiristereo.mikansei.ui.MainViewModel
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun BottomNavGraph(
     mainNavController: NavHostController,
@@ -28,7 +26,7 @@ fun BottomNavGraph(
 
     NavigateToIndexWhenBottomSheetNavigatorHidden()
 
-    AnimatedNavHost(
+    NavHost(
         navController = bottomSheetNavigator.navController,
         startDestination = BottomSheetNavigator.INDEX_ROUTE,
         enterTransition = { EnterTransition.None },

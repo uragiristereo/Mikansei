@@ -34,22 +34,12 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:resources"))
 
-    // Compose UI
     implementation(libs.compose)
     implementation(libs.compose.material)
     implementation(libs.androidx.constraintlayout.compose)
-
-    // Accompanist Compose Extensions
     implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.navigation.animation)
     api(libs.accompanist.insets.ui)
-
-    // Kotlinx.Serialization JSON Serialization
     implementation(libs.kotlinx.serialization.json)
-
-    // Timber Logger
     implementation(libs.timber)
-
-    // Safer Navigation Compose
-    implementation(libs.safer.navigation.animation)
+    implementation(libs.safer.navigation.compose)
 }

@@ -103,7 +103,6 @@ dependencies {
     implementation(libs.bundles.koin)
 
     // Accompanist Compose Extensions
-    implementation(libs.accompanist.navigation.animation)
     implementation(libs.accompanist.permissions)
 
     // Coil Image Loader
@@ -116,5 +115,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     // Safer Navigation Compose
-    implementation(libs.safer.navigation.animation)
+    implementation(libs.safer.navigation.compose)
 }

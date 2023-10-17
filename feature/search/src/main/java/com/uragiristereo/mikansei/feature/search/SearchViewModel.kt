@@ -23,7 +23,6 @@ class SearchViewModel(
 ) : ViewModel() {
     val tags = savedStateHandle.getData(MainRoute.Search()).tags
 
-    var actionsRowExpanded by mutableStateOf(true)
     var searchAllowed by mutableStateOf(true)
     var boldWord by mutableStateOf("")
 
@@ -187,9 +186,5 @@ class SearchViewModel(
         val word = text.substring(startIndex = startIndex, endIndex = endIndex)
 
         return SearchWordIndex(word, startIndex, endIndex)
-    }
-
-    fun onActionsRowExpandedChange(value: Boolean) {
-        actionsRowExpanded = value
     }
 }

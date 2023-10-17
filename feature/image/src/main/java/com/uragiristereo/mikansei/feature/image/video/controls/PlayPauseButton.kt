@@ -1,10 +1,9 @@
 package com.uragiristereo.mikansei.feature.image.video.controls
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
@@ -13,7 +12,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.uragiristereo.mikansei.core.resources.R
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun PlayPauseButton(
     isPlaying: Boolean,
@@ -30,7 +28,7 @@ internal fun PlayPauseButton(
             AnimatedContent(
                 targetState = isPlaying,
                 transitionSpec = {
-                    scaleIn() with scaleOut()
+                    scaleIn() togetherWith scaleOut()
                 },
                 label = "PlayPauseAnimation",
                 modifier = modifier,

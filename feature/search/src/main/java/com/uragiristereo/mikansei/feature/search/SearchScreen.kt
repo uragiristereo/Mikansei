@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -39,7 +38,6 @@ import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
-import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.search.core.SearchBar
 import com.uragiristereo.mikansei.feature.search.core.SearchBrowseButton
 import com.uragiristereo.mikansei.feature.search.quick_shortcut_bar.SearchQuickShortcutBar
@@ -51,12 +49,10 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun SearchScreen(
-    onNavigate: (MainRoute) -> Unit,
     onNavigateBack: () -> Unit,
     onSearchSubmit: (String) -> Unit,
     viewModel: SearchViewModel = koinViewModel(),
 ) {
-    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val scaffoldState = LocalScaffoldState.current
 
@@ -127,7 +123,6 @@ internal fun SearchScreen(
                 SearchBar(
                     query = query,
                     placeholder = stringResource(id = R.string.field_placeholder_example),
-                    actionsRowExpanded = viewModel.actionsRowExpanded,
                     loading = viewModel.loading,
                     focusRequester = focusRequester,
                     onNavigateBack = onNavigateBack,
@@ -140,7 +135,6 @@ internal fun SearchScreen(
                     onClearClick = {
                         query = TextFieldValue()
                     },
-                    onActionsRowExpandedChange = viewModel::onActionsRowExpandedChange,
                 )
             }
         },

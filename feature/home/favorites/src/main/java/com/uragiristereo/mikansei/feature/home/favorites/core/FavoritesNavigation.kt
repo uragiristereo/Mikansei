@@ -7,7 +7,7 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.animation.composable
+import com.github.uragiristereo.safer.compose.navigation.compose.composable
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.ui.extension.rememberParentViewModelStoreOwner
@@ -18,7 +18,6 @@ import com.uragiristereo.mikansei.feature.home.favorites.FavoritesScreen
 import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.AddToFavGroupContent
 import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.NewFavGroupScreen
 
-@OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
     composable(
         route = HomeRoute.Favorites,

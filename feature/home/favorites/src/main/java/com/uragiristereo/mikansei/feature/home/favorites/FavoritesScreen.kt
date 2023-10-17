@@ -1,10 +1,9 @@
 package com.uragiristereo.mikansei.feature.home.favorites
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.with
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -25,7 +24,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
@@ -46,14 +44,13 @@ import com.uragiristereo.mikansei.feature.home.favorites.grid.FavoritesGrid
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun FavoritesScreen(
     onFavoritesClick: (id: Int, userName: String) -> Unit,
     onAddClick: () -> Unit,
     viewModel: FavoritesViewModel = koinViewModel(),
 ) {
-    val context = LocalContext.current
     val scaffoldState = LocalScaffoldState.current
     val scope = rememberCoroutineScope()
 
@@ -105,7 +102,7 @@ internal fun FavoritesScreen(
             Box {
                 AnimatedContent(
                     targetState = viewModel.loadingState == LoadingState.FROM_LOAD,
-                    transitionSpec = { fadeIn() with fadeOut() },
+                    transitionSpec = { fadeIn() togetherWith fadeOut() },
                     label = "grid_and_loading",
                 ) { state ->
                     when {

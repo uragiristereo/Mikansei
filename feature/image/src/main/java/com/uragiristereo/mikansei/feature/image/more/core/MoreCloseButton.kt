@@ -1,7 +1,6 @@
 package com.uragiristereo.mikansei.feature.image.more.core
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -19,7 +18,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.resources.R
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun MoreCloseButton(
     visible: Boolean,
