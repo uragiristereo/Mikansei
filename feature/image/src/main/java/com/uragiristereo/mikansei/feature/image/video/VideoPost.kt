@@ -23,6 +23,7 @@ import androidx.media3.common.C
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import com.google.accompanist.insets.ui.Scaffold
+import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
 import com.uragiristereo.mikansei.feature.image.video.controls.VideoControls
 import kotlinx.coroutines.Job
@@ -113,6 +114,7 @@ fun VideoPost(
     }
 
     Scaffold(
+        scaffoldState = LocalScaffoldState.current,
         topBar = {
             AnimatedVisibility(
                 visible = areAppBarsVisible,

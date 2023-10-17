@@ -1,123 +1,107 @@
 package com.uragiristereo.mikansei.feature.home.favorites.new_fav_group
 
-import android.widget.Toast
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.product.component.ProductSetSystemBarsColor
-import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
-import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.core.ui.composable.SectionTitle
+import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
+import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
+import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
+import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
-import com.uragiristereo.mikansei.core.ui.extension.defaultPaddings
 import com.uragiristereo.mikansei.core.ui.extension.forEach
-import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core.LoadingFab
+import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core.NewFavGroupFab
 import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core.NewFavGroupState
-import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core.SubmitFab
+import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core.NewFavGroupTopAppBar
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun NewFavGroupScreen(
     onNavigateBack: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: NewFavGroupViewModel = koinViewModel(),
 ) {
-    val context = LocalContext.current
+    val scaffoldState = LocalScaffoldState.current
+    val scope = rememberCoroutineScope()
 
     var textField by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue()) }
     val focusRequester = remember { FocusRequester() }
 
-    LaunchedEffect(key1 = viewModel) {
+    LaunchedEffect(key1 = Unit) {
         viewModel.channel.forEach { state ->
             when (state) {
                 NewFavGroupState.Success -> {
-                    Toast.makeText(context, "Favorite group is successfully created", Toast.LENGTH_SHORT).show()
+                    scope.launch(SupervisorJob()) {
+                        onNavigateBack()
 
-                    onNavigateBack()
+                        scaffoldState.snackbarHostState.showSnackbar(message = "Favorite group is successfully created")
+                    }
                 }
 
                 is NewFavGroupState.Failed -> {
-                    Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
+                    scope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(message = state.message)
+                    }
                 }
             }
         }
     }
 
-    ProductSetSystemBarsColor()
-
-    Scaffold(
+    Scaffold2(
+        scaffoldState = scaffoldState,
         topBar = {
-            ProductTopAppBar(
-                title = {
-                    Text(text = "New Favorite Group")
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = onNavigateBack,
-                        content = {
-                            Icon(
-                                painter = painterResource(id = R.drawable.arrow_back),
-                                contentDescription = null,
-                            )
-                        },
-                    )
+            ProductStatusBarSpacer {
+                NewFavGroupTopAppBar(onNavigateBack = onNavigateBack)
+            }
+        },
+        floatingActionButton = {
+            NewFavGroupFab(
+                isLoading = viewModel.isLoading,
+                onSubmitFabClick = {
+                    when {
+                        textField.text.isBlank() -> {
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(message = "Please enter a name!")
+                            }
+                        }
+
+                        else -> viewModel.createNewFavoriteGroup(name = textField.text)
+                    }
                 },
             )
         },
-        floatingActionButton = {
-            AnimatedContent(
-                targetState = viewModel.isLoading,
-                transitionSpec = {
-                    scaleIn() with scaleOut()
-                },
-            ) { state ->
-                when {
-                    !state -> SubmitFab(
-                        onClick = {
-                            when {
-                                textField.text.isBlank() -> Toast.makeText(context, "Please enter a name!", Toast.LENGTH_SHORT).show()
-                                else -> viewModel.createNewFavoriteGroup(name = textField.text)
-                            }
-                        },
-                    )
-
-                    else -> LoadingFab()
-                }
-            }
+        bottomBar = {
+            ProductNavigationBarSpacer()
         },
-        modifier = modifier
-            .defaultPaddings()
-            .navigationBarsPadding()
-            .imePadding(),
+        contentPadding = PaddingValues(0.dp),
+        modifier = Modifier
+            .imePadding()
+            .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
+            .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             if (viewModel.postId != null) {
@@ -126,15 +110,6 @@ internal fun NewFavGroupScreen(
                 Divider()
             }
 
-            SectionTitle(
-                text = "Name",
-                modifier = Modifier
-                    .padding(
-                        horizontal = 16.dp,
-                        vertical = 8.dp,
-                    ),
-            )
-
             OutlinedTextField(
                 value = textField,
                 onValueChange = {
@@ -142,16 +117,17 @@ internal fun NewFavGroupScreen(
                         textField = it
                     }
                 },
+                label = {
+                    Text(text = "Name")
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .padding(all = 16.dp)
                     .focusRequester(focusRequester),
             )
 
-            DisposableEffect(key1 = viewModel) {
+            LaunchedEffect(key1 = Unit) {
                 focusRequester.requestFocus()
-
-                onDispose { }
             }
         }
     }

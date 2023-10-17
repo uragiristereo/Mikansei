@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.home.posts.more
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -21,10 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
 import com.uragiristereo.mikansei.feature.home.posts.more.core.FavoriteSection
 import com.uragiristereo.mikansei.feature.home.posts.more.core.PostMoreHeader
 import com.uragiristereo.mikansei.feature.home.posts.more.core.ScoreSection
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -38,6 +39,7 @@ internal fun PostMoreContent(
     viewModel: PostMoreViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
+    val snackbarHostState = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
     val post = viewModel.post
 
@@ -80,12 +82,13 @@ internal fun PostMoreContent(
             ClickableSection(
                 title = stringResource(id = R.string.add_to_action),
                 onClick = {
-                    scope.launch {
+                    scope.launch(SupervisorJob()) {
+                        onDismiss()
+
                         if (viewModel.activeUser.value.isNotAnonymous()) {
-                            onDismiss()
                             onAddToFavoriteGroupClick(post)
                         } else {
-                            Toast.makeText(context, "Please Login to use this feature!", Toast.LENGTH_SHORT).show()
+                            snackbarHostState.showSnackbar(message = "Please Login to use this feature!")
                         }
                     }
                 },

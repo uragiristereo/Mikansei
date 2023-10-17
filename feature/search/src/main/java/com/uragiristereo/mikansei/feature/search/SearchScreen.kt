@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.search
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -28,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -39,7 +37,7 @@ import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
+import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.search.core.SearchBar
@@ -60,6 +58,7 @@ internal fun SearchScreen(
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val scaffoldState = LocalScaffoldState.current
 
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
@@ -112,20 +111,17 @@ internal fun SearchScreen(
     }
 
     LaunchedEffect(key1 = viewModel.errorMessage) {
-        if (viewModel.errorMessage != null) {
-            Toast.makeText(
-                /* context = */ context,
-                /* text = */ viewModel.errorMessage,
-                /* duration = */ Toast.LENGTH_LONG,
-            ).show()
+        viewModel.errorMessage?.let { errorMessage ->
+            scope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(message = errorMessage)
 
-            viewModel.errorMessage = null
+                viewModel.errorMessage = null
+            }
         }
     }
 
-    SetSystemBarsColors(Color.Transparent)
-
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             ProductStatusBarSpacer {
                 SearchBar(

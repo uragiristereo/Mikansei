@@ -28,6 +28,7 @@ import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpa
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.composable.SectionTitle
 import com.uragiristereo.mikansei.core.ui.extension.plus
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
@@ -45,6 +46,7 @@ internal fun ManageUserScreen(
     val inactiveUsers by viewModel.inactiveUsers.collectAsState()
 
     Scaffold(
+        scaffoldState = LocalScaffoldState.current,
         topBar = {
             ProductStatusBarSpacer {
                 ProductTopAppBar(

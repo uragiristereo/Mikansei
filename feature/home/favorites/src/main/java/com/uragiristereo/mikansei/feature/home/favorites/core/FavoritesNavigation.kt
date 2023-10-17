@@ -51,9 +51,7 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
     composable(
         route = MainRoute.NewFavGroup(),
         content = {
-            NewFavGroupScreen(
-                onNavigateBack = navController::navigateUp,
-            )
+            NewFavGroupScreen(onNavigateBack = navController::navigateUp)
         }
     )
 }

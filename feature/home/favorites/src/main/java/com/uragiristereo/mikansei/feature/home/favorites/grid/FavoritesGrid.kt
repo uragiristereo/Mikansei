@@ -31,7 +31,7 @@ internal fun FavoritesGrid(
                 WindowSize.EXPANDED -> 5
             },
         ),
-        contentPadding = contentPadding + PaddingValues(all = 16.dp) + PaddingValues(bottom = 56.dp + 16.dp),
+        contentPadding = contentPadding + PaddingValues(all = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier.fillMaxSize(),

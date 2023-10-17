@@ -18,9 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.column.FavoriteGroupsColumn
 import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core.CreateNewFavGroupButton
 import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core.FavoriteGroupsHeader
@@ -33,7 +33,7 @@ fun AddToFavGroupContent(
     onNewFavoriteGroupClick: (postId: Int) -> Unit,
     viewModel: AddToFavGroupViewModel = koinViewModel(),
 ) {
-    val context = LocalContext.current
+    val snackbarHostState = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
     val post = viewModel.post
 
@@ -87,7 +87,12 @@ fun AddToFavGroupContent(
                     onAddClick = { item ->
                         scope.launch {
                             onDismiss()
-                            viewModel.addPostToFavoriteGroup(context, item)
+                            viewModel.addPostToFavoriteGroup(
+                                item = item,
+                                onShowMessage = { message, duration ->
+                                    snackbarHostState.showSnackbar(message = message, duration = duration)
+                                }
+                            )
                         }
                     },
                     onRemoveClick = viewModel::removePostFromFavoriteGroup,

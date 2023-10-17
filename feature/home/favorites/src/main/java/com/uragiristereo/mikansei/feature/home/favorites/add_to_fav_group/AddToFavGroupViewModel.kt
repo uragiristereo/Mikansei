@@ -1,7 +1,6 @@
 package com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group
 
-import android.content.Context
-import android.widget.Toast
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -73,7 +72,10 @@ class AddToFavGroupViewModel(
         }
     }
 
-    fun addPostToFavoriteGroup(context: Context, item: FavoriteGroup) {
+    fun addPostToFavoriteGroup(
+        item: FavoriteGroup,
+        onShowMessage: suspend (message: String, length: SnackbarDuration) -> Unit,
+    ) {
         viewModelScope.launch(SupervisorJob()) {
             danbooruRepository.addPostToFavoriteGroup(
                 favoriteGroupId = item.id,
@@ -91,11 +93,11 @@ class AddToFavGroupViewModel(
                 }
 
                 val duration = when (result) {
-                    is Result.Success -> Toast.LENGTH_SHORT
-                    else -> Toast.LENGTH_LONG
+                    is Result.Success -> SnackbarDuration.Short
+                    else -> SnackbarDuration.Long
                 }
 
-                Toast.makeText(context, message, duration).show()
+                onShowMessage(message, duration)
             }
         }
     }

@@ -26,6 +26,7 @@ import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
+import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
@@ -168,6 +169,7 @@ internal fun ImagePost(
     }
 
     Scaffold(
+        scaffoldState = LocalScaffoldState.current,
         topBar = {
             AnimatedVisibility(
                 visible = areAppBarsVisible,

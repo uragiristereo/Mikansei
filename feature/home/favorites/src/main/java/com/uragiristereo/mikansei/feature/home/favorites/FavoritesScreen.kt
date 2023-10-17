@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.home.favorites
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
@@ -23,17 +22,19 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
+import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.composable.Banner
+import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
 import com.uragiristereo.mikansei.core.ui.extension.forEach
 import com.uragiristereo.mikansei.core.ui.extension.horizontalOnly
 import com.uragiristereo.mikansei.core.ui.extension.verticalOnly
@@ -42,6 +43,7 @@ import com.uragiristereo.mikansei.feature.home.favorites.core.FavoritesTopAppBar
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingIndicator
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
 import com.uragiristereo.mikansei.feature.home.favorites.grid.FavoritesGrid
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalAnimationApi::class, ExperimentalMaterialApi::class)
@@ -52,21 +54,26 @@ internal fun FavoritesScreen(
     viewModel: FavoritesViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
+    val scaffoldState = LocalScaffoldState.current
+    val scope = rememberCoroutineScope()
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.loadingState == LoadingState.FROM_REFRESH,
         onRefresh = viewModel::getFavoritesAndFavoriteGroups,
     )
 
-    LaunchedEffect(key1 = viewModel) {
+    LaunchedEffect(key1 = Unit) {
         viewModel.errorMessageChannel.forEach { errorMessage ->
-            Toast.makeText(context, "Error: $errorMessage", Toast.LENGTH_LONG).show()
+            scope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(message = "Error: $errorMessage")
+            }
         }
     }
 
     InterceptBackGestureForBottomSheetNavigator()
 
-    Scaffold(
+    Scaffold2(
+        scaffoldState = scaffoldState,
         topBar = {
             ProductStatusBarSpacer {
                 FavoritesTopAppBar(

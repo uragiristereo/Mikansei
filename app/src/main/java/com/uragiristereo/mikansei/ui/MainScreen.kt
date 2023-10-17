@@ -3,7 +3,6 @@ package com.uragiristereo.mikansei.ui
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -67,7 +66,9 @@ import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
+import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
+import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeVertical
 import com.uragiristereo.mikansei.core.ui.WindowSize
@@ -101,7 +102,7 @@ fun MainScreen(
     viewModel: MainViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
-    val homeScaffoldState = rememberScaffoldState()
+    val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     val bottomNavController = rememberAnimatedNavController()
 
@@ -132,7 +133,9 @@ fun MainScreen(
         },
         onPermissionResult = { isGranted ->
             if (!isGranted) {
-                Toast.makeText(context, context.getText(R.string.download_permission_denied), Toast.LENGTH_LONG).show()
+                scope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(message = context.getText(R.string.download_permission_denied).toString())
+                }
             }
 
             viewModel.selectedPost?.let {
@@ -167,7 +170,7 @@ fun MainScreen(
                 scope.launch {
                     viewModel.confirmExit = false
 
-                    homeScaffoldState.snackbarHostState.showSnackbar(
+                    scaffoldState.snackbarHostState.showSnackbar(
                         message = context.resources.getString(
                             /* id = */
                             R.string.press_back_again_to_exit,
@@ -206,6 +209,8 @@ fun MainScreen(
                 LocalWindowSizeHorizontal provides rememberWindowSizeHorizontal(),
                 LocalWindowSizeVertical provides rememberWindowSizeVertical(),
                 LocalBottomSheetNavigator provides rememberBottomSheetNavigator(navController = bottomNavController),
+                LocalScaffoldState provides scaffoldState,
+                LocalSnackbarHostState provides scaffoldState.snackbarHostState,
             ),
         ) {
             SetSystemBarsColors(Color.Transparent)

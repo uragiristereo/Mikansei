@@ -43,16 +43,17 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
+import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeVertical
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DimensionSubcomposeLayout
+import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.extension.forEach
@@ -214,7 +215,8 @@ internal fun PostsScreen(
 
     SetSystemBarsColors(Color.Transparent)
 
-    Scaffold(
+    Scaffold2(
+        scaffoldState = LocalScaffoldState.current,
         topBar = {
             DimensionSubcomposeLayout(
                 modifier = Modifier
