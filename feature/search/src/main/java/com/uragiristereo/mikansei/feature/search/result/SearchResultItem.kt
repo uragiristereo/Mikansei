@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
@@ -72,31 +73,45 @@ internal fun SearchResultItem(
 
             Text(
                 text = buildAnnotatedString {
-                    val newTag = "$delimiter${tag.name}".lowercase()
-
+                    val hasAntecedent = tag.antecedent != null
+                    val tagToBold = tag.antecedent ?: tag.name
+                    val newTag = "$delimiter${tagToBold}".lowercase()
                     val boldStartIndex = newTag.indexOf(string = boldWord)
                     val boldEndIndex = boldStartIndex + boldWord.length
                     val shouldBold = boldStartIndex != -1
 
                     if (shouldBold) {
-                        append(
-                            text = newTag.substring(
-                                startIndex = 0,
-                                endIndex = boldStartIndex,
-                            ),
-                        )
-
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
-                            append(
-                                text = newTag.substring(boldStartIndex, boldEndIndex),
+                        withStyle(
+                            style = SpanStyle(
+                                fontStyle = when {
+                                    hasAntecedent -> FontStyle.Italic
+                                    else -> FontStyle.Normal
+                                },
                             )
-                        }
+                        ) {
+                            append(
+                                text = newTag.substring(
+                                    startIndex = 0,
+                                    endIndex = boldStartIndex,
+                                ),
+                            )
 
-                        append(
-                            text = newTag.substring(startIndex = boldEndIndex),
-                        )
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
+                                append(text = newTag.substring(boldStartIndex, boldEndIndex))
+                            }
+
+                            append(text = newTag.substring(startIndex = boldEndIndex))
+                        }
                     } else {
                         append(text = newTag)
+                    }
+
+                    if (hasAntecedent) {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.ExtraBold)) {
+                            append(text = "  ›  ")
+                        }
+
+                        append(text = tag.name)
                     }
                 },
                 modifier = Modifier
