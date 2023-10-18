@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.getCategoryColor
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 
 @Composable
@@ -46,25 +47,7 @@ internal fun MoreTagItem(
     val isLight = MaterialTheme.colors.isLight
 
     val tagColor = remember(tag, isLight) {
-        when {
-            isLight -> when (tag.category) {
-                Tag.Category.GENERAL -> Color(0xFF0075F8)
-                Tag.Category.CHARACTER -> Color(0xFF00AB2C)
-                Tag.Category.COPYRIGHT -> Color(0xFFA800AA)
-                Tag.Category.ARTIST -> Color(0xFFC00004)
-                Tag.Category.META -> Color(0xFFFD9200)
-                Tag.Category.UNKNOWN -> Color(0xFF0075F8)
-            }
-
-            else -> when (tag.category) {
-                Tag.Category.GENERAL -> Color(0xFF009BE6)
-                Tag.Category.CHARACTER -> Color(0xFF35C64A)
-                Tag.Category.COPYRIGHT -> Color(0xFFC797FF)
-                Tag.Category.ARTIST -> Color(0xFFFF8A8B)
-                Tag.Category.META -> Color(0xFFEAD084)
-                Tag.Category.UNKNOWN -> Color(0xFF009BE6)
-            }
-        }
+        tag.category.getCategoryColor(isLight)
     }
 
     val backgroundColor = when {

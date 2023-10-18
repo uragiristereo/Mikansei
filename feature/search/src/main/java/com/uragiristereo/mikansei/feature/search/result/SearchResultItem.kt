@@ -6,12 +6,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.getCategoryColor
 import com.uragiristereo.mikansei.core.resources.R
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -34,6 +37,12 @@ internal fun SearchResultItem(
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val isLight = MaterialTheme.colors.isLight
+
+    val tagColor = remember(tag, isLight) {
+        tag.category.getCategoryColor(isLight)
+    }
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -53,9 +62,12 @@ internal fun SearchResultItem(
                 ),
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.search),
+                painter = painterResource(id = R.drawable.circle_fill),
                 contentDescription = null,
-                modifier = Modifier.padding(end = 16.dp),
+                tint = tagColor,
+                modifier = Modifier
+                    .padding(end = 24.dp)
+                    .size(12.dp),
             )
 
             Text(
