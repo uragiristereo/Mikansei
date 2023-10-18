@@ -127,7 +127,7 @@ internal fun SearchScreen(
                     focusRequester = focusRequester,
                     onNavigateBack = onNavigateBack,
                     onQueryChange = {
-                        query = it
+                        query = it.copy(text = it.text.lowercase())
                     },
                     onQuerySubmit = {
                         onSearchSubmit(viewModel.parsedQuery)
