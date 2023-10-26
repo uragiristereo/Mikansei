@@ -6,24 +6,14 @@ plugins {
 
 android {
     namespace "com.uragiristereo.mikansei.core.database"
-    compileSdk 34
-
-    defaultConfig {
-        minSdk 21
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
-    }
 
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {

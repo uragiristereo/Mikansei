@@ -6,11 +6,6 @@ plugins {
 
 android {
     namespace "com.uragiristereo.mikansei.core.product"
-    compileSdk 34
-
-    defaultConfig {
-        minSdk 21
-    }
 
     buildFeatures {
         compose true
@@ -19,15 +14,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
+}
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
-    }
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
