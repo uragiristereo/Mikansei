@@ -87,20 +87,10 @@ This project is trying to use the latest Android tech stacks.
 ## Building
 
 To build this project, you need the latest stable
-of [Android Studio](https://developer.android.com/studio) and a signing key `*.jks`.
+of [Android Studio](https://developer.android.com/studio).
 
 1. Clone the project and open in Android Studio.
-2. Create a file named `signing.properties` inside the root directory, then add this signing
-   information:
-
-```properties
-STORE_FILE=<PATH TO STORE FILE>
-STORE_PASSWORD=<STORE PASSWORD>
-KEY_ALIAS=<KEY ALIAS>
-KEY_PASSWORD=<KEY PASSWORD>
-```
-
-3. Sync project with Gradle then Run 'app'.
+2. Sync project with Gradle then Run 'app'.
 
 ## License
 
