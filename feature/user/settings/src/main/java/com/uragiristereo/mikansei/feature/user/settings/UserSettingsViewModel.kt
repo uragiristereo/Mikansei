@@ -16,6 +16,8 @@ import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.product.preference.BottomSheetPreferenceData
 import com.uragiristereo.mikansei.core.resources.R
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -30,6 +32,9 @@ class UserSettingsViewModel(
     var loading by mutableStateOf(true)
         private set
 
+    var failed by mutableStateOf(false)
+        private set
+
     var ratingFilters by mutableStateOf(
         value = BottomSheetPreferenceData(
             preferenceTextResId = R.string.settings_booru_listing_mode_select,
@@ -38,6 +43,10 @@ class UserSettingsViewModel(
         ),
     )
         private set
+
+    val snackbarChannel = Channel<String>()
+    private var requestSyncJob: Job? = null
+    private var updateSettingsJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -49,23 +58,47 @@ class UserSettingsViewModel(
         requestSync()
     }
 
-    private fun requestSync() {
-        viewModelScope.launch {
-            syncUserSettingsUseCase().collect { result ->
-                if (result is Result.Success) {
-                    loading = false
+    fun requestSync() {
+        requestSyncJob?.cancel()
+
+        requestSyncJob = viewModelScope.launch {
+            loading = true
+
+            syncSettings()
+
+            loading = false
+        }
+    }
+
+    private suspend fun syncSettings() {
+        syncUserSettingsUseCase().collect { result ->
+            when (result) {
+                is Result.Success -> {
+                    failed = false
+                }
+                is Result.Failed -> {
+                    failed = true
+                    snackbarChannel.send(result.message)
+                }
+                is Result.Error -> {
+                    failed = true
+                    snackbarChannel.send(result.t.toString())
                 }
             }
         }
     }
 
     private fun updateSettings(data: ProfileSettingsField) {
-        viewModelScope.launch {
+        updateSettingsJob?.cancel()
+
+        updateSettingsJob = viewModelScope.launch {
             loading = activeUser.value.id != 0
 
             updateUserSettingsUseCase(data).collect {
-                requestSync()
+                syncSettings()
             }
+
+            loading = false
         }
     }
 
