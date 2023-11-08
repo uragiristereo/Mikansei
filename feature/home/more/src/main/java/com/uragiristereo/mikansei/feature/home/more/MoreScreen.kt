@@ -31,10 +31,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
-import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
+import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
+import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
 import com.uragiristereo.mikansei.core.ui.composable.SectionTitle
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.horizontalOnly
@@ -65,7 +66,8 @@ internal fun MoreScreen(
 
     SetSystemBarsColors(Color.Transparent)
 
-    Scaffold(
+    Scaffold2(
+        scaffoldState = LocalScaffoldState.current,
         topBar = {
             ProductStatusBarSpacer {
                 MoreTopAppBar()
