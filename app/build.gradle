@@ -50,9 +50,9 @@ android {
     }
 
     applicationVariants.configureEach { variant ->
-        // Enables GMS on play build variant
+        // Enables GMS on play release build variant
         tasks.named("process${variant.name.capitalize()}GoogleServices").configure {
-            enabled = variant.flavorName == "play"
+            enabled = variant.flavorName == "play" && buildType.name == "release"
         }
     }
 
