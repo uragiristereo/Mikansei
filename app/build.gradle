@@ -37,6 +37,18 @@ android {
         }
     }
 
+    flavorDimensions.add("env")
+
+    productFlavors {
+        oss {
+            dimension "env"
+        }
+
+        play {
+            dimension "env"
+        }
+    }
+
     buildFeatures {
         compose true
     }
