@@ -37,13 +37,16 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
+    flavorDimensions.add("env")
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
+    productFlavors {
+        oss {
+            dimension "env"
+        }
+
+        play {
+            dimension "env"
+        }
     }
 
     buildFeatures {
@@ -59,6 +62,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
