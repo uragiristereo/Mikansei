@@ -49,6 +49,13 @@ android {
         }
     }
 
+    applicationVariants.configureEach { variant ->
+        // Enables GMS on play build variant
+        tasks.named("process${variant.name.capitalize()}GoogleServices").configure {
+            enabled = variant.flavorName == "play"
+        }
+    }
+
     buildFeatures {
         compose true
     }
@@ -117,7 +124,7 @@ dependencies {
     implementation(libs.safer.navigation.compose)
 
     // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
+    playImplementation(platform(libs.firebase.bom))
+    playImplementation(libs.firebase.analytics)
+    playImplementation(libs.firebase.crashlytics)
 }
