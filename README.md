@@ -92,23 +92,14 @@ of [Android Studio](https://developer.android.com/studio).
 1. Clone the project and open in Android Studio.
 2. Sync project with Gradle then Run 'app'.
 
-Note: the `play` build variant will bundle Firebase Crashlytics to the app. By default it will use
-the `oss` build variant. The `oss` build variant won't bundle Firebase at all. To use the `play`
-build variant, you need to create 2 Firebase apps:
+**Note:**
 
-For production/release build, create a Firebase Android app with `com.uragiristereo.mikansei` as the
-package name. And store the `google-services.json` file in this path:
+The `playRelease` build variant will bundle Firebase Crashlytics to the app. By default it
+will use the `ossDebug` build variant. The rest of the build variants won't bundle Firebase at all.
 
-```
-~/app/src/play/release/
-```
-
-For dev/debug build, create a Firebase Android app with `com.uragiristereo.mikansei.dev` as the
-package name. And store the `google-services.json` file in this path:
-
-```
-~/app/src/play/debug/
-```
+To use the `playRelease` build variant, first you need to create a Firebase Android app with
+`com.uragiristereo.mikansei` as the package name then store the `google-services.json` file in the
+root of `app` module.
 
 ## License
 
