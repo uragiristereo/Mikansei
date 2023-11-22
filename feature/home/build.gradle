@@ -26,9 +26,9 @@ dependencies {
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
-    implementation(project(":feature:home:favorites"))
-    implementation(project(":feature:home:more"))
-    implementation(project(":feature:home:posts"))
+    api(project(":feature:home:favorites"))
+    api(project(":feature:home:more"))
+    api(project(":feature:home:posts"))
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
