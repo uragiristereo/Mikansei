@@ -6,6 +6,10 @@ pluginManagement {
     }
 }
 
+plugins {
+    id("com.android.settings") version("8.1.4")
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
@@ -41,3 +45,9 @@ include(":feature:user")
 include(":feature:user:login")
 include(":feature:user:manage")
 include(":feature:user:settings")
+
+android {
+    buildToolsVersion "34.0.0"
+    compileSdk 34
+    minSdk 21
+}

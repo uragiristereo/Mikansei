@@ -7,11 +7,6 @@ plugins {
 
 android {
     namespace "com.uragiristereo.mikansei.feature.home.posts"
-    compileSdk 34
-
-    defaultConfig {
-        minSdk 21
-    }
 
     buildFeatures {
         compose true
