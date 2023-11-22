@@ -21,13 +21,8 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:ui"))
 
-    // Koin Dependency Injection & Timber Logger
     implementation(libs.bundles.core)
-
-    // Androidx Room Database
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
-
-    // Kotlinx.Serialization JSON Serialization
     implementation(libs.kotlinx.serialization.json)
 }

@@ -94,34 +94,17 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(project(":feature:user"))
 
-    // AndroidX
     implementation(libs.bundles.androidx)
     implementation(libs.androidx.splashscreen)
-
-    // Compose UI
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
     debugImplementation(libs.bundles.compose.debug)
-
-    // Koin Dependency Injection
     implementation(libs.bundles.koin)
-
-    // Accompanist Compose Extensions
     implementation(libs.accompanist.permissions)
-
-    // Coil Image Loader
     implementation(libs.bundles.coil)
-
-    // Timber Logger
     implementation(libs.timber)
-
-    // Kotlinx.Serialization JSON Serialization
     implementation(libs.kotlinx.serialization.json)
-
-    // Safer Navigation Compose
     implementation(libs.safer.navigation.compose)
-
-    // Firebase
     playImplementation(platform(libs.firebase.bom))
     playImplementation(libs.firebase.analytics)
     playImplementation(libs.firebase.crashlytics)

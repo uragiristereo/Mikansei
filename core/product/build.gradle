@@ -27,13 +27,9 @@ dependencies {
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
 
-    // Compose UI
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
-
-    // Timber Logger
     implementation(libs.timber)
-
     implementation(libs.bundles.koin)
     implementation(libs.safer.navigation.compose)
 }

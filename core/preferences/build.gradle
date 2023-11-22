@@ -17,12 +17,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:resources"))
 
-    // Koin Dependency Injection & Timber Logger
     implementation(libs.bundles.core)
-
-    // AndroidX DataStore
     implementation(libs.androidx.datastore)
-
-    // Kotlinx.Serialization JSON Serialization
     implementation(libs.kotlinx.serialization.json)
 }
