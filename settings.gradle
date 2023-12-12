@@ -7,7 +7,13 @@ pluginManagement {
 }
 
 plugins {
-    id("com.android.settings") version("8.1.4")
+    id("com.android.settings") version("8.2.0")
+}
+
+android {
+    buildToolsVersion "34.0.0"
+    compileSdk 34
+    minSdk 21
 }
 
 dependencyResolutionManagement {
@@ -45,9 +51,3 @@ include(":feature:user")
 include(":feature:user:login")
 include(":feature:user:manage")
 include(":feature:user:settings")
-
-android {
-    buildToolsVersion "34.0.0"
-    compileSdk 34
-    minSdk 21
-}
