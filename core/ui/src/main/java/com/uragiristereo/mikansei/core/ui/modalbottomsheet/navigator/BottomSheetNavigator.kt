@@ -8,6 +8,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheetState2
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState2
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
@@ -78,7 +80,7 @@ class BottomSheetNavigator(
             coroutineScope.launch(SupervisorJob()) {
                 isNavigating = true
 
-                if (currentRoute != "index") {
+                if (currentRoute != INDEX_ROUTE) {
                     bottomSheetState.hide()
 
                     if (popBackStack) {
@@ -88,14 +90,24 @@ class BottomSheetNavigator(
 
                 block(navController)
 
-                if (currentRoute != "index") {
-                    delay(timeMillis = 500L)
+                coroutineScope.launch(SupervisorJob()) {
+                    if (currentRoute != INDEX_ROUTE) {
+                        delay(timeMillis = 500L)
+                    }
+
+                    expand()
                 }
-
-                bottomSheetState.expand()
-
-                isNavigating = false
             }
+        }
+    }
+
+    internal suspend fun expand() {
+        try {
+            Timber.d("expanding")
+            bottomSheetState.expand()
+        } catch (_: CancellationException) {
+            Timber.d("expand got cancelled, trying to expand again")
+            bottomSheetState.expand()
         }
     }
 
@@ -126,7 +138,7 @@ fun InterceptBackGestureForBottomSheetNavigator() {
             if (previousRoute !in listOf(null, BottomSheetNavigator.INDEX_ROUTE)) {
                 bottomSheetNavigator.navController.popBackStack()
                 delay(timeMillis = 500L)
-                bottomSheetNavigator.bottomSheetState.expand()
+                bottomSheetNavigator.expand()
             }
 
             bottomSheetNavigator.isNavigating = false
@@ -141,6 +153,13 @@ fun NavigateToIndexWhenBottomSheetNavigatorHidden() {
     val bottomSheetNavigator = LocalBottomSheetNavigator.current
     val scope = rememberCoroutineScope()
 
+    LaunchedEffect(key1 = bottomSheetNavigator.bottomSheetState.isVisible) {
+        if (bottomSheetNavigator.bottomSheetState.isVisible) {
+            Timber.d("expanded")
+            bottomSheetNavigator.isNavigating = false
+        }
+    }
+
     DisposableEffect(
         key1 = bottomSheetNavigator.bottomSheetState.isVisible,
         key2 = bottomSheetNavigator.isNavigating,
@@ -152,19 +171,6 @@ fun NavigateToIndexWhenBottomSheetNavigatorHidden() {
                 bottomSheetNavigator.navController.navigate(BottomSheetNavigator.INDEX_ROUTE) {
                     popUpTo(id = 0)
                 }
-            }
-        }
-
-        onDispose {
-            job.cancel()
-        }
-    }
-
-    DisposableEffect(key1 = bottomSheetNavigator.bottomSheetState.isVisible) {
-        val job = scope.launch {
-            if (!bottomSheetNavigator.bottomSheetState.isVisible) {
-                delay(timeMillis = 2_000L)
-                bottomSheetNavigator.isNavigating = false
             }
         }
 
