@@ -14,7 +14,6 @@ import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,8 +21,8 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
+import com.uragiristereo.mikansei.core.ui.composable.PostHeader
 import com.uragiristereo.mikansei.feature.home.posts.more.core.FavoriteSection
-import com.uragiristereo.mikansei.feature.home.posts.more.core.PostMoreHeader
 import com.uragiristereo.mikansei.feature.home.posts.more.core.ScoreSection
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -38,7 +37,6 @@ internal fun PostMoreContent(
     onAddToFavoriteGroupClick: (Post) -> Unit,
     viewModel: PostMoreViewModel = koinViewModel(),
 ) {
-    val context = LocalContext.current
     val snackbarHostState = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
     val post = viewModel.post
@@ -49,8 +47,8 @@ internal fun PostMoreContent(
             .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
             .padding(top = 16.dp),
     ) {
-        PostMoreHeader(
-            postId = post.id,
+        PostHeader(
+            title = "#${post.id}",
             previewUrl = post.medias.preview.url,
             aspectRatio = post.aspectRatio,
             onClick = {
