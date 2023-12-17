@@ -21,9 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
+import com.uragiristereo.mikansei.core.ui.composable.PostHeader
 import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.column.FavoriteGroupsColumn
 import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core.CreateNewFavGroupButton
-import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core.FavoriteGroupsHeader
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -43,8 +43,9 @@ fun AddToFavGroupContent(
             .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
             .padding(top = 16.dp),
     ) {
-        FavoriteGroupsHeader(
-            postId = post.id,
+        PostHeader(
+            title = "Add to Favorite Group",
+            subtitle = "#${post.id}",
             previewUrl = post.medias.preview.url,
             aspectRatio = post.aspectRatio,
         )
