@@ -12,7 +12,6 @@ import com.github.uragiristereo.safer.compose.navigation.compose.composable
 import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.model.danbooru.Post
-import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
@@ -21,6 +20,7 @@ import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
 import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreContent
+import com.uragiristereo.mikansei.feature.home.posts.share.ShareContent
 
 @SuppressLint("RestrictedApi")
 fun NavGraphBuilder.postsRoute(
@@ -94,7 +94,6 @@ fun NavGraphBuilder.postsBottomRoute(
 ) {
     composable<HomeRoute.PostMore> {
         val lambdaOnDownload = LocalLambdaOnDownload.current
-        val lambdaOnShare = LocalLambdaOnShare.current
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         PostMoreContent(
@@ -110,13 +109,34 @@ fun NavGraphBuilder.postsBottomRoute(
             },
             onDownloadClick = lambdaOnDownload,
             onShareClick = { post ->
-                lambdaOnShare(post, ShareOption.COMPRESSED)
+                bottomSheetNavigator.navigate {
+                    it.navigate(HomeRoute.Share(post))
+                }
             },
             onAddToFavoriteGroupClick = { post ->
                 bottomSheetNavigator.navigate {
                     it.navigate(HomeRoute.AddToFavGroup(post))
                 }
             },
+        )
+    }
+
+    composable<HomeRoute.Share> {
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val lambdaOnShare = LocalLambdaOnShare.current
+
+        ShareContent(
+            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            onPostClick = { post ->
+                bottomSheetNavigator.runHiding {
+                    onNavigatedBackByGesture(false)
+
+                    mainNavController.navigate(
+                        MainRoute.Image(post)
+                    )
+                }
+            },
+            onShareClick = lambdaOnShare,
         )
     }
 }

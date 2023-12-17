@@ -118,7 +118,12 @@ fun MainScreen(
     }
 
     val lambdaOnShare = { post: Post, shareOption: ShareOption ->
-        viewModel.sharePost(context, post, shareOption)
+        val selectedOption = when (post.type) {
+            Post.Type.UGOIRA -> ShareOption.COMPRESSED
+            else -> shareOption
+        }
+
+        viewModel.sharePost(context, post, selectedOption)
     }
 
     val lambdaOnRequestScrollToTop: () -> Unit = {

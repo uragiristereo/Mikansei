@@ -34,11 +34,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.model.danbooru.Post
-import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
-import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DragHandle
@@ -62,12 +60,12 @@ internal fun MoreBottomSheet(
     showExpandButton: Boolean,
     onExpandClick: () -> Unit,
     onAddToClick: () -> Unit,
+    onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MoreBottomSheetViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
-    val lambdaOnShare = LocalLambdaOnShare.current
     val hapticFeedback = LocalHapticFeedback.current
 
     val scope = rememberCoroutineScope()
@@ -130,7 +128,7 @@ internal fun MoreBottomSheet(
                                 scope.launch {
                                     sheetState.hide()
 
-                                    lambdaOnShare(post, ShareOption.COMPRESSED)
+                                    onShareClick()
                                 }
                             },
                             onExpandClick = {

@@ -14,16 +14,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.uragiristereo.mikansei.core.model.danbooru.Post
-import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
-import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.areNavigationBarsButtons
 import com.uragiristereo.mikansei.core.ui.extension.hideSystemBars
 import com.uragiristereo.mikansei.core.ui.extension.showSystemBars
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState2
+import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.image.image.ImagePost
 import com.uragiristereo.mikansei.feature.image.more.MoreBottomSheet
 import com.uragiristereo.mikansei.feature.image.video.VideoPost
@@ -41,7 +42,7 @@ internal fun ImageScreen(
     val window = (context as Activity).window
     val hapticFeedback = LocalHapticFeedback.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
-    val lambdaOnShare = LocalLambdaOnShare.current
+    val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState2(initialValue = ModalBottomSheetValue.Hidden)
@@ -50,6 +51,17 @@ internal fun ImageScreen(
         scope.launch {
             hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
             sheetState.animateTo(ModalBottomSheetValue.Expanded)
+        }
+    }
+
+    val lambdaOnShareClick: () -> Unit = {
+        bottomSheetNavigator.navigate {
+            it.navigate(
+                HomeRoute.Share(
+                    post = viewModel.post,
+                    showThumbnail = false,
+                )
+            )
         }
     }
 
@@ -90,11 +102,12 @@ internal fun ImageScreen(
         navigationBarDarkIcons = false,
     )
 
-    when (val postType = viewModel.post.type) {
+    when (viewModel.post.type) {
         Post.Type.IMAGE, Post.Type.ANIMATED_GIF -> {
             ImagePost(
                 onNavigateBack = onNavigateBack,
                 onMoreClick = lambdaOnMoreClick,
+                onShareClick = lambdaOnShareClick,
                 areAppBarsVisible = viewModel.areAppBarsVisible,
                 onAppBarsVisibleChange = viewModel::setAppBarsVisible,
             )
@@ -109,15 +122,7 @@ internal fun ImageScreen(
                 onDownloadClick = {
                     lambdaOnDownload(viewModel.post)
                 },
-                onShareClick = {
-                    lambdaOnShare(
-                        viewModel.post,
-                        when (postType) {
-                            Post.Type.UGOIRA -> ShareOption.COMPRESSED
-                            else -> ShareOption.ORIGINAL
-                        },
-                    )
-                }
+                onShareClick = lambdaOnShareClick,
             )
         }
     }
@@ -134,5 +139,6 @@ internal fun ImageScreen(
                 onNavigateToAddToFavGroup(viewModel.post)
             }
         },
+        onShareClick = lambdaOnShareClick,
     )
 }

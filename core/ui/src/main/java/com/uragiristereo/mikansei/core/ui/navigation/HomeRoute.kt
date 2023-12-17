@@ -16,11 +16,6 @@ sealed interface HomeRoute : NavRoute {
     object More : HomeRoute
 
     @Serializable
-    data class PostDialog(
-        val post: Post,
-    ) : HomeRoute
-
-    @Serializable
     data class PostMore(
         val post: Post,
     ) : HomeRoute
@@ -28,6 +23,12 @@ sealed interface HomeRoute : NavRoute {
     @Serializable
     data class AddToFavGroup(
         val post: Post,
+    ) : HomeRoute
+
+    @Serializable
+    data class Share(
+        val post: Post,
+        val showThumbnail: Boolean = true,
     ) : HomeRoute
 }
 

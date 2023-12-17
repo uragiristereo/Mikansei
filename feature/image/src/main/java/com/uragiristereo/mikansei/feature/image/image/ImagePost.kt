@@ -22,10 +22,8 @@ import coil.request.ImageRequest
 import com.google.accompanist.insets.ui.Scaffold
 import com.ortiz.touchview.OnTouchImageViewListener
 import com.ortiz.touchview.TouchImageView
-import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
-import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
@@ -41,6 +39,7 @@ import kotlin.math.abs
 internal fun ImagePost(
     onNavigateBack: (Boolean) -> Unit,
     onMoreClick: () -> Unit,
+    onShareClick: () -> Unit,
     areAppBarsVisible: Boolean,
     onAppBarsVisibleChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -48,7 +47,6 @@ internal fun ImagePost(
 ) {
     val context = LocalContext.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
-    val lambdaOnShare = LocalLambdaOnShare.current
 
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
@@ -189,9 +187,7 @@ internal fun ImagePost(
                     },
                     onExpandClick = lambdaOnExpandClick,
                     onDownloadClick = lambdaOnDownload,
-                    onShareClick = {
-                        lambdaOnShare(post, ShareOption.COMPRESSED)
-                    },
+                    onShareClick = onShareClick,
                     onMoreClick = onMoreClick,
                 )
             }
@@ -212,9 +208,7 @@ internal fun ImagePost(
                     expandButtonVisible = viewModel.expandButtonVisible,
                     onExpandClick = lambdaOnExpandClick,
                     onDownloadClick = lambdaOnDownload,
-                    onShareClick = {
-                        lambdaOnShare(post, ShareOption.COMPRESSED)
-                    },
+                    onShareClick = onShareClick,
                 )
             }
         },

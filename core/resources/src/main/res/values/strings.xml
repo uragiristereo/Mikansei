@@ -36,7 +36,7 @@
 
     <!-- Global Actions -->
     <string name="download_action">Download</string>
-    <string name="share_action">Share</string>
+    <string name="share_action">Share…</string>
     <string name="add_to_action">Add to…</string>
     <string name="add_action">Add</string>
     <string name="cancel_action">Cancel</string>
@@ -76,6 +76,12 @@
     <string name="block_tags_post_action">Block tags from this post</string>
     <string name="hide_post_action">Hide post</string>
     <string name="press_back_again_to_exit">Press BACK again to exit %1$s</string>
+
+    <!-- Home > Posts > Share -->
+    <string name="share_post">Share post</string>
+    <string name="post_link">Post link</string>
+    <string name="compressed_image">Compressed (sample) image</string>
+    <string name="full_size_image">Full size (original) image</string>
 
     <!-- Home > More -->
     <string name="selected_booru">Selected Booru</string>
