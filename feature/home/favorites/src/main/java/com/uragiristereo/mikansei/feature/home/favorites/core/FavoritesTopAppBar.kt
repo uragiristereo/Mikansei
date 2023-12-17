@@ -21,7 +21,7 @@ import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.resources.R
 
 @Composable
-internal fun FavoritesTopAppBar(
+fun FavoritesTopAppBar(
     activeUserName: String,
     onRefreshClick: () -> Unit,
     modifier: Modifier = Modifier,

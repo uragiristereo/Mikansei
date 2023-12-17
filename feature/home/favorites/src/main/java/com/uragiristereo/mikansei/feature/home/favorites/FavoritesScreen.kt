@@ -21,7 +21,6 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -33,7 +32,6 @@ import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.composable.Banner
 import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
-import com.uragiristereo.mikansei.core.ui.extension.forEach
 import com.uragiristereo.mikansei.core.ui.extension.horizontalOnly
 import com.uragiristereo.mikansei.core.ui.extension.verticalOnly
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
@@ -41,18 +39,16 @@ import com.uragiristereo.mikansei.feature.home.favorites.core.FavoritesTopAppBar
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingIndicator
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
 import com.uragiristereo.mikansei.feature.home.favorites.grid.FavoritesGrid
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-internal fun FavoritesScreen(
-    onFavoritesClick: (id: Int, userName: String) -> Unit,
+fun FavoritesScreen(
+    onFavoritesClick: (id: Int, username: String) -> Unit,
     onAddClick: () -> Unit,
     viewModel: FavoritesViewModel = koinViewModel(),
 ) {
     val scaffoldState = LocalScaffoldState.current
-    val scope = rememberCoroutineScope()
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.loadingState == LoadingState.FROM_REFRESH,
@@ -60,9 +56,11 @@ internal fun FavoritesScreen(
     )
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.errorMessageChannel.forEach { errorMessage ->
-            scope.launch {
-                scaffoldState.snackbarHostState.showSnackbar(message = "Error: $errorMessage")
+        viewModel.event.collect { event ->
+            when (event) {
+                is FavoritesViewModel.Event.OnError -> {
+                    scaffoldState.snackbarHostState.showSnackbar(message = "Error: ${event.message}")
+                }
             }
         }
     }

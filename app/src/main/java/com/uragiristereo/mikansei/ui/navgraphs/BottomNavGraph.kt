@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.BottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.NavigateToIndexWhenBottomSheetNavigatorHidden
-import com.uragiristereo.mikansei.feature.home.favorites.core.favoritesBottomRoute
+import com.uragiristereo.mikansei.feature.home.favorites.favoritesBottomRoute
 import com.uragiristereo.mikansei.feature.home.posts.core.postsBottomRoute
 import com.uragiristereo.mikansei.feature.user.manage.core.manageBottomRoute
 import com.uragiristereo.mikansei.ui.MainViewModel

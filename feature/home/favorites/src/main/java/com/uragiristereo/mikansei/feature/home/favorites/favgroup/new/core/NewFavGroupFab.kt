@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-internal fun NewFavGroupFab(
+fun NewFavGroupFab(
     isLoading: Boolean,
     onSubmitFabClick: () -> Unit,
     modifier: Modifier = Modifier,

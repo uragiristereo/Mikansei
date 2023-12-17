@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun LoadingFab(
+fun LoadingFab(
     modifier: Modifier = Modifier,
 ) {
     FloatingActionButton(

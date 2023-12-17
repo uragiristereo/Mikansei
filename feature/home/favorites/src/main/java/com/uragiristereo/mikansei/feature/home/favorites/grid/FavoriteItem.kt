@@ -24,7 +24,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.product.component.ProductPostPlaceholder
 
 @Composable
-internal fun FavoriteItem(
+fun FavoriteItem(
     item: Favorite,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

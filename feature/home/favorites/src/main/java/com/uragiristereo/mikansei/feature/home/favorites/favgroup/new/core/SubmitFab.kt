@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core
 
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -8,7 +8,7 @@ import androidx.compose.ui.res.painterResource
 import com.uragiristereo.mikansei.core.resources.R
 
 @Composable
-internal fun SubmitFab(
+fun SubmitFab(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

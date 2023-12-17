@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.column
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.column
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
@@ -15,10 +15,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core.FavoriteGroup
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.FavoriteGroup
 
 @Composable
-internal fun FavoriteGroupItem(
+fun FavoriteGroupItem(
     item: FavoriteGroup,
     enabled: Boolean,
     onAddClick: (FavoriteGroup) -> Unit,

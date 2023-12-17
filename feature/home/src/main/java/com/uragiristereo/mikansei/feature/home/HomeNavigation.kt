@@ -12,7 +12,7 @@ import com.uragiristereo.mikansei.core.ui.animation.holdOut
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.feature.home.favorites.core.favoritesRoute
+import com.uragiristereo.mikansei.feature.home.favorites.favoritesRoute
 import com.uragiristereo.mikansei.feature.home.more.core.moreRoute
 import com.uragiristereo.mikansei.feature.home.posts.core.postsRoute
 

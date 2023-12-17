@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.column
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.column
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,11 +7,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core.FavoriteGroup
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.FavoriteGroup
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun FavoriteGroupsColumn(
+fun FavoriteGroupsColumn(
     items: List<FavoriteGroup>,
     enabled: Boolean,
     onAddClick: (FavoriteGroup) -> Unit,

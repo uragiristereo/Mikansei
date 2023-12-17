@@ -11,12 +11,16 @@ import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGro
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel(
     private val userRepository: UserRepository,
     private val getFavoritesAndFavoriteGroupsUseCase: GetFavoritesAndFavoriteGroupsUseCase,
 ) : ViewModel() {
+    private val channel = Channel<Event>()
+    val event = channel.receiveAsFlow()
+
     var activeUser by mutableStateOf(userRepository.active.value)
         private set
 
@@ -25,8 +29,6 @@ class FavoritesViewModel(
 
     var favorites by mutableStateOf(listOf<Favorite>())
         private set
-
-    val errorMessageChannel = Channel<String>()
 
     init {
         viewModelScope.launch {
@@ -58,13 +60,17 @@ class FavoritesViewModel(
                 getFavoritesAndFavoriteGroupsUseCase().collect { result ->
                     when (result) {
                         is Result.Success -> favorites = result.data
-                        is Result.Failed -> errorMessageChannel.send(result.message)
-                        is Result.Error -> errorMessageChannel.send(result.t.toString())
+                        is Result.Failed -> channel.send(Event.OnError(result.message))
+                        is Result.Error -> channel.send(Event.OnError(result.t.toString()))
                     }
                 }
 
                 loadingState = LoadingState.DISABLED
             }
         }
+    }
+
+    sealed interface Event {
+        data class OnError(val message: String) : Event
     }
 }

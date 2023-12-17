@@ -15,7 +15,7 @@ import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.extension.plus
 
 @Composable
-internal fun FavoritesGrid(
+fun FavoritesGrid(
     items: List<Favorite>,
     contentPadding: PaddingValues,
     onFavoritesClick: (Int) -> Unit,

@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun CreateNewFavGroupButton(
+fun CreateNewFavGroupButton(
     postId: Int,
     enabled: Boolean,
     onClick: (Int) -> Unit,

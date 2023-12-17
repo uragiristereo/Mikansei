@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core
 
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton

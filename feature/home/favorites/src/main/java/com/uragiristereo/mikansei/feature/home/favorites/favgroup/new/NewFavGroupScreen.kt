@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.new_fav_group
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.new
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,15 +33,15 @@ import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
 import com.uragiristereo.mikansei.core.ui.extension.forEach
-import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core.NewFavGroupFab
-import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core.NewFavGroupState
-import com.uragiristereo.mikansei.feature.home.favorites.new_fav_group.core.NewFavGroupTopAppBar
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.NewFavGroupFab
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.NewFavGroupState
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.NewFavGroupTopAppBar
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-internal fun NewFavGroupScreen(
+fun NewFavGroupScreen(
     onNavigateBack: () -> Unit,
     viewModel: NewFavGroupViewModel = koinViewModel(),
 ) {

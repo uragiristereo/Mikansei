@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto
 
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.runtime.getValue
@@ -13,7 +13,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
-import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core.FavoriteGroup
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.FavoriteGroup
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber

@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group
+package com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,8 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.PostHeader
-import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.column.FavoriteGroupsColumn
-import com.uragiristereo.mikansei.feature.home.favorites.add_to_fav_group.core.CreateNewFavGroupButton
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.column.FavoriteGroupsColumn
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.CreateNewFavGroupButton
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
