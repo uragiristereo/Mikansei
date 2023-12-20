@@ -24,6 +24,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
@@ -134,7 +135,7 @@ fun FavoritesScreen(
                 icon = painterResource(id = R.drawable.login),
                 text = {
                     Text(
-                        text = "Please login to use this feature",
+                        text = stringResource(id = R.string.please_login),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.h6,
                     )

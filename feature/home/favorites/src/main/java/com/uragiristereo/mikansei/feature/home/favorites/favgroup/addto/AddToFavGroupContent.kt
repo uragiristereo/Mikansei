@@ -18,8 +18,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.PostHeader
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.column.FavoriteGroupsColumn
@@ -44,7 +46,7 @@ fun AddToFavGroupContent(
             .padding(top = 16.dp),
     ) {
         PostHeader(
-            title = "Add to Favorite Group",
+            title = stringResource(id = R.string.add_to_favorite_group),
             subtitle = "#${post.id}",
             previewUrl = post.medias.preview.url,
             aspectRatio = post.aspectRatio,
@@ -69,7 +71,7 @@ fun AddToFavGroupContent(
             viewModel.items.isEmpty() -> {
                 // Item empty label
                 Text(
-                    text = "You don't have a favorite group",
+                    text = stringResource(id = R.string.no_favorite_groups),
                     color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
                     textAlign = TextAlign.Center,
                     modifier = Modifier

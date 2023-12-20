@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.resources.R
 
@@ -16,7 +17,7 @@ fun NewFavGroupTopAppBar(
 ) {
     ProductTopAppBar(
         title = {
-            Text(text = "New Favorite Group")
+            Text(text = stringResource(id = R.string.new_favorite_group))
         },
         navigationIcon = {
             IconButton(

@@ -5,18 +5,10 @@
     <string name="feature_under_development">Feature is under development</string>
     <string name="none">None</string>
     <string name="share_label">Share to</string>
+    <string name="name">Name</string>
 
-    <!-- Boorus -->
-    <string name="gelbooru_label" translatable="false">Gelbooru</string>
-    <string name="gelbooru_domain" translatable="false">gelbooru.com</string>
-
-    <string name="danbooru_label" translatable="false">Danbooru</string>
-    <string name="danbooru_domain" translatable="false">danbooru.donmai.us</string>
-
-    <string name="safebooruorg_label" translatable="false">Safebooru.org</string>
-    <string name="safebooruorg_domain" translatable="false">safebooru.org</string>
-    <string name="yandere_label" translatable="false">yande.re</string>
-    <string name="yandere_domain" translatable="false">yande.re</string>
+    <!-- Auth -->
+    <string name="please_login">Please login to use this feature</string>
 
     <!-- Screens label -->
     <string name="filters_label">Filters</string>
@@ -82,6 +74,13 @@
     <string name="post_link">Post link</string>
     <string name="compressed_image">Compressed (sample) image</string>
     <string name="full_size_image">Full size (original) image</string>
+
+    <!-- Home > Favorites -->
+    <string name="add_to_favorite_group">Add to Favorite Group</string>
+    <string name="new_favorite_group">New Favorite Group</string>
+    <string name="create_favorite_group_success">Favorite group is successfully created</string>
+    <string name="post_n_will_be_added_to_favorite_group">Post #%s will be added to this new favorite group.</string>
+    <string name="no_favorite_groups">You don\'t have a favorite group</string>
 
     <!-- Home > More -->
     <string name="selected_booru">Selected Booru</string>

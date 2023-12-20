@@ -8,7 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mikansei.core.resources.R
 
 @Composable
 fun CreateNewFavGroupButton(
@@ -29,7 +31,7 @@ fun CreateNewFavGroupButton(
                 onClick(postId)
             },
             content = {
-                Text(text = "New Favorite Group".uppercase())
+                Text(text = stringResource(id = R.string.new_favorite_group).uppercase())
             },
         )
     }

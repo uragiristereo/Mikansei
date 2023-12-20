@@ -16,25 +16,21 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
+import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
-import com.uragiristereo.mikansei.core.ui.extension.forEach
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.FabState
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.NewFavGroupFab
-import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.NewFavGroupState
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.NewFavGroupTopAppBar
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -43,28 +39,27 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun NewFavGroupScreen(
     onNavigateBack: () -> Unit,
+    onSuccess: () -> Unit,
     viewModel: NewFavGroupViewModel = koinViewModel(),
 ) {
+    val context = LocalContext.current
     val scaffoldState = LocalScaffoldState.current
-    val scope = rememberCoroutineScope()
-
-    var textField by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue()) }
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.channel.forEach { state ->
-            when (state) {
-                NewFavGroupState.Success -> {
-                    scope.launch(SupervisorJob()) {
+        viewModel.event.collect { event ->
+            when (event) {
+                is NewFavGroupViewModel.Event.Success -> {
+                    launch(SupervisorJob()) {
                         onNavigateBack()
-
-                        scaffoldState.snackbarHostState.showSnackbar(message = "Favorite group is successfully created")
+                        onSuccess()
+                        scaffoldState.snackbarHostState.showSnackbar(message = context.getString(R.string.create_favorite_group_success))
                     }
                 }
 
-                is NewFavGroupState.Failed -> {
-                    scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(message = state.message)
+                is NewFavGroupViewModel.Event.Failed -> {
+                    launch(SupervisorJob()) {
+                        scaffoldState.snackbarHostState.showSnackbar(message = event.message)
                     }
                 }
             }
@@ -80,17 +75,9 @@ fun NewFavGroupScreen(
         },
         floatingActionButton = {
             NewFavGroupFab(
-                isLoading = viewModel.isLoading,
+                state = viewModel.fabState,
                 onSubmitFabClick = {
-                    when {
-                        textField.text.isBlank() -> {
-                            scope.launch {
-                                scaffoldState.snackbarHostState.showSnackbar(message = "Please enter a name!")
-                            }
-                        }
-
-                        else -> viewModel.createNewFavoriteGroup(name = textField.text)
-                    }
+                    viewModel.createNewFavoriteGroup()
                 },
             )
         },
@@ -105,20 +92,23 @@ fun NewFavGroupScreen(
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             if (viewModel.postId != null) {
-                SettingTip(text = "Post #${viewModel.postId} will be added to this new favorite group.")
+                SettingTip(
+                    text = stringResource(
+                        id = R.string.post_n_will_be_added_to_favorite_group, viewModel.postId.toString(),
+                    ),
+                )
 
                 Divider()
             }
 
             OutlinedTextField(
-                value = textField,
+                enabled = viewModel.fabState != FabState.LOADING,
+                value = viewModel.textField,
                 onValueChange = {
-                    if (!viewModel.isLoading) {
-                        textField = it
-                    }
+                    viewModel.textField = it
                 },
                 label = {
-                    Text(text = "Name")
+                    Text(text = stringResource(id = R.string.name))
                 },
                 modifier = Modifier
                     .fillMaxWidth()

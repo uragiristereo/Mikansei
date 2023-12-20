@@ -17,6 +17,7 @@ import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.AddToFav
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.AddToFavGroupViewModel
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.NewFavGroupScreen
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.NewFavGroupViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -53,7 +54,19 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
     }
 
     composable(route = MainRoute.NewFavGroup()) {
-        NewFavGroupScreen(onNavigateBack = navController::navigateUp)
+        val homeViewModelStoreOwner = rememberParentViewModelStoreOwner(
+            navController = navController,
+            parentRoute = MainRoute.Home.route,
+        )
+
+        val favoritesViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = homeViewModelStoreOwner)
+
+        NewFavGroupScreen(
+            onNavigateBack = navController::navigateUp,
+            onSuccess = {
+                favoritesViewModel.getFavoritesAndFavoriteGroups()
+            },
+        )
     }
 }
 

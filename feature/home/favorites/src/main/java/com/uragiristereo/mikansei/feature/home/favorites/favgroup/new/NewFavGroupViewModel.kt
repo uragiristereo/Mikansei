@@ -1,23 +1,29 @@
 package com.uragiristereo.mikansei.feature.home.favorites.favgroup.new
 
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.NewFavGroupState
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.FabState
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@OptIn(SavedStateHandleSaveableApi::class)
 class NewFavGroupViewModel(
     savedStateHandle: SavedStateHandle,
     private val danbooruRepository: DanbooruRepository,
@@ -25,17 +31,32 @@ class NewFavGroupViewModel(
 ) : ViewModel() {
     val postId = savedStateHandle.getData(MainRoute.NewFavGroup()).postId
 
-    var isLoading by mutableStateOf(false)
-        private set
+    private val channel = Channel<Event>()
+    val event = channel.receiveAsFlow()
 
-    val channel = Channel<NewFavGroupState>()
+    var textField by savedStateHandle.saveable(
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(TextFieldValue())
+        },
+    )
 
-    fun createNewFavoriteGroup(name: String) {
+    private var isLoading by mutableStateOf(false)
+
+    val fabState by derivedStateOf {
+        when {
+            isLoading -> FabState.LOADING
+            textField.text.isBlank() -> FabState.HIDDEN
+            else -> FabState.ENABLED
+        }
+    }
+
+    fun createNewFavoriteGroup() {
         viewModelScope.launch {
             isLoading = true
 
             danbooruRepository.createNewFavoriteGroup(
-                name = name,
+                name = textField.text,
                 postIds = when {
                     postId != null -> listOf(postId)
                     else -> listOf()
@@ -47,21 +68,21 @@ class NewFavGroupViewModel(
 
                         updateAndCacheFavoriteGroups()
 
-                        channel.send(NewFavGroupState.Success)
+                        channel.send(Event.Success)
                     }
 
                     is Result.Failed -> {
                         val message = "Error: ${result.message}"
                         Timber.d(message)
 
-                        channel.send(NewFavGroupState.Failed(message))
+                        channel.send(Event.Failed(message))
                     }
 
                     is Result.Error -> {
                         val message = "Error: ${result.t}"
                         Timber.d(message)
 
-                        channel.send(NewFavGroupState.Failed(message))
+                        channel.send(Event.Failed(message))
                     }
                 }
             }
@@ -77,5 +98,11 @@ class NewFavGroupViewModel(
                 forceRefresh = true,
             ).collect()
         }
+    }
+
+    sealed interface Event {
+        data object Success : Event
+
+        data class Failed(val message: String) : Event
     }
 }
