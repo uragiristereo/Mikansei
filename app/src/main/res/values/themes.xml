@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Mejiboard.Starting" parent="Theme.SplashScreen">
-        <!-- Set the splash screen background, and icon. -->
+    <style name="Theme.Mikansei.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@android:color/white</item>
-
-        <!-- Set the theme of the Activity that directly follows your splash screen. -->
-        <!-- Required -->
-        <item name="postSplashScreenTheme">@style/Theme.MejiboardComposer</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Mikansei</item>
     </style>
 
-    <style name="Theme.MejiboardComposer" parent="Theme.AppCompat.Light.NoActionBar" />
+    <style name="Theme.Mikansei" parent="Theme.AppCompat.Light.NoActionBar" />
 </resources>
