@@ -5,6 +5,10 @@ plugins {
 
 android {
     namespace "com.uragiristereo.mikansei.core.network"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 kotlin {
