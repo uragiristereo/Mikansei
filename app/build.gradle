@@ -31,7 +31,12 @@ android {
         release {
             minifyEnabled true
             shrinkResources true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro",
+                    "proguard-rules-okhttp3.pro",
+                    "proguard-rules-retrofit2.pro",
+            )
         }
     }
 
@@ -40,6 +45,10 @@ android {
     productFlavors {
         oss {
             dimension "env"
+
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
         }
 
         play {
