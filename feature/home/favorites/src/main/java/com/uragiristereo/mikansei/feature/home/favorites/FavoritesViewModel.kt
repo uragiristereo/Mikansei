@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGroupsUseCase
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class FavoritesViewModel(
     private val userRepository: UserRepository,
+    private val danbooruRepository: DanbooruRepository,
     private val getFavoritesAndFavoriteGroupsUseCase: GetFavoritesAndFavoriteGroupsUseCase,
 ) : ViewModel() {
     private val channel = Channel<Event>()
@@ -70,7 +72,26 @@ class FavoritesViewModel(
         }
     }
 
+    fun deleteFavoriteGroup(favoriteGroup: Favorite) {
+        loadingState = LoadingState.FROM_REFRESH
+
+        viewModelScope.launch {
+            danbooruRepository.deleteFavoriteGroup(favoriteGroup.id).collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        getFavoritesAndFavoriteGroups()
+                        channel.send(Event.OnDeleteSuccess)
+                    }
+
+                    is Result.Failed -> channel.send(Event.OnError(result.message))
+                    is Result.Error -> channel.send(Event.OnError(result.t.toString()))
+                }
+            }
+        }
+    }
+
     sealed interface Event {
         data class OnError(val message: String) : Event
+        data object OnDeleteSuccess : Event
     }
 }

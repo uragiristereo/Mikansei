@@ -23,9 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
@@ -40,15 +42,19 @@ import com.uragiristereo.mikansei.feature.home.favorites.core.FavoritesTopAppBar
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingIndicator
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
 import com.uragiristereo.mikansei.feature.home.favorites.grid.FavoritesGrid
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FavoritesScreen(
-    onFavoritesClick: (id: Int, username: String) -> Unit,
+    onFavoriteClick: (id: Int, username: String) -> Unit,
+    onFavGroupLongClick: (Favorite) -> Unit,
     onAddClick: () -> Unit,
     viewModel: FavoritesViewModel = koinViewModel(),
 ) {
+    val context = LocalContext.current
     val scaffoldState = LocalScaffoldState.current
 
     val pullRefreshState = rememberPullRefreshState(
@@ -58,9 +64,15 @@ fun FavoritesScreen(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.event.collect { event ->
-            when (event) {
-                is FavoritesViewModel.Event.OnError -> {
-                    scaffoldState.snackbarHostState.showSnackbar(message = "Error: ${event.message}")
+            launch(SupervisorJob()) {
+                when (event) {
+                    is FavoritesViewModel.Event.OnError -> {
+                        scaffoldState.snackbarHostState.showSnackbar(message = "Error: ${event.message}")
+                    }
+
+                    is FavoritesViewModel.Event.OnDeleteSuccess -> {
+                        scaffoldState.snackbarHostState.showSnackbar(message = context.getString(R.string.delete_favorite_group_success))
+                    }
                 }
             }
         }
@@ -114,9 +126,10 @@ fun FavoritesScreen(
                         else -> FavoritesGrid(
                             items = viewModel.favorites,
                             contentPadding = innerPadding,
-                            onFavoritesClick = { id ->
-                                onFavoritesClick(id, viewModel.activeUser.name)
+                            onFavoriteClick = { id ->
+                                onFavoriteClick(id, viewModel.activeUser.name)
                             },
+                            onFavGroupLongClick = onFavGroupLongClick,
                             modifier = Modifier.pullRefresh(pullRefreshState),
                         )
                     }

@@ -1,6 +1,8 @@
 package com.uragiristereo.mikansei.feature.home.favorites.grid
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,10 +25,12 @@ import coil.request.ImageRequest
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.product.component.ProductPostPlaceholder
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FavoriteItem(
     item: Favorite,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
@@ -36,11 +40,22 @@ fun FavoriteItem(
             modifier = Modifier
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(size = 8.dp))
-                .clickable(
-                    onClick = onClick,
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = Color.Black),
-                ),
+                .let {
+                    if (item.id == 0) {
+                        it.clickable(
+                            onClick = onClick,
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(color = Color.Black),
+                        )
+                    } else {
+                        it.combinedClickable(
+                            onClick = onClick,
+                            onLongClick = onLongClick,
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(color = Color.Black),
+                        )
+                    }
+                },
         ) {
             ProductPostPlaceholder()
 

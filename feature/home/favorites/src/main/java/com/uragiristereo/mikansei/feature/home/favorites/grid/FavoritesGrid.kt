@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
@@ -18,10 +20,12 @@ import com.uragiristereo.mikansei.core.ui.extension.plus
 fun FavoritesGrid(
     items: List<Favorite>,
     contentPadding: PaddingValues,
-    onFavoritesClick: (Int) -> Unit,
+    onFavoriteClick: (Int) -> Unit,
+    onFavGroupLongClick: (Favorite) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
+    val hapticFeedback = LocalHapticFeedback.current
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(
@@ -40,7 +44,11 @@ fun FavoritesGrid(
             FavoriteItem(
                 item = item,
                 onClick = {
-                    onFavoritesClick(item.id)
+                    onFavoriteClick(item.id)
+                },
+                onLongClick = {
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                    onFavGroupLongClick(item)
                 },
             )
         }
