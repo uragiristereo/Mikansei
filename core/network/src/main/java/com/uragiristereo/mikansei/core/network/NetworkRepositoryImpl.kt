@@ -13,7 +13,6 @@ import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
@@ -26,7 +25,6 @@ import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
 
 @androidx.annotation.OptIn(UnstableApi::class)
-@OptIn(ExperimentalSerializationApi::class)
 class NetworkRepositoryImpl(
     context: Context,
     preferencesRepository: PreferencesRepository,
