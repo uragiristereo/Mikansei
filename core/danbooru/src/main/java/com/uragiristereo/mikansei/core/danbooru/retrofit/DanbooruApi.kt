@@ -119,4 +119,16 @@ interface DanbooruApi {
         @Query("favorite_group[name]") name: String,
         @Query("favorite_group[post_ids_string]") postIds: String,
     ): Response<DanbooruFavoriteGroup>
+
+    @PUT("/favorite_groups/{favorite_group_id}.json")
+    suspend fun editFavoriteGroup(
+        @Path("favorite_group_id") favoriteGroupId: Int,
+        @Query("favorite_group[name]") name: String,
+        @Query("favorite_group[post_ids_string]") postIds: String,
+    ): Response<Unit>
+
+    @DELETE("/favorite_groups/{favorite_group_id}.json")
+    suspend fun deleteFavoriteGroup(
+        @Path("favorite_group_id") favoriteGroupId: Int,
+    ): Response<Unit>
 }

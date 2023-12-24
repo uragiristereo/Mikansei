@@ -287,4 +287,12 @@ open class DanbooruRepositoryImpl(
     }.mapSuccess {
         it.toFavorite()
     }
+
+    override fun editFavoriteGroup(favoriteGroupId: Int, name: String, postIds: List<Int>) = resultFlow {
+        client.editFavoriteGroup(favoriteGroupId, name, postIds.joinToString(separator = " "))
+    }
+
+    override fun deleteFavoriteGroup(favoriteGroupId: Int) = resultFlow {
+        client.deleteFavoriteGroup(favoriteGroupId)
+    }
 }

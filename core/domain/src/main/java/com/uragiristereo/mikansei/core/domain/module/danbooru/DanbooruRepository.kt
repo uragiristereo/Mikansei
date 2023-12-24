@@ -52,4 +52,8 @@ interface DanbooruRepository {
     fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int): Flow<Result<Unit>>
 
     fun createNewFavoriteGroup(name: String, postIds: List<Int>): Flow<Result<Favorite>>
+
+    fun editFavoriteGroup(favoriteGroupId: Int, name: String, postIds: List<Int>): Flow<Result<Unit>>
+
+    fun deleteFavoriteGroup(favoriteGroupId: Int): Flow<Result<Unit>>
 }
