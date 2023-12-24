@@ -44,6 +44,7 @@
     <string name="delete_confirm">Confirm deletion</string>
     <string name="enabled_action">On</string>
     <string name="disabled_action">Off</string>
+    <string name="edit">Edit…</string>
 
     <!-- Downloads -->
     <string name="download_added">Downloading…</string>
@@ -76,11 +77,17 @@
     <string name="full_size_image">Full size (original) image</string>
 
     <!-- Home > Favorites -->
-    <string name="add_to_favorite_group">Add to Favorite Group</string>
-    <string name="new_favorite_group">New Favorite Group</string>
+    <string name="favorite_group">Favorite group</string>
+    <string name="add_to_favorite_group">Add to favorite group</string>
+    <string name="new_favorite_group">New favorite group</string>
     <string name="create_favorite_group_success">Favorite group is successfully created</string>
     <string name="post_n_will_be_added_to_favorite_group">Post #%s will be added to this new favorite group.</string>
     <string name="no_favorite_groups">You don\'t have a favorite group</string>
+    <string name="edit_favorite_group">Edit favorite group</string>
+    <string name="edit_favorite_group_success">Favorite group is successfully edited</string>
+    <string name="delete_favorite_group_confirmation">Are you sure want to delete the %s favorite group?</string>
+    <string name="delete_favorite_group_success">Favorite group is successfully deleted</string>
+    <string name="post_ids">Post IDs (separated by spaces)</string>
 
     <!-- Home > More -->
     <string name="selected_booru">Selected Booru</string>
