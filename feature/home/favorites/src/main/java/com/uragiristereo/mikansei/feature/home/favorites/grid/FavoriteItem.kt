@@ -19,11 +19,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.product.component.ProductPostPlaceholder
+import com.uragiristereo.mikansei.core.resources.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -73,7 +75,10 @@ fun FavoriteItem(
         }
 
         Text(
-            text = item.name,
+            text = when (item.id) {
+                0 -> stringResource(id = R.string.my_favorites)
+                else -> item.name
+            },
             modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
