@@ -36,7 +36,10 @@ val LocalBottomSheetNavigator = staticCompositionLocalOf<BottomSheetNavigator> {
 @Composable
 fun rememberBottomSheetNavigator(
     navController: NavHostController,
-    bottomSheetState: ModalBottomSheetState2 = rememberModalBottomSheetState2(initialValue = ModalBottomSheetValue.Hidden),
+    bottomSheetState: ModalBottomSheetState2 = rememberModalBottomSheetState2(
+        initialValue = ModalBottomSheetValue.Hidden,
+        skipHalfExpanded = true,
+    ),
 ): BottomSheetNavigator {
     val scope = rememberCoroutineScope()
 
@@ -92,7 +95,7 @@ class BottomSheetNavigator(
 
                 coroutineScope.launch(SupervisorJob()) {
                     if (currentRoute != INDEX_ROUTE) {
-                        delay(timeMillis = 500L)
+                        delay(timeMillis = 300L)
                     }
 
                     expand()
@@ -137,7 +140,7 @@ fun InterceptBackGestureForBottomSheetNavigator() {
 
             if (previousRoute !in listOf(null, BottomSheetNavigator.INDEX_ROUTE)) {
                 bottomSheetNavigator.navController.popBackStack()
-                delay(timeMillis = 500L)
+                delay(timeMillis = 300L)
                 bottomSheetNavigator.expand()
             }
 
