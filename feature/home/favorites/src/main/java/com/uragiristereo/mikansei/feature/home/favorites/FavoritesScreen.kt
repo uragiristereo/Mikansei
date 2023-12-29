@@ -117,11 +117,7 @@ fun FavoritesScreen(
                     label = "grid_and_loading",
                 ) { state ->
                     when {
-                        state -> {
-                            LoadingIndicator(
-                                modifier = Modifier.padding(innerPadding),
-                            )
-                        }
+                        state -> LoadingIndicator()
 
                         else -> FavoritesGrid(
                             items = viewModel.favorites,
