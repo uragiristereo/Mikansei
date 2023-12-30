@@ -58,6 +58,16 @@ internal fun SettingsColumn(
         },
     )
 
+
+    val testModeState = rememberSwitchPreferenceState(
+        selected = preferences.testMode,
+        onSelectedChange = { selected ->
+            viewModel.updatePreferences { preferences ->
+                preferences.copy(testMode = selected)
+            }
+        },
+    )
+
     LazyColumn(
         contentPadding = contentPadding,
         modifier = modifier,
@@ -89,7 +99,7 @@ internal fun SettingsColumn(
                 subtitle = null,
                 selected = preferences.blackTheme,
                 onSelectedChange = { selected ->
-                        viewModel.updatePreferences { data -> data.copy(blackTheme = selected) }
+                    viewModel.updatePreferences { data -> data.copy(blackTheme = selected) }
                 },
                 enabled = when {
                     preferences.theme == ThemePreference.LIGHT -> false
@@ -106,7 +116,7 @@ internal fun SettingsColumn(
                 subtitle = stringResource(id = R.string.settings_dynamic_accent_colors_desc),
                 selected = preferences.monetEnabled,
                 onSelectedChange = { selected ->
-                        viewModel.updatePreferences { data -> data.copy(monetEnabled = selected) }
+                    viewModel.updatePreferences { data -> data.copy(monetEnabled = selected) }
                 },
                 icon = painterResource(id = R.drawable.format_color_fill),
                 enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
@@ -134,6 +144,20 @@ internal fun SettingsColumn(
                 },
                 icon = painterResource(id = R.drawable.vpn_lock),
             )
+        }
+
+        if (BuildConfig.DEBUG) {
+            item {
+                PreferenceCategory(title = "Debug")
+            }
+
+            item {
+                SwitchPreference(
+                    state = testModeState,
+                    title = "Test mode",
+                    subtitle = "Use the testbooru subdomain, requires to restart the app to take effect",
+                )
+            }
         }
 
 //        item {

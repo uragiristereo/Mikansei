@@ -1,7 +1,7 @@
 package com.uragiristereo.mikansei
 
 import com.uragiristereo.mikansei.core.danbooru.DanbooruRepositoryImpl
-import com.uragiristereo.mikansei.core.database.DatabaseModule
+import com.uragiristereo.mikansei.core.database.databaseModule
 import com.uragiristereo.mikansei.core.domain.DomainModule
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.network.NetworkModule
@@ -30,7 +30,7 @@ object MikanseiModule {
     operator fun invoke(): Module = module {
         includes(
             listOf(
-                DatabaseModule(),
+                databaseModule(),
                 DomainModule(),
                 NetworkModule(),
                 HomeModule(),

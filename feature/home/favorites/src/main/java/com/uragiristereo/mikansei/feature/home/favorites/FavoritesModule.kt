@@ -19,6 +19,7 @@ import com.uragiristereo.mikansei.feature.home.favorites.favgroup.delete.DeleteF
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.edit.EditFavGroupScreen
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.edit.EditFavGroupViewModel
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.more.FavGroupMoreContent
+import com.uragiristereo.mikansei.feature.home.favorites.favgroup.more.FavGroupMoreViewModel
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.NewFavGroupScreen
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.NewFavGroupViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -30,6 +31,7 @@ val favoritesModule = module {
     viewModelOf(::AddToFavGroupViewModel)
     viewModelOf(::NewFavGroupViewModel)
     viewModelOf(::EditFavGroupViewModel)
+    viewModelOf(::FavGroupMoreViewModel)
 }
 
 fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {

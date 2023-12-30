@@ -55,6 +55,8 @@ class MoreBottomSheetViewModel(
     var uploaderName by mutableStateOf(post.uploaderId.toString())
         private set
 
+    val postLink = danbooruRepository.host.parsePostLink(post.id)
+
     init {
         getUploaderName()
     }

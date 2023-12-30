@@ -30,6 +30,7 @@ import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import com.uragiristereo.mikansei.core.model.result.resultFlow
+import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.resources.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,23 +48,36 @@ import retrofit2.Retrofit
 import java.util.zip.GZIPInputStream
 
 @OptIn(ExperimentalSerializationApi::class)
-open class DanbooruRepositoryImpl(
+class DanbooruRepositoryImpl(
     private val context: Context,
     private val networkRepository: NetworkRepository,
     private val userRepository: UserRepository,
+    preferencesRepository: PreferencesRepository,
 ) : DanbooruRepository {
-    override val isProd = true
+    private val isInTestMode = preferencesRepository.data.value.testMode
     override var unsafeTags: List<String> = listOf()
 
-    open val host = DanbooruHost.Danbooru
-    open val safeHost = DanbooruHost.Safebooru
+    private var activeUser = userRepository.active.value
+
+    private val actualHost = when {
+        isInTestMode -> DanbooruHost.Testbooru
+        else -> DanbooruHost.Danbooru
+    }
+
+    private val safeHost = when {
+        isInTestMode -> DanbooruHost.Testbooru
+        else -> DanbooruHost.Safebooru
+    }
+
+    override val host = when {
+        isInSafeMode() -> safeHost
+        else -> actualHost
+    }
 
     private val json = Json {
         ignoreUnknownKeys = true
         explicitNulls = false
     }
-
-    private var activeUser = userRepository.active.value
 
     private lateinit var clientAuth: DanbooruApi
     private lateinit var clientNoAuth: DanbooruApi
@@ -71,7 +85,7 @@ open class DanbooruRepositoryImpl(
 
     private val client: DanbooruApi
         get() = when {
-            activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY -> clientSafe
+            isInSafeMode() -> clientSafe
             else -> clientAuth
         }
 
@@ -121,8 +135,8 @@ open class DanbooruRepositoryImpl(
             else -> okHttpClient
         }
 
-        clientAuth = buildClient(preferredOkHttpClient, host)
-        clientNoAuth = buildClient(okHttpClient, host)
+        clientAuth = buildClient(preferredOkHttpClient, actualHost)
+        clientNoAuth = buildClient(okHttpClient, actualHost)
         clientSafe = buildClient(preferredOkHttpClient, safeHost)
     }
 
@@ -147,6 +161,10 @@ open class DanbooruRepositoryImpl(
                 }
             }
             .build()
+    }
+
+    private fun isInSafeMode(): Boolean {
+        return activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY
     }
 
     override fun getPost(id: Int) = resultFlow {

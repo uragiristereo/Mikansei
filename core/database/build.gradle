@@ -19,6 +19,7 @@ kotlin {
 dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:model"))
+    implementation(project(":core:preferences"))
     implementation(project(":core:ui"))
 
     implementation(libs.bundles.core)

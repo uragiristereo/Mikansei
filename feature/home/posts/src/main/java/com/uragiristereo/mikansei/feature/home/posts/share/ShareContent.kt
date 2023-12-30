@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -79,13 +78,9 @@ fun ShareContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        val link = remember {
-            "https://danbooru.donmai.us/posts/${post.id}"
-        }
-
         ClickableSection(
             title = stringResource(id = R.string.post_link),
-            subtitle = link,
+            subtitle = viewModel.postLink,
             icon = painterResource(id = R.drawable.link),
             onClick = {
                 scope.launch {
@@ -93,7 +88,7 @@ fun ShareContent(
 
                     val intent = Intent().apply {
                         action = Intent.ACTION_SEND
-                        putExtra(Intent.EXTRA_TEXT, link)
+                        putExtra(Intent.EXTRA_TEXT, viewModel.postLink)
                         type = "text/plain"
                     }
 

@@ -227,6 +227,7 @@ fun MainScreen(
                         currentRoute = currentRoute,
                         previousRoute = previousRoute,
                         navigationRailPadding = viewModel.navigationRailPadding,
+                        testMode = viewModel.testMode,
                         onNavigationRailPaddingChange = {
                             viewModel.navigationRailPadding = it
                         },

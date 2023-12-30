@@ -17,4 +17,8 @@ enum class DanbooruHost {
             else -> "https://${this.name.lowercase()}.donmai.us"
         }
     }
+
+    fun parsePostLink(postId: Int): String {
+        return "${getBaseUrl()}/posts/$postId"
+    }
 }

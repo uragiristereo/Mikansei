@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.uragiristereo.safer.compose.navigation.core.getData
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -17,8 +18,11 @@ class ShareViewModel(
     savedStateHandle: SavedStateHandle,
     private val networkRepository: NetworkRepository,
     private val convertFileSizeUseCase: ConvertFileSizeUseCase,
+    danbooruRepository: DanbooruRepository,
 ) : ViewModel() {
     val navArgs = checkNotNull(savedStateHandle.getData<HomeRoute.Share>())
+
+    val postLink = danbooruRepository.host.parsePostLink(navArgs.post.id)
 
     var scaledImageFileSizeStr by mutableStateOf("")
         private set

@@ -21,4 +21,7 @@ data class Preferences(
 
     @SerialName(value = "doh_enabled")
     val dohEnabled: Boolean = true,
+
+    @SerialName(value = "test_mode")
+    val testMode: Boolean = false,
 )

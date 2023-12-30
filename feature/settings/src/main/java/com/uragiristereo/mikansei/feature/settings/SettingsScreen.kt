@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.settings
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
@@ -10,9 +9,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ui.Scaffold
-import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.product.preference.LocalIconPadding
 import com.uragiristereo.mikansei.feature.settings.core.SettingsTopAppBar
@@ -32,10 +29,6 @@ internal fun SettingsScreen(
                 )
             }
         },
-        bottomBar = {
-            ProductNavigationBarSpacer()
-        },
-        contentPadding = PaddingValues(0.dp),
         modifier = Modifier
             .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
             .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),

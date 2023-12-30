@@ -137,13 +137,11 @@ internal fun MoreBottomSheet(
                                     onExpandClick()
                                 }
                             },
-                            onOpenInExternalClick = remember {
-                                {
-                                    viewModel.launchUrl(
-                                        context = context,
-                                        url = "https://danbooru.donmai.us/posts/${post.id}",
-                                    )
-                                }
+                            onOpenInExternalClick = {
+                                viewModel.launchUrl(
+                                    context = context,
+                                    url = viewModel.postLink,
+                                )
                             },
                             onAddToClick = onAddToClick,
                             favoriteCount = viewModel.favoriteCount,

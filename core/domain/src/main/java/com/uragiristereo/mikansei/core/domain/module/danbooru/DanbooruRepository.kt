@@ -7,12 +7,13 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
+import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.result.Result
 import kotlinx.coroutines.flow.Flow
 
 interface DanbooruRepository {
-    val isProd: Boolean
+    val host: DanbooruHost
     val unsafeTags: List<String>
 
     fun getPost(id: Int): Flow<Result<Post>>

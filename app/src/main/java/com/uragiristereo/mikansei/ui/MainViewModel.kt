@@ -39,6 +39,7 @@ class MainViewModel(
     var navigationRailPadding by mutableStateOf(0.dp)
 
     val scrollToTopChannel = Channel<String>()
+    val testMode = preferences.value.testMode
 
     init {
         if (!initialized) {

@@ -26,6 +26,7 @@ import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
 import com.uragiristereo.mikansei.core.ui.composable.PostHeader
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun FavGroupMoreContent(
@@ -34,6 +35,7 @@ fun FavGroupMoreContent(
     onFavGroupClick: () -> Unit,
     onEditFavGroupClick: () -> Unit,
     onDeleteFavGroupClick: () -> Unit,
+    viewModel: FavGroupMoreViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -79,7 +81,7 @@ fun FavGroupMoreContent(
             icon = painterResource(id = R.drawable.open_in_browser),
             onClick = {
                 scope.launch {
-                    val uri = "https://danbooru.donmai.us/posts?tags=favgroup:${favoriteGroup.id}".toUri()
+                    val uri = "${viewModel.getBaseUrl()}/posts?tags=favgroup:${favoriteGroup.id}".toUri()
 
                     onDismiss()
                     customTabsIntent.launchUrl(context, uri)
