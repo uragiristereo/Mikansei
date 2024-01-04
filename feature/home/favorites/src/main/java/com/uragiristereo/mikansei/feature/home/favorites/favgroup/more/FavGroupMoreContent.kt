@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Divider
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -68,11 +71,13 @@ fun FavGroupMoreContent(
             onClick = onEditFavGroupClick,
         )
 
-        ClickableSection(
-            title = stringResource(id = R.string.delete),
-            icon = painterResource(id = R.drawable.delete),
-            onClick = onDeleteFavGroupClick,
-        )
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.error) {
+            ClickableSection(
+                title = stringResource(id = R.string.delete),
+                icon = painterResource(id = R.drawable.delete),
+                onClick = onDeleteFavGroupClick,
+            )
+        }
 
         Divider()
 
