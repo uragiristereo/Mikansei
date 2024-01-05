@@ -5,16 +5,16 @@ ksp = "1.9.21-1.0.16"
 lifecycle = "2.6.2"
 compose = "1.5.4"
 compose-compiler = "1.5.7"
-room = "2.5.2"
+room = "2.6.1"
 accompanist = "0.32.0"
 koin = "3.5.0"
 coil = "2.4.0"
 okhttp = "5.0.0-alpha.11"
 retrofit = "2.9.0"
 safer-navigation-compose = "860e4afc2f"
-media3 = "1.1.1"
+media3 = "1.2.0"
 gms = "4.4.0"
-firebase-bom = "32.5.0"
+firebase-bom = "32.7.0"
 firebase-crashlytics = "2.9.9"
 
 [plugins]
@@ -35,7 +35,7 @@ androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-kt
 androidx-savedstate = { module = "androidx.savedstate:savedstate-ktx", version = "1.2.1" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.0.1" }
 androidx-datastore = { module = "androidx.datastore:datastore", version = "1.0.0" }
-androidx-browser = { module = "androidx.browser:browser", version = "1.6.0" }
+androidx-browser = { module = "androidx.browser:browser", version = "1.7.0" }
 
 # Jetpack Compose
 compose = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -47,6 +47,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1" }
 
+# Room Database
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
