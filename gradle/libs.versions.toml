@@ -11,7 +11,7 @@ koin = "3.5.0"
 coil = "2.4.0"
 okhttp = "5.0.0-alpha.11"
 retrofit = "2.9.0"
-safer-navigation-compose = "860e4afc2f"
+serialized-navigation-extension = "38fe773e9e"
 media3 = "1.2.0"
 gms = "4.4.0"
 firebase-bom = "32.7.0"
@@ -85,8 +85,9 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 # Timber Logger
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 
-# Safer Navigation Compose
-safer-navigation-compose = { module = "com.github.uragiristereo.safer-navigation-compose:navigation-compose", version.ref = "safer-navigation-compose" }
+# Serialized Navigation Extension
+serialized-navigation-extension-compose = { module = "com.github.uragiristereo.serialized-navigation-extension:navigation-compose", version.ref = "serialized-navigation-extension" }
+serialized-navigation-extension-serializer-kotlinx = { module = "com.github.uragiristereo.serialized-navigation-extension:serializer-kotlinx", version.ref = "serialized-navigation-extension" }
 
 # AndroidX Media3
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }

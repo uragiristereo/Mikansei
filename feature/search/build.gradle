@@ -31,5 +31,4 @@ dependencies {
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.koin)
     implementation(libs.timber)
-    implementation(libs.safer.navigation.compose)
 }

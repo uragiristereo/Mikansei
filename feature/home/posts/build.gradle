@@ -37,5 +37,4 @@ dependencies {
     implementation(libs.bundles.coil)
     implementation(libs.timber)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.safer.navigation.compose)
 }

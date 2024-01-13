@@ -31,5 +31,4 @@ dependencies {
     debugImplementation(libs.bundles.compose.debug)
     implementation(libs.timber)
     implementation(libs.bundles.koin)
-    implementation(libs.safer.navigation.compose)
 }

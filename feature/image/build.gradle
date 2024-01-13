@@ -37,6 +37,5 @@ dependencies {
     implementation(libs.coil.gif)
     implementation(libs.touchimageview)
     implementation(libs.bundles.core)
-    implementation(libs.safer.navigation.compose)
     implementation(libs.bundles.media3)
 }

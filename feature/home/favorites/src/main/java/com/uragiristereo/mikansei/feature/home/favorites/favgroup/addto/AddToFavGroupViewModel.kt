@@ -7,13 +7,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.FavoriteGroup
+import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -24,7 +24,7 @@ class AddToFavGroupViewModel(
     private val danbooruRepository: DanbooruRepository,
     private val getFavoriteGroupsUseCase: GetFavoriteGroupsUseCase,
 ) : ViewModel() {
-    val post = checkNotNull(savedStateHandle.getData<HomeRoute.AddToFavGroup>()).post
+    val post = checkNotNull(savedStateHandle.navArgsOf<HomeRoute.AddToFavGroup>()).post
 
     var items by mutableStateOf<List<FavoriteGroup>>(listOf())
         private set

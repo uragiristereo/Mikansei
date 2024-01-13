@@ -8,9 +8,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.compose.composable
-import com.github.uragiristereo.safer.compose.navigation.core.navigate
-import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
@@ -21,6 +18,9 @@ import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
 import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreContent
 import com.uragiristereo.mikansei.feature.home.posts.share.ShareContent
+import com.uragiristereo.serializednavigationextension.navigation.compose.composable
+import com.uragiristereo.serializednavigationextension.runtime.navigate
+import com.uragiristereo.serializednavigationextension.runtime.routeOf
 
 @SuppressLint("RestrictedApi")
 fun NavGraphBuilder.postsRoute(
@@ -37,10 +37,10 @@ fun NavGraphBuilder.postsRoute(
     }
 
     composable(
-        route = HomeRoute.Posts(),
+        defaultValue = HomeRoute.Posts(),
         enterTransition = {
             when (initialState.destination.route) {
-                HomeRoute.Posts::class.route -> slideIntoContainer(
+                routeOf<HomeRoute.Posts>() -> slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(durationMillis = 350),
                 )
@@ -51,7 +51,7 @@ fun NavGraphBuilder.postsRoute(
         },
         exitTransition = {
             when (targetState.destination.route) {
-                HomeRoute.Posts::class.route -> slideOutOfContainer(
+                routeOf<HomeRoute.Posts>() -> slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(durationMillis = 350),
                 )
@@ -59,32 +59,33 @@ fun NavGraphBuilder.postsRoute(
                 else -> null
             }
         },
-        content = { data ->
-            val bottomSheetNavigator = LocalBottomSheetNavigator.current
+    ) {
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
-            val isRouteFirstEntry = remember {
-                // 3 from list of null, MainRoute.Home, HomeRoute.Posts
-                mainNavController.currentBackStack.value.size == 3
-            }
+        val isRouteFirstEntry = remember {
+            // 3 from list of null, MainRoute.Home, HomeRoute.Posts
+            mainNavController.currentBackStack.value.size == 3
+        }
 
-            LaunchedEffect(key1 = data.tags) {
-                onCurrentTagsChange(data.tags)
-            }
+        val args = rememberNavArgsOf()
 
-            InterceptBackGestureForBottomSheetNavigator()
+        LaunchedEffect(key1 = args.tags) {
+            onCurrentTagsChange(args.tags)
+        }
 
-            PostsScreen(
-                isRouteFirstEntry = isRouteFirstEntry,
-                onNavigateBack = mainNavController::navigateUp,
-                onNavigateImage = lambdaOnNavigateImage,
-                onNavigateMore = { post ->
-                    bottomSheetNavigator.navigate {
-                        it.navigate(HomeRoute.PostMore(post))
-                    }
-                },
-            )
-        },
-    )
+        InterceptBackGestureForBottomSheetNavigator()
+
+        PostsScreen(
+            isRouteFirstEntry = isRouteFirstEntry,
+            onNavigateBack = mainNavController::navigateUp,
+            onNavigateImage = lambdaOnNavigateImage,
+            onNavigateMore = { post ->
+                bottomSheetNavigator.navigate {
+                    it.navigate(HomeRoute.PostMore(post))
+                }
+            },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

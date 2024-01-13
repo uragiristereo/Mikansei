@@ -7,12 +7,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsAutoCompleteUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.search.state.SearchWordIndex
+import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,7 +21,7 @@ class SearchViewModel(
     savedStateHandle: SavedStateHandle,
     private val getTagsAutoCompleteUseCase: GetTagsAutoCompleteUseCase,
 ) : ViewModel() {
-    val tags = savedStateHandle.getData(MainRoute.Search()).tags
+    val tags = savedStateHandle.navArgsOf(MainRoute.Search()).tags
 
     var searchAllowed by mutableStateOf(true)
     var boldWord by mutableStateOf("")

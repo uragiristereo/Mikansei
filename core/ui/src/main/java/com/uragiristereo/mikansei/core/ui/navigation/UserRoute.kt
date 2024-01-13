@@ -1,13 +1,18 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import kotlinx.serialization.Serializable
 
 sealed interface UserRoute : NavRoute {
-    object Login : UserRoute
+    @Serializable
+    data object Login : UserRoute
 
-    object Manage : UserRoute
+    @Serializable
+    data object Manage : UserRoute
 
-    object Settings : UserRoute
+    @Serializable
+    data object Settings : UserRoute
 
-    object Switch : UserRoute
+    @Serializable
+    data object Switch : UserRoute
 }

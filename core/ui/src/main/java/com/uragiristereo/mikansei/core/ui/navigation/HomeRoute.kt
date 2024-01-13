@@ -1,9 +1,9 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
-import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import kotlinx.serialization.Serializable
 
 sealed interface HomeRoute : NavRoute {
@@ -12,9 +12,11 @@ sealed interface HomeRoute : NavRoute {
         val tags: String = "",
     ) : HomeRoute
 
-    object Favorites : HomeRoute
+    @Serializable
+    data object Favorites : HomeRoute
 
-    object More : HomeRoute
+    @Serializable
+    data object More : HomeRoute
 
     @Serializable
     data class PostMore(
@@ -53,7 +55,7 @@ sealed interface HomeRoute : NavRoute {
 
 val HomeRoutesString: List<String>
     get() = listOf(
-        HomeRoute.Posts::class.route,
-        HomeRoute.Favorites::class.route,
-        HomeRoute.More::class.route,
+        routeOf<HomeRoute.Posts>(),
+        routeOf<HomeRoute.Favorites>(),
+        routeOf<HomeRoute.More>(),
     )

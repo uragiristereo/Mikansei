@@ -7,19 +7,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.image.image.core.ImageLoadingState
+import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.flow.StateFlow
 
 class ImageViewModel(
     savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    val post = checkNotNull(savedStateHandle.getData<MainRoute.Image>()).post
+    val post = checkNotNull(savedStateHandle.navArgsOf<MainRoute.Image>()).post
 
     val activeUser: StateFlow<Profile>
         get() = userRepository.active

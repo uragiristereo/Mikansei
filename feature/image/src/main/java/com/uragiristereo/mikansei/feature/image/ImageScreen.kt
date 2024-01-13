@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import com.github.uragiristereo.safer.compose.navigation.core.navigate
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
@@ -28,6 +27,7 @@ import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.image.image.ImagePost
 import com.uragiristereo.mikansei.feature.image.more.MoreBottomSheet
 import com.uragiristereo.mikansei.feature.image.video.VideoPost
+import com.uragiristereo.serializednavigationextension.runtime.navigate
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

@@ -20,9 +20,6 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
-import com.github.uragiristereo.safer.compose.navigation.core.navigate
-import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -52,6 +49,9 @@ import com.uragiristereo.mikansei.core.ui.rememberWindowSizeVertical
 import com.uragiristereo.mikansei.ui.content.MainContentResponsive
 import com.uragiristereo.mikansei.ui.core.ShareDownloadDialog
 import com.uragiristereo.mikansei.ui.navgraphs.BottomNavGraph
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import com.uragiristereo.serializednavigationextension.runtime.navigate
+import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
@@ -133,7 +133,7 @@ fun MainScreen(
     }
 
     BackHandler(
-        enabled = viewModel.confirmExit && currentRoute == MainRoute.Home::class.route,
+        enabled = viewModel.confirmExit && currentRoute == routeOf<MainRoute.Home>(),
         onBack = remember {
             {
                 scope.launch {
@@ -155,7 +155,7 @@ fun MainScreen(
     )
 
     BackHandler(
-        enabled = !viewModel.confirmExit && currentRoute == MainRoute.Home::class.route,
+        enabled = !viewModel.confirmExit && currentRoute == routeOf<MainRoute.Home>(),
         onBack = {
             (context as Activity).finishAffinity()
         },
@@ -208,9 +208,8 @@ fun MainScreen(
                 )
             }
 
-            val navigationBarsVisible = when {
-                currentRoute in HomeRoutesString -> true
-                currentRoute == null -> true
+            val navigationBarsVisible = when (currentRoute) {
+                in HomeRoutesString, null -> true
                 else -> false
             }
 

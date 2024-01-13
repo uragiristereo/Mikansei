@@ -29,8 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
-import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.composable.DimensionSubcomposeLayout
 import com.uragiristereo.mikansei.core.ui.composable.RailScaffold
@@ -40,6 +38,8 @@ import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.ui.appbars.MainNavigationRail
 import com.uragiristereo.mikansei.ui.navgraphs.MainNavGraph
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import com.uragiristereo.serializednavigationextension.runtime.routeOf
 
 @Composable
 fun MainContentMediumWide(
@@ -118,8 +118,8 @@ fun MainContentMediumWide(
                 MainNavGraph(navController = navController)
 
                 if (currentRoute !in listOf(
-                        MainRoute.Image::class.route,
-                        HomeRoute.Posts::class.route
+                        routeOf<MainRoute.Image>(),
+                        routeOf<HomeRoute.Posts>(),
                     )
                 ) {
                     Spacer(

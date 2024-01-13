@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import com.github.uragiristereo.safer.compose.navigation.core.getData
 import com.uragiristereo.mikansei.core.database.session.SessionDao
 import com.uragiristereo.mikansei.core.database.session.toSessionList
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
@@ -24,6 +23,7 @@ import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsContentState
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsLoadingState
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsSavedState
+import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ class PostsViewModel(
     private val getPostsUseCase: GetPostsUseCase,
     private val sessionDao: SessionDao,
 ) : ViewModel() {
-    val tags = savedStateHandle.getData<HomeRoute.Posts>()?.tags ?: ""
+    val tags = savedStateHandle.navArgsOf<HomeRoute.Posts>()?.tags ?: ""
 
     var topAppBarHeight by mutableStateOf(0.dp)
     val offsetY = Animatable(initialValue = 0f)
