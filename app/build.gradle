@@ -110,7 +110,7 @@ dependencies {
     implementation(libs.bundles.coil)
     implementation(libs.timber)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.safer.navigation.compose)
+    implementation(libs.serialized.navigation.extension.serializer.kotlinx)
     playImplementation(platform(libs.firebase.bom))
     playImplementation(libs.firebase.analytics)
     playImplementation(libs.firebase.crashlytics)

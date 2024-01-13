@@ -34,7 +34,6 @@ dependencies {
     implementation(libs.bundles.core)
     implementation(libs.bundles.coil)
     implementation(libs.bundles.koin)
-    implementation(libs.safer.navigation.compose)
     implementation(libs.androidx.browser)
     implementation(libs.kotlinx.serialization.json)
 }

@@ -32,6 +32,6 @@ dependencies {
     api(libs.accompanist.insets.ui)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
-    implementation(libs.safer.navigation.compose)
+    api(libs.serialized.navigation.extension.compose)
     implementation(libs.bundles.coil)
 }

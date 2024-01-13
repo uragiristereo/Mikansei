@@ -27,5 +27,4 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
     implementation(libs.timber)
-    implementation(libs.safer.navigation.compose)
 }
