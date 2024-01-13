@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.compose.NavHost
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeIn
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeOut
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
@@ -16,6 +15,7 @@ import com.uragiristereo.mikansei.feature.search.core.searchRoute
 import com.uragiristereo.mikansei.feature.settings.core.settingsGraph
 import com.uragiristereo.mikansei.feature.user.userGraph
 import com.uragiristereo.mikansei.ui.MainViewModel
+import com.uragiristereo.serializednavigationextension.navigation.compose.NavHost
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -26,7 +26,7 @@ fun MainNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = MainRoute.Home::class,
+        startDestination = MainRoute.Home,
         enterTransition = {
             translateXFadeIn(forward = true)
         },

@@ -15,9 +15,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 
 @Composable
 fun MainContentResponsive(

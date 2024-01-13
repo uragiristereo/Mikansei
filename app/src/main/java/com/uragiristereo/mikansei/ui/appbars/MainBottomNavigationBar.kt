@@ -14,13 +14,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
-import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import com.uragiristereo.serializednavigationextension.runtime.route
+import com.uragiristereo.serializednavigationextension.runtime.routeOf
 
 @Composable
 fun MainBottomNavigationBar(
@@ -56,7 +57,7 @@ fun MainBottomNavigationBar(
             contentColor = MaterialTheme.colors.primary,
         ) {
             MainNavigationItems.entries.forEach { item ->
-                val itemRouteString = item.route::class.route
+                val itemRouteString = item.route.route
                 val currentRouteIsItem = currentRoute == itemRouteString
                 val previousRouteIsItem = previousRoute == itemRouteString
 
@@ -82,10 +83,10 @@ fun MainBottomNavigationBar(
                     onClick = {
                         when {
                             listOf(item.route.route, currentRoute).all {
-                                it == HomeRoute.Posts::class.route
+                                it == routeOf<HomeRoute.Posts>()
                             } -> onRequestScrollToTop()
 
-                            item.route.route == MainRoute.Search::class.route -> onNavigateSearch()
+                            item.route.route == routeOf<MainRoute.Search>() -> onNavigateSearch()
                             else -> onNavigate(item.route)
                         }
                     },

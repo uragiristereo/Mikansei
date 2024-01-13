@@ -6,9 +6,6 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.compose.composable
-import com.github.uragiristereo.safer.compose.navigation.core.navigate
-import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.ui.extension.rememberParentViewModelStoreOwner
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
@@ -22,6 +19,9 @@ import com.uragiristereo.mikansei.feature.home.favorites.favgroup.more.FavGroupM
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.more.FavGroupMoreViewModel
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.NewFavGroupScreen
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.NewFavGroupViewModel
+import com.uragiristereo.serializednavigationextension.navigation.compose.composable
+import com.uragiristereo.serializednavigationextension.runtime.navigate
+import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
@@ -40,7 +40,7 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
 
         val homeViewModelStoreOwner = rememberParentViewModelStoreOwner(
             navController = navController,
-            parentRoute = MainRoute.Home.route,
+            parentRoute = routeOf<MainRoute.Home>(),
         )
 
         CompositionLocalProvider(LocalViewModelStoreOwner provides homeViewModelStoreOwner) {
@@ -67,10 +67,10 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
         }
     }
 
-    composable(route = MainRoute.NewFavGroup()) {
+    composable(defaultValue = MainRoute.NewFavGroup()) {
         val homeViewModelStoreOwner = rememberParentViewModelStoreOwner(
             navController = navController,
-            parentRoute = MainRoute.Home.route,
+            parentRoute = routeOf<MainRoute.Home>(),
         )
 
         val favoritesViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = homeViewModelStoreOwner)
@@ -84,7 +84,7 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
     composable<HomeRoute.EditFavoriteGroup> {
         val homeViewModelStoreOwner = rememberParentViewModelStoreOwner(
             navController = navController,
-            parentRoute = MainRoute.Home.route,
+            parentRoute = routeOf<MainRoute.Home>(),
         )
 
         val favoritesViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = homeViewModelStoreOwner)
@@ -111,10 +111,12 @@ fun NavGraphBuilder.favoritesBottomRoute(navController: NavHostController) {
         )
     }
 
-    composable<HomeRoute.FavoriteGroupMore> { data ->
-        if (data != null) {
+    composable<HomeRoute.FavoriteGroupMore> {
+        val args = rememberNavArgsOf()
+
+        if (args != null) {
             val bottomSheetNavigator = LocalBottomSheetNavigator.current
-            val favoriteGroup = data.favoriteGroup
+            val favoriteGroup = args.favoriteGroup
 
             FavGroupMoreContent(
                 onDismiss = bottomSheetNavigator.bottomSheetState::hide,
@@ -142,22 +144,23 @@ fun NavGraphBuilder.favoritesBottomRoute(navController: NavHostController) {
         }
     }
 
-    composable<HomeRoute.DeleteFavoriteGroup> { data ->
+    composable<HomeRoute.DeleteFavoriteGroup> {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val args = rememberNavArgsOf()
 
         val homeViewModelStoreOwner = rememberParentViewModelStoreOwner(
             navController = navController,
-            parentRoute = MainRoute.Home.route,
+            parentRoute = routeOf<MainRoute.Home>(),
         )
 
         val favoritesViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = homeViewModelStoreOwner)
 
-        if (data != null) {
+        if (args != null) {
             DeleteFavGroupContent(
-                favoriteGroup = data.favoriteGroup,
+                favoriteGroup = args.favoriteGroup,
                 onDeleteClick = {
                     bottomSheetNavigator.runHiding {
-                        favoritesViewModel.deleteFavoriteGroup(data.favoriteGroup)
+                        favoritesViewModel.deleteFavoriteGroup(args.favoriteGroup)
                     }
                 },
             )

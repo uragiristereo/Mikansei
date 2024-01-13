@@ -30,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
@@ -47,6 +46,7 @@ import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.home.more.core.MoreTopAppBar
 import com.uragiristereo.mikansei.feature.home.more.core.NavigationItem
 import com.uragiristereo.mikansei.feature.home.more.core.UserHeader
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

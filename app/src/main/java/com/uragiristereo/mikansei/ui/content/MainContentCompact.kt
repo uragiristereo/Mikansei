@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.ui.appbars.MainBottomNavigationBar
 import com.uragiristereo.mikansei.ui.navgraphs.MainNavGraph
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 
 @Composable
 fun MainContentCompact(

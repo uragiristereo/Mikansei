@@ -1,7 +1,9 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import kotlinx.serialization.Serializable
 
 sealed interface SettingsRoute : NavRoute {
-    object Index : NavRoute
+    @Serializable
+    data object Index : SettingsRoute
 }

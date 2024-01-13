@@ -3,10 +3,10 @@ package com.uragiristereo.mikansei.ui.appbars
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Stable
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 
 @Stable
 enum class MainNavigationItems(

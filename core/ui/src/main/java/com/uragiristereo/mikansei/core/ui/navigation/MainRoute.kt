@@ -1,12 +1,13 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
-import com.github.uragiristereo.safer.compose.navigation.core.NavRoute
-import com.github.uragiristereo.safer.compose.navigation.core.route
 import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import kotlinx.serialization.Serializable
 
 sealed interface MainRoute : NavRoute {
-    object Home : MainRoute
+    @Serializable
+    data object Home : MainRoute
 
     @Serializable
     data class Search(
@@ -18,17 +19,23 @@ sealed interface MainRoute : NavRoute {
         val post: Post,
     ) : MainRoute
 
-    object Settings : MainRoute
+    @Serializable
+    data object Settings : MainRoute
 
-    object Filters : MainRoute
+    @Serializable
+    data object Filters : MainRoute
 
-    object SearchHistory : MainRoute
+    @Serializable
+    data object SearchHistory : MainRoute
 
-    object SavedSearches : MainRoute
+    @Serializable
+    data object SavedSearches : MainRoute
 
-    object About : MainRoute
+    @Serializable
+    data object About : MainRoute
 
-    object User : MainRoute
+    @Serializable
+    data object User : MainRoute
 
     @Serializable
     data class NewFavGroup(
@@ -37,7 +44,7 @@ sealed interface MainRoute : NavRoute {
 }
 
 val NestedNavigationRoutes = listOf(
-    MainRoute.Home.route,
-    MainRoute.Settings.route,
-    MainRoute.User.route,
+    routeOf<MainRoute.Home>(),
+    routeOf<MainRoute.Settings>(),
+    routeOf<MainRoute.User>(),
 )
