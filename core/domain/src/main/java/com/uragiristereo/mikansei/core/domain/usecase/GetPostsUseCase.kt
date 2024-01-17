@@ -7,17 +7,16 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.Rating
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
-import kotlinx.coroutines.flow.Flow
 
 class GetPostsUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val userRepository: UserRepository,
 ) {
-    operator fun invoke(
+    suspend operator fun invoke(
         tags: String,
         page: Int,
         currentPosts: List<Post>,
-    ): Flow<Result<PostsResult>> {
+    ): Result<PostsResult> {
         return danbooruRepository.getPosts(tags, page)
             .mapSuccess { postsResult ->
                 // if page == 1, it means refreshing and previous posts should be cleared
@@ -27,9 +26,7 @@ class GetPostsUseCase(
                 }
 
                 val profile = userRepository.active.value
-
                 val ratingFilters = profile.mikansei.postsRatingFilter.getFilteredRatings()
-
                 var posts = postsResult.posts
                 var canLoadMore = postsResult.canLoadMore
 

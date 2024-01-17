@@ -6,13 +6,12 @@ import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
-import kotlinx.coroutines.flow.Flow
 
 class GetTagsAutoCompleteUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val userRepository: UserRepository,
 ) {
-    operator fun invoke(query: String): Flow<Result<List<Tag>>> {
+    suspend operator fun invoke(query: String): Result<List<Tag>> {
         return danbooruRepository.getTagsAutoComplete(query)
             .mapSuccess { tags ->
                 val activeUser = userRepository.active.value

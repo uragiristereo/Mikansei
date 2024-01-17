@@ -4,13 +4,12 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
-import kotlinx.coroutines.flow.Flow
 
 class GetFavoritesUseCase(
     private val userRepository: UserRepository,
     private val getPostsUseCase: GetPostsUseCase,
 ) {
-    operator fun invoke(): Flow<Result<Favorite>> {
+    suspend operator fun invoke(): Result<Favorite> {
         val activeUser = userRepository.active.value
 
         return getPostsUseCase(
