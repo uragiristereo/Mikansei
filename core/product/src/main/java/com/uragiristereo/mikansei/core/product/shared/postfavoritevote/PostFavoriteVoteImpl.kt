@@ -44,19 +44,17 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
 
     init {
         viewModelScope.launch {
-            danbooruRepository.getPost(id = post.id).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        post = result.data
-                        favoriteCount = post.favorites
-                        score = post.score
+            when (val result = danbooruRepository.getPost(id = post.id)) {
+                is Result.Success -> {
+                    post = result.data
+                    favoriteCount = post.favorites
+                    score = post.score
 
-                        Timber.d("post updated")
-                    }
-
-                    is Result.Failed -> Timber.d(result.message)
-                    is Result.Error -> Timber.d(result.t.toString())
+                    Timber.d("post updated")
                 }
+
+                is Result.Failed -> Timber.d(result.message)
+                is Result.Error -> Timber.d(result.t.toString())
             }
 
             isPostUpdated = true
@@ -64,21 +62,21 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
 
         viewModelScope.launch {
             if (activeUser.isNotAnonymous()) {
-                danbooruRepository.isPostInFavorites(
+                val result = danbooruRepository.isPostInFavorites(
                     postId = post.id,
                     userId = activeUser.id,
-                ).collect { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            favoriteButtonEnabled = true
-                            isPostInFavorites = result.data
+                )
 
-                            Timber.d("is post in favorites = $isPostInFavorites")
-                        }
+                when (result) {
+                    is Result.Success -> {
+                        favoriteButtonEnabled = true
+                        isPostInFavorites = result.data
 
-                        is Result.Failed -> Timber.d(result.message)
-                        is Result.Error -> Timber.d(result.t.toString())
+                        Timber.d("is post in favorites = $isPostInFavorites")
                     }
+
+                    is Result.Failed -> Timber.d(result.message)
+                    is Result.Error -> Timber.d(result.t.toString())
                 }
             }
 
@@ -87,21 +85,21 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
 
         viewModelScope.launch {
             if (activeUser.isNotAnonymous()) {
-                danbooruRepository.getPostVote(
+                val result = danbooruRepository.getPostVote(
                     postId = post.id,
                     userId = activeUser.id,
-                ).collect { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            voteButtonEnabled = true
-                            scoreState = result.data.status
+                )
 
-                            Timber.d("score state = $scoreState")
-                        }
+                when (result) {
+                    is Result.Success -> {
+                        voteButtonEnabled = true
+                        scoreState = result.data.status
 
-                        is Result.Failed -> Timber.d(result.message)
-                        is Result.Error -> Timber.d(result.t.toString())
+                        Timber.d("score state = $scoreState")
                     }
+
+                    is Result.Failed -> Timber.d(result.message)
+                    is Result.Error -> Timber.d(result.t.toString())
                 }
             }
 
@@ -119,39 +117,31 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
 
             isPostInFavorites = value
 
-            when {
-                isPostInFavorites -> {
-                    favoriteCount += 1
+            if (isPostInFavorites) {
+                favoriteCount += 1
 
-                    if (scoreState == PostVote.Status.NONE) {
-                        scoreState = PostVote.Status.UPVOTED
-                        updateScore()
-                    }
-
-                    danbooruRepository.addToFavorites(post.id).collect { result ->
-                        when (result) {
-                            is Result.Success -> Timber.d("post ${post.id} successfully added to favorites")
-                            is Result.Failed -> Timber.d(result.message)
-                            is Result.Error -> Timber.d(result.t.toString())
-                        }
-                    }
+                if (scoreState == PostVote.Status.NONE) {
+                    scoreState = PostVote.Status.UPVOTED
+                    updateScore()
                 }
 
-                else -> {
-                    favoriteCount -= 1
+                when (val result = danbooruRepository.addToFavorites(post.id)) {
+                    is Result.Success -> Timber.d("post ${post.id} successfully added to favorites")
+                    is Result.Failed -> Timber.d(result.message)
+                    is Result.Error -> Timber.d(result.t.toString())
+                }
+            } else {
+                favoriteCount -= 1
 
-                    if (scoreState == PostVote.Status.UPVOTED) {
-                        scoreState = PostVote.Status.NONE
-                        score -= 1
-                    }
+                if (scoreState == PostVote.Status.UPVOTED) {
+                    scoreState = PostVote.Status.NONE
+                    score -= 1
+                }
 
-                    danbooruRepository.deleteFromFavorites(post.id).collect { result ->
-                        when (result) {
-                            is Result.Success -> Timber.d("post ${post.id} successfully removed from favorites")
-                            is Result.Failed -> Timber.d(result.message)
-                            is Result.Error -> Timber.d(result.t.toString())
-                        }
-                    }
+                when (val result = danbooruRepository.deleteFromFavorites(post.id)) {
+                    is Result.Success -> Timber.d("post ${post.id} successfully removed from favorites")
+                    is Result.Failed -> Timber.d(result.message)
+                    is Result.Error -> Timber.d(result.t.toString())
                 }
             }
         }
@@ -194,15 +184,15 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     private suspend fun votePost() {
         updateScore()
 
-        danbooruRepository.votePost(
+        val result = danbooruRepository.votePost(
             postId = post.id,
             score = scoreState,
-        ).collect { result ->
-            when (result) {
-                is Result.Success -> Timber.d("post ${post.id} successfully ${scoreState.name}")
-                is Result.Failed -> Timber.d(result.message)
-                is Result.Error -> Timber.d(result.t.toString())
-            }
+        )
+
+        when (result) {
+            is Result.Success -> Timber.d("post ${post.id} successfully ${scoreState.name}")
+            is Result.Failed -> Timber.d(result.message)
+            is Result.Error -> Timber.d(result.t.toString())
         }
     }
 
@@ -222,15 +212,15 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
 
             scoreState = PostVote.Status.NONE
 
-            danbooruRepository.votePost(
+            val result = danbooruRepository.votePost(
                 postId = post.id,
                 score = PostVote.Status.NONE,
-            ).collect { result ->
-                when (result) {
-                    is Result.Success -> Timber.d("post ${post.id} successfully unvoted")
-                    is Result.Failed -> Timber.d(result.message)
-                    is Result.Error -> Timber.d(result.t.toString())
-                }
+            )
+
+            when (result) {
+                is Result.Success -> Timber.d("post ${post.id} successfully unvoted")
+                is Result.Failed -> Timber.d(result.message)
+                is Result.Error -> Timber.d(result.t.toString())
             }
         }
     }
