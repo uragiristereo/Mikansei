@@ -47,25 +47,25 @@ class AddToFavGroupViewModel(
                 thumbnailUrl = favorite.thumbnailUrl,
                 isPostAlreadyExits = favorite.postIds.any { it == post.id },
             )
-        }.sortedByDescending { it.isPostAlreadyExits }
+        }.sortedByDescending(FavoriteGroup::isPostAlreadyExits)
     }
 
     private fun loadFavoriteGroups() {
         viewModelScope.launch {
             isLoading = true
 
-            getFavoriteGroupsUseCase(
+            val result = getFavoriteGroupsUseCase(
                 forceCache = true,
                 forceRefresh = false,
-            ).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        items = mapResult(result.data)
-                    }
+            )
 
-                    is Result.Failed -> Timber.d(result.message)
-                    is Result.Error -> Timber.d(result.t.toString())
+            when (result) {
+                is Result.Success -> {
+                    items = mapResult(result.data)
                 }
+
+                is Result.Failed -> Timber.d(result.message)
+                is Result.Error -> Timber.d(result.t.toString())
             }
 
             isLoading = false
@@ -77,28 +77,28 @@ class AddToFavGroupViewModel(
         onShowMessage: suspend (message: String, length: SnackbarDuration) -> Unit,
     ) {
         viewModelScope.launch(SupervisorJob()) {
-            danbooruRepository.addPostToFavoriteGroup(
+            val result = danbooruRepository.addPostToFavoriteGroup(
                 favoriteGroupId = item.id,
-                postId = post.id
-            ).collect { result ->
-                val message = when (result) {
-                    is Result.Success -> {
-                        updateAndCacheFavoriteGroups(showLoading = false)
+                postId = post.id,
+            )
 
-                        "Added to favorite group: ${item.name}"
-                    }
+            val message = when (result) {
+                is Result.Success -> {
+                    updateAndCacheFavoriteGroups(showLoading = false)
 
-                    is Result.Failed -> "Error: " + result.message
-                    is Result.Error -> "Error: " + result.t.toString()
+                    "Added to favorite group: ${item.name}"
                 }
 
-                val duration = when (result) {
-                    is Result.Success -> SnackbarDuration.Short
-                    else -> SnackbarDuration.Long
-                }
-
-                onShowMessage(message, duration)
+                is Result.Failed -> "Error: " + result.message
+                is Result.Error -> "Error: " + result.t.toString()
             }
+
+            val duration = when (result) {
+                is Result.Success -> SnackbarDuration.Short
+                else -> SnackbarDuration.Long
+            }
+
+            onShowMessage(message, duration)
         }
     }
 
@@ -113,20 +113,20 @@ class AddToFavGroupViewModel(
                 isLoading = true
             }
 
-            getFavoriteGroupsUseCase(
+            val result = getFavoriteGroupsUseCase(
                 forceCache = true,
                 forceRefresh = true,
-            ).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        items = mapResult(result.data)
+            )
 
-                        Timber.d("updateAndCacheFavoriteGroups success")
-                    }
+            when (result) {
+                is Result.Success -> {
+                    items = mapResult(result.data)
 
-                    is Result.Failed -> Timber.d(result.message)
-                    is Result.Error -> Timber.d(result.t.toString())
+                    Timber.d("updateAndCacheFavoriteGroups success")
                 }
+
+                is Result.Failed -> Timber.d(result.message)
+                is Result.Error -> Timber.d(result.t.toString())
             }
 
             if (showLoading) {
@@ -139,15 +139,15 @@ class AddToFavGroupViewModel(
         viewModelScope.launch {
             isRemoving = true
 
-            danbooruRepository.removePostFromFavoriteGroup(
+            val result = danbooruRepository.removePostFromFavoriteGroup(
                 favoriteGroupId = item.id,
                 postId = post.id
-            ).collect { result ->
-                when (result) {
-                    is Result.Success -> updateAndCacheFavoriteGroups(showLoading = true)
-                    is Result.Failed -> Timber.d(result.message)
-                    is Result.Error -> Timber.d(result.t.toString())
-                }
+            )
+
+            when (result) {
+                is Result.Success -> updateAndCacheFavoriteGroups(showLoading = true)
+                is Result.Failed -> Timber.d(result.message)
+                is Result.Error -> Timber.d(result.t.toString())
             }
 
             isRemoving = false

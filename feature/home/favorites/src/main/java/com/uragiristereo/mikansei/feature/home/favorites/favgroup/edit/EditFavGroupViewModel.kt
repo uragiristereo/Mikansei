@@ -96,16 +96,16 @@ class EditFavGroupViewModel(
         viewModelScope.launch {
             isLoading = true
 
-            danbooruRepository.editFavoriteGroup(
+            val result = danbooruRepository.editFavoriteGroup(
                 favoriteGroupId = favoriteGroup.id,
                 name = nameTextField.text,
                 postIds = mapPostIds(),
-            ).collect { result ->
-                when (result) {
-                    is Result.Success -> channel.send(Event.OnSuccess)
-                    is Result.Failed -> channel.send(Event.OnFailed(result.message))
-                    is Result.Error -> channel.send(Event.OnFailed(result.t.toString()))
-                }
+            )
+
+            when (result) {
+                is Result.Success -> channel.send(Event.OnSuccess)
+                is Result.Failed -> channel.send(Event.OnFailed(result.message))
+                is Result.Error -> channel.send(Event.OnFailed(result.t.toString()))
             }
 
             isLoading = false

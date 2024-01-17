@@ -5,13 +5,12 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
-import kotlinx.coroutines.flow.Flow
 
 class GetTagsUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val userRepository: UserRepository,
 ) {
-    operator fun invoke(tags: List<String>): Flow<Result<List<Tag>>> {
+    suspend operator fun invoke(tags: List<String>): Result<List<Tag>> {
         val filters = userRepository.active.value
             .danbooru
             .blacklistedTags

@@ -13,6 +13,7 @@ import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.search.state.SearchWordIndex
 import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -72,31 +73,30 @@ class SearchViewModel(
         job = viewModelScope.launch {
             loading = true
 
-            getTagsAutoCompleteUseCase(query = term)
-                .collect { result ->
-                    when (result) {
-                        is Result.Success -> {
-                            searches.apply {
-                                clear()
-                                addAll(result.data)
-                            }
+            when (val result = getTagsAutoCompleteUseCase(query = term)) {
+                is Result.Success -> {
+                    searches.apply {
+                        clear()
+                        addAll(result.data)
+                    }
 
-                            errorMessage = null
-                        }
-                        is Result.Failed -> {
-                            searches.clear()
-                            errorMessage = result.message
-                            Timber.d(errorMessage)
-                        }
+                    errorMessage = null
+                }
 
-                        is Result.Error -> {
-                            searches.clear()
-                            errorMessage = result.t.toString()
-                            Timber.d(errorMessage)
-                            loading = false
-                        }
+                is Result.Failed -> {
+                    searches.clear()
+                    errorMessage = result.message
+                    Timber.d(errorMessage)
+                }
+
+                is Result.Error -> {
+                    if (result.t !is CancellationException) {
+                        searches.clear()
+                        errorMessage = result.t.toString()
+                        Timber.d(errorMessage)
                     }
                 }
+            }
 
             loading = false
         }
