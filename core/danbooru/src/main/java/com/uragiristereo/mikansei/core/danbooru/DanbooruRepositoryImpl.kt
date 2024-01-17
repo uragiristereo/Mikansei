@@ -4,6 +4,7 @@ import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavoriteList
+import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.post.toPost
 import com.uragiristereo.mikansei.core.danbooru.model.post.toPostList
 import com.uragiristereo.mikansei.core.danbooru.model.post.toPostVote
@@ -16,26 +17,28 @@ import com.uragiristereo.mikansei.core.danbooru.retrofit.DanbooruApi
 import com.uragiristereo.mikansei.core.danbooru.retrofit.DanbooruAuthInterceptor
 import com.uragiristereo.mikansei.core.danbooru.retrofit.ForceCacheResponseInterceptor
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
+import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
-import com.uragiristereo.mikansei.core.model.result.resultFlow
+import com.uragiristereo.mikansei.core.model.result.resultOf
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.resources.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -167,13 +170,11 @@ class DanbooruRepositoryImpl(
         return activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY
     }
 
-    override fun getPost(id: Int) = resultFlow {
+    override suspend fun getPost(id: Int): Result<Post> = resultOf {
         clientAuth.getPost(id)
-    }.mapSuccess {
-        it.toPost()
-    }
+    }.mapSuccess(DanbooruPost::toPost)
 
-    override fun getPosts(tags: String, page: Int) = resultFlow {
+    override suspend fun getPosts(tags: String, page: Int): Result<PostsResult> = resultOf {
         client.getPosts(tags, page)
     }.mapSuccess {
         PostsResult(
@@ -182,31 +183,31 @@ class DanbooruRepositoryImpl(
         )
     }
 
-    override fun getTagsAutoComplete(query: String) = resultFlow {
+    override suspend fun getTagsAutoComplete(query: String): Result<List<Tag>> = resultOf {
         client.getTagsAutoComplete(query)
     }.mapSuccess {
         it.toTagList()
     }
 
-    override fun getTags(tags: List<String>) = resultFlow {
+    override suspend fun getTags(tags: List<String>): Result<List<Tag>> = resultOf {
         client.getTags(tags)
     }.mapSuccess {
         it.toTagList()
     }
 
-    override fun isPostInFavorites(postId: Int, userId: Int) = resultFlow {
+    override suspend fun isPostInFavorites(postId: Int, userId: Int): Result<Boolean> = resultOf {
         client.getFavorites(postId, userId)
     }.mapSuccess { favorites ->
         favorites.any { it.postId == postId && it.userId == userId }
     }
 
-    override fun getProfile() = resultFlow {
+    override suspend fun getProfile(): Result<Profile> = resultOf {
         client.getProfile()
     }.mapSuccess {
         it.toProfile()
     }
 
-    override fun login(name: String, apiKey: String) = resultFlow {
+    override suspend fun login(name: String, apiKey: String): Result<Profile> = resultOf {
         clientNoAuth.getProfile(
             credentials = Credentials.basic(
                 username = name,
@@ -217,17 +218,17 @@ class DanbooruRepositoryImpl(
         it.toProfile()
     }
 
-    override fun getUser(id: Int) = resultFlow {
+    override suspend fun getUser(id: Int): Result<User> = resultOf {
         client.getUser(id)
     }.mapSuccess {
         it.toUser()
     }
 
-    override fun getUsers(ids: List<Int>): Flow<Result<Map<Int, User>>> {
+    override suspend fun getUsers(ids: List<Int>): Result<Map<Int, User>> {
         TODO("Not yet implemented")
     }
 
-    override fun updateUserSettings(id: Int, field: ProfileSettingsField) = resultFlow {
+    override suspend fun updateUserSettings(id: Int, field: ProfileSettingsField): Result<Unit> = resultOf {
         client.updateUserSettings(
             id = id,
             data = DanbooruUserField(
@@ -245,13 +246,13 @@ class DanbooruRepositoryImpl(
         )
     }
 
-    override fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean) = resultFlow {
+    override suspend fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean): Result<List<Favorite>> = resultOf {
         client.getFavoriteGroups(creatorId, getCacheControl(forceRefresh))
     }.mapSuccess { favoriteGroups ->
         favoriteGroups.sortedByDescending { it.updatedAt }.toFavoriteList()
     }
 
-    override fun getPostsByIds(ids: List<Int>, forceCache: Boolean, forceRefresh: Boolean) = resultFlow {
+    override suspend fun getPostsByIds(ids: List<Int>, forceCache: Boolean, forceRefresh: Boolean): Result<List<Post>> = resultOf {
         val separated = ids.joinToString(separator = ",")
 
         client.getPosts(
@@ -264,21 +265,21 @@ class DanbooruRepositoryImpl(
         it.toPostList()
     }
 
-    override fun addToFavorites(postId: Int) = resultFlow {
+    override suspend fun addToFavorites(postId: Int): Result<Unit> = resultOf {
         client.addToFavorites(postId)
     }
 
-    override fun deleteFromFavorites(postId: Int) = resultFlow {
+    override suspend fun deleteFromFavorites(postId: Int): Result<Unit> = resultOf {
         client.deleteFromFavorites(postId)
     }
 
-    override fun getPostVote(postId: Int, userId: Int) = resultFlow {
+    override suspend fun getPostVote(postId: Int, userId: Int): Result<PostVote> = resultOf {
         client.getPostVotes(postId, userId)
     }.mapSuccess { postVotes ->
         postVotes.toPostVote(postId, userId)
     }
 
-    override fun votePost(postId: Int, score: PostVote.Status) = resultFlow {
+    override suspend fun votePost(postId: Int, score: PostVote.Status): Result<Unit> = resultOf {
         when (score) {
             PostVote.Status.NONE -> client.unvotePost(postId)
             else -> client.votePost(
@@ -292,25 +293,25 @@ class DanbooruRepositoryImpl(
         }
     }
 
-    override fun addPostToFavoriteGroup(favoriteGroupId: Int, postId: Int) = resultFlow {
+    override suspend fun addPostToFavoriteGroup(favoriteGroupId: Int, postId: Int): Result<Unit> = resultOf {
         client.addPostToFavoriteGroup(favoriteGroupId, postId)
     }
 
-    override fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int) = resultFlow {
+    override suspend fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int): Result<Unit> = resultOf {
         client.removePostFromFavoriteGroup(favoriteGroupId, postId)
     }
 
-    override fun createNewFavoriteGroup(name: String, postIds: List<Int>) = resultFlow {
+    override suspend fun createNewFavoriteGroup(name: String, postIds: List<Int>): Result<Favorite> = resultOf {
         client.createNewFavoriteGroup(name, postIds.joinToString(separator = " "))
     }.mapSuccess {
         it.toFavorite()
     }
 
-    override fun editFavoriteGroup(favoriteGroupId: Int, name: String, postIds: List<Int>) = resultFlow {
+    override suspend fun editFavoriteGroup(favoriteGroupId: Int, name: String, postIds: List<Int>): Result<Unit> = resultOf {
         client.editFavoriteGroup(favoriteGroupId, name, postIds.joinToString(separator = " "))
     }
 
-    override fun deleteFavoriteGroup(favoriteGroupId: Int) = resultFlow {
+    override suspend fun deleteFavoriteGroup(favoriteGroupId: Int): Result<Unit> = resultOf {
         client.deleteFavoriteGroup(favoriteGroupId)
     }
 }
