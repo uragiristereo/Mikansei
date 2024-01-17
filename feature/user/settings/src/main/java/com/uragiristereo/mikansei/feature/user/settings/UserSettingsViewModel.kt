@@ -71,19 +71,17 @@ class UserSettingsViewModel(
     }
 
     private suspend fun syncSettings() {
-        syncUserSettingsUseCase().collect { result ->
-            when (result) {
-                is Result.Success -> {
-                    failed = false
-                }
-                is Result.Failed -> {
-                    failed = true
-                    snackbarChannel.send(result.message)
-                }
-                is Result.Error -> {
-                    failed = true
-                    snackbarChannel.send(result.t.toString())
-                }
+        when (val result = syncUserSettingsUseCase()) {
+            is Result.Success -> failed = false
+
+            is Result.Failed -> {
+                failed = true
+                snackbarChannel.send(result.message)
+            }
+
+            is Result.Error -> {
+                failed = true
+                snackbarChannel.send(result.t.toString())
             }
         }
     }
@@ -92,11 +90,10 @@ class UserSettingsViewModel(
         updateSettingsJob?.cancel()
 
         updateSettingsJob = viewModelScope.launch {
-            loading = activeUser.value.id != 0
+            loading = activeUser.value.isNotAnonymous()
 
-            updateUserSettingsUseCase(data).collect {
-                syncSettings()
-            }
+            updateUserSettingsUseCase(data)
+            syncSettings()
 
             loading = false
         }

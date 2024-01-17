@@ -73,28 +73,24 @@ class MoreBottomSheetViewModel(
             viewModelScope.launch {
                 loading = true
 
-                getTagsUseCase(tags = tagsString)
-                    .collect { result ->
-                        when (result) {
-                            is Result.Success -> {
-                                errorMessage = null
-                                tags.addAll(result.data)
-                                loading = false
-                            }
-
-                            is Result.Failed -> {
-                                errorMessage = result.message
-                                Timber.d(errorMessage)
-                                loading = false
-                            }
-
-                            is Result.Error -> {
-                                errorMessage = result.t.toString()
-                                Timber.d(errorMessage)
-                                loading = false
-                            }
-                        }
+                when (val result = getTagsUseCase(tags = tagsString)) {
+                    is Result.Success -> {
+                        errorMessage = null
+                        tags.addAll(result.data)
                     }
+
+                    is Result.Failed -> {
+                        errorMessage = result.message
+                        Timber.d(errorMessage)
+                    }
+
+                    is Result.Error -> {
+                        errorMessage = result.t.toString()
+                        Timber.d(errorMessage)
+                    }
+                }
+
+                loading = false
             }
         }
     }
@@ -154,18 +150,16 @@ class MoreBottomSheetViewModel(
         viewModelScope.launch {
             Timber.d("getting uploader name...")
 
-            danbooruRepository.getUser(id = post.uploaderId).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        val user = result.data
-                        uploaderName = user.name
+            when (val result = danbooruRepository.getUser(id = post.uploaderId)) {
+                is Result.Success -> {
+                    val user = result.data
+                    uploaderName = user.name
 
-                        Timber.d("uploader name = $uploaderName")
-                    }
-
-                    is Result.Failed -> Timber.d("Error: ${result.message}")
-                    is Result.Error -> Timber.d("Error: ${result.t}")
+                    Timber.d("uploader name = $uploaderName")
                 }
+
+                is Result.Failed -> Timber.d("Error: ${result.message}")
+                is Result.Error -> Timber.d("Error: ${result.t}")
             }
         }
     }

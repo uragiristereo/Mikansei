@@ -24,6 +24,7 @@ import com.uragiristereo.mikansei.feature.home.posts.state.PostsContentState
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsLoadingState
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsSavedState
 import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -111,28 +112,30 @@ class PostsViewModel(
 
             errorMessage = null
 
-            getPostsUseCase(
+            val result = getPostsUseCase(
                 tags = tags,
                 page = page,
                 currentPosts = posts.value,
-            ).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        posts = immutableListOf(result.data.posts)
-                        canLoadMore = result.data.canLoadMore
-                        errorMessage = null
+            )
 
-                        disableLoadingState(refresh)
-                    }
+            when (result) {
+                is Result.Success -> {
+                    posts = immutableListOf(result.data.posts)
+                    canLoadMore = result.data.canLoadMore
+                    errorMessage = null
 
-                    is Result.Failed -> {
-                        errorMessage = result.message
-                        disableLoadingState(refresh)
+                    disableLoadingState(refresh)
+                }
 
-                        Timber.d(errorMessage)
-                    }
+                is Result.Failed -> {
+                    errorMessage = result.message
+                    disableLoadingState(refresh)
 
-                    is Result.Error -> {
+                    Timber.d(errorMessage)
+                }
+
+                is Result.Error -> {
+                    if (result.t !is CancellationException) {
                         errorMessage = result.t.toString()
                         disableLoadingState(refresh)
 

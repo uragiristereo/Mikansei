@@ -59,12 +59,10 @@ class FavoritesViewModel(
                     else -> LoadingState.FROM_LOAD
                 }
 
-                getFavoritesAndFavoriteGroupsUseCase().collect { result ->
-                    when (result) {
-                        is Result.Success -> favorites = result.data
-                        is Result.Failed -> channel.send(Event.OnError(result.message))
-                        is Result.Error -> channel.send(Event.OnError(result.t.toString()))
-                    }
+                when (val result = getFavoritesAndFavoriteGroupsUseCase()) {
+                    is Result.Success -> favorites = result.data
+                    is Result.Failed -> channel.send(Event.OnError(result.message))
+                    is Result.Error -> channel.send(Event.OnError(result.t.toString()))
                 }
 
                 loadingState = LoadingState.DISABLED
@@ -76,16 +74,14 @@ class FavoritesViewModel(
         loadingState = LoadingState.FROM_REFRESH
 
         viewModelScope.launch {
-            danbooruRepository.deleteFavoriteGroup(favoriteGroup.id).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        getFavoritesAndFavoriteGroups()
-                        channel.send(Event.OnDeleteSuccess)
-                    }
-
-                    is Result.Failed -> channel.send(Event.OnError(result.message))
-                    is Result.Error -> channel.send(Event.OnError(result.t.toString()))
+            when (val result = danbooruRepository.deleteFavoriteGroup(favoriteGroup.id)) {
+                is Result.Success -> {
+                    getFavoritesAndFavoriteGroups()
+                    channel.send(Event.OnDeleteSuccess)
                 }
+
+                is Result.Failed -> channel.send(Event.OnError(result.message))
+                is Result.Error -> channel.send(Event.OnError(result.t.toString()))
             }
         }
     }

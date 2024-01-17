@@ -40,25 +40,20 @@ class LoginViewModel(
         job = viewModelScope.launch {
             loginState = LoginState.LoggingIn
 
-            performLoginUseCase(name, apiKey)
-                .collect { result ->
-                    loginState = when (result) {
-                        is Result.Success -> LoginState.Success
-                        is Result.Failed -> LoginState.Failed(message = result.message)
-                        is Result.Error -> LoginState.Failed(message = result.t.toString())
-                    }
-                }
+            when (val result = performLoginUseCase(name, apiKey)) {
+                is Result.Success -> LoginState.Success
+                is Result.Failed -> LoginState.Failed(message = result.message)
+                is Result.Error -> LoginState.Failed(message = result.t.toString())
+            }
         }
     }
 
     private fun forceEnableSafeMode() {
         viewModelScope.launch {
-            updateUserSettingsUseCase(data = ProfileSettingsField(enableSafeMode = true)).collect { result ->
-                loginState = when (result) {
-                    is Result.Success -> LoginState.Success
-                    is Result.Failed -> LoginState.Failed(message = result.message)
-                    is Result.Error -> LoginState.Failed(message = result.t.toString())
-                }
+            when (val result = updateUserSettingsUseCase(data = ProfileSettingsField(enableSafeMode = true))) {
+                is Result.Success -> LoginState.Success
+                is Result.Failed -> LoginState.Failed(message = result.message)
+                is Result.Error -> LoginState.Failed(message = result.t.toString())
             }
         }
     }

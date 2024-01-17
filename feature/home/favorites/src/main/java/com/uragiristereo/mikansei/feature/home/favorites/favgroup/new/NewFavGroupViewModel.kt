@@ -18,10 +18,10 @@ import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.FabSt
 import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.coroutines.cancellation.CancellationException
 
 @OptIn(SavedStateHandleSaveableApi::class)
 class NewFavGroupViewModel(
@@ -55,30 +55,31 @@ class NewFavGroupViewModel(
         viewModelScope.launch {
             isLoading = true
 
-            danbooruRepository.createNewFavoriteGroup(
+            val result = danbooruRepository.createNewFavoriteGroup(
                 name = textField.text,
                 postIds = when {
                     postId != null -> listOf(postId)
                     else -> listOf()
                 },
-            ).collect { result ->
-                when (result) {
-                    is Result.Success -> {
-                        Timber.d("createNewFavoriteGroup success, id = ${result.data.id}")
+            )
+            when (result) {
+                is Result.Success -> {
+                    Timber.d("createNewFavoriteGroup success, id = ${result.data.id}")
 
-                        updateAndCacheFavoriteGroups()
+                    updateAndCacheFavoriteGroups()
 
-                        channel.send(Event.Success)
-                    }
+                    channel.send(Event.Success)
+                }
 
-                    is Result.Failed -> {
-                        val message = "Error: ${result.message}"
-                        Timber.d(message)
+                is Result.Failed -> {
+                    val message = "Error: ${result.message}"
+                    Timber.d(message)
 
-                        channel.send(Event.Failed(message))
-                    }
+                    channel.send(Event.Failed(message))
+                }
 
-                    is Result.Error -> {
+                is Result.Error -> {
+                    if (result.t !is CancellationException) {
                         val message = "Error: ${result.t}"
                         Timber.d(message)
 
@@ -93,10 +94,16 @@ class NewFavGroupViewModel(
 
     private fun updateAndCacheFavoriteGroups() {
         viewModelScope.launch(SupervisorJob()) {
-            getFavoriteGroupsUseCase(
+            val result = getFavoriteGroupsUseCase(
                 forceCache = true,
                 forceRefresh = true,
-            ).collect()
+            )
+
+            when (result) {
+                is Result.Success -> Timber.d("updateAndCacheFavoriteGroups success")
+                is Result.Failed -> Timber.d(result.message)
+                is Result.Error -> Timber.d(result.t)
+            }
         }
     }
 
