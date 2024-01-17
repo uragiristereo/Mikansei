@@ -10,51 +10,50 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.result.Result
-import kotlinx.coroutines.flow.Flow
 
 interface DanbooruRepository {
     val host: DanbooruHost
     val unsafeTags: List<String>
 
-    fun getPost(id: Int): Flow<Result<Post>>
+    suspend fun getPost(id: Int): Result<Post>
 
-    fun getPosts(tags: String, page: Int): Flow<Result<PostsResult>>
+    suspend fun getPosts(tags: String, page: Int): Result<PostsResult>
 
-    fun getTagsAutoComplete(query: String): Flow<Result<List<Tag>>>
+    suspend fun getTagsAutoComplete(query: String): Result<List<Tag>>
 
-    fun getTags(tags: List<String>): Flow<Result<List<Tag>>>
+    suspend fun getTags(tags: List<String>): Result<List<Tag>>
 
-    fun isPostInFavorites(postId: Int, userId: Int): Flow<Result<Boolean>>
+    suspend fun isPostInFavorites(postId: Int, userId: Int): Result<Boolean>
 
-    fun getProfile(): Flow<Result<Profile>>
+    suspend fun getProfile(): Result<Profile>
 
-    fun login(name: String, apiKey: String): Flow<Result<Profile>>
+    suspend fun login(name: String, apiKey: String): Result<Profile>
 
-    fun getUser(id: Int): Flow<Result<User>>
+    suspend fun getUser(id: Int): Result<User>
 
-    fun getUsers(ids: List<Int>): Flow<Result<Map<Int, User>>>
+    suspend fun getUsers(ids: List<Int>): Result<Map<Int, User>>
 
-    fun updateUserSettings(id: Int, field: ProfileSettingsField): Flow<Result<Unit>>
+    suspend fun updateUserSettings(id: Int, field: ProfileSettingsField): Result<Unit>
 
-    fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean): Flow<Result<List<Favorite>>>
+    suspend fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean): Result<List<Favorite>>
 
-    fun getPostsByIds(ids: List<Int>, forceCache: Boolean, forceRefresh: Boolean): Flow<Result<List<Post>>>
+    suspend fun getPostsByIds(ids: List<Int>, forceCache: Boolean, forceRefresh: Boolean): Result<List<Post>>
 
-    fun addToFavorites(postId: Int): Flow<Result<Unit>>
+    suspend fun addToFavorites(postId: Int): Result<Unit>
 
-    fun deleteFromFavorites(postId: Int): Flow<Result<Unit>>
+    suspend fun deleteFromFavorites(postId: Int): Result<Unit>
 
-    fun getPostVote(postId: Int, userId: Int): Flow<Result<PostVote>>
+    suspend fun getPostVote(postId: Int, userId: Int): Result<PostVote>
 
-    fun votePost(postId: Int, score: PostVote.Status): Flow<Result<Unit>>
+    suspend fun votePost(postId: Int, score: PostVote.Status): Result<Unit>
 
-    fun addPostToFavoriteGroup(favoriteGroupId: Int, postId: Int): Flow<Result<Unit>>
+    suspend fun addPostToFavoriteGroup(favoriteGroupId: Int, postId: Int): Result<Unit>
 
-    fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int): Flow<Result<Unit>>
+    suspend fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int): Result<Unit>
 
-    fun createNewFavoriteGroup(name: String, postIds: List<Int>): Flow<Result<Favorite>>
+    suspend fun createNewFavoriteGroup(name: String, postIds: List<Int>): Result<Favorite>
 
-    fun editFavoriteGroup(favoriteGroupId: Int, name: String, postIds: List<Int>): Flow<Result<Unit>>
+    suspend fun editFavoriteGroup(favoriteGroupId: Int, name: String, postIds: List<Int>): Result<Unit>
 
-    fun deleteFavoriteGroup(favoriteGroupId: Int): Flow<Result<Unit>>
+    suspend fun deleteFavoriteGroup(favoriteGroupId: Int): Result<Unit>
 }
