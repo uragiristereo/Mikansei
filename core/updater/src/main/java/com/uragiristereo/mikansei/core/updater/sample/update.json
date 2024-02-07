@@ -1,0 +1,9 @@
+[
+  {
+    "version": 1000,
+    "name": "1.0.0",
+    "url": "https://github.com/app-release.apk",
+    "force_update": true,
+    "description": "Initial release."
+  }
+]
