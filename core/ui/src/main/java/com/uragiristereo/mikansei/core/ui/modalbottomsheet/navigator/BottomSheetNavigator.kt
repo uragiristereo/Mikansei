@@ -95,7 +95,7 @@ class BottomSheetNavigator(
 
                 coroutineScope.launch(SupervisorJob()) {
                     if (currentRoute != INDEX_ROUTE) {
-                        delay(timeMillis = 300L)
+                        delay(timeMillis = 500L)
                     }
 
                     expand()
