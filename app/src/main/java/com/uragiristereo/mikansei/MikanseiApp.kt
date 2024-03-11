@@ -10,6 +10,7 @@ import coil.ImageLoaderFactory
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.serializednavigationextension.runtime.installSerializer
 import com.uragiristereo.serializednavigationextension.serializer.KotlinxSerializer
+import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.component.KoinComponent
@@ -24,7 +25,7 @@ class MikanseiApp : Application(), ImageLoaderFactory, KoinComponent {
         super.onCreate()
 
         Timber.plant(Timber.DebugTree())
-        installSerializer(KotlinxSerializer())
+        installSerializer(KotlinxSerializer(json = Json { ignoreUnknownKeys = true }))
 
         if (SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel("downloads", "Downloads", NotificationManager.IMPORTANCE_LOW)
