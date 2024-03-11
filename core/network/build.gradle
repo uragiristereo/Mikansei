@@ -6,6 +6,10 @@ plugins {
 android {
     namespace "com.uragiristereo.mikansei.core.network"
 
+    defaultConfig {
+        consumerProguardFiles("okhttp3.pro", "retrofit2.pro")
+    }
+
     buildFeatures {
         buildConfig = true
     }
