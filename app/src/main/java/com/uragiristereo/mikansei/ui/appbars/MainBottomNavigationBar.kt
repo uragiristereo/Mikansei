@@ -3,6 +3,8 @@ package com.uragiristereo.mikansei.ui.appbars
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Divider
@@ -14,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
@@ -55,6 +56,7 @@ fun MainBottomNavigationBar(
             elevation = 0.dp,
             backgroundColor = Color.Transparent,
             contentColor = MaterialTheme.colors.primary,
+            windowInsets = WindowInsets.navigationBars,
         ) {
             MainNavigationItems.entries.forEach { item ->
                 val itemRouteString = item.route.route
@@ -94,7 +96,5 @@ fun MainBottomNavigationBar(
                 )
             }
         }
-
-        NavigationBarSpacer()
     }
 }

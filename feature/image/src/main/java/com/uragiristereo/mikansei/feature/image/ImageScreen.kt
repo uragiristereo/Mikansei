@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,6 +47,11 @@ internal fun ImageScreen(
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState2(initialValue = ModalBottomSheetValue.Hidden)
+
+    val shouldNavigationBarDarkIcons = when {
+        MaterialTheme.colors.isLight -> sheetState.targetValue != ModalBottomSheetValue.Hidden || sheetState.currentValue != ModalBottomSheetValue.Hidden
+        else -> false
+    }
 
     val lambdaOnMoreClick: () -> Unit = {
         scope.launch {
@@ -99,7 +105,7 @@ internal fun ImageScreen(
 
             else -> Color.Transparent
         },
-        navigationBarDarkIcons = false,
+        navigationBarDarkIcons = shouldNavigationBarDarkIcons,
     )
 
     when (viewModel.post.type) {

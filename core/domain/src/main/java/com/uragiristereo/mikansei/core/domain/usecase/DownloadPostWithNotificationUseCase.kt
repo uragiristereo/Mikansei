@@ -75,7 +75,7 @@ class DownloadPostWithNotificationUseCase(
             put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
             put(
                 MediaStore.MediaColumns.RELATIVE_PATH,
-                directory + File.separator + context.getString(R.string.app_name)
+                directory + File.separator + context.getString(R.string.product_name)
             )
         }
 

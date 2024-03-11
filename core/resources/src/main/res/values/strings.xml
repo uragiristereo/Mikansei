@@ -1,6 +1,7 @@
 <resources>
     <!-- Global -->
     <string name="app_name" translatable="false">Mikansei</string>
+    <string name="product_name" translatable="false">Mikansei</string>
     <string name="field_placeholder_example">Example: 1girl blue_sky</string>
     <string name="feature_under_development">Feature is under development</string>
     <string name="none">None</string>

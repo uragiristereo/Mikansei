@@ -72,10 +72,11 @@ class DanbooruRepositoryImpl(
         else -> DanbooruHost.Safebooru
     }
 
-    override val host = when {
-        isInSafeMode() -> safeHost
-        else -> actualHost
-    }
+    override val host: DanbooruHost
+        get() = when {
+            isInSafeMode() -> safeHost
+            else -> actualHost
+        }
 
     private val json = Json {
         ignoreUnknownKeys = true
