@@ -4,6 +4,7 @@ import com.uragiristereo.mikansei.core.danbooru.DanbooruRepositoryImpl
 import com.uragiristereo.mikansei.core.database.databaseModule
 import com.uragiristereo.mikansei.core.domain.DomainModule
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
+import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.network.NetworkModule
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepositoryImpl
@@ -40,6 +41,7 @@ object MikanseiModule {
             )
         )
 
+        singleOf(::MikanseiEnvironment) { bind<Environment>() }
         single { SupervisorJob() }
         factory { CoroutineScope(context = Dispatchers.Default + get<CompletableJob>()) }
 
