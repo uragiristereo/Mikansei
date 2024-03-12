@@ -98,34 +98,36 @@ internal fun UserSettingsScreen(
                 contentPadding = innerPadding,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                item {
-                    SwitchPreference(
-                        title = "Safe mode",
-                        subtitle = "Show only safe (general) images. Hide sensitive, questionable and explicit images.",
-                        selected = activeUser.danbooru.safeMode,
-                        onSelectedChange = viewModel::onSafeModeChange,
-                        icon = null,
-                        enabled = shouldEnableSettings,
-                    )
-                }
+                if (!viewModel.safeModeEnvironment) {
+                    item {
+                        SwitchPreference(
+                            title = "Safe mode",
+                            subtitle = "Show only safe (general) images. Hide sensitive, questionable and explicit images.",
+                            selected = activeUser.danbooru.safeMode,
+                            onSelectedChange = viewModel::onSafeModeChange,
+                            icon = null,
+                            enabled = shouldEnableSettings,
+                        )
+                    }
 
-                item {
-                    AnimatedContent(
-                        targetState = !activeUser.danbooru.safeMode,
-                        label = "PostRatingFilter",
-                    ) { state ->
-                        if (state) {
-                            RegularPreference(
-                                title = "Posts rating listing filters (*)",
-                                subtitle = viewModel.ratingFilters.selectedItem?.getTitleString()
-                                    .orEmpty(),
-                                onClick = {
-                                    scope.launch {
-                                        bottomSheetPreferenceState.navigate(data = viewModel.ratingFilters)
-                                    }
-                                },
-                                enabled = shouldEnableSettings,
-                            )
+                    item {
+                        AnimatedContent(
+                            targetState = !activeUser.danbooru.safeMode,
+                            label = "PostRatingFilter",
+                        ) { state ->
+                            if (state) {
+                                RegularPreference(
+                                    title = "Posts rating listing filters (*)",
+                                    subtitle = viewModel.ratingFilters.selectedItem?.getTitleString()
+                                        .orEmpty(),
+                                    onClick = {
+                                        scope.launch {
+                                            bottomSheetPreferenceState.navigate(data = viewModel.ratingFilters)
+                                        }
+                                    },
+                                    enabled = shouldEnableSettings,
+                                )
+                            }
                         }
                     }
                 }

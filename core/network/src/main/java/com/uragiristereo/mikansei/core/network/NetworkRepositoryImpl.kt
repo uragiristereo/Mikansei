@@ -9,6 +9,7 @@ import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
+import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import kotlinx.coroutines.flow.Flow
@@ -28,20 +29,21 @@ import kotlin.coroutines.cancellation.CancellationException
 class NetworkRepositoryImpl(
     context: Context,
     preferencesRepository: PreferencesRepository,
+    environment: Environment,
 ) : NetworkRepository {
     private var isDohEnabled = preferencesRepository.data.value.dohEnabled
 
     private val bootstrapOkHttpClient = OkHttpClient.Builder()
         .cache(CacheUtil.createDefaultCache(context = context, path = "image_cache"))
-        .addInterceptor {
-            HttpLoggingInterceptor()
-                .setLevel(
-                    when {
-//                        BuildConfig.DEBUG -> HttpLoggingInterceptor.Level.BODY
-                        else -> HttpLoggingInterceptor.Level.NONE
-                    }
-                )
-                .intercept(it)
+        .apply {
+            if (environment.debug) {
+                addInterceptor {
+                    HttpLoggingInterceptor()
+//                        .setLevel(HttpLoggingInterceptor.Level.BODY)
+                        .setLevel(HttpLoggingInterceptor.Level.NONE)
+                        .intercept(it)
+                }
+            }
         }
         .build()
 

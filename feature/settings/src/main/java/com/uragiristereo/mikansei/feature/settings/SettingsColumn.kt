@@ -146,7 +146,7 @@ internal fun SettingsColumn(
             )
         }
 
-        if (BuildConfig.DEBUG) {
+        if (viewModel.debugEnvironment) {
             item {
                 PreferenceCategory(title = "Debug")
             }

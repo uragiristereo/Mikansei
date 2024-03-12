@@ -9,10 +9,6 @@ android {
     defaultConfig {
         consumerProguardFiles("okhttp3.pro", "retrofit2.pro")
     }
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 kotlin {

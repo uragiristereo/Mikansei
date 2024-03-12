@@ -27,6 +27,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.Constants
+import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
@@ -56,6 +57,7 @@ class DanbooruRepositoryImpl(
     private val networkRepository: NetworkRepository,
     private val userRepository: UserRepository,
     preferencesRepository: PreferencesRepository,
+    private val environment: Environment,
 ) : DanbooruRepository {
     private val isInTestMode = preferencesRepository.data.value.testMode
     override var unsafeTags: List<String> = listOf()
@@ -168,7 +170,7 @@ class DanbooruRepositoryImpl(
     }
 
     private fun isInSafeMode(): Boolean {
-        return activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY
+        return environment.safeMode || activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY
     }
 
     override suspend fun getPost(id: Int): Result<Post> = resultOf {

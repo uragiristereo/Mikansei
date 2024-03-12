@@ -10,6 +10,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSett
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.usecase.SyncUserSettingsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
+import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.model.preferences.base.Preference
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
@@ -25,6 +26,7 @@ class UserSettingsViewModel(
     private val userRepository: UserRepository,
     private val syncUserSettingsUseCase: SyncUserSettingsUseCase,
     private val updateUserSettingsUseCase: UpdateUserSettingsUseCase,
+    environment: Environment,
 ) : ViewModel() {
     val activeUser: StateFlow<Profile>
         get() = userRepository.active
@@ -47,6 +49,8 @@ class UserSettingsViewModel(
     val snackbarChannel = Channel<String>()
     private var requestSyncJob: Job? = null
     private var updateSettingsJob: Job? = null
+
+    val safeModeEnvironment = environment.safeMode
 
     init {
         viewModelScope.launch {
