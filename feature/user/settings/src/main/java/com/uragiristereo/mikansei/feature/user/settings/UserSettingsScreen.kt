@@ -153,7 +153,7 @@ internal fun UserSettingsScreen(
                                 append(text = "status:deleted")
                             }
 
-                            append(text = " or marked with grey border.\n")
+                            append(text = " or marked with grey border.")
                         },
                         selected = activeUser.danbooru.showDeletedPosts,
                         onSelectedChange = viewModel::onShowDeletedPostsChange,
