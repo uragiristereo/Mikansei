@@ -19,5 +19,7 @@ interface UserRepository {
 
     suspend fun update(user: Profile)
 
+    suspend fun update(transformation: (Profile) -> Profile)
+
     suspend fun delete(user: Profile)
 }
