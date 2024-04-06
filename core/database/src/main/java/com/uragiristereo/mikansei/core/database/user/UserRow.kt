@@ -42,4 +42,7 @@ data class UserRow(
 
     @ColumnInfo(name = "blur_explicit_posts", defaultValue = "1")
     val blurExplicitPosts: Boolean = true,
+
+    @ColumnInfo(name = "show_pending_posts")
+    val showPendingPosts: Boolean,
 )

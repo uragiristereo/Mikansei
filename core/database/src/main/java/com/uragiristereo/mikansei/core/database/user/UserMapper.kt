@@ -20,11 +20,11 @@ fun UserRow.toProfile(): Profile {
             },
         ),
         mikansei = Profile.MikanseiSettings(
-            // TODO: is prod account
             isActive = isActive,
             postsRatingFilter = postsRatingFilter,
             blurQuestionablePosts = blurQuestionablePosts,
             blurExplicitPosts = blurExplicitPosts,
+            showPendingPosts = showPendingPosts,
             nameAlias = getInitialChars(name),
         ),
     )
@@ -45,6 +45,7 @@ fun Profile.toUserRow(): UserRow {
         defaultImageSize = danbooru.defaultImageSize.getEnumForDanbooru(),
         blacklistedTags = danbooru.blacklistedTags.joinToString("\n"),
         postsRatingFilter = mikansei.postsRatingFilter,
+        showPendingPosts = mikansei.showPendingPosts,
         isActive = mikansei.isActive,
     )
 }

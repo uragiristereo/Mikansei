@@ -35,6 +35,11 @@ class GetPostsUseCase(
                     else -> listOf(false)
                 }
 
+                val showPendingPosts = when {
+                    profile.mikansei.showPendingPosts || tags.contains("status:any") || tags.contains("status:pending") -> listOf(false, true)
+                    else -> listOf(false)
+                }
+
                 posts = posts.filter { post ->
                     !profile.danbooru.blacklistedTags.any { tags ->
                         tags.split(' ')
@@ -65,6 +70,7 @@ class GetPostsUseCase(
                             && post.rating !in ratingFilters
                             && post.status != Post.Status.BANNED
                             && (post.status == Post.Status.DELETED) in showDeletedPosts
+                            && (post.status == Post.Status.PENDING) in showPendingPosts
                 }
 
                 if (canLoadMore && posts.isEmpty()) {

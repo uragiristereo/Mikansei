@@ -41,5 +41,9 @@ class UserRepositoryImpl(
 
     override suspend fun update(user: Profile) = userDao.update(user.toUserRow())
 
+    override suspend fun update(transformation: (Profile) -> Profile) {
+        userDao.update(transformation(active.value).toUserRow())
+    }
+
     override suspend fun delete(user: Profile) = userDao.delete(user.toUserRow())
 }

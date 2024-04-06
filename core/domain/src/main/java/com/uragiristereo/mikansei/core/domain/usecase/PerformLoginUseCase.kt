@@ -2,11 +2,13 @@ package com.uragiristereo.mikansei.core.domain.usecase
 
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
+import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.model.result.Result
 
 class PerformLoginUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val userRepository: UserRepository,
+    private val environment: Environment,
 ) {
     suspend operator fun invoke(
         name: String,
@@ -22,7 +24,10 @@ class PerformLoginUseCase(
                     userExists -> Result.Failed("User is already logged in.")
                     else -> {
                         userRepository.add(
-                            user = profile.copy(apiKey = apiKey)
+                            user = profile.copy(
+                                apiKey = apiKey,
+                                mikansei = profile.mikansei.copy(showPendingPosts = !environment.safeMode),
+                            )
                         )
 
                         userRepository.switchActive(profile.id)

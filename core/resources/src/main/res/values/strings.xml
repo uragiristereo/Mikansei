@@ -104,6 +104,11 @@
     <string name="image_rating_sensitive">Sensitive</string>
     <string name="image_rating_questionable">Questionable</string>
     <string name="image_rating_explicit">Explicit</string>
+    <string name="image_status">Status</string>
+    <string name="image_status_active">Active</string>
+    <string name="image_status_pending">Pending</string>
+    <string name="image_status_deleted">Deleted</string>
+    <string name="image_status__banned">Banned</string>
     <string name="image_uploaded_by">Uploaded by</string>
     <string name="image_compressed">Compressed (sample)</string>
     <string name="image_original">Full size (original)</string>

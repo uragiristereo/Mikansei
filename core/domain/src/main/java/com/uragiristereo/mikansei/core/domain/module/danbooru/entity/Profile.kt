@@ -40,11 +40,11 @@ data class Profile(
     )
 
     data class MikanseiSettings(
-        val isProdAccount: Boolean = true,
         val isActive: Boolean = false,
         val postsRatingFilter: RatingPreference = RatingPreference.GENERAL_ONLY,
         val blurQuestionablePosts: Boolean = true,
         val blurExplicitPosts: Boolean = true,
+        val showPendingPosts: Boolean = false,
         val nameAlias: String = "",
     )
 

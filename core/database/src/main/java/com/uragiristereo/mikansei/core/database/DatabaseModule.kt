@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.uragiristereo.mikansei.core.database.user.UserRepositoryImpl
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
+import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.bind
@@ -24,11 +25,17 @@ fun databaseModule() = module {
 
 private fun Scope.provideDatabase(context: Context): MikanseiDatabase {
     val preferencesRepository = get<PreferencesRepository>()
+    val environment = get<Environment>()
     val isTestMode = preferencesRepository.data.value.testMode
 
     val databaseName = when {
         isTestMode -> "mikansei-database-test.db"
         else -> "mikansei-database.db"
+    }
+
+    val showPendingPosts = when {
+        environment.safeMode -> "0"
+        else -> "1"
     }
 
     return Room
@@ -42,7 +49,7 @@ private fun Scope.provideDatabase(context: Context): MikanseiDatabase {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
 
-                    db.execSQL("insert into users (id, name, level, is_active) values (0, 'Anonymous', 0, 1)")
+                    db.execSQL("insert into users (id, name, level, is_active, show_pending_posts) values (0, 'Anonymous', 0, 1, $showPendingPosts)")
                 }
             })
         .build()

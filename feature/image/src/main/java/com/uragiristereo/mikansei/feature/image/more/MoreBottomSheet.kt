@@ -20,6 +20,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
@@ -73,11 +75,16 @@ internal fun MoreBottomSheet(
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
     val tagsCount = remember(post) { post.tags.size }
+    val activeUser by viewModel.activeUser.collectAsState()
 
     val closeButtonVisible by remember {
         derivedStateOf {
             viewModel.tagsExpanded && windowSizeHorizontal == WindowSize.COMPACT && viewModel.tags.isNotEmpty()
         }
+    }
+
+    val isInSafeMode = remember(activeUser) {
+        activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY
     }
 
     LaunchedEffect(key1 = sheetState.currentValue) {
@@ -229,6 +236,7 @@ internal fun MoreBottomSheet(
                             originalImageFileSizeStr = viewModel.originalImageFileSizeStr,
                             expanded = viewModel.infoExpanded,
                             uploaderName = viewModel.uploaderName,
+                            shouldShowRating = !isInSafeMode,
                             onMoreClick = remember {
                                 {
                                     viewModel.infoExpanded = true
