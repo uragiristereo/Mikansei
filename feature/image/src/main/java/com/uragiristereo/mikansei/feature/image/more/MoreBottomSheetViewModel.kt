@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsUseCase
@@ -33,6 +34,7 @@ class MoreBottomSheetViewModel(
     savedStateHandle: SavedStateHandle,
     private val danbooruRepository: DanbooruRepository,
     private val networkRepository: NetworkRepository,
+    private val userRepository: UserRepository,
     private val getTagsUseCase: GetTagsUseCase,
     private val convertFileSizeUseCase: ConvertFileSizeUseCase,
 ) : ViewModel(),
@@ -56,6 +58,7 @@ class MoreBottomSheetViewModel(
         private set
 
     val postLink = danbooruRepository.host.parsePostLink(post.id)
+    val activeUser = userRepository.active
 
     init {
         getUploaderName()

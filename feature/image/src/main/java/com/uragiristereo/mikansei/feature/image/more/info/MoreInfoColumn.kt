@@ -1,7 +1,6 @@
 package com.uragiristereo.mikansei.feature.image.more.info
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -17,7 +16,6 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.Rating
 import com.uragiristereo.mikansei.core.resources.R
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun MoreInfoColumn(
     post: Post,
@@ -25,6 +23,7 @@ internal fun MoreInfoColumn(
     originalImageFileSizeStr: String,
     expanded: Boolean,
     uploaderName: String,
+    shouldShowRating: Boolean,
     onMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -36,15 +35,32 @@ internal fun MoreInfoColumn(
         ),
     ) {
         MoreInfo(
-            title = stringResource(id = R.string.image_rating),
-            subtitle = when (post.rating) {
-                Rating.GENERAL -> stringResource(id = R.string.image_rating_general)
-                Rating.SENSITIVE -> stringResource(id = R.string.image_rating_sensitive)
-                Rating.QUESTIONABLE -> stringResource(id = R.string.image_rating_questionable)
-                Rating.EXPLICIT -> stringResource(id = R.string.image_rating_explicit)
-            },
+            title = stringResource(id = R.string.image_status),
+            subtitle = stringResource(
+                id = when (post.status) {
+                    Post.Status.ACTIVE -> R.string.image_status_active
+                    Post.Status.PENDING -> R.string.image_status_pending
+                    Post.Status.DELETED -> R.string.image_status_deleted
+                    Post.Status.BANNED -> R.string.image_status__banned
+                },
+            ),
             modifier = Modifier.padding(bottom = 8.dp),
         )
+
+        if (shouldShowRating) {
+            MoreInfo(
+                title = stringResource(id = R.string.image_rating),
+                subtitle = stringResource(
+                    id = when (post.rating) {
+                        Rating.GENERAL -> R.string.image_rating_general
+                        Rating.SENSITIVE -> R.string.image_rating_sensitive
+                        Rating.QUESTIONABLE -> R.string.image_rating_questionable
+                        Rating.EXPLICIT -> R.string.image_rating_explicit
+                    },
+                ),
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
+        }
 
         MoreInfo(
             title = stringResource(id = R.string.image_uploaded_by),
@@ -93,6 +109,5 @@ internal fun MoreInfoColumn(
                 }
             },
         )
-
     }
 }
