@@ -24,6 +24,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
@@ -98,6 +102,14 @@ internal fun UserSettingsScreen(
                 contentPadding = innerPadding,
                 modifier = Modifier.fillMaxSize(),
             ) {
+                item {
+                    SettingTip(text = "(*) indicates a Mikansei feature and won't be synced with Danbooru.")
+                }
+
+                item {
+                    Divider()
+                }
+
                 if (!viewModel.safeModeEnvironment) {
                     item {
                         SwitchPreference(
@@ -118,8 +130,7 @@ internal fun UserSettingsScreen(
                             if (state) {
                                 RegularPreference(
                                     title = "Posts rating listing filters (*)",
-                                    subtitle = viewModel.ratingFilters.selectedItem?.getTitleString()
-                                        .orEmpty(),
+                                    subtitle = viewModel.ratingFilters.selectedItem?.getTitleString().orEmpty(),
                                     onClick = {
                                         scope.launch {
                                             bottomSheetPreferenceState.navigate(data = viewModel.ratingFilters)
@@ -135,7 +146,15 @@ internal fun UserSettingsScreen(
                 item {
                     SwitchPreference(
                         title = "Show deleted posts",
-                        subtitle = null,
+                        subtitle = buildAnnotatedString {
+                            append(text = "Show posts that are tagged with ")
+
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(text = "status:deleted")
+                            }
+
+                            append(text = " or marked with grey border.\n")
+                        },
                         selected = activeUser.danbooru.showDeletedPosts,
                         onSelectedChange = viewModel::onShowDeletedPostsChange,
                         icon = null,
@@ -157,11 +176,28 @@ internal fun UserSettingsScreen(
                 }
 
                 item {
-                    Divider()
-                }
+                    SwitchPreference(
+                        title = "Show pending posts (*)",
+                        subtitle = buildAnnotatedString {
+                            append(text = "Show posts that are tagged with ")
 
-                item {
-                    SettingTip(text = "(*) indicates a Mikansei feature and won't be synced with Danbooru.")
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(text = "status:pending")
+                            }
+
+                            append(text = " or marked with blue border.\n")
+
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(text = "Note:")
+                            }
+
+                            append(text = " pending posts sometimes got tagged incorrectly.")
+                        },
+                        selected = activeUser.mikansei.showPendingPosts,
+                        onSelectedChange = viewModel::onShowPendingPostsChange,
+                        icon = null,
+                        enabled = shouldEnableSettings,
+                    )
                 }
             }
 

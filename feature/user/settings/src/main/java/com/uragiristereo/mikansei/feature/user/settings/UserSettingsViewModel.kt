@@ -115,15 +115,25 @@ class UserSettingsViewModel(
         updateSettings(data = ProfileSettingsField(defaultImageSize = value))
     }
 
+    fun onShowPendingPostsChange(value: Boolean) {
+        viewModelScope.launch {
+            userRepository.update { profile ->
+                profile.copy(
+                    mikansei = profile.mikansei.copy(showPendingPosts = value),
+                )
+            }
+        }
+    }
+
     fun setBottomSheetPreferenceState(preference: Preference) {
         when (preference) {
             is RatingPreference -> {
                 viewModelScope.launch {
-                    userRepository.update(
-                        user = activeUser.value.copy(
-                            mikansei = activeUser.value.mikansei.copy(postsRatingFilter = preference),
-                        ),
-                    )
+                    userRepository.update { profile ->
+                        profile.copy(
+                            mikansei = profile.mikansei.copy(postsRatingFilter = preference),
+                        )
+                    }
                 }
             }
         }
