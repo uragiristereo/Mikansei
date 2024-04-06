@@ -16,6 +16,7 @@ data class Post(
     val source: String?,
     val rating: Rating,
     val status: Status,
+    val relationshipType: RelationshipType,
 
     val score: Int,
     val upScore: Int,
@@ -57,5 +58,12 @@ data class Post(
         PENDING,
         DELETED,
         BANNED,
+    }
+
+    enum class RelationshipType {
+        NONE,
+        PARENT,
+        CHILD,
+        PARENT_CHILD,
     }
 }
