@@ -28,6 +28,12 @@ fun DanbooruPost.toPost(): Post {
             isPending -> Post.Status.PENDING
             else -> Post.Status.ACTIVE
         },
+        relationshipType = when {
+            hasChildren && parentId != null -> Post.RelationshipType.PARENT_CHILD
+            hasChildren -> Post.RelationshipType.PARENT
+            parentId != null -> Post.RelationshipType.CHILD
+            else -> Post.RelationshipType.NONE
+        },
         score = score,
         upScore = upScore,
         downScore = downScore,
