@@ -3,7 +3,6 @@ package com.uragiristereo.mikansei.feature.home.posts.grid
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,7 +30,9 @@ internal fun PostItem(
 ) {
     val context = LocalContext.current
 
-    Box(
+    PostBorder(
+        status = post.status,
+        relationshipType = post.relationshipType,
         modifier = modifier
             .aspectRatio(post.aspectRatio)
             .clip(RoundedCornerShape(size = 8.dp))
