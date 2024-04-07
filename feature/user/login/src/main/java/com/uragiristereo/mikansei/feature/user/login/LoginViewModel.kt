@@ -40,7 +40,7 @@ class LoginViewModel(
         job = viewModelScope.launch {
             loginState = LoginState.LoggingIn
 
-            when (val result = performLoginUseCase(name, apiKey)) {
+            loginState = when (val result = performLoginUseCase(name, apiKey)) {
                 is Result.Success -> LoginState.Success
                 is Result.Failed -> LoginState.Failed(message = result.message)
                 is Result.Error -> LoginState.Failed(message = result.t.toString())
