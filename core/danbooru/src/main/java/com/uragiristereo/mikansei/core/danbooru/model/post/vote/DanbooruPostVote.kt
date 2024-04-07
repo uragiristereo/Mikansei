@@ -1,13 +1,10 @@
 package com.uragiristereo.mikansei.core.danbooru.model.post.vote
 
-
-import androidx.annotation.Keep
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.Date
 
-@Keep
 @Serializable
 data class DanbooruPostVote(
     @SerialName("id")

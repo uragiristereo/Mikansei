@@ -1,11 +1,9 @@
 package com.uragiristereo.mikansei.core.danbooru.model.favorite
 
 
-import androidx.annotation.Keep
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Keep
 @Serializable
 data class DanbooruFavorite(
     @SerialName("id")

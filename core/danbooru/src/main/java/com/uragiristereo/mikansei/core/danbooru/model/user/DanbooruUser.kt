@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.core.danbooru.model.user
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
