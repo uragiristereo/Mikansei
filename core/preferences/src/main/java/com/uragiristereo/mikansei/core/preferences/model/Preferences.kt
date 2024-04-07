@@ -1,13 +1,12 @@
 package com.uragiristereo.mikansei.core.preferences.model
 
 import android.os.Build
-import androidx.annotation.Keep
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Keep
 @Serializable
 data class Preferences(
+    @SerialName(value = "theme")
     val theme: ThemePreference = ThemePreference.SYSTEM_DEFAULT,
 
     @SerialName(value = "black_theme")
