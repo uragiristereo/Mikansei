@@ -16,6 +16,8 @@ interface DanbooruRepository {
     val host: DanbooruHost
     val unsafeTags: List<String>
 
+    fun removeCachedEndpoints()
+
     suspend fun getPost(id: Int): Result<Post>
 
     suspend fun getPosts(tags: String, page: Int): Result<PostsResult>

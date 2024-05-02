@@ -23,6 +23,8 @@ class PerformLoginUseCase(
                     profile.name != name -> Result.Failed(message = "Invalid name/API key.")
                     userExists -> Result.Failed("User is already logged in.")
                     else -> {
+                        danbooruRepository.removeCachedEndpoints()
+
                         userRepository.add(
                             user = profile.copy(
                                 apiKey = apiKey,
