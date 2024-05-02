@@ -29,6 +29,7 @@ import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -130,11 +131,23 @@ class PostsViewModel(
 
             when (result) {
                 is Result.Success -> {
-                    posts = immutableListOf(result.data.posts)
-                    canLoadMore = result.data.canLoadMore
-                    errorMessage = null
+                    val isSavedSearchesQuerying = result.data.posts.isEmpty()
+                            && tags.contains("search:")
+                            && refresh
+                            && shouldRetryGettingPosts
 
-                    disableLoadingState(refresh)
+                    if (isSavedSearchesQuerying) {
+                        delay(timeMillis = 500L)
+                        shouldRetryGettingPosts = false
+                        getPosts(refresh = true)
+                    } else {
+                        posts = immutableListOf(result.data.posts)
+                        canLoadMore = result.data.canLoadMore
+                        errorMessage = null
+                        shouldRetryGettingPosts = false
+
+                        disableLoadingState(refresh)
+                    }
                 }
 
                 is Result.Failed -> {
