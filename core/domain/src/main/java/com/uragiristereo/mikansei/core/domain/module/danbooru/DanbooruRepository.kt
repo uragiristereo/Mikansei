@@ -5,6 +5,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
@@ -56,4 +57,12 @@ interface DanbooruRepository {
     suspend fun editFavoriteGroup(favoriteGroupId: Int, name: String, postIds: List<Int>): Result<Unit>
 
     suspend fun deleteFavoriteGroup(favoriteGroupId: Int): Result<Unit>
+
+    suspend fun getSavedSearches(forceRefresh: Boolean): Result<SavedSearch.Result>
+
+    suspend fun createNewSavedSearch(query: String, labels: List<String>): Result<Unit>
+
+    suspend fun editSavedSearch(savedSearch: SavedSearch): Result<Unit>
+
+    suspend fun deleteSavedSearch(id: Int): Result<Unit>
 }
