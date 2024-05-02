@@ -2,7 +2,6 @@ package com.uragiristereo.mikansei.feature.home.posts
 
 import android.app.Activity
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.layout.Box
@@ -24,6 +23,7 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -46,6 +46,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
+import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
@@ -67,18 +68,20 @@ import com.uragiristereo.mikansei.feature.home.posts.state.PostsError
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsLoadingState
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsProgress
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun PostsScreen(
     isRouteFirstEntry: Boolean,
     onNavigateBack: () -> Unit,
     onNavigateImage: (Post) -> Unit,
     onNavigateMore: (Post) -> Unit,
+    onNavigateNewSavedSearch: (String) -> Unit,
     viewModel: PostsViewModel = koinViewModel(),
 ) {
     val density = LocalDensity.current
@@ -88,6 +91,7 @@ internal fun PostsScreen(
     val scrollToTopChannel = LocalScrollToTopChannel.current
     val windowSizeVertical = LocalWindowSizeVertical.current
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
+    val scaffoldState = LocalScaffoldState.current
 
     val scope = rememberCoroutineScope()
     val gridState = rememberLazyStaggeredGridState()
@@ -95,6 +99,7 @@ internal fun PostsScreen(
         refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
         onRefresh = viewModel::retryGetPosts,
     )
+    val activeUser by viewModel.activeUser.collectAsState()
 
     val isMoreLoadingVisible by remember {
         derivedStateOf {
@@ -238,6 +243,47 @@ internal fun PostsScreen(
                             gridState.animateScrollToItem(index = 0)
 
                             viewModel.retryGetPosts()
+                        }
+                    },
+                    onSaveSearchClick = {
+                        when {
+                            viewModel.tags.isBlank() -> {
+                                scope.launch(SupervisorJob()) {
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        message = "Saving a search requires at least one tag to browse",
+                                    )
+                                }
+                            }
+
+                            viewModel.tags.contains("search:") -> {
+                                scope.launch(SupervisorJob()) {
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        message = "You can't save an existing saved search",
+                                    )
+                                }
+                            }
+
+                            activeUser.isAnonymous() -> {
+                                scope.launch(SupervisorJob()) {
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        message = context.getString(R.string.please_login),
+                                    )
+                                }
+                            }
+
+                            else -> {
+                                onNavigateNewSavedSearch(viewModel.tags.trim())
+                            }
+                        }
+
+                        if (activeUser.isNotAnonymous()) {
+                            onNavigateNewSavedSearch(viewModel.tags.trim())
+                        } else {
+                            scope.launch(SupervisorJob()) {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = context.getString(R.string.please_login),
+                                )
+                            }
                         }
                     },
                     onExitClick = {
