@@ -65,6 +65,11 @@ class DanbooruRepositoryImpl(
     private val isInTestMode = preferencesRepository.data.value.testMode
     override var unsafeTags: List<String> = listOf()
 
+    private val cacheClearedEndpoints = listOf(
+        "/saved_searches.json",
+        "/favorite_groups.json",
+    )
+
     private var activeUser = userRepository.active.value
 
     private val actualHost = when {
@@ -174,6 +179,22 @@ class DanbooruRepositoryImpl(
 
     private fun isInSafeMode(): Boolean {
         return environment.safeMode || activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY
+    }
+
+    override fun removeCachedEndpoints() {
+        val cacheUrlIterator = networkRepository.cacheUrls
+
+        while (cacheUrlIterator.hasNext()) {
+            val nextUrl = cacheUrlIterator.next()
+
+            val isUrlInList = cacheClearedEndpoints.any {
+                nextUrl.contains(it)
+            }
+
+            if (isUrlInList) {
+                cacheUrlIterator.remove()
+            }
+        }
     }
 
     override suspend fun getPost(id: Int): Result<Post> = resultOf {
