@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -47,6 +48,8 @@ import com.uragiristereo.mikansei.feature.home.more.core.MoreTopAppBar
 import com.uragiristereo.mikansei.feature.home.more.core.NavigationItem
 import com.uragiristereo.mikansei.feature.home.more.core.UserHeader
 import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -56,6 +59,9 @@ internal fun MoreScreen(
     viewModel: MoreViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
+    val scaffoldState = LocalScaffoldState.current
+    val scope = rememberCoroutineScope()
+
     val gridSize = 2
     val span: (LazyGridItemSpanScope.() -> GridItemSpan) = {
         GridItemSpan(currentLineSpan = gridSize)
@@ -67,7 +73,7 @@ internal fun MoreScreen(
     SetSystemBarsColors(Color.Transparent)
 
     Scaffold2(
-        scaffoldState = LocalScaffoldState.current,
+        scaffoldState = scaffoldState,
         topBar = {
             ProductStatusBarSpacer {
                 MoreTopAppBar()
@@ -180,6 +186,25 @@ internal fun MoreScreen(
                     painter = painterResource(id = R.drawable.filter_list),
                     onClick = {
                         onNavigate(MainRoute.Filters)
+                    },
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+            }
+
+            item {
+                NavigationItem(
+                    text = "Saved searches",
+                    painter = painterResource(id = R.drawable.sell),
+                    onClick = {
+                        if (activeUser.isNotAnonymous()) {
+                            onNavigate(MainRoute.SavedSearches)
+                        } else {
+                            scope.launch(SupervisorJob()) {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = context.getString(R.string.please_login),
+                                )
+                            }
+                        }
                     },
                     modifier = Modifier.padding(bottom = 12.dp),
                 )
