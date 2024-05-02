@@ -5,6 +5,7 @@ import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavoriteG
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.post.vote.DanbooruPostVote
 import com.uragiristereo.mikansei.core.danbooru.model.profile.DanbooruProfile
+import com.uragiristereo.mikansei.core.danbooru.model.saved_search.DanbooruSavedSearch
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
@@ -131,4 +132,26 @@ interface DanbooruApi {
     suspend fun deleteFavoriteGroup(
         @Path("favorite_group_id") favoriteGroupId: Int,
     ): Response<Unit>
+
+    @GET("/saved_searches.json")
+    suspend fun getSavedSearches(
+        @Header("force-cache") forceCache: Boolean = true,
+        @Header("cache-control") cacheControl: CacheControl,
+    ): Response<List<DanbooruSavedSearch>>
+
+    @POST("/saved_searches.json")
+    suspend fun createNewSavedSearch(
+        @Query("saved_search[query]") query: String,
+        @Query("saved_search[label_string]") labels: String,
+    ): Response<DanbooruSavedSearch>
+
+    @PUT("/saved_searches/{id}.json")
+    suspend fun editSavedSearch(
+        @Path("id") id: Int,
+        @Query("saved_search[query]") query: String,
+        @Query("saved_search[label_string]") labels: String,
+    ): Response<Unit>
+
+    @DELETE("/saved_searches/{id}.json")
+    suspend fun deleteSavedSearch(@Path("id") id: Int): Response<Unit>
 }

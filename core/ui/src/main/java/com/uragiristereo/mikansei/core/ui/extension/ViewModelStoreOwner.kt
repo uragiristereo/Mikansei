@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.core.ui.extension
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModelStoreOwner
@@ -10,10 +11,12 @@ fun rememberParentViewModelStoreOwner(
     navController: NavHostController,
     parentRoute: String,
 ): ViewModelStoreOwner {
-    return remember(navController.currentBackStackEntry) {
+    return remember(navController, parentRoute) {
         object : ViewModelStoreOwner {
-            override val viewModelStore =
-                navController.getBackStackEntry(parentRoute).viewModelStore
+            @SuppressLint("UnrememberedGetBackStackEntry")
+            override val viewModelStore = navController
+                .getBackStackEntry(parentRoute)
+                .viewModelStore
         }
     }
 }

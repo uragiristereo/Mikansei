@@ -13,6 +13,8 @@ import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.uragiristereo.mikansei.core.database.session.SessionDao
 import com.uragiristereo.mikansei.core.database.session.toSessionList
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
+import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
@@ -27,6 +29,8 @@ import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -35,6 +39,7 @@ import java.util.UUID
 @OptIn(SavedStateHandleSaveableApi::class)
 class PostsViewModel(
     savedStateHandle: SavedStateHandle,
+    private val userRepository: UserRepository,
     private val getPostsUseCase: GetPostsUseCase,
     private val sessionDao: SessionDao,
 ) : ViewModel() {
@@ -83,6 +88,12 @@ class PostsViewModel(
     private var sessionUuid = savedStateHandle[Constants.STATE_KEY_POSTS_SESSION_ID] ?: UUID.randomUUID().toString()
     private var postsJob: Job? = null
 
+    // saved searches
+    val activeUser: StateFlow<Profile>
+        get() = userRepository.active
+
+    private var shouldRetryGettingPosts = true
+
     init {
         if (!initialized) {
             initialized = true
@@ -120,11 +131,23 @@ class PostsViewModel(
 
             when (result) {
                 is Result.Success -> {
-                    posts = immutableListOf(result.data.posts)
-                    canLoadMore = result.data.canLoadMore
-                    errorMessage = null
+                    val isSavedSearchesQuerying = result.data.posts.isEmpty()
+                            && tags.contains("search:")
+                            && refresh
+                            && shouldRetryGettingPosts
 
-                    disableLoadingState(refresh)
+                    if (isSavedSearchesQuerying) {
+                        delay(timeMillis = 500L)
+                        shouldRetryGettingPosts = false
+                        getPosts(refresh = true)
+                    } else {
+                        posts = immutableListOf(result.data.posts)
+                        canLoadMore = result.data.canLoadMore
+                        errorMessage = null
+                        shouldRetryGettingPosts = false
+
+                        disableLoadingState(refresh)
+                    }
                 }
 
                 is Result.Failed -> {

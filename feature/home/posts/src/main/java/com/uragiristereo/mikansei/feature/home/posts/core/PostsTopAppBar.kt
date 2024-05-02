@@ -35,6 +35,7 @@ internal fun PostsTopAppBar(
     isRouteFirstEntry: Boolean,
     onNavigateBack: () -> Unit,
     onRefreshClick: () -> Unit,
+    onSaveSearchClick: () -> Unit,
     onExitClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -82,6 +83,10 @@ internal fun PostsTopAppBar(
                         dropdownExpanded = false
                         onRefreshClick()
                     },
+                    onSaveSearchClick = {
+                        dropdownExpanded = false
+                        onSaveSearchClick()
+                    },
                     onExitClick = {
                         dropdownExpanded = false
                         onExitClick()
@@ -121,6 +126,7 @@ private fun PostsTopAppBarDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     onRefreshClick: () -> Unit,
+    onSaveSearchClick: () -> Unit,
     onExitClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -134,6 +140,13 @@ private fun PostsTopAppBarDropdownMenu(
                 onClick = onRefreshClick,
                 content = {
                     Text(text = stringResource(id = R.string.refresh))
+                },
+            )
+
+            DropdownMenuItem(
+                onClick = onSaveSearchClick,
+                content = {
+                    Text(text = "Save this search")
                 },
             )
 

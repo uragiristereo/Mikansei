@@ -1,0 +1,33 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace "com.uragiristereo.mikansei.feature.saved_searches"
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+dependencies {
+    implementation(project(":core:domain"))
+    implementation(project(":core:model"))
+    implementation(project(":core:product"))
+    implementation(project(":core:resources"))
+    implementation(project(":core:ui"))
+
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.androidx.compose)
+    implementation(libs.bundles.core)
+    implementation(libs.bundles.koin)
+}

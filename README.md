@@ -2,7 +2,8 @@
 
 [![Discord](https://img.shields.io/discord/1084015982198145065?logo=discord&logoColor=white&label=discord)](https://discord.gg/YMyVNsFvpC)
 
-**Mikansei 未完成** _(lit. unfinished)_ is a [Danbooru](https://danbooru.donmai.us/posts?tags=rating:general) client for Android. Made with Jetpack Compose 🚀.
+**Mikansei 未完成** _(lit. unfinished)_ is a [Danbooru](https://safebooru.donmai.us/posts) client
+for Android. Made with Jetpack Compose 🚀.
 
 The name is inspired from my favorite [vocaloid](https://vocaloid.fandom.com/wiki/Vocaloid_Wiki) producer, [Orangestar](https://twitter.com/mikanseip)'s Japanese name version (蜜柑星, which is read _mikansei_).
 
@@ -15,7 +16,7 @@ This is a complete rewrite version of my old project [Mejiboard](https://github.
 > 2. A taggable imageboard, with sophisticated features for keeping, organizing and finding pictures.
 > 3. (Japanese) Corrugated cardboard box.
 
-_(taken from the website's [home wiki](https://danbooru.donmai.us/wiki_pages/help:home))_
+_(taken from the website's [home wiki](https://safebooru.donmai.us/wiki_pages/help:home))_
 
 ## Screenshots
 
@@ -47,6 +48,7 @@ _(taken from the website's [home wiki](https://danbooru.donmai.us/wiki_pages/hel
 - View, favorite and vote posts
 - Searching with autocomplete
 - Favorites and favorite groups
+- Saved searches
 - Tags filtering/blacklisting
 - Safe mode toggle
 - Show deleted posts toggle
@@ -73,7 +75,8 @@ This project is trying to use the latest Android tech stacks.
 - Others:
   - [Kotlinx.Serialization](https://github.com/Kotlin/kotlinx.serialization) (Serializer)
   - [Accompanist](https://google.github.io/accompanist) (Jetpack Compose Extensions)
-  - [Safer Navigation Compose](https://github.com/uragiristereo/safer-navigation-compose) (Navigation)
+  - [Serialized Navigation Extension](https://github.com/uragiristereo/serialized-navigation-extension) (
+    Navigation)
   - [Timber](https://github.com/JakeWharton/timber) (Logger)
   - [Media3 ExoPlayer](https://github.com/androidx/media) (Video Loading)
 
@@ -90,9 +93,9 @@ To build this project, you need the latest stable
 of [Android Studio](https://developer.android.com/studio).
 
 1. Clone the project and open in Android Studio.
-2. Sync project with Gradle then Run 'app'.
+2. Sync project with Gradle then Run `app`.
 
-**Note:**
+**Notes:**
 
 The `playRelease` build variant will bundle Firebase Crashlytics to the app. By default it
 will use the `ossDebug` build variant. The rest of the build variants won't bundle Firebase at all.

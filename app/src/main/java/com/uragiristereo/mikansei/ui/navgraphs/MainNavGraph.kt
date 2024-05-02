@@ -11,6 +11,7 @@ import com.uragiristereo.mikansei.feature.about.core.aboutRoute
 import com.uragiristereo.mikansei.feature.filters.core.filtersRoute
 import com.uragiristereo.mikansei.feature.home.homeGraph
 import com.uragiristereo.mikansei.feature.image.core.imageRoute
+import com.uragiristereo.mikansei.feature.saved_searches.savedSearchesGraph
 import com.uragiristereo.mikansei.feature.search.core.searchRoute
 import com.uragiristereo.mikansei.feature.settings.core.settingsGraph
 import com.uragiristereo.mikansei.feature.user.userGraph
@@ -62,5 +63,7 @@ fun MainNavGraph(
         aboutRoute(navController)
 
         userGraph(navController)
+
+        savedSearchesGraph(navController)
     }
 }

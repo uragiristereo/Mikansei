@@ -9,6 +9,8 @@ import com.uragiristereo.mikansei.core.danbooru.model.post.toPost
 import com.uragiristereo.mikansei.core.danbooru.model.post.toPostList
 import com.uragiristereo.mikansei.core.danbooru.model.post.toPostVote
 import com.uragiristereo.mikansei.core.danbooru.model.profile.toProfile
+import com.uragiristereo.mikansei.core.danbooru.model.saved_search.toSavedSearch
+import com.uragiristereo.mikansei.core.danbooru.model.saved_search.toSavedSearchList
 import com.uragiristereo.mikansei.core.danbooru.model.tag.toTagList
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserFieldData
@@ -22,6 +24,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
@@ -61,6 +64,11 @@ class DanbooruRepositoryImpl(
 ) : DanbooruRepository {
     private val isInTestMode = preferencesRepository.data.value.testMode
     override var unsafeTags: List<String> = listOf()
+
+    private val cacheClearedEndpoints = listOf(
+        "/saved_searches.json",
+        "/favorite_groups.json",
+    )
 
     private var activeUser = userRepository.active.value
 
@@ -171,6 +179,22 @@ class DanbooruRepositoryImpl(
 
     private fun isInSafeMode(): Boolean {
         return environment.safeMode || activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY
+    }
+
+    override fun removeCachedEndpoints() {
+        val cacheUrlIterator = networkRepository.cacheUrls
+
+        while (cacheUrlIterator.hasNext()) {
+            val nextUrl = cacheUrlIterator.next()
+
+            val isUrlInList = cacheClearedEndpoints.any {
+                nextUrl.contains(it)
+            }
+
+            if (isUrlInList) {
+                cacheUrlIterator.remove()
+            }
+        }
     }
 
     override suspend fun getPost(id: Int): Result<Post> = resultOf {
@@ -316,5 +340,43 @@ class DanbooruRepositoryImpl(
 
     override suspend fun deleteFavoriteGroup(favoriteGroupId: Int): Result<Unit> = resultOf {
         client.deleteFavoriteGroup(favoriteGroupId)
+    }
+
+    override suspend fun getSavedSearches(forceRefresh: Boolean): Result<SavedSearch.Result> {
+        val response = client.getSavedSearches(cacheControl = getCacheControl(forceRefresh))
+
+        return resultOf {
+            response
+        }.mapSuccess {
+            SavedSearch.Result(
+                items = it.toSavedSearchList(),
+                isFromCache = response.raw().cacheResponse != null
+                        && response.raw().networkResponse == null,
+            )
+        }
+    }
+
+    override suspend fun createNewSavedSearch(
+        query: String,
+        labels: List<String>,
+    ): Result<Unit> = resultOf {
+        client.createNewSavedSearch(
+            query = query,
+            labels = labels.joinToString(separator = " "),
+        )
+    }.mapSuccess {
+        it.toSavedSearch()
+    }
+
+    override suspend fun editSavedSearch(savedSearch: SavedSearch): Result<Unit> = resultOf {
+        client.editSavedSearch(
+            id = savedSearch.id,
+            query = savedSearch.query,
+            labels = savedSearch.labels.joinToString(separator = " "),
+        )
+    }
+
+    override suspend fun deleteSavedSearch(id: Int): Result<Unit> = resultOf {
+        client.deleteSavedSearch(id)
     }
 }

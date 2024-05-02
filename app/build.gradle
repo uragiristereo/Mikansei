@@ -95,6 +95,7 @@ dependencies {
     implementation(project(":feature:filters"))
     implementation(project(":feature:home"))
     implementation(project(":feature:image"))
+    implementation(project(":feature:saved_searches"))
     implementation(project(":feature:search"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:user"))

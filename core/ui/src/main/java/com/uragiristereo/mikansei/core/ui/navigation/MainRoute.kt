@@ -29,9 +29,6 @@ sealed interface MainRoute : NavRoute {
     data object SearchHistory : MainRoute
 
     @Serializable
-    data object SavedSearches : MainRoute
-
-    @Serializable
     data object About : MainRoute
 
     @Serializable
@@ -41,6 +38,9 @@ sealed interface MainRoute : NavRoute {
     data class NewFavGroup(
         val postId: Int? = null,
     ) : MainRoute
+
+    @Serializable
+    data object SavedSearches : MainRoute
 }
 
 val NestedNavigationRoutes = listOf(

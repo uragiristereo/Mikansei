@@ -15,6 +15,7 @@ import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBa
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchesRoute
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
 import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreContent
 import com.uragiristereo.mikansei.feature.home.posts.share.ShareContent
@@ -84,6 +85,14 @@ fun NavGraphBuilder.postsRoute(
                     it.navigate(HomeRoute.PostMore(post))
                 }
             },
+            onNavigateNewSavedSearch = { tags ->
+                mainNavController.navigate(
+                    route = SavedSearchesRoute.NewOrEdit(
+                        query = tags,
+                        savedSearch = null,
+                    ),
+                )
+            }
         )
     }
 }

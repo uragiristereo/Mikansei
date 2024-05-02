@@ -13,6 +13,7 @@ import com.uragiristereo.mikansei.feature.filters.FiltersViewModel
 import com.uragiristereo.mikansei.feature.home.HomeModule
 import com.uragiristereo.mikansei.feature.home.more.MoreViewModel
 import com.uragiristereo.mikansei.feature.image.ImageModule
+import com.uragiristereo.mikansei.feature.saved_searches.savedSearchesModule
 import com.uragiristereo.mikansei.feature.search.SearchViewModel
 import com.uragiristereo.mikansei.feature.settings.SettingsViewModel
 import com.uragiristereo.mikansei.feature.user.UserModule
@@ -38,6 +39,7 @@ object MikanseiModule {
                 ImageModule(),
                 UserModule(),
                 ProductModule(),
+                savedSearchesModule,
             )
         )
 

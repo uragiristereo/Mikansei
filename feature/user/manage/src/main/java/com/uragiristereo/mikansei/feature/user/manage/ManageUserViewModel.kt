@@ -2,6 +2,7 @@ package com.uragiristereo.mikansei.feature.user.manage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ManageUserViewModel(
+    private val danbooruRepository: DanbooruRepository,
     private val userRepository: UserRepository,
 ) : ViewModel() {
     val activeUser: StateFlow<Profile>
@@ -37,6 +39,7 @@ class ManageUserViewModel(
 
     fun switchActiveUser(user: Profile) {
         viewModelScope.launch {
+            danbooruRepository.removeCachedEndpoints()
             userRepository.switchActive(user.id)
         }
     }
