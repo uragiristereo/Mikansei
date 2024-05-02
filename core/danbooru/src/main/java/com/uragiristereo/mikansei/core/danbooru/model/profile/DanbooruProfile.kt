@@ -44,7 +44,7 @@ data class DanbooruProfile(
     val defaultImageSize: String,
 
     @SerialName("favorite_tags")
-    val favoriteTags: String,
+    val favoriteTags: String?,
 
     @SerialName("blacklisted_tags")
     val blacklistedTags: String,
@@ -68,7 +68,7 @@ data class DanbooruProfile(
     val perPage: Int,
 
     @SerialName("custom_style")
-    val customStyle: String,
+    val customStyle: String?,
 
     @SerialName("theme")
     val theme: String,
