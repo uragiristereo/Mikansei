@@ -247,6 +247,14 @@ internal fun PostsScreen(
                     },
                     onSaveSearchClick = {
                         when {
+                            activeUser.isAnonymous() -> {
+                                scope.launch(SupervisorJob()) {
+                                    scaffoldState.snackbarHostState.showSnackbar(
+                                        message = context.getString(R.string.please_login),
+                                    )
+                                }
+                            }
+
                             viewModel.tags.isBlank() -> {
                                 scope.launch(SupervisorJob()) {
                                     scaffoldState.snackbarHostState.showSnackbar(
@@ -263,26 +271,8 @@ internal fun PostsScreen(
                                 }
                             }
 
-                            activeUser.isAnonymous() -> {
-                                scope.launch(SupervisorJob()) {
-                                    scaffoldState.snackbarHostState.showSnackbar(
-                                        message = context.getString(R.string.please_login),
-                                    )
-                                }
-                            }
-
                             else -> {
                                 onNavigateNewSavedSearch(viewModel.tags.trim())
-                            }
-                        }
-
-                        if (activeUser.isNotAnonymous()) {
-                            onNavigateNewSavedSearch(viewModel.tags.trim())
-                        } else {
-                            scope.launch(SupervisorJob()) {
-                                scaffoldState.snackbarHostState.showSnackbar(
-                                    message = context.getString(R.string.please_login),
-                                )
                             }
                         }
                     },
