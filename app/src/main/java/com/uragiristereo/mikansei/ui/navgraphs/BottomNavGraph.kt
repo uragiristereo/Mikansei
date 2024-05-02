@@ -12,6 +12,7 @@ import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottom
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.NavigateToIndexWhenBottomSheetNavigatorHidden
 import com.uragiristereo.mikansei.feature.home.favorites.favoritesBottomRoute
 import com.uragiristereo.mikansei.feature.home.posts.core.postsBottomRoute
+import com.uragiristereo.mikansei.feature.saved_searches.savedSearchesBottomRoute
 import com.uragiristereo.mikansei.feature.user.manage.core.manageBottomRoute
 import com.uragiristereo.mikansei.ui.MainViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -43,5 +44,7 @@ fun BottomNavGraph(
         manageBottomRoute(mainNavController)
 
         favoritesBottomRoute(mainNavController)
+
+        savedSearchesBottomRoute(mainNavController)
     }
 }
