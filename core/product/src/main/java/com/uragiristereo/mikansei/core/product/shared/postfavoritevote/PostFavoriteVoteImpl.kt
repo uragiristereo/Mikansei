@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.core.product.shared.postfavoritevote
 
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +14,7 @@ import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -40,7 +40,8 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     override var favoriteButtonEnabled by mutableStateOf(false)
     override var voteButtonEnabled by mutableStateOf(false)
 
-    override val toastChannel = Channel<Pair<String, Int>>()
+    private val snackbarChannel = Channel<PostFavoriteVote.Event>()
+    override val postFavoriteSnackbarEvent = snackbarChannel.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -110,7 +111,7 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     override fun toggleFavorite(value: Boolean) {
         viewModelScope.launch {
             if (activeUser.isAnonymous()) {
-                toastChannel.send("Please Login to use this feature!" to Toast.LENGTH_LONG)
+                snackbarChannel.send(PostFavoriteVote.Event.LOGIN_REQUIRED)
 
                 return@launch
             }
@@ -158,7 +159,7 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     override fun upvotePost() {
         viewModelScope.launch {
             if (activeUser.isAnonymous()) {
-                toastChannel.send("Please Login to use this feature!" to Toast.LENGTH_LONG)
+                snackbarChannel.send(PostFavoriteVote.Event.LOGIN_REQUIRED)
 
                 return@launch
             }
@@ -171,7 +172,7 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     override fun downvotePost() {
         viewModelScope.launch {
             if (activeUser.isAnonymous()) {
-                toastChannel.send("Please Login to use this feature!" to Toast.LENGTH_LONG)
+                snackbarChannel.send(PostFavoriteVote.Event.LOGIN_REQUIRED)
 
                 return@launch
             }
@@ -199,7 +200,7 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     override fun unvotePost() {
         viewModelScope.launch {
             if (activeUser.isAnonymous()) {
-                toastChannel.send("Please Login to use this feature!" to Toast.LENGTH_LONG)
+                snackbarChannel.send(PostFavoriteVote.Event.LOGIN_REQUIRED)
 
                 return@launch
             }

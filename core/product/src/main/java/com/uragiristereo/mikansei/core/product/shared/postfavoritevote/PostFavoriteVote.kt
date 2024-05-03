@@ -2,7 +2,7 @@ package com.uragiristereo.mikansei.core.product.shared.postfavoritevote
 
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.model.danbooru.Post
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 
 interface PostFavoriteVote {
     val post: Post
@@ -13,11 +13,15 @@ interface PostFavoriteVote {
     val isPostUpdated: Boolean
     val favoriteButtonEnabled: Boolean
     val voteButtonEnabled: Boolean
-    val toastChannel: Channel<Pair<String, Int>>
+    val postFavoriteSnackbarEvent: Flow<Event>
 
     fun toggleFavorite(value: Boolean)
     fun upvotePost()
     fun downvotePost()
     fun unvotePost()
     fun onVoteChange(value: PostVote.Status)
+
+    enum class Event {
+        LOGIN_REQUIRED,
+    }
 }

@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.image.more
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -37,19 +36,21 @@ import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
+import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVote
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
+import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DragHandle
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
-import com.uragiristereo.mikansei.core.ui.extension.forEach
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheetState2
 import com.uragiristereo.mikansei.feature.image.more.core.MoreActionsRow
 import com.uragiristereo.mikansei.feature.image.more.core.MoreCloseButton
 import com.uragiristereo.mikansei.feature.image.more.core.MoreTagsButton
 import com.uragiristereo.mikansei.feature.image.more.info.MoreInfoColumn
 import com.uragiristereo.mikansei.feature.image.more.tags.MoreTagsRow
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.text.DateFormat
@@ -69,6 +70,7 @@ internal fun MoreBottomSheet(
     val context = LocalContext.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
     val hapticFeedback = LocalHapticFeedback.current
+    val snackbarHostState = LocalSnackbarHostState.current
 
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
@@ -93,9 +95,18 @@ internal fun MoreBottomSheet(
         }
     }
 
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.toastChannel.forEach { (message, duration) ->
-            Toast.makeText(context, message, duration).show()
+    LaunchedEffect(key1 = Unit) {
+        viewModel.postFavoriteSnackbarEvent.collect { event ->
+            launch(SupervisorJob()) {
+                when (event) {
+                    PostFavoriteVote.Event.LOGIN_REQUIRED -> {
+                        sheetState.hide()
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.please_login)
+                        )
+                    }
+                }
+            }
         }
     }
 

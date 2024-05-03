@@ -3,7 +3,6 @@ package com.uragiristereo.mikansei.core.product.shared.downloadshare
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -22,9 +21,11 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.core.DownloadState
 import com.uragiristereo.mikansei.core.resources.R
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -37,6 +38,9 @@ open class DownloadShareViewModelImpl : ViewModel(), DownloadShareViewModel, Koi
     private val downloadPostWithNotificationUseCase: DownloadPostWithNotificationUseCase by inject()
     private val convertFileSizeUseCase: ConvertFileSizeUseCase by inject()
 
+    private val snackbarChannel = Channel<DownloadShareViewModel.Event>()
+    override val downloadShareEvent = snackbarChannel.receiveAsFlow()
+
     // share
     override var shareDialogVisible by mutableStateOf(false)
 
@@ -44,18 +48,14 @@ open class DownloadShareViewModelImpl : ViewModel(), DownloadShareViewModel, Koi
 
     override var selectedPost: Post? = null
 
-    override fun downloadPost(
-        context: Context,
-        post: Post,
-    ) {
-        if (downloadRepository.isPostAlreadyAdded(postId = post.id)) {
-            Toast.makeText(context, context.getText(R.string.download_already_running), Toast.LENGTH_LONG).show()
-        } else {
-            viewModelScope.launch {
+    override fun downloadPost(post: Post) {
+        viewModelScope.launch {
+            if (downloadRepository.isPostAlreadyAdded(postId = post.id)) {
+                snackbarChannel.send(DownloadShareViewModel.Event.POST_IS_ALREADY_DOWNLOADING)
+            } else {
+                snackbarChannel.send(DownloadShareViewModel.Event.DOWNLOADING)
                 downloadPostWithNotificationUseCase(post)
             }
-
-            Toast.makeText(context, context.getText(R.string.download_added), Toast.LENGTH_SHORT).show()
         }
     }
 

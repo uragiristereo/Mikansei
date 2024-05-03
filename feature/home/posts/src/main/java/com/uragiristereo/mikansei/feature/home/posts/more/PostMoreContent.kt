@@ -12,12 +12,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVote
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
@@ -37,9 +40,25 @@ internal fun PostMoreContent(
     onAddToFavoriteGroupClick: (Post) -> Unit,
     viewModel: PostMoreViewModel = koinViewModel(),
 ) {
+    val context = LocalContext.current
     val snackbarHostState = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
     val post = viewModel.post
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.postFavoriteSnackbarEvent.collect { event ->
+            launch(SupervisorJob()) {
+                when (event) {
+                    PostFavoriteVote.Event.LOGIN_REQUIRED -> {
+                        onDismiss()
+                        snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.please_login),
+                        )
+                    }
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -86,7 +105,9 @@ internal fun PostMoreContent(
                         if (viewModel.activeUser.value.isNotAnonymous()) {
                             onAddToFavoriteGroupClick(post)
                         } else {
-                            snackbarHostState.showSnackbar(message = "Please Login to use this feature!")
+                            snackbarHostState.showSnackbar(
+                                message = context.getString(R.string.please_login),
+                            )
                         }
                     }
                 },

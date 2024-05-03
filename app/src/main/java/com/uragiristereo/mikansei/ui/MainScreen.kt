@@ -9,6 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
 import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheetLayout
+import com.uragiristereo.mikansei.core.product.shared.downloadshare.DownloadShareViewModel
 import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme
 import com.uragiristereo.mikansei.core.product.theme.Theme
 import com.uragiristereo.mikansei.core.resources.R
@@ -52,6 +54,7 @@ import com.uragiristereo.mikansei.ui.navgraphs.BottomNavGraph
 import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 import com.uragiristereo.serializednavigationextension.runtime.navigate
 import com.uragiristereo.serializednavigationextension.runtime.routeOf
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
@@ -102,9 +105,7 @@ fun MainScreen(
                 }
             }
 
-            viewModel.selectedPost?.let {
-                viewModel.downloadPost(context, it)
-            }
+            viewModel.selectedPost?.let(viewModel::downloadPost)
         }
     )
 
@@ -113,7 +114,7 @@ fun MainScreen(
             viewModel.selectedPost = post
             notificationPermissionState.launchPermissionRequest()
         } else {
-            viewModel.downloadPost(context, post)
+            viewModel.downloadPost(post)
         }
     }
 
@@ -129,6 +130,26 @@ fun MainScreen(
     val lambdaOnRequestScrollToTop: () -> Unit = {
         scope.launch {
             viewModel.scrollToTopChannel.send(UUID.randomUUID().toString())
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.downloadShareEvent.collect { event ->
+            launch(SupervisorJob()) {
+                when (event) {
+                    DownloadShareViewModel.Event.DOWNLOADING -> {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.download_added),
+                        )
+                    }
+
+                    DownloadShareViewModel.Event.POST_IS_ALREADY_DOWNLOADING -> {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            message = context.getString(R.string.download_already_running),
+                        )
+                    }
+                }
+            }
         }
     }
 
