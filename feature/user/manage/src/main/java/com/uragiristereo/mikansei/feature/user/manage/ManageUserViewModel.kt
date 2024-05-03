@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -39,7 +40,10 @@ class ManageUserViewModel(
 
     fun switchActiveUser(user: Profile) {
         viewModelScope.launch {
-            danbooruRepository.removeCachedEndpoints()
+            launch(SupervisorJob()) {
+                danbooruRepository.removeCachedEndpoints()
+            }
+
             userRepository.switchActive(user.id)
         }
     }
