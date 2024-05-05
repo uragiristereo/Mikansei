@@ -8,6 +8,7 @@ import android.os.Build.VERSION.SDK_INT
 import coil.ImageLoader
 import coil.ImageLoaderFactory
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
+import com.uragiristereo.mikansei.core.model.CacheUtil
 import com.uragiristereo.serializednavigationextension.runtime.installSerializer
 import com.uragiristereo.serializednavigationextension.serializer.KotlinxSerializer
 import kotlinx.serialization.json.Json
@@ -44,7 +45,11 @@ class MikanseiApp : Application(), ImageLoaderFactory, KoinComponent {
         return ImageLoader.Builder(context = this)
             .diskCache(null)
             .respectCacheHeaders(enable = false)
-            .okHttpClient { networkRepository.okHttpClient }
+            .okHttpClient {
+                networkRepository.okHttpClient.newBuilder()
+                    .cache(CacheUtil.createDefaultCache(context = this, path = "image_cache"))
+                    .build()
+            }
             .build()
     }
 }

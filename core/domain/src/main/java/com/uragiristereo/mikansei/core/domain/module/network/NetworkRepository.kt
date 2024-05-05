@@ -12,7 +12,6 @@ import okhttp3.ResponseBody
 interface NetworkRepository {
     val okHttpClient: OkHttpClient
     val exoPlayerCacheFactory: CacheDataSource.Factory
-    val cacheUrls: MutableIterator<String>
 
     fun getFileSize(url: String): Flow<Result<Long>>
 

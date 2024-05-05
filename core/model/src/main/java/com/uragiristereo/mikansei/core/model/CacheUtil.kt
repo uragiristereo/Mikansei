@@ -1,4 +1,4 @@
-package com.uragiristereo.mikansei.core.network
+package com.uragiristereo.mikansei.core.model
 
 import android.content.Context
 import android.os.StatFs

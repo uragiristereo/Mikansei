@@ -32,13 +32,8 @@ class NetworkRepositoryImpl(
     environment: Environment,
 ) : NetworkRepository {
     private var isDohEnabled = preferencesRepository.data.value.dohEnabled
-    private val cache = CacheUtil.createDefaultCache(context = context, path = "image_cache")
-
-    override val cacheUrls: MutableIterator<String>
-        get() = cache.urls()
 
     private val bootstrapOkHttpClient = OkHttpClient.Builder()
-        .cache(cache)
         .apply {
             if (environment.debug) {
                 addInterceptor {

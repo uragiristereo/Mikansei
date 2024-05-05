@@ -29,6 +29,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
+import com.uragiristereo.mikansei.core.model.CacheUtil
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
@@ -70,6 +71,7 @@ class DanbooruRepositoryImpl(
         "/favorite_groups.json",
     )
 
+    private val cache = CacheUtil.createDefaultCache(context = context, path = "http_cache")
     private var activeUser = userRepository.active.value
 
     private val actualHost = when {
@@ -138,6 +140,7 @@ class DanbooruRepositoryImpl(
 
         val okHttpClientWithAuth = okHttpClient
             .newBuilder()
+            .cache(cache)
             .addInterceptor(
                 DanbooruAuthInterceptor(profile.name, profile.apiKey)
             )
@@ -168,10 +171,9 @@ class DanbooruRepositoryImpl(
 
     private fun getCacheControl(forceRefresh: Boolean): CacheControl {
         return CacheControl.Builder()
-            .let { builder ->
-                when {
-                    forceRefresh -> builder.noCache()
-                    else -> builder
+            .apply {
+                if (forceRefresh) {
+                    noCache()
                 }
             }
             .build()
@@ -182,7 +184,7 @@ class DanbooruRepositoryImpl(
     }
 
     override fun removeCachedEndpoints() {
-        val cacheUrlIterator = networkRepository.cacheUrls
+        val cacheUrlIterator = cache.urls()
 
         while (cacheUrlIterator.hasNext()) {
             val nextUrl = cacheUrlIterator.next()
