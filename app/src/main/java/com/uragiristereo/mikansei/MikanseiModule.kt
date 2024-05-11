@@ -1,9 +1,8 @@
 package com.uragiristereo.mikansei
 
-import com.uragiristereo.mikansei.core.danbooru.DanbooruRepositoryImpl
+import com.uragiristereo.mikansei.core.danbooru.danbooruModule
 import com.uragiristereo.mikansei.core.database.databaseModule
 import com.uragiristereo.mikansei.core.domain.DomainModule
-import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.network.NetworkModule
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
@@ -32,6 +31,7 @@ object MikanseiModule {
     operator fun invoke(): Module = module {
         includes(
             listOf(
+                danbooruModule,
                 databaseModule(),
                 DomainModule(),
                 NetworkModule(),
@@ -47,7 +47,6 @@ object MikanseiModule {
         single { SupervisorJob() }
         factory { CoroutineScope(context = Dispatchers.Default + get<CompletableJob>()) }
 
-        singleOf(::DanbooruRepositoryImpl) { bind<DanbooruRepository>() }
         singleOf(::PreferencesRepositoryImpl) { bind<PreferencesRepository>() }
 
         viewModelOf(::MainViewModel)
