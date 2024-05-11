@@ -1,5 +1,7 @@
-package com.uragiristereo.mikansei.core.danbooru.retrofit
+package com.uragiristereo.mikansei.core.danbooru
 
+import com.uragiristereo.mikansei.core.danbooru.annotation.NoAuth
+import com.uragiristereo.mikansei.core.danbooru.annotation.NoSafeHost
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavoriteGroup
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
@@ -11,7 +13,6 @@ import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplet
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.model.Constants
-import okhttp3.CacheControl
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -24,6 +25,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface DanbooruApi {
+    @NoSafeHost
     @GET("/posts/{id}.json")
     suspend fun getPost(@Path("id") id: Int): Response<DanbooruPost>
 
@@ -33,7 +35,7 @@ interface DanbooruApi {
         @Query("page") pageId: Int,
         @Query("limit") postsPerPage: Int = Constants.POSTS_PER_PAGE,
         @Header("force-cache") forceCache: Boolean = false,
-        @Header("cache-control") cacheControl: String = "",
+        @Header("force-refresh") forceRefresh: Boolean = false,
     ): Response<List<DanbooruPost>>
 
     @GET("/autocomplete.json")
@@ -56,8 +58,12 @@ interface DanbooruApi {
     ): Response<List<DanbooruFavorite>>
 
     @GET("/profile.json")
-    suspend fun getProfile(
-        @Header("Authorization") credentials: String? = null,
+    suspend fun getProfile(): Response<DanbooruProfile>
+
+    @NoAuth
+    @GET("/profile.json")
+    suspend fun login(
+        @Header("Authorization") credentials: String,
     ): Response<DanbooruProfile>
 
     @GET("/users/{id}.json")
@@ -72,7 +78,7 @@ interface DanbooruApi {
     @GET("/favorite_groups.json")
     suspend fun getFavoriteGroups(
         @Query("search[creator_id]") creatorId: Int,
-        @Header("cache-control") cacheControl: CacheControl,
+        @Header("force-refresh") forceRefresh: Boolean,
         @Header("force-cache") forceCache: Boolean = true,
     ): Response<List<DanbooruFavoriteGroup>>
 
@@ -136,7 +142,7 @@ interface DanbooruApi {
     @GET("/saved_searches.json")
     suspend fun getSavedSearches(
         @Header("force-cache") forceCache: Boolean = true,
-        @Header("cache-control") cacheControl: CacheControl,
+        @Header("force-refresh") forceRefresh: Boolean,
     ): Response<List<DanbooruSavedSearch>>
 
     @POST("/saved_searches.json")

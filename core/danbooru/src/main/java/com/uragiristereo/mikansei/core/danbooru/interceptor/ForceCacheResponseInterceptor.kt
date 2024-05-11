@@ -1,17 +1,24 @@
-package com.uragiristereo.mikansei.core.danbooru.retrofit
+package com.uragiristereo.mikansei.core.danbooru.interceptor
 
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.util.concurrent.TimeUnit
 
-class ForceCacheResponseInterceptor : Interceptor {
+object ForceCacheResponseInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val response = chain.proceed(chain.request())
+        var request = chain.request()
+        val hasForceCache = request.headers["force-cache"]?.toBoolean() ?: false
 
-        val forceCache = response.request.headers["force-cache"]?.toBoolean() ?: false
+        if (hasForceCache) {
+            request = request.newBuilder()
+                .removeHeader("force-cache")
+                .build()
+        }
 
-        if (forceCache) {
+        val response = chain.proceed(request)
+
+        if (hasForceCache) {
             val cacheControl = CacheControl.Builder()
                 .maxAge(10, TimeUnit.MINUTES)
                 .build()

@@ -2,6 +2,10 @@ package com.uragiristereo.mikansei.core.danbooru
 
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruAuthInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruHostInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceCacheResponseInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceRefreshInterceptor
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavoriteList
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
@@ -15,9 +19,6 @@ import com.uragiristereo.mikansei.core.danbooru.model.tag.toTagList
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserFieldData
 import com.uragiristereo.mikansei.core.danbooru.model.user.toUser
-import com.uragiristereo.mikansei.core.danbooru.retrofit.DanbooruApi
-import com.uragiristereo.mikansei.core.danbooru.retrofit.DanbooruAuthInterceptor
-import com.uragiristereo.mikansei.core.danbooru.retrofit.ForceCacheResponseInterceptor
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
@@ -27,44 +28,39 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSett
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
-import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.CacheUtil
 import com.uragiristereo.mikansei.core.model.Constants
-import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
-import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import com.uragiristereo.mikansei.core.model.result.resultOf
-import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.resources.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import okhttp3.CacheControl
 import okhttp3.Credentials
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import java.util.zip.GZIPInputStream
 
 @OptIn(ExperimentalSerializationApi::class)
 class DanbooruRepositoryImpl(
     private val context: Context,
-    private val networkRepository: NetworkRepository,
-    private val userRepository: UserRepository,
-    preferencesRepository: PreferencesRepository,
-    private val environment: Environment,
+    private val coroutineScope: CoroutineScope,
+    networkRepository: NetworkRepository,
+    authInterceptor: DanbooruAuthInterceptor,
+    private val hostInterceptor: DanbooruHostInterceptor,
 ) : DanbooruRepository {
-    private val isInTestMode = preferencesRepository.data.value.testMode
     override var unsafeTags: List<String> = listOf()
+
+    override val host: DanbooruHost
+        get() = hostInterceptor.host
 
     private val cacheClearedEndpoints = listOf(
         "/saved_searches.json",
@@ -72,57 +68,33 @@ class DanbooruRepositoryImpl(
     )
 
     private val cache = CacheUtil.createDefaultCache(context = context, path = "http_cache")
-    private var activeUser = userRepository.active.value
-
-    private val actualHost = when {
-        isInTestMode -> DanbooruHost.Testbooru
-        else -> DanbooruHost.Danbooru
-    }
-
-    private val safeHost = when {
-        isInTestMode -> DanbooruHost.Testbooru
-        else -> DanbooruHost.Safebooru
-    }
-
-    override val host: DanbooruHost
-        get() = when {
-            isInSafeMode() -> safeHost
-            else -> actualHost
-        }
 
     private val json = Json {
         ignoreUnknownKeys = true
         explicitNulls = false
     }
 
-    private lateinit var clientAuth: DanbooruApi
-    private lateinit var clientNoAuth: DanbooruApi
-    private lateinit var clientSafe: DanbooruApi
+    private val okHttpClient = networkRepository.okHttpClient.newBuilder()
+        .cache(cache)
+        .addInterceptor(hostInterceptor)
+        .addNetworkInterceptor(authInterceptor)
+        .addNetworkInterceptor(ForceCacheResponseInterceptor)
+        .addNetworkInterceptor(ForceRefreshInterceptor)
+        .build()
 
-    private val client: DanbooruApi
-        get() = when {
-            isInSafeMode() -> clientSafe
-            else -> clientAuth
-        }
+    private val client = Retrofit.Builder()
+        .client(okHttpClient)
+        .baseUrl(DanbooruHost.Safebooru.getBaseUrl())
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .build()
+        .create(DanbooruApi::class.java)
 
     init {
-        buildClients(activeUser)
-
-        CoroutineScope(context = Dispatchers.IO + SupervisorJob()).launch {
-            userRepository.active.collect { user ->
-                if (activeUser.id != user.id) {
-                    buildClients(user)
-                }
-
-                activeUser = user
-            }
-        }
-
         loadUnsafeTags()
     }
 
     private fun loadUnsafeTags() {
-        CoroutineScope(context = Dispatchers.Default).launch {
+        coroutineScope.launch {
             val rawResource = context.resources.openRawResource(R.raw.unsafe_tags)
 
             val stream = withContext(Dispatchers.IO) {
@@ -133,54 +105,6 @@ class DanbooruRepositoryImpl(
 
             unsafeTags = text.split('\n')
         }
-    }
-
-    private fun buildClients(profile: Profile) {
-        val okHttpClient = networkRepository.okHttpClient
-
-        val okHttpClientWithAuth = okHttpClient
-            .newBuilder()
-            .cache(cache)
-            .addInterceptor(
-                DanbooruAuthInterceptor(profile.name, profile.apiKey)
-            )
-            .addNetworkInterceptor(ForceCacheResponseInterceptor())
-            .build()
-
-        val preferredOkHttpClient = when {
-            profile.id != 0 -> okHttpClientWithAuth
-            else -> okHttpClient
-        }
-
-        clientAuth = buildClient(preferredOkHttpClient, actualHost)
-        clientNoAuth = buildClient(okHttpClient, actualHost)
-        clientSafe = buildClient(preferredOkHttpClient, safeHost)
-    }
-
-    private fun buildClient(
-        okHttpClient: OkHttpClient,
-        host: DanbooruHost,
-    ): DanbooruApi {
-        return Retrofit.Builder()
-            .baseUrl(host.getBaseUrl())
-            .client(okHttpClient)
-            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .build()
-            .create(DanbooruApi::class.java)
-    }
-
-    private fun getCacheControl(forceRefresh: Boolean): CacheControl {
-        return CacheControl.Builder()
-            .apply {
-                if (forceRefresh) {
-                    noCache()
-                }
-            }
-            .build()
-    }
-
-    private fun isInSafeMode(): Boolean {
-        return environment.safeMode || activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY
     }
 
     override fun removeCachedEndpoints() {
@@ -200,7 +124,7 @@ class DanbooruRepositoryImpl(
     }
 
     override suspend fun getPost(id: Int): Result<Post> = resultOf {
-        clientAuth.getPost(id)
+        client.getPost(id)
     }.mapSuccess(DanbooruPost::toPost)
 
     override suspend fun getPosts(tags: String, page: Int): Result<PostsResult> = resultOf {
@@ -237,7 +161,7 @@ class DanbooruRepositoryImpl(
     }
 
     override suspend fun login(name: String, apiKey: String): Result<Profile> = resultOf {
-        clientNoAuth.getProfile(
+        client.login(
             credentials = Credentials.basic(
                 username = name,
                 password = apiKey,
@@ -257,7 +181,10 @@ class DanbooruRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateUserSettings(id: Int, field: ProfileSettingsField): Result<Unit> = resultOf {
+    override suspend fun updateUserSettings(
+        id: Int,
+        field: ProfileSettingsField,
+    ): Result<Unit> = resultOf {
         client.updateUserSettings(
             id = id,
             data = DanbooruUserField(
@@ -275,20 +202,27 @@ class DanbooruRepositoryImpl(
         )
     }
 
-    override suspend fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean): Result<List<Favorite>> = resultOf {
-        client.getFavoriteGroups(creatorId, getCacheControl(forceRefresh))
+    override suspend fun getFavoriteGroups(
+        creatorId: Int,
+        forceRefresh: Boolean,
+    ): Result<List<Favorite>> = resultOf {
+        client.getFavoriteGroups(creatorId, forceRefresh = forceRefresh)
     }.mapSuccess { favoriteGroups ->
         favoriteGroups.sortedByDescending { it.updatedAt }.toFavoriteList()
     }
 
-    override suspend fun getPostsByIds(ids: List<Int>, forceCache: Boolean, forceRefresh: Boolean): Result<List<Post>> = resultOf {
+    override suspend fun getPostsByIds(
+        ids: List<Int>,
+        forceCache: Boolean,
+        forceRefresh: Boolean,
+    ): Result<List<Post>> = resultOf {
         val separated = ids.joinToString(separator = ",")
 
         client.getPosts(
             tags = "id:$separated",
             pageId = 1,
             forceCache = forceCache,
-            cacheControl = getCacheControl(forceRefresh).toString(),
+            forceRefresh = forceRefresh,
         )
     }.mapSuccess {
         it.toPostList()
@@ -322,21 +256,34 @@ class DanbooruRepositoryImpl(
         }
     }
 
-    override suspend fun addPostToFavoriteGroup(favoriteGroupId: Int, postId: Int): Result<Unit> = resultOf {
+    override suspend fun addPostToFavoriteGroup(
+        favoriteGroupId: Int,
+        postId: Int,
+    ): Result<Unit> = resultOf {
         client.addPostToFavoriteGroup(favoriteGroupId, postId)
     }
 
-    override suspend fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int): Result<Unit> = resultOf {
+    override suspend fun removePostFromFavoriteGroup(
+        favoriteGroupId: Int,
+        postId: Int,
+    ): Result<Unit> = resultOf {
         client.removePostFromFavoriteGroup(favoriteGroupId, postId)
     }
 
-    override suspend fun createNewFavoriteGroup(name: String, postIds: List<Int>): Result<Favorite> = resultOf {
+    override suspend fun createNewFavoriteGroup(
+        name: String,
+        postIds: List<Int>,
+    ): Result<Favorite> = resultOf {
         client.createNewFavoriteGroup(name, postIds.joinToString(separator = " "))
     }.mapSuccess {
         it.toFavorite()
     }
 
-    override suspend fun editFavoriteGroup(favoriteGroupId: Int, name: String, postIds: List<Int>): Result<Unit> = resultOf {
+    override suspend fun editFavoriteGroup(
+        favoriteGroupId: Int,
+        name: String,
+        postIds: List<Int>,
+    ): Result<Unit> = resultOf {
         client.editFavoriteGroup(favoriteGroupId, name, postIds.joinToString(separator = " "))
     }
 
@@ -345,7 +292,7 @@ class DanbooruRepositoryImpl(
     }
 
     override suspend fun getSavedSearches(forceRefresh: Boolean): Result<SavedSearch.Result> {
-        val response = client.getSavedSearches(cacheControl = getCacheControl(forceRefresh))
+        val response = client.getSavedSearches(forceRefresh = forceRefresh)
 
         return resultOf {
             response
