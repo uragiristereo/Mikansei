@@ -18,12 +18,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -41,10 +38,14 @@ import com.uragiristereo.mikansei.feature.search.core.SearchBar
 import com.uragiristereo.mikansei.feature.search.core.SearchBrowseButton
 import com.uragiristereo.mikansei.feature.search.quick_shortcut_bar.SearchQuickShortcutBar
 import com.uragiristereo.mikansei.feature.search.result.SearchResultItem
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(FlowPreview::class)
 @Composable
 internal fun SearchScreen(
     onNavigateBack: () -> Unit,
@@ -58,28 +59,6 @@ internal fun SearchScreen(
     val columnState = rememberLazyListState()
 
     val focusRequester = remember { FocusRequester() }
-    var query by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue()) }
-
-    DisposableEffect(key1 = viewModel) {
-        when {
-            query.text.isEmpty() -> {
-                query = TextFieldValue(
-                    text = viewModel.tags,
-                    selection = TextRange(viewModel.tags.length),
-                )
-                viewModel.parsedQuery = viewModel.tags
-            }
-
-            else -> viewModel.searchTerm(
-                text = query.text,
-                cursorIndex = query.selection.end,
-            )
-        }
-
-        onDispose {
-            viewModel.cancelSearch()
-        }
-    }
 
     LaunchedEffect(key1 = viewModel.loading) {
         if (!viewModel.loading) {
@@ -89,13 +68,22 @@ internal fun SearchScreen(
         }
     }
 
-    LaunchedEffect(key1 = query.text) {
-        viewModel.parseQuery(query.text)
+    DisposableEffect(key1 = Unit) {
+        val job = scope.launch {
+            snapshotFlow { viewModel.query }
+                .debounce(timeoutMillis = 250L)
+                .distinctUntilChangedBy { it.text }
+                .collect { query ->
+                    viewModel.searchTerm(
+                        text = query.text,
+                        cursorIndex = query.selection.end,
+                    )
+                }
+        }
 
-        viewModel.searchTerm(
-            text = query.text,
-            cursorIndex = query.selection.end,
-        )
+        onDispose {
+            job.cancel()
+        }
     }
 
     LaunchedEffect(key1 = columnState.isScrollInProgress) {
@@ -119,19 +107,19 @@ internal fun SearchScreen(
         topBar = {
             ProductStatusBarSpacer {
                 SearchBar(
-                    query = query,
+                    query = viewModel.query,
                     placeholder = stringResource(id = R.string.field_placeholder_example),
                     loading = viewModel.loading,
                     focusRequester = focusRequester,
                     onNavigateBack = onNavigateBack,
                     onQueryChange = {
-                        query = it.copy(text = it.text.lowercase())
+                        viewModel.query = it.copy(text = it.text.lowercase())
                     },
                     onQuerySubmit = {
                         onSearchSubmit(viewModel.parsedQuery)
                     },
                     onClearClick = {
-                        query = TextFieldValue()
+                        viewModel.query = TextFieldValue()
                     },
                 )
             }
@@ -139,9 +127,9 @@ internal fun SearchScreen(
         bottomBar = {
             Column {
                 SearchQuickShortcutBar(
-                    query = query,
+                    query = viewModel.query,
                     onQueryChange = {
-                        query = it
+                        viewModel.query = it
                     },
                 )
 
@@ -187,7 +175,7 @@ internal fun SearchScreen(
                             {
                                 viewModel.searchAllowed = false
 
-                                val result = query.text.replaceRange(
+                                val result = viewModel.query.text.replaceRange(
                                     startIndex = viewModel.searchWord.startIndex,
                                     endIndex = viewModel.searchWord.endIndex,
                                     replacement = "${viewModel.delimiter}${item.name} ",
@@ -195,7 +183,7 @@ internal fun SearchScreen(
 
                                 val newQuery = "$result ".replace(regex = "\\s+".toRegex(), replacement = " ")
 
-                                query = TextFieldValue(
+                                viewModel.query = TextFieldValue(
                                     text = newQuery,
                                     selection = TextRange(index = newQuery.length)
                                 )

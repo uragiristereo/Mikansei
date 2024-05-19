@@ -1,12 +1,17 @@
 package com.uragiristereo.mikansei.feature.search
 
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsAutoCompleteUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -18,16 +23,24 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+@OptIn(SavedStateHandleSaveableApi::class)
 class SearchViewModel(
     savedStateHandle: SavedStateHandle,
     private val getTagsAutoCompleteUseCase: GetTagsAutoCompleteUseCase,
 ) : ViewModel() {
-    val tags = savedStateHandle.navArgsOf(MainRoute.Search()).tags
+    private val tags = savedStateHandle.navArgsOf(MainRoute.Search()).tags
+
+    var query by savedStateHandle.saveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(
+            TextFieldValue(
+                text = tags,
+                selection = TextRange(index = tags.length),
+            )
+        )
+    }
 
     var searchAllowed by mutableStateOf(true)
     var boldWord by mutableStateOf("")
-
-    var parsedQuery by mutableStateOf("")
 
     val searches = mutableStateListOf<Tag>()
 
@@ -45,8 +58,8 @@ class SearchViewModel(
     private var job: Job? = null
     private val keywords = arrayOf(' ', '{', '}', '~')
 
-    fun parseQuery(query: String) {
-        parsedQuery = query
+    val parsedQuery by derivedStateOf {
+        query.text
             .trim()
             .replace(regex = "\\s+".toRegex(), replacement = " ")
             .replace(oldValue = "{ ", newValue = "{")
@@ -138,10 +151,6 @@ class SearchViewModel(
         errorMessage = null
         loading = false
         searchWord = SearchWordIndex()
-    }
-
-    fun cancelSearch() {
-        job?.cancel()
     }
 
     private fun getWordInPosition(text: String, position: Int): SearchWordIndex {
