@@ -11,6 +11,7 @@ import okhttp3.ResponseBody
 @OptIn(UnstableApi::class)
 interface NetworkRepository {
     val okHttpClient: OkHttpClient
+    val okHttpClientImage: OkHttpClient
     val exoPlayerCacheFactory: CacheDataSource.Factory
 
     fun getFileSize(url: String): Flow<Result<Long>>

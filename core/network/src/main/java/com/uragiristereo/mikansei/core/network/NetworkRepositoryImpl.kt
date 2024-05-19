@@ -9,6 +9,7 @@ import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
+import com.uragiristereo.mikansei.core.model.CacheUtil
 import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
@@ -52,6 +53,12 @@ class NetworkRepositoryImpl(
             else -> bootstrapOkHttpClient
         }
 
+    override val okHttpClientImage by lazy {
+        okHttpClient.newBuilder()
+            .cache(CacheUtil.createDefaultCache(context = context, path = "image_cache"))
+            .build()
+    }
+
     private val dns = DnsOverHttps.Builder()
         .client(bootstrapOkHttpClient)
         .url("https://cloudflare-dns.com/dns-query".toHttpUrl())
@@ -73,7 +80,7 @@ class NetworkRepositoryImpl(
 
     private val client: MikanseiApi = Retrofit.Builder()
         .baseUrl("https://github.com")
-        .client(okHttpClient)
+        .client(okHttpClientImage)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create(MikanseiApi::class.java)
