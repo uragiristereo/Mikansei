@@ -16,6 +16,9 @@ interface UserDao {
     @Query("select * from users where id = :id")
     fun get(id: Int): Flow<UserRow>
 
+    @Query("select * from users where id = :id")
+    suspend fun getOnce(id: Int): UserRow?
+
     @Query("select * from users where is_active = 1 limit 1")
     fun getActive(): Flow<UserRow>
 

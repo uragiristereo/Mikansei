@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "37604f26c958b3e24253516dde572e59",
+    "identityHash": "c8b343a1a013e270e59d741ba49282b5",
     "entities": [
       {
         "tableName": "sessions",
@@ -142,12 +142,38 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "user_delegations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `delegated_user_id` INTEGER, PRIMARY KEY(`user_id`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "delegatedUserId",
+            "columnName": "delegated_user_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "user_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '37604f26c958b3e24253516dde572e59')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c8b343a1a013e270e59d741ba49282b5')"
     ]
   }
 }

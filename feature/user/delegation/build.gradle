@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.feature.user"
+    namespace "com.uragiristereo.mikansei.feature.user.delegation"
 
     buildFeatures {
         compose true
@@ -22,17 +22,13 @@ kotlin {
 dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:model"))
-    implementation(project(":core:preferences"))
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
-    api(project(":feature:user:delegation"))
-    api(project(":feature:user:login"))
-    api(project(":feature:user:manage"))
-    api(project(":feature:user:settings"))
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
+    debugImplementation(libs.bundles.compose.debug)
+    implementation(libs.bundles.core)
     implementation(libs.bundles.koin)
-    implementation(libs.timber)
 }

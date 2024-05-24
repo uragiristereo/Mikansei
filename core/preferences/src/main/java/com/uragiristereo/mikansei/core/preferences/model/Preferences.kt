@@ -23,4 +23,13 @@ data class Preferences(
 
     @SerialName(value = "test_mode")
     val testMode: Boolean = false,
-)
+
+    @SerialName(value = "flags")
+    val flags: Flags = Flags()
+) {
+    @Serializable
+    data class Flags(
+        @SerialName(value = "yankee")
+        val yankee: Boolean = false,
+    )
+}
