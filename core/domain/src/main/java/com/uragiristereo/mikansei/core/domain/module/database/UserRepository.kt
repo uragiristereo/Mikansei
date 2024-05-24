@@ -11,6 +11,8 @@ interface UserRepository {
 
     fun get(id: Int): Flow<Profile>
 
+    suspend fun getOnce(id: Int): Profile?
+
     suspend fun isUserExists(id: Int): Boolean
 
     suspend fun switchActive(id: Int)
