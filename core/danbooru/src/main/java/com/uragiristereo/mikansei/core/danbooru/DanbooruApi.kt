@@ -38,6 +38,7 @@ interface DanbooruApi {
         @Header("force-refresh") forceRefresh: Boolean = false,
     ): Response<List<DanbooruPost>>
 
+    @NoAuth
     @GET("/autocomplete.json")
     suspend fun getTagsAutoComplete(
         @Query("search[query]") query: String,
@@ -45,6 +46,7 @@ interface DanbooruApi {
         @Query("limit") limit: Int = 20,
     ): Response<List<DanbooruTagAutoComplete>>
 
+    @NoAuth
     @GET("/tags.json")
     suspend fun getTags(
         @Query("search[name][]") tags: List<String>,
@@ -66,6 +68,7 @@ interface DanbooruApi {
         @Header("Authorization") credentials: String,
     ): Response<DanbooruProfile>
 
+    @NoAuth
     @GET("/users/{id}.json")
     suspend fun getUser(@Path("id") id: Int): Response<DanbooruUser>
 
