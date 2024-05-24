@@ -73,11 +73,8 @@ internal fun SearchScreen(
             snapshotFlow { viewModel.query }
                 .debounce(timeoutMillis = 250L)
                 .distinctUntilChangedBy { it.text }
-                .collect { query ->
-                    viewModel.searchTerm(
-                        text = query.text,
-                        cursorIndex = query.selection.end,
-                    )
+                .collect {
+                    viewModel.searchTerm()
                 }
         }
 
@@ -189,6 +186,7 @@ internal fun SearchScreen(
                                 )
 
                                 viewModel.searchAllowed = true
+                                viewModel.searchTerm()
 
                                 focusRequester.requestFocus()
                                 keyboardController?.show()

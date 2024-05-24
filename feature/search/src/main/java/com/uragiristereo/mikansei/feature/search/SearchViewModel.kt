@@ -115,7 +115,10 @@ class SearchViewModel(
         }
     }
 
-    fun searchTerm(text: String, cursorIndex: Int) {
+    fun searchTerm() {
+        val text = query.text
+        val cursorIndex = query.selection.end
+
         if (cursorIndex > 0 && searchAllowed) {
             val match = keywords.filter { keyword ->
                 keyword in text[cursorIndex - 1].toString()
