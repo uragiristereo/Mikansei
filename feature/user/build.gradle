@@ -22,6 +22,7 @@ kotlin {
 dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:model"))
+    implementation(project(":core:preferences"))
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))

@@ -44,20 +44,26 @@ import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
+import com.uragiristereo.mikansei.core.ui.extension.alphabet
 import com.uragiristereo.mikansei.core.ui.extension.forEach
+import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.settings.core.UserSettingsTopAppBar
+import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun UserSettingsScreen(
+    onNavigate: (NavRoute) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: UserSettingsViewModel = koinViewModel(),
 ) {
     val scaffoldState = LocalScaffoldState.current
     val scope = rememberCoroutineScope()
     val activeUser by viewModel.activeUser.collectAsState()
+    val delegatedUserName by viewModel.delegatedUserName.collectAsState()
+    val yankeeFlagEnabled by viewModel.yankeeFlagEnabled.collectAsState()
 
     val bottomSheetPreferenceState = rememberBottomSheetPreferenceState(
         onItemSelected = viewModel::setBottomSheetPreferenceState,
@@ -103,7 +109,13 @@ internal fun UserSettingsScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 item {
-                    SettingTip(text = "(*) indicates a Mikansei feature and won't be synced with Danbooru.")
+                    SettingTip(
+                        text = "(*) indicates a Mikansei feature and won't be synced with Danbooru.",
+                        modifier = Modifier.alphabet(
+                            alphabet = activeUser.isNotAnonymous() && !yankeeFlagEnabled,
+                            operation = viewModel::yankee,
+                        ),
+                    )
                 }
 
                 item {
@@ -130,7 +142,8 @@ internal fun UserSettingsScreen(
                             if (state) {
                                 RegularPreference(
                                     title = "Posts rating listing filters (*)",
-                                    subtitle = viewModel.ratingFilters.selectedItem?.getTitleString().orEmpty(),
+                                    subtitle = viewModel.ratingFilters
+                                        .selectedItem?.getTitleString().orEmpty(),
                                     onClick = {
                                         scope.launch {
                                             bottomSheetPreferenceState.navigate(data = viewModel.ratingFilters)
@@ -198,6 +211,19 @@ internal fun UserSettingsScreen(
                         icon = null,
                         enabled = shouldEnableSettings,
                     )
+                }
+
+                if (activeUser.isNotAnonymous() && yankeeFlagEnabled) {
+                    item {
+                        RegularPreference(
+                            title = "Delegate access to user (*)",
+                            subtitle = delegatedUserName ?: "None",
+                            onClick = {
+                                onNavigate(UserRoute.DelegationSettings)
+                            },
+                            enabled = shouldEnableSettings,
+                        )
+                    }
                 }
             }
 

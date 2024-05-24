@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSettingsField
+import com.uragiristereo.mikansei.core.domain.module.database.UserDelegationRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.usecase.SyncUserSettingsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
@@ -15,18 +16,28 @@ import com.uragiristereo.mikansei.core.model.preferences.base.Preference
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
+import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.product.preference.BottomSheetPreferenceData
 import com.uragiristereo.mikansei.core.resources.R
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class UserSettingsViewModel(
     private val userRepository: UserRepository,
+    private val userDelegationRepository: UserDelegationRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val syncUserSettingsUseCase: SyncUserSettingsUseCase,
     private val updateUserSettingsUseCase: UpdateUserSettingsUseCase,
-    environment: Environment,
+    private val environment: Environment,
 ) : ViewModel() {
     val activeUser: StateFlow<Profile>
         get() = userRepository.active
@@ -51,6 +62,37 @@ class UserSettingsViewModel(
     private var updateSettingsJob: Job? = null
 
     val safeModeEnvironment = environment.safeMode
+
+    val yankeeFlagEnabled = preferencesRepository.data
+        .map { it.flags.yankee }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 2_000L),
+            initialValue = false,
+        )
+
+    val delegatedUserName = userDelegationRepository
+        .getDelegatedUserById(activeUser.value.id)
+        .map { delegatedUserId ->
+            if (activeUser.value.id != delegatedUserId) {
+                delegatedUserId
+            } else {
+                null
+            }
+        }
+        .flatMapLatest { delegatedUserId ->
+            if (delegatedUserId != null) {
+                userRepository.get(delegatedUserId)
+            } else {
+                flowOf(null)
+            }
+        }
+        .map { it?.name }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 2_000L),
+            initialValue = null,
+        )
 
     init {
         viewModelScope.launch {
@@ -135,6 +177,14 @@ class UserSettingsViewModel(
                         )
                     }
                 }
+            }
+        }
+    }
+
+    fun yankee() {
+        viewModelScope.launch {
+            preferencesRepository.update {
+                it.copy(flags = it.flags.copy(yankee = !environment.safeMode))
             }
         }
     }
