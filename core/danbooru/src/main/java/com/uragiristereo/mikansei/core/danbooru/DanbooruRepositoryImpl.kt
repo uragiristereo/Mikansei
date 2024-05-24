@@ -82,7 +82,7 @@ class DanbooruRepositoryImpl(
         .addNetworkInterceptor(authInterceptor)
         .addNetworkInterceptor(userDelegationInterceptor)
         .addNetworkInterceptor(ForceCacheResponseInterceptor)
-        .addNetworkInterceptor(ForceRefreshInterceptor)
+        .addInterceptor(ForceRefreshInterceptor)
         .build()
 
     private val client = Retrofit.Builder()

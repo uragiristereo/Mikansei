@@ -7,13 +7,13 @@ import okhttp3.Response
 object ForceRefreshInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val isForceRefresh = request.headers["force-cache"]?.toBoolean() ?: false
+        val isForceRefresh = request.headers["force-refresh"]?.toBoolean() ?: false
 
         if (isForceRefresh) {
             val forceRefreshRequest = request
                 .newBuilder()
-                .removeHeader("force-cache")
-                .cacheControl(CacheControl.FORCE_NETWORK)
+                .removeHeader("force-refresh")
+                .cacheControl(CacheControl.Builder().noCache().build())
                 .build()
 
             return chain.proceed(forceRefreshRequest)
