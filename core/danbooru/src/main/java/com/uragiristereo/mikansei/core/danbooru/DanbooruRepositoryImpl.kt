@@ -6,6 +6,7 @@ import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruAuthIntercep
 import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruHostInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceCacheResponseInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceRefreshInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.UserDelegationInterceptor
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavoriteList
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
@@ -55,6 +56,7 @@ class DanbooruRepositoryImpl(
     private val coroutineScope: CoroutineScope,
     networkRepository: NetworkRepository,
     authInterceptor: DanbooruAuthInterceptor,
+    userDelegationInterceptor: UserDelegationInterceptor,
     private val hostInterceptor: DanbooruHostInterceptor,
 ) : DanbooruRepository {
     override var unsafeTags: List<String> = listOf()
@@ -78,6 +80,7 @@ class DanbooruRepositoryImpl(
         .cache(cache)
         .addInterceptor(hostInterceptor)
         .addNetworkInterceptor(authInterceptor)
+        .addNetworkInterceptor(userDelegationInterceptor)
         .addNetworkInterceptor(ForceCacheResponseInterceptor)
         .addNetworkInterceptor(ForceRefreshInterceptor)
         .build()
