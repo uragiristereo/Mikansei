@@ -33,6 +33,10 @@ class UserRepositoryImpl(
         it.toProfile()
     }
 
+    override suspend fun getOnce(id: Int): Profile? {
+        return userDao.getOnce(id)?.toProfile()
+    }
+
     override suspend fun isUserExists(id: Int) = userDao.isUserExists(id)
 
     override suspend fun switchActive(id: Int) = userDao.switchActiveUser(id)
