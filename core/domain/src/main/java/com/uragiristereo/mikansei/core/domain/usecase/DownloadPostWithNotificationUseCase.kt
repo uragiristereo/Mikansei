@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -52,7 +53,11 @@ class DownloadPostWithNotificationUseCase(
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
-            .addAction(R.drawable.close, context.getString(R.string.download_cancel), cancelDownloadPendingIntent)
+            .addAction(
+                R.drawable.close,
+                context.getString(R.string.download_cancel),
+                cancelDownloadPendingIntent,
+            )
 
         val file = File(
             when (post.type) {
@@ -64,31 +69,44 @@ class DownloadPostWithNotificationUseCase(
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
         val tempFileUri = File(FileUtil.getTempDir(context), file.name).toUri()
 
-        val values = ContentValues().apply {
-            val directory = when {
-                mimeType?.contains("video") == true -> Environment.DIRECTORY_MOVIES
-                mimeType?.contains("image") == true -> Environment.DIRECTORY_PICTURES
-                else -> Environment.DIRECTORY_DOWNLOADS
-            }
-
-            put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
-            put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
-            put(
-                MediaStore.MediaColumns.RELATIVE_PATH,
-                directory + File.separator + context.getString(R.string.product_name)
-            )
+        val directory = when {
+            mimeType?.contains("video") == true -> Environment.DIRECTORY_MOVIES
+            mimeType?.contains("image") == true -> Environment.DIRECTORY_PICTURES
+            else -> Environment.DIRECTORY_DOWNLOADS
         }
 
-        val location = when {
-            mimeType?.contains("video") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-            mimeType?.contains("image") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            else -> when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
-                else -> Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toUri()
+        val uri = when {
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.P -> {
+                val storageDirectory = Environment.getExternalStoragePublicDirectory(directory)
+                val location = File(storageDirectory, context.getString(R.string.product_name))
+                val path = File(location, file.name)
+
+                if (!location.exists()) {
+                    location.mkdirs()
+                }
+
+                path.toUri()
+            }
+
+            else -> {
+                val values = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
+                    put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
+                    put(
+                        MediaStore.MediaColumns.RELATIVE_PATH,
+                        directory + File.separator + context.getString(R.string.product_name)
+                    )
+                }
+
+                val location = when {
+                    mimeType?.contains("video") == true -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                    mimeType?.contains("image") == true -> MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    else -> MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                }
+
+                resolver.insert(location, values)!!
             }
         }
-
-        val uri = resolver.insert(location, values)!!
 
         Timber.d(uri.toString())
 
@@ -142,8 +160,21 @@ class DownloadPostWithNotificationUseCase(
                     }
 
                     is DownloadResource.Completed -> {
-                        FileUtil.copyFile(context = context, sourceUri = tempFileUri, destinationUri = uri)
+                        FileUtil.copyFile(
+                            context = context,
+                            sourceUri = tempFileUri,
+                            destinationUri = uri
+                        )
                         tempFileUri.toFile().delete()
+
+                        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                            MediaScannerConnection.scanFile(
+                                /* context = */ context,
+                                /* paths = */ arrayOf(uri.toFile().absolutePath),
+                                /* mimeTypes = */ null,
+                                /* callback = */ null,
+                            )
+                        }
 
                         val openDownloadedFileIntent = Intent().apply {
                             action = Intent.ACTION_VIEW
@@ -153,7 +184,7 @@ class DownloadPostWithNotificationUseCase(
 
                         val pendingOpenDownloadedFileIntent = PendingIntent.getActivity(
                             /* context = */ context,
-                            /* requestCode = */ 0,
+                            /* requestCode = */ notificationId,
                             /* intent = */ openDownloadedFileIntent,
                             /* flags = */ PendingIntent.FLAG_IMMUTABLE
                         )
@@ -163,7 +194,9 @@ class DownloadPostWithNotificationUseCase(
                         notificationManager.apply {
                             notificationBuilder
                                 .setSmallIcon(R.drawable.download_done)
-                                .setContentTitle(context.getString(R.string.download_post_id, post.id))
+                                .setContentTitle(
+                                    context.getString(R.string.download_post_id, post.id)
+                                )
                                 .setProgress(
                                     /* max = */ 0,
                                     /* progress = */ 0,
@@ -190,7 +223,9 @@ class DownloadPostWithNotificationUseCase(
                         notificationManager.apply {
                             notificationBuilder
                                 .setSmallIcon(R.drawable.error)
-                                .setContentTitle(context.getString(R.string.download_post_id, post.id))
+                                .setContentTitle(
+                                    context.getString(R.string.download_post_id, post.id)
+                                )
                                 .setProgress(
                                     /* max = */ 0,
                                     /* progress = */ 0,

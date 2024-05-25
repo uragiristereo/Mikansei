@@ -109,12 +109,43 @@ fun MainScreen(
         }
     )
 
-    val lambdaOnDownload = { post: Post ->
-        if (!notificationPermissionState.status.isGranted || notificationPermissionState.status.shouldShowRationale) {
-            viewModel.selectedPost = post
-            notificationPermissionState.launchPermissionRequest()
+    val writeExternalStoragePermissionState = rememberPermissionState(
+        permission = when {
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.P -> android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            else -> android.Manifest.permission.INTERNET
+        },
+    ) { isGranted ->
+        if (isGranted) {
+            val notificationPermStatus = notificationPermissionState.status
+
+            if (!notificationPermStatus.isGranted || notificationPermStatus.shouldShowRationale) {
+                notificationPermissionState.launchPermissionRequest()
+            } else {
+                viewModel.selectedPost?.let(viewModel::downloadPost)
+            }
         } else {
-            viewModel.downloadPost(post)
+            scope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(
+                    message = "Error: to download a post, you need to allow the app to write to your storage.",
+                )
+            }
+        }
+    }
+
+    val lambdaOnDownload = { post: Post ->
+        val storagePermStatus = writeExternalStoragePermissionState.status
+        val notificationPermStatus = notificationPermissionState.status
+
+        if (!storagePermStatus.isGranted || storagePermStatus.shouldShowRationale) {
+            viewModel.selectedPost = post
+            writeExternalStoragePermissionState.launchPermissionRequest()
+        } else {
+            if (!notificationPermStatus.isGranted || notificationPermStatus.shouldShowRationale) {
+                viewModel.selectedPost = post
+                notificationPermissionState.launchPermissionRequest()
+            } else {
+                viewModel.downloadPost(post)
+            }
         }
     }
 
