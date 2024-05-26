@@ -1,5 +1,5 @@
 [versions]
-gradle = "8.4.0"
+gradle = "8.4.1"
 kotlin = "2.0.0"
 ksp = "2.0.0-1.0.21"
 lifecycle = "2.7.0"
