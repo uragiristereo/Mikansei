@@ -1,0 +1,40 @@
+plugins {
+    alias(libs.plugins.android.dynamic.feature)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    namespace "com.uragiristereo.mikansei.feature.upload"
+
+    flavorDimensions.add("env")
+
+    productFlavors {
+        oss {}
+        play {}
+    }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+dependencies {
+    implementation(project(":app"))
+    implementation(project(":core:product"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:ui"))
+
+    implementation(libs.bundles.compose)
+    implementation(libs.bundles.androidx.compose)
+    debugImplementation(libs.bundles.compose.debug)
+    implementation(libs.bundles.core)
+    implementation(libs.bundles.koin)
+}

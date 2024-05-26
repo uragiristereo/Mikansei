@@ -22,6 +22,9 @@ fun NavGraphBuilder.moreRoute(mainNavController: NavHostController) {
                     it.navigate(route)
                 }
             },
+            onNavigateUpload = {
+                mainNavController.navigate("upload")
+            },
         )
     }
 }

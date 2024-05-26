@@ -4,8 +4,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeIn
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeOut
+import com.uragiristereo.mikansei.core.ui.dfm.DynamicComposable
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.about.core.aboutRoute
 import com.uragiristereo.mikansei.feature.filters.core.filtersRoute
@@ -65,5 +68,26 @@ fun MainNavGraph(
         userGraph(navController)
 
         savedSearchesGraph(navController)
+
+        navigation(
+            startDestination = "choose_media",
+            route = "upload"
+        ) {
+            composable(route = "choose_media") {
+                DynamicComposable(
+                    module = "upload",
+                    screen = "chooseMediaScreen",
+                    navController = navController,
+                )
+            }
+
+            composable(route = "select_media") {
+                DynamicComposable(
+                    module = "upload",
+                    screen = "selectMediaScreen",
+                    navController = navController,
+                )
+            }
+        }
     }
 }

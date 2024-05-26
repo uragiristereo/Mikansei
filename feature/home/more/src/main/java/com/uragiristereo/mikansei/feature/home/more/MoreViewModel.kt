@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 
 class MoreViewModel(
     private val userRepository: UserRepository,
@@ -24,4 +25,8 @@ class MoreViewModel(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 2_000L),
             initialValue = true,
         )
+
+    init {
+        Timber.d(userRepository.toString())
+    }
 }

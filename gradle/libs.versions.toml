@@ -20,6 +20,7 @@ firebase-crashlytics = "2.9.9"
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradle" }
 android-library = { id = "com.android.library", version.ref = "gradle" }
+android-dynamic-feature = { id = "com.android.dynamic-feature", version.ref = "gradle" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -59,8 +60,8 @@ accompanist-insets-ui = { module = "com.google.accompanist:accompanist-insets-ui
 
 # Koin Dependency Injection
 koin = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-androidx-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation", version.ref = "koin" }
 
 # Coil Image Loader
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -99,14 +100,13 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
-
 [bundles]
 androidx = ["androidx-core", "androidx-lifecycle-runtime", "androidx-savedstate"]
 androidx-compose = ["androidx-activity-compose", "androidx-lifecycle-viewmodel-compose"]
 compose = ["compose", "compose-material", "compose-tooling-preview"]
 compose-debug = ["compose-ui-tooling", "compose-ui-test-manifest"]
 room = ["room-runtime", "room-ktx"]
-koin = ["koin", "koin-androidx-navigation", "koin-androidx-compose"]
+koin = ["koin", "koin-androidx-compose-navigation", "koin-androidx-compose"]
 retrofit = ["okhttp", "retrofit", "retrofit-converter-kotlinx-serialization"]
 coil = ["coil", "coil-compose"]
 core = ["koin", "timber"]

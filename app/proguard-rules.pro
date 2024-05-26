@@ -21,3 +21,5 @@
 #-renamesourcefileattribute SourceFile
 
 #-keepnames class **
+
+-keep class * implements com.uragiristereo.mikansei.core.ui.dfm.DynamicComposable { *; }

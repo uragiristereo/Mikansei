@@ -56,6 +56,7 @@ import org.koin.androidx.compose.koinViewModel
 internal fun MoreScreen(
     onNavigate: (NavRoute) -> Unit,
     onNavigateBottom: (NavRoute) -> Unit,
+    onNavigateUpload: () -> Unit,
     viewModel: MoreViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
@@ -242,7 +243,8 @@ internal fun MoreScreen(
                     text = "About",
                     painter = painterResource(id = R.drawable.info),
                     onClick = {
-                        onNavigate(MainRoute.About)
+//                        onNavigate(MainRoute.About)
+                        onNavigateUpload()
                     },
                     modifier = Modifier.padding(bottom = 12.dp),
                 )

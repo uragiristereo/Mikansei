@@ -34,4 +34,5 @@ dependencies {
     implementation(libs.timber)
     api(libs.serialized.navigation.extension.compose)
     implementation(libs.bundles.coil)
+    implementation(libs.bundles.koin)
 }
