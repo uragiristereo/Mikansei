@@ -1,9 +1,10 @@
 [versions]
 gradle = "8.4.1"
-kotlin = "2.0.0"
-ksp = "2.0.0-1.0.21"
+kotlin = "1.9.22"
+ksp = "1.9.22-1.0.17"
 lifecycle = "2.7.0"
 compose = "1.6.4"
+compose-compiler = "1.5.10"
 room = "2.6.1"
 accompanist = "0.34.0"
 koin = "3.5.0"
@@ -21,7 +22,6 @@ android-application = { id = "com.android.application", version.ref = "gradle" }
 android-library = { id = "com.android.library", version.ref = "gradle" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms" }

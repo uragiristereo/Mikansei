@@ -1,7 +1,8 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlinx.serialization)
 }
@@ -12,14 +13,14 @@ android {
     buildFeatures {
         compose true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+    }
 }
 
 kotlin {
     jvmToolchain(17)
-}
-
-composeCompiler {
-    enableStrongSkippingMode = true
 }
 
 dependencies {
@@ -38,4 +39,11 @@ dependencies {
     implementation(libs.bundles.coil)
     implementation(libs.timber)
     implementation(libs.kotlinx.serialization.json)
+}
+
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions.freeCompilerArgs.addAll(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:experimentalStrongSkipping=true",
+    )
 }
