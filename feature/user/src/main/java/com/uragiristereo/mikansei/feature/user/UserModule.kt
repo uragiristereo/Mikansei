@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.user
 
+import com.uragiristereo.mikansei.feature.user.deactivation.UserDeactivationViewModel
 import com.uragiristereo.mikansei.feature.user.delegation.UserDelegationSettingsViewModel
 import com.uragiristereo.mikansei.feature.user.login.LoginViewModel
 import com.uragiristereo.mikansei.feature.user.manage.ManageUserViewModel
@@ -14,5 +15,6 @@ object UserModule {
         viewModelOf(::ManageUserViewModel)
         viewModelOf(::UserSettingsViewModel)
         viewModelOf(::UserDelegationSettingsViewModel)
+        viewModelOf(::UserDeactivationViewModel)
     }
 }

@@ -18,4 +18,7 @@ sealed interface UserRoute : NavRoute {
 
     @Serializable
     data object DelegationSettings : UserRoute
+
+    @Serializable
+    data object Deactivation : UserRoute
 }
