@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
+import com.uragiristereo.mikansei.feature.user.deactivation.core.userDeactivationRoute
 import com.uragiristereo.mikansei.feature.user.delegation.core.userDelegationSettingsRoute
 import com.uragiristereo.mikansei.feature.user.login.core.loginRoute
 import com.uragiristereo.mikansei.feature.user.manage.core.manageRoute
@@ -24,5 +25,7 @@ fun NavGraphBuilder.userGraph(
         userSettingsRoute(navController)
 
         userDelegationSettingsRoute(navController)
+
+        userDeactivationRoute(navController)
     }
 }

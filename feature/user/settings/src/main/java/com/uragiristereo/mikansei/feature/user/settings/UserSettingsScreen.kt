@@ -35,6 +35,7 @@ import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndic
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.product.preference.BottomSheetPreference
 import com.uragiristereo.mikansei.core.product.preference.DropDownPreference
+import com.uragiristereo.mikansei.core.product.preference.PreferenceCategory
 import com.uragiristereo.mikansei.core.product.preference.RegularPreference
 import com.uragiristereo.mikansei.core.product.preference.SwitchPreference
 import com.uragiristereo.mikansei.core.product.preference.getTitleString
@@ -220,6 +221,23 @@ internal fun UserSettingsScreen(
                             subtitle = delegatedUserName ?: "None",
                             onClick = {
                                 onNavigate(UserRoute.DelegationSettings)
+                            },
+                            enabled = shouldEnableSettings,
+                        )
+                    }
+                }
+
+                if (activeUser.isNotAnonymous()) {
+                    item {
+                        PreferenceCategory(title = "Danger zone")
+                    }
+
+                    item {
+                        RegularPreference(
+                            title = "Deactivate your account",
+                            subtitle = null,
+                            onClick = {
+                                onNavigate(UserRoute.Deactivation)
                             },
                             enabled = shouldEnableSettings,
                         )

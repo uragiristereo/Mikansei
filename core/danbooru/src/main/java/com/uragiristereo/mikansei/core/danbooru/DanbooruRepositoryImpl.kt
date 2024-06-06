@@ -47,6 +47,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Credentials
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.internal.http.HTTP_NO_CONTENT
+import okhttp3.internal.http.HTTP_OK
 import retrofit2.Retrofit
 import java.util.zip.GZIPInputStream
 
@@ -330,5 +332,23 @@ class DanbooruRepositoryImpl(
 
     override suspend fun deleteSavedSearch(id: Int): Result<Unit> = resultOf {
         client.deleteSavedSearch(id)
+    }
+
+    override suspend fun deactivateAccount(
+        userId: Int,
+        password: String,
+    ): Result<Unit> {
+        val response = client.deactivateAccount(userId, password)
+
+        return when (response.code()) {
+            // the actual success response code
+            HTTP_NO_CONTENT -> Result.Success(Unit)
+
+            // error but renders html containing incorrect password
+            HTTP_OK -> Result.Failed(message = "Incorrect password")
+
+            // other error
+            else -> resultOf { response }
+        }
     }
 }

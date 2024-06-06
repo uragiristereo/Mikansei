@@ -24,4 +24,6 @@ interface UserRepository {
     suspend fun update(transformation: (Profile) -> Profile)
 
     suspend fun delete(user: Profile)
+
+    suspend fun switchToAnonymousAndDelete(user: Profile)
 }
