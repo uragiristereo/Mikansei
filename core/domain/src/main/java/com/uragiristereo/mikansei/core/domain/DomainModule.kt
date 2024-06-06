@@ -1,6 +1,7 @@
 package com.uragiristereo.mikansei.core.domain
 
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
+import com.uragiristereo.mikansei.core.domain.usecase.DeactivateAccountUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostWithNotificationUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
@@ -30,5 +31,6 @@ object DomainModule {
         factoryOf(::GetFavoritesUseCase)
         factoryOf(::GetFavoriteGroupsUseCase)
         factoryOf(::GetFavoritesAndFavoriteGroupsUseCase)
+        factoryOf(::DeactivateAccountUseCase)
     }
 }
