@@ -50,4 +50,8 @@ class UserRepositoryImpl(
     }
 
     override suspend fun delete(user: Profile) = userDao.delete(user.toUserRow())
+
+    override suspend fun switchToAnonymousAndDelete(user: Profile) {
+        userDao.switchToAnonymousAndDelete(user.toUserRow())
+    }
 }

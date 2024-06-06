@@ -32,12 +32,12 @@ interface UserDao {
     suspend fun activate(id: Int)
 
     @Query("update users set is_active = 0 where id <> :activeId")
-    suspend fun deactivate(activeId: Int)
+    suspend fun switchToAnonymousAndDelete(activeId: Int)
 
     @Transaction
     suspend fun switchActiveUser(id: Int) {
         activate(id)
-        deactivate(activeId = id)
+        switchToAnonymousAndDelete(activeId = id)
     }
 
     @Insert
@@ -48,4 +48,10 @@ interface UserDao {
 
     @Delete
     suspend fun delete(user: UserRow)
+
+    @Transaction
+    suspend fun switchToAnonymousAndDelete(user: UserRow) {
+        switchActiveUser(id = 0)
+        delete(user)
+    }
 }
