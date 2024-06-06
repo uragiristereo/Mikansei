@@ -67,4 +67,6 @@ interface DanbooruRepository {
     suspend fun editSavedSearch(savedSearch: SavedSearch): Result<Unit>
 
     suspend fun deleteSavedSearch(id: Int): Result<Unit>
+
+    suspend fun deactivateAccount(userId: Int, password: String): Result<Unit>
 }
