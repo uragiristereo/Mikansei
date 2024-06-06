@@ -163,4 +163,10 @@ interface DanbooruApi {
 
     @DELETE("/saved_searches/{id}.json")
     suspend fun deleteSavedSearch(@Path("id") id: Int): Response<Unit>
+
+    @DELETE("/users/{id}.json")
+    suspend fun deactivateAccount(
+        @Path("id") userId: Int,
+        @Query("user[password]") password: String,
+    ): Response<Unit>
 }
