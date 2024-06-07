@@ -113,7 +113,7 @@ internal fun UserSettingsScreen(
                     SettingTip(
                         text = "(*) indicates a Mikansei feature and won't be synced with Danbooru.",
                         modifier = Modifier.alphabet(
-                            alphabet = activeUser.isNotAnonymous() && !yankeeFlagEnabled,
+                            alphabet = !viewModel.safeModeEnvironment && activeUser.isNotAnonymous() && !yankeeFlagEnabled,
                             operation = viewModel::yankee,
                         ),
                     )
