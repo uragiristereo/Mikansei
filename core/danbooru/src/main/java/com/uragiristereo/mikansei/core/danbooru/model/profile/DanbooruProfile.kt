@@ -143,7 +143,7 @@ data class DanbooruProfile(
     val artistCommentaryVersionCount: Int,
 
     @SerialName("pool_version_count")
-    val poolVersionCount: Int,
+    val poolVersionCount: Int?,
 
     @SerialName("forum_post_count")
     val forumPostCount: Int,
