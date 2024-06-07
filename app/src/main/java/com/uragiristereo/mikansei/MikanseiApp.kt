@@ -50,7 +50,7 @@ class MikanseiApp : Application(), ImageLoaderFactory, KoinComponent, AppCompone
         }
 
         appComponent = DaggerAppComponent.builder()
-            .applicationContext(this)
+            .application(this)
             .build()
 
         DaggerMikanseiAppComponent.factory()
@@ -58,6 +58,7 @@ class MikanseiApp : Application(), ImageLoaderFactory, KoinComponent, AppCompone
             .inject(this)
 
         Timber.d(okHttpClient.toString())
+        Timber.d(this.toString())
     }
 
     override fun newImageLoader(): ImageLoader {

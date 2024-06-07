@@ -1,6 +1,6 @@
 package com.uragiristereo.mikansei.core.model.dagger.component
 
-import android.content.Context
+import android.app.Application
 import com.uragiristereo.mikansei.core.model.dagger.module.AppModule
 import com.uragiristereo.mikansei.core.model.dagger.module.SingletonProvider
 import dagger.BindsInstance
@@ -13,7 +13,7 @@ interface AppComponent : SingletonProvider {
     @Component.Builder
     interface Builder {
         @BindsInstance
-        fun applicationContext(context: Context): Builder
+        fun application(application: Application): Builder
 
         fun build(): AppComponent
     }
