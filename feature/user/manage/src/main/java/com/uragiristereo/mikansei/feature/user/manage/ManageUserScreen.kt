@@ -42,8 +42,7 @@ internal fun ManageUserScreen(
     onNavigateBack: () -> Unit,
     viewModel: ManageUserViewModel = koinViewModel(),
 ) {
-    val activeUser by viewModel.activeUser.collectAsState()
-    val inactiveUsers by viewModel.inactiveUsers.collectAsState()
+    val usersState by viewModel.usersState.collectAsState()
 
     Scaffold(
         scaffoldState = LocalScaffoldState.current,
@@ -99,9 +98,9 @@ internal fun ManageUserScreen(
                 )
             }
 
-            item(key = activeUser.id) {
+            item(key = usersState.active.id) {
                 ProfileItem(
-                    user = activeUser,
+                    user = usersState.active,
                     onSettingsClick = {
                         onNavigate(UserRoute.Settings)
                     },
@@ -122,7 +121,7 @@ internal fun ManageUserScreen(
             }
 
             items(
-                items = inactiveUsers,
+                items = usersState.inactive,
                 key = { it.id },
             ) { user ->
                 ProfileItem(

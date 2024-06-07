@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
+import com.uragiristereo.mikansei.feature.user.manage.core.UsersState
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -16,19 +16,20 @@ class ManageUserViewModel(
     private val danbooruRepository: DanbooruRepository,
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    val activeUser: StateFlow<Profile>
-        get() = userRepository.active
+    val usersState = userRepository.getAll()
+        .map { users ->
+            val activeUser = users.first { it.mikansei.isActive }
+            val inactiveUsers = users.filter { !it.mikansei.isActive }
 
-    val inactiveUsers = userRepository.getAll()
-        .map { profileList ->
-            profileList.filter {
-                !it.mikansei.isActive
-            }
+            UsersState(activeUser, inactiveUsers)
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 2_000L),
-            initialValue = emptyList(),
+            initialValue = UsersState(
+                active = userRepository.active.value,
+                inactive = emptyList(),
+            ),
         )
 
     val allUsers = userRepository.getAll()
