@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -20,6 +21,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":core:model"))
     implementation(project(":core:product"))
     implementation(project(":core:resources"))
     implementation(project(":core:ui"))
@@ -27,4 +29,8 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
     implementation(libs.timber)
+    implementation(libs.bundles.retrofit)
+
+    implementation(libs.dagger.runtime)
+    ksp(libs.dagger.compiler)
 }

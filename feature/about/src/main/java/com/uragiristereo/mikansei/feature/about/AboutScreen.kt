@@ -12,18 +12,30 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ui.Scaffold
+import com.uragiristereo.mikansei.core.model.dagger.feature.rememberContainer
+import com.uragiristereo.mikansei.core.model.dagger.viewmodel.assistedViewModel
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.feature.about.di.AboutContainer
+import timber.log.Timber
 
 @Composable
 internal fun AboutScreen(
     onNavigateBack: () -> Unit,
 ) {
+    val container = rememberContainer(::AboutContainer)
+    val viewModel: AboutViewModel = assistedViewModel { container.viewModelFactory }
+
+    LaunchedEffect(key1 = Unit) {
+        Timber.d(viewModel.random.value)
+    }
+
     Scaffold(
         topBar = {
             ProductStatusBarSpacer {

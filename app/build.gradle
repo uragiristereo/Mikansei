@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.gms)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -114,4 +115,7 @@ dependencies {
     playImplementation(platform(libs.firebase.bom))
     playImplementation(libs.firebase.analytics)
     playImplementation(libs.firebase.crashlytics)
+
+    implementation(libs.dagger.runtime)
+    ksp(libs.dagger.compiler)
 }
