@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeIn
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeOut
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.feature.about.core.aboutRoute
+import com.uragiristereo.mikansei.feature.about.aboutRoute
 import com.uragiristereo.mikansei.feature.filters.core.filtersRoute
 import com.uragiristereo.mikansei.feature.home.homeGraph
 import com.uragiristereo.mikansei.feature.image.core.imageRoute
