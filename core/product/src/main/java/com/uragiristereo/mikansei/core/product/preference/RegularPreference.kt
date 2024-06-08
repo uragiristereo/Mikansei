@@ -1,10 +1,12 @@
 package com.uragiristereo.mikansei.core.product.preference
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -60,7 +62,9 @@ fun RegularPreference(
             Icon(
                 painter = icon,
                 contentDescription = null,
-                modifier = Modifier.padding(end = 32.dp),
+                modifier = Modifier
+                    .padding(end = 32.dp)
+                    .size(24.dp),
             )
         }
 
@@ -73,6 +77,42 @@ fun RegularPreference(
         PreferenceContainer(
             title = title,
             subtitle = subtitle,
+            enabled = enabled,
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+fun RegularPreference(
+    title: String,
+    subtitle: String?,
+    imageIcon: Painter,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(
+                enabled = enabled,
+                onClick = onClick,
+            )
+            .padding(all = 16.dp),
+    ) {
+        Image(
+            painter = imageIcon,
+            contentDescription = null,
+            modifier = Modifier
+                .padding(end = 32.dp)
+                .size(24.dp),
+        )
+
+        PreferenceContainer(
+            title = title,
+            subtitle = subtitle?.let { AnnotatedString(it) },
             enabled = enabled,
             modifier = Modifier.weight(1f),
         )
