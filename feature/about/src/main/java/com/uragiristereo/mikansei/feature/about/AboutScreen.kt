@@ -1,6 +1,7 @@
 package com.uragiristereo.mikansei.feature.about
 
 import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.google.accompanist.insets.ui.Scaffold
+import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.product.preference.PreferenceCategory
@@ -79,6 +82,21 @@ internal fun AboutScreen(
             modifier = Modifier.fillMaxSize(),
         ) {
             item {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 24.dp),
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.mikansei_logo),
+                        contentDescription = null,
+                        modifier = Modifier.size(128.dp),
+                    )
+                }
+            }
+
+            item {
                 val versionName = context.versionName
                 val versionCode = context.versionCode
                 val flavor = viewModel.environment.flavor.name.lowercase()
@@ -88,9 +106,14 @@ internal fun AboutScreen(
                     subtitle = "$versionName ($versionCode) [$flavor]",
                     icon = painterResource(id = R.drawable.android),
                     onClick = {
+                        val url = when (viewModel.environment.flavor) {
+                            Environment.Flavor.OSS -> "https://github.com/uragiristereo/Mikansei/releases"
+                            Environment.Flavor.PLAY -> "https://play.google.com/store/apps/details?id=com.uragiristereo.mikansei"
+                        }.toUri()
+
                         val intent = Intent().apply {
                             action = Intent.ACTION_VIEW
-                            data = "https://github.com/uragiristereo/Mikansei/releases".toUri()
+                            data = url
                         }
 
                         context.startActivity(intent)
