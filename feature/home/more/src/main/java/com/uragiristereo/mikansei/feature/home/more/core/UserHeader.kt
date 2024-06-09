@@ -2,7 +2,6 @@ package com.uragiristereo.mikansei.feature.home.more.core
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,7 +55,7 @@ internal fun UserHeader(
                 shape = RoundedCornerShape(8.dp),
             )
             .clip(RoundedCornerShape(8.dp))
-            .clickable(onClick = onProfileClick)
+//            .clickable(onClick = onProfileClick)
             .padding(all = 16.dp),
     ) {
         Box(

@@ -30,17 +30,17 @@ internal fun SettingsTopAppBar(
                 },
             )
         },
-        actions = {
-            IconButton(
-                onClick = onMoreClick,
-                content = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.more_vert),
-                        contentDescription = null,
-                    )
-                },
-            )
-        },
+//        actions = {
+//            IconButton(
+//                onClick = onMoreClick,
+//                content = {
+//                    Icon(
+//                        painter = painterResource(id = R.drawable.more_vert),
+//                        contentDescription = null,
+//                    )
+//                },
+//            )
+//        },
         modifier = modifier,
     )
 }

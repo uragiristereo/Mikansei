@@ -13,6 +13,7 @@ object PreferencesSerializer : Serializer<Preferences> {
     private val json = Json {
         encodeDefaults = true
         prettyPrint = true
+        ignoreUnknownKeys = true
     }
 
     override val defaultValue: Preferences
