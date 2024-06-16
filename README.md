@@ -2,32 +2,20 @@
 
 [![Discord](https://img.shields.io/discord/1084015982198145065?logo=discord&logoColor=white&label=discord)](https://discord.gg/YMyVNsFvpC)
 
-**Mikansei 未完成** _(lit. unfinished)_ is a [Danbooru](https://safebooru.donmai.us/posts) client
-for Android. Made with Jetpack Compose 🚀.
+**Mikansei 未完成** _(lit. unfinished)_ is a [Danbooru](https://safebooru.donmai.us/posts) client for Android. Made with Jetpack Compose 🚀.
 
-The name is inspired from my favorite [vocaloid](https://vocaloid.fandom.com/wiki/Vocaloid_Wiki) producer, [Orangestar](https://twitter.com/mikanseip)'s Japanese name version (蜜柑星, which is read _mikansei_).
-
-This is a complete rewrite version of my old project [Mejiboard](https://github.com/uragiristereo/Mejiboard), that aims on delivering a great Danbooru browsing experience on Android.
-
-#### What is Danbooru?
-
-> Danbooru [dahn-boh-ruh] (noun):
-> 1. (on donmai.us) A repository of high-quality anime-style art and doujinshi.
-> 2. A taggable imageboard, with sophisticated features for keeping, organizing and finding pictures.
-> 3. (Japanese) Corrugated cardboard box.
-
-_(taken from the website's [home wiki](https://safebooru.donmai.us/wiki_pages/help:home))_
+**Danbooru** is an image board website for anime-style artworks with tagging system that makes organizing easier. You can easily browse your favorite characters or real artists here.
 
 ## Screenshots
 
 <p align="center">
-  <img src="./.github/assets/home.jpg?raw=true" alt="Home screen" width="30%" />
-  <img src="./.github/assets/viewer.jpg?raw=true" alt="Viewer screen" width="30%" />
-  <img src="./.github/assets/more_info.jpg?raw=true" alt="More info on viewer screen" width="30%" />
+  <img src="./.github/assets/Screenshot_1.jpg" alt="Home screen" width="30%" />
+  <img src="./.github/assets/Screenshot_2.jpg" alt="Viewer screen" width="30%" />
+  <img src="./.github/assets/Screenshot_3.jpg" alt="More info on viewer screen" width="30%" />
 
-  <img src="./.github/assets/search.jpg?raw=true" alt="Search screen" width="30%" />
-  <img src="./.github/assets/favorites.jpg?raw=true" alt="Favorites screen" width="30%" />
-  <img src="./.github/assets/manage_accounts.jpg?raw=true" alt="Manage accounts screen" width="30%" />
+  <img src="./.github/assets/Screenshot_4.jpg" alt="Search screen" width="30%" />
+  <img src="./.github/assets/Screenshot_5.jpg" alt="Favorites screen" width="30%" />
+  <img src="./.github/assets/Screenshot_6.jpg" alt="Manage accounts screen" width="30%" />
 </p>
 
 > _Note: the screenshots don't indicate the final product._
@@ -41,9 +29,9 @@ _(taken from the website's [home wiki](https://safebooru.donmai.us/wiki_pages/he
 - Video player with controls & gestures support
 - Download and share posts
 - DNS over HTTPS enabled by default
-- Using latest Android tech stacks
+- Using the latest Android tech stacks
 
-**Features that are currently supported and synced with Danbooru:**
+**Features that are currently supported and synced with Danbooru**
 
 - View, favorite and vote posts
 - Searching with autocomplete
@@ -53,12 +41,14 @@ _(taken from the website's [home wiki](https://safebooru.donmai.us/wiki_pages/he
 - Safe mode toggle
 - Show deleted posts toggle
 - Image detail size switch
+- Account deactivation
 
 ## Download
 
-**🚧 PROJECT IS UNDER DEVELOPMENT (~90% finished) 🚧**
-
-The signed APK is currently not yet available, please [build](#building) it yourself to test.
+- Version: **1.0.0** (1.0.0)
+- Updated at: 2024-06-16
+- Download: Play Store _(coming soon)_ • [APK](https://github.com/uragiristereo/Mikansei/releases/download/100-1.0.0/Mikansei_v1.0.0_(100)-oss.apk)
+- Changelogs: [here](https://github.com/uragiristereo/Mikansei/releases/tag/100-1.0.0)
 
 ## Tech Stacks
 
@@ -75,8 +65,7 @@ This project is trying to use the latest Android tech stacks.
 - Others:
   - [Kotlinx.Serialization](https://github.com/Kotlin/kotlinx.serialization) (Serializer)
   - [Accompanist](https://google.github.io/accompanist) (Jetpack Compose Extensions)
-  - [Serialized Navigation Extension](https://github.com/uragiristereo/serialized-navigation-extension) (
-    Navigation)
+  - [Serialized Navigation Extension](https://github.com/uragiristereo/serialized-navigation-extension) (Navigation)
   - [Timber](https://github.com/JakeWharton/timber) (Logger)
   - [Media3 ExoPlayer](https://github.com/androidx/media) (Video Loading)
 
@@ -89,24 +78,20 @@ This project is trying to use the latest Android tech stacks.
 
 ## Building
 
-To build this project, you need the latest stable
-of [Android Studio](https://developer.android.com/studio).
+To build this project, you need the latest stable of [Android Studio](https://developer.android.com/studio).
 
 1. Clone the project and open in Android Studio.
 2. Sync project with Gradle then Run `app`.
 
 **Notes:**
 
-The `playRelease` build variant will bundle Firebase Crashlytics to the app. By default it
-will use the `ossDebug` build variant. The rest of the build variants won't bundle Firebase at all.
+By default it will use the `ossDebug` build variant. The `playRelease` build variant will bundle Firebase Crashlytics to the app. The rest of the build variants won't bundle Firebase at all.
 
-To use the `playRelease` build variant, first you need to create a Firebase Android app with
-`com.uragiristereo.mikansei` as the package name then store the `google-services.json` file in the
-root of `app` module.
+To use the `playRelease` build variant, first you need to create a Firebase Android app with `com.uragiristereo.mikansei` as the package name then store the `google-services.json` file in the root of `app` module.
 
 ## License
 
-    Copyright 2023 Agung Watanabe
+    Copyright 2024 Agung Watanabe
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
