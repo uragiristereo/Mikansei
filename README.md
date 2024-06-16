@@ -47,7 +47,7 @@
 
 - Version: **1.0.0** (1.0.0)
 - Updated at: 2024-06-16
-- Download: Play Store _(coming soon)_ • [APK](https://github.com/uragiristereo/Mikansei/releases/download/100-1.0.0/Mikansei_v1.0.0_(100)-oss.apk)
+- Download: Play Store _(coming soon)_ • [APK](https://github.com/uragiristereo/Mikansei/releases/download/100-1.0.0/Mikansei_v1.0.0_100-oss.apk)
 - Changelogs: [here](https://github.com/uragiristereo/Mikansei/releases/tag/100-1.0.0)
 
 ## Tech Stacks
