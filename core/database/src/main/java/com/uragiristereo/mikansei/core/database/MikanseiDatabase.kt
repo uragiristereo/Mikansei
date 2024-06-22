@@ -9,6 +9,8 @@ import com.uragiristereo.mikansei.core.database.post.PostDao
 import com.uragiristereo.mikansei.core.database.post.PostRow
 import com.uragiristereo.mikansei.core.database.session.SessionDao
 import com.uragiristereo.mikansei.core.database.session.SessionRow
+import com.uragiristereo.mikansei.core.database.session_post.SessionPostDao
+import com.uragiristereo.mikansei.core.database.session_post.SessionPostRow
 import com.uragiristereo.mikansei.core.database.user.UserDao
 import com.uragiristereo.mikansei.core.database.user.UserRow
 import com.uragiristereo.mikansei.core.database.user_delegation.UserDelegationDao
@@ -20,6 +22,7 @@ import com.uragiristereo.mikansei.core.database.user_delegation.UserDelegationRo
         UserRow::class,
         UserDelegationRow::class,
         PostRow::class,
+        SessionPostRow::class,
     ],
     version = 2,
     autoMigrations = [
@@ -35,4 +38,6 @@ abstract class MikanseiDatabase : RoomDatabase() {
     abstract fun searchDelegationDao(): UserDelegationDao
 
     abstract fun postDao(): PostDao
+
+    abstract fun sessionPostDao(): SessionPostDao
 }
