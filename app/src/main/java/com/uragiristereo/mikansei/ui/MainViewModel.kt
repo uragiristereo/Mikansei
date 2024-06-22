@@ -8,7 +8,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.uragiristereo.mikansei.core.database.session.SessionDao
+import com.uragiristereo.mikansei.core.domain.module.database.PostRepository
+import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.FileUtil
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
@@ -22,7 +23,8 @@ import timber.log.Timber
 class MainViewModel(
     savedStateHandle: SavedStateHandle,
     preferencesRepository: PreferencesRepository,
-    sessionDao: SessionDao,
+    sessionRepository: SessionRepository,
+    postRepository: PostRepository,
     private val applicationContext: Context,
 ) : ViewModel(), DownloadShareViewModel by DownloadShareViewModelImpl() {
     val preferences = preferencesRepository.data
@@ -46,7 +48,8 @@ class MainViewModel(
             savedStateHandle[Constants.STATE_KEY_INITIALIZED] = true
 
             viewModelScope.launch(Dispatchers.IO) {
-                sessionDao.reset()
+                postRepository.reset()
+                sessionRepository.reset()
             }
         }
 
