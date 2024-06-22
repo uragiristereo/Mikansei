@@ -2,7 +2,7 @@ package com.uragiristereo.mikansei
 
 import com.uragiristereo.mikansei.core.danbooru.danbooruModule
 import com.uragiristereo.mikansei.core.database.databaseModule
-import com.uragiristereo.mikansei.core.domain.DomainModule
+import com.uragiristereo.mikansei.core.domain.domainModule
 import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.network.NetworkModule
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
@@ -34,7 +34,7 @@ object MikanseiModule {
             listOf(
                 danbooruModule,
                 databaseModule(),
-                DomainModule(),
+                domainModule,
                 NetworkModule(),
                 HomeModule(),
                 ImageModule(),
