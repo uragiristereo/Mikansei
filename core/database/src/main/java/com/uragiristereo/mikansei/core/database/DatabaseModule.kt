@@ -23,6 +23,7 @@ fun databaseModule() = module {
     single { get<MikanseiDatabase>().sessionDao() }
     single { get<MikanseiDatabase>().userDao() }
     single { get<MikanseiDatabase>().searchDelegationDao() }
+    single { get<MikanseiDatabase>().postDao() }
 
     singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
     singleOf(::UserDelegationRepositoryImpl) bind UserDelegationRepository::class

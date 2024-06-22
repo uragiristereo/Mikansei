@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.uragiristereo.mikansei.core.database.migration.From1To2MigrationSpec
+import com.uragiristereo.mikansei.core.database.post.PostDao
+import com.uragiristereo.mikansei.core.database.post.PostRow
 import com.uragiristereo.mikansei.core.database.session.SessionDao
 import com.uragiristereo.mikansei.core.database.session.SessionRow
 import com.uragiristereo.mikansei.core.database.user.UserDao
@@ -17,6 +19,7 @@ import com.uragiristereo.mikansei.core.database.user_delegation.UserDelegationRo
         SessionRow::class,
         UserRow::class,
         UserDelegationRow::class,
+        PostRow::class,
     ],
     version = 2,
     autoMigrations = [
@@ -30,4 +33,6 @@ abstract class MikanseiDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     abstract fun searchDelegationDao(): UserDelegationDao
+
+    abstract fun postDao(): PostDao
 }
