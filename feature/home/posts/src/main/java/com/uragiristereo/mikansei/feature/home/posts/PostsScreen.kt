@@ -21,13 +21,13 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -40,9 +40,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
@@ -67,14 +64,14 @@ import com.uragiristereo.mikansei.feature.home.posts.state.PostsEmpty
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsError
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsLoadingState
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsProgress
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, FlowPreview::class)
 @Composable
 internal fun PostsScreen(
     isRouteFirstEntry: Boolean,
@@ -87,7 +84,6 @@ internal fun PostsScreen(
     val density = LocalDensity.current
     val hapticFeedback = LocalHapticFeedback.current
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     val scrollToTopChannel = LocalScrollToTopChannel.current
     val windowSizeVertical = LocalWindowSizeVertical.current
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
@@ -137,6 +133,19 @@ internal fun PostsScreen(
         }
     }
 
+    LaunchedEffect(key1 = Unit) {
+        viewModel.event.collect { event ->
+            when (event) {
+                is PostsViewModel.Event.OnJumpToPosition -> {
+                    gridState.scrollToItem(
+                        index = event.session.scrollIndex,
+                        scrollOffset = event.session.scrollOffset,
+                    )
+                }
+            }
+        }
+    }
+
     LaunchedEffect(key1 = shouldEnableTopAppBarScroll) {
         scope.launch {
             viewModel.offsetY.animateTo(targetValue = 0f)
@@ -156,10 +165,6 @@ internal fun PostsScreen(
     }
 
     LaunchedEffect(key1 = viewModel.loading) {
-        if (viewModel.loading == PostsLoadingState.DISABLED || viewModel.loading == PostsLoadingState.DISABLED_REFRESHED) {
-            viewModel.updatePostsSession()
-        }
-
         if (viewModel.loading == PostsLoadingState.DISABLED_REFRESHED) {
             scope.launch {
                 gridState.scrollToItem(index = 0)
@@ -175,47 +180,15 @@ internal fun PostsScreen(
         }
     }
 
-    LaunchedEffect(key1 = viewModel.jumpToPosition) {
-        if (viewModel.jumpToPosition) {
-            scope.launch {
-                gridState.scrollToItem(
-                    index = viewModel.savedState.scrollIndex,
-                    scrollOffset = viewModel.savedState.scrollOffset,
+    LaunchedEffect(key1 = Unit) {
+        snapshotFlow { gridState.firstVisibleItemScrollOffset }
+            .debounce(timeoutMillis = 1_000L)
+            .collect {
+                viewModel.updateSessionPosition(
+                    index = gridState.firstVisibleItemIndex,
+                    offset = gridState.firstVisibleItemScrollOffset,
                 )
-
-                viewModel.jumpToPosition = false
             }
-        }
-    }
-
-    DisposableEffect(key1 = lifecycleOwner) {
-        var job: Job? = null
-
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> {
-                    job = scope.launch {
-                        while (true) {
-                            viewModel.updateSessionPosition(
-                                index = gridState.firstVisibleItemIndex,
-                                offset = gridState.firstVisibleItemScrollOffset,
-                            )
-
-                            delay(timeMillis = 1000L)
-                        }
-                    }
-                }
-
-                else -> job?.cancel()
-            }
-        }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            job?.cancel()
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
     }
 
     SetSystemBarsColors(Color.Transparent)

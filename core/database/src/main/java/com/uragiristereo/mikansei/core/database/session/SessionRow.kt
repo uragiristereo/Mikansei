@@ -1,16 +1,21 @@
 package com.uragiristereo.mikansei.core.database.session
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.uragiristereo.mikansei.core.model.danbooru.Post
 
-@Entity(tableName = "sessions")
+@Entity(tableName = "sessions_v2")
 data class SessionRow(
     @PrimaryKey
-    val uuid: String,
+    @ColumnInfo(name = "session_id")
+    val id: String,
 
-    val sessionUuid: String,
-    val sequence: Int,
+    @ColumnInfo(name = "tags")
+    val tags: String,
 
-    val post: Post,
+    @ColumnInfo(name = "scroll_index", defaultValue = "0")
+    val scrollIndex: Int = 0,
+
+    @ColumnInfo(name = "scroll_offset", defaultValue = "0")
+    val scrollOffset: Int = 0,
 )

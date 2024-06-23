@@ -1,11 +1,14 @@
 package com.uragiristereo.mikansei.core.database
 
-import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.uragiristereo.mikansei.core.database.post.PostRepositoryImpl
+import com.uragiristereo.mikansei.core.database.session.SessionRepositoryImpl
 import com.uragiristereo.mikansei.core.database.user.UserRepositoryImpl
 import com.uragiristereo.mikansei.core.database.user_delegation.UserDelegationRepositoryImpl
+import com.uragiristereo.mikansei.core.domain.module.database.PostRepository
+import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserDelegationRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.Environment
@@ -18,17 +21,21 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 fun databaseModule() = module {
-    single { provideDatabase(androidContext()) }
+    single { provideDatabase() }
 
     single { get<MikanseiDatabase>().sessionDao() }
     single { get<MikanseiDatabase>().userDao() }
     single { get<MikanseiDatabase>().searchDelegationDao() }
+    single { get<MikanseiDatabase>().postDao() }
+    single { get<MikanseiDatabase>().sessionPostDao() }
 
     singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
     singleOf(::UserDelegationRepositoryImpl) bind UserDelegationRepository::class
+    singleOf(::PostRepositoryImpl) bind PostRepository::class
+    singleOf(::SessionRepositoryImpl) bind SessionRepository::class
 }
 
-private fun Scope.provideDatabase(context: Context): MikanseiDatabase {
+private fun Scope.provideDatabase(): MikanseiDatabase {
     val preferencesRepository = get<PreferencesRepository>()
     val environment = get<Environment>()
     val isTestMode = preferencesRepository.data.value.testMode
@@ -45,7 +52,7 @@ private fun Scope.provideDatabase(context: Context): MikanseiDatabase {
 
     return Room
         .databaseBuilder(
-            context = context,
+            context = androidContext(),
             klass = MikanseiDatabase::class.java,
             name = databaseName,
         )

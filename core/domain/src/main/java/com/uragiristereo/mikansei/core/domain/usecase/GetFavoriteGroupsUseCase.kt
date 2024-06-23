@@ -9,6 +9,7 @@ import com.uragiristereo.mikansei.core.model.result.mapSuccess
 class GetFavoriteGroupsUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val userRepository: UserRepository,
+    private val filterPostsUseCase: FilterPostsUseCase,
 ) {
     suspend operator fun invoke(forceCache: Boolean, forceRefresh: Boolean): Result<List<Favorite>> {
         val activeUser = userRepository.active.value
@@ -29,10 +30,12 @@ class GetFavoriteGroupsUseCase(
                     forceCache = forceCache,
                     forceRefresh = forceRefresh,
                 ).mapSuccess { posts ->
+                    val filteredPosts = filterPostsUseCase(posts, tags = "")
+
                     favoriteGroups.map { favoriteGroup ->
                         val thumbnailPostId = favoriteGroup.postIds.maxOrNull()
 
-                        val post = posts.firstOrNull {
+                        val post = filteredPosts.firstOrNull {
                             it.id == thumbnailPostId
                         }
 
