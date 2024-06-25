@@ -16,6 +16,8 @@ media3 = "1.3.0"
 gms = "4.4.1"
 firebase-bom = "32.8.0"
 firebase-crashlytics = "2.9.9"
+junit = "4.13.2"
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradle" }
@@ -99,6 +101,10 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
+#Testing
+junit = { module = "junit:junit", version.ref = "junit" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
 
 [bundles]
 androidx = ["androidx-core", "androidx-lifecycle-runtime", "androidx-savedstate"]
@@ -111,3 +117,4 @@ retrofit = ["okhttp", "retrofit", "retrofit-converter-kotlinx-serialization"]
 coil = ["coil", "coil-compose"]
 core = ["koin", "timber"]
 media3 = ["media3-exoplayer", "media3-okhttp", "media3-ui"]
+test = ["junit", "kotlin-test"]

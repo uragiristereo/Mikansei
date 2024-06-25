@@ -31,4 +31,6 @@ dependencies {
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.koin)
     implementation(libs.timber)
+
+    testImplementation(libs.bundles.test)
 }
