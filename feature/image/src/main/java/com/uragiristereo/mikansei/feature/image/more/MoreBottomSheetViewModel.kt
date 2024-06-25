@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
+import com.uragiristereo.mikansei.core.domain.module.database.TagCategoryRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
@@ -35,6 +36,7 @@ class MoreBottomSheetViewModel(
     private val danbooruRepository: DanbooruRepository,
     private val networkRepository: NetworkRepository,
     private val userRepository: UserRepository,
+    private val tagCategoryRepository: TagCategoryRepository,
     private val getTagsUseCase: GetTagsUseCase,
     private val convertFileSizeUseCase: ConvertFileSizeUseCase,
 ) : ViewModel(),
@@ -80,6 +82,9 @@ class MoreBottomSheetViewModel(
                     is Result.Success -> {
                         errorMessage = null
                         tags.addAll(result.data)
+
+                        val tagsMap = tags.associate { it.name to it.category }
+                        tagCategoryRepository.update(tagsMap)
                     }
 
                     is Result.Failed -> {
