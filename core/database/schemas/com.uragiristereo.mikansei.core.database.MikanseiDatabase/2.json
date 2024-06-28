@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "9c6132fd8c04841a24b868086fc3d295",
+    "identityHash": "647a432a36c897901e11925a68bd2339",
     "entities": [
       {
         "tableName": "sessions_v2",
@@ -289,12 +289,44 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "tag_categories",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`tag` TEXT NOT NULL, `category` TEXT NOT NULL, `updated_at` INTEGER NOT NULL, PRIMARY KEY(`tag`))",
+        "fields": [
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "tag"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9c6132fd8c04841a24b868086fc3d295')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '647a432a36c897901e11925a68bd2339')"
     ]
   }
 }

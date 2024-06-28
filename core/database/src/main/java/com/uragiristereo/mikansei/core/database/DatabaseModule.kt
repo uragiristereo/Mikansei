@@ -5,10 +5,12 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.uragiristereo.mikansei.core.database.post.PostRepositoryImpl
 import com.uragiristereo.mikansei.core.database.session.SessionRepositoryImpl
+import com.uragiristereo.mikansei.core.database.tag_category.TagCategoryRepositoryImpl
 import com.uragiristereo.mikansei.core.database.user.UserRepositoryImpl
 import com.uragiristereo.mikansei.core.database.user_delegation.UserDelegationRepositoryImpl
 import com.uragiristereo.mikansei.core.domain.module.database.PostRepository
 import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
+import com.uragiristereo.mikansei.core.domain.module.database.TagCategoryRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserDelegationRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.Environment
@@ -28,11 +30,13 @@ fun databaseModule() = module {
     single { get<MikanseiDatabase>().searchDelegationDao() }
     single { get<MikanseiDatabase>().postDao() }
     single { get<MikanseiDatabase>().sessionPostDao() }
+    single { get<MikanseiDatabase>().tagCategoryDao() }
 
     singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
     singleOf(::UserDelegationRepositoryImpl) bind UserDelegationRepository::class
     singleOf(::PostRepositoryImpl) bind PostRepository::class
     singleOf(::SessionRepositoryImpl) bind SessionRepository::class
+    singleOf(::TagCategoryRepositoryImpl) bind TagCategoryRepository::class
 }
 
 private fun Scope.provideDatabase(): MikanseiDatabase {

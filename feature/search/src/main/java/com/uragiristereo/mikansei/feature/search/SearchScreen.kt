@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -18,6 +19,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
@@ -34,12 +37,12 @@ import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
+import com.uragiristereo.mikansei.core.ui.extension.copy
+import com.uragiristereo.mikansei.feature.search.browse_chips.BrowseChips
 import com.uragiristereo.mikansei.feature.search.core.SearchBar
-import com.uragiristereo.mikansei.feature.search.core.SearchBrowseButton
 import com.uragiristereo.mikansei.feature.search.quick_shortcut_bar.SearchQuickShortcutBar
 import com.uragiristereo.mikansei.feature.search.result.SearchResultItem
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
@@ -57,7 +60,7 @@ internal fun SearchScreen(
 
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
-
+    val browseChips by viewModel.browseChips.collectAsState()
     val focusRequester = remember { FocusRequester() }
 
     LaunchedEffect(key1 = viewModel.loading) {
@@ -141,14 +144,18 @@ internal fun SearchScreen(
             .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Horizontal))
             .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     ) { innerPadding ->
+        val navigationBarsPadding = WindowInsets.navigationBars.asPaddingValues()
+
         LazyColumn(
             state = columnState,
-            contentPadding = innerPadding,
+            contentPadding = innerPadding.copy(
+                bottom = navigationBarsPadding.calculateBottomPadding() + 36.dp + 8.dp,
+            ),
             modifier = Modifier.fillMaxSize(),
         ) {
             item {
-                SearchBrowseButton(
-                    text = viewModel.parsedQuery,
+                BrowseChips(
+                    chips = browseChips,
                     onClick = {
                         onSearchSubmit(viewModel.parsedQuery)
                     },
@@ -178,7 +185,9 @@ internal fun SearchScreen(
                                     replacement = "${viewModel.delimiter}${item.name} ",
                                 )
 
-                                val newQuery = "$result ".replace(regex = "\\s+".toRegex(), replacement = " ")
+                                val newQuery = "$result "
+                                    .replace("\\s+".toRegex(), " ")
+                                    .lowercase()
 
                                 viewModel.query = TextFieldValue(
                                     text = newQuery,
@@ -201,7 +210,6 @@ internal fun SearchScreen(
 
     DisposableEffect(key1 = viewModel) {
         scope.launch {
-            delay(timeMillis = 200L)
             focusRequester.requestFocus()
             keyboardController?.show()
         }
