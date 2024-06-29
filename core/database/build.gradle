@@ -7,6 +7,10 @@ plugins {
 android {
     namespace "com.uragiristereo.mikansei.core.database"
 
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
@@ -26,4 +30,5 @@ dependencies {
     implementation(libs.bundles.room)
     ksp(libs.room.compiler)
     implementation(libs.kotlinx.serialization.json)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

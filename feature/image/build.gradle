@@ -13,6 +13,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
 }
 
 kotlin {
@@ -38,4 +42,5 @@ dependencies {
     implementation(libs.touchimageview)
     implementation(libs.bundles.core)
     implementation(libs.bundles.media3)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

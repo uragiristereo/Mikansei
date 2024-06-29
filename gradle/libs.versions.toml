@@ -17,6 +17,7 @@ gms = "4.4.1"
 firebase-bom = "32.8.0"
 firebase-crashlytics = "2.9.9"
 junit = "4.13.2"
+desugar-jdk-libs = "2.0.4"
 
 
 [plugins]
@@ -104,6 +105,9 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx"
 #Testing
 junit = { module = "junit:junit", version.ref = "junit" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
+# Desugaring
+desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar-jdk-libs" }
 
 
 [bundles]

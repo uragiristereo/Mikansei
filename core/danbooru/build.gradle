@@ -6,6 +6,10 @@ plugins {
 
 android {
     namespace "com.uragiristereo.mikansei.core.danbooru"
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
 }
 
 kotlin {
@@ -22,4 +26,5 @@ dependencies {
     implementation(libs.bundles.core)
     implementation(libs.bundles.retrofit)
     implementation(libs.kotlinx.serialization.json)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

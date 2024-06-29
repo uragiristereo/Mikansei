@@ -15,6 +15,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
 }
 
 kotlin {
@@ -28,4 +32,5 @@ dependencies {
     implementation(libs.compose)
     implementation(libs.bundles.retrofit)
     implementation(libs.kotlinx.serialization.json)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

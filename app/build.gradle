@@ -70,6 +70,10 @@ android {
         kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
+
     packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -114,4 +118,5 @@ dependencies {
     playImplementation(platform(libs.firebase.bom))
     playImplementation(libs.firebase.analytics)
     playImplementation(libs.firebase.crashlytics)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
