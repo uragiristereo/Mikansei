@@ -53,7 +53,9 @@ import com.uragiristereo.mikansei.feature.image.more.tags.MoreTagsRow
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import java.text.DateFormat
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -195,10 +197,17 @@ internal fun MoreBottomSheet(
                     }
 
                     item {
-                        val df = remember { DateFormat.getDateTimeInstance() }
+                        val formatted = remember(post.createdAt) {
+                            val zonedDateTime = post.createdAt
+                                .atZoneSameInstant(ZoneId.systemDefault())
+
+                            DateTimeFormatter
+                                .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.MEDIUM)
+                                .format(zonedDateTime)
+                        }
 
                         Text(
-                            text = df.format(post.createdAt),
+                            text = formatted,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier
