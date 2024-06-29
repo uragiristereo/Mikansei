@@ -2,7 +2,7 @@ package com.uragiristereo.mikansei.core.model.danbooru
 
 import androidx.compose.runtime.Stable
 import kotlinx.serialization.Serializable
-import java.util.Date
+import java.time.OffsetDateTime
 
 @Stable
 @Serializable
@@ -10,7 +10,7 @@ data class Post(
     val id: Int,
 
     @Serializable(DanbooruDateSerializer::class)
-    val createdAt: Date,
+    val createdAt: OffsetDateTime,
 
     val uploaderId: Int,
     val source: String?,
