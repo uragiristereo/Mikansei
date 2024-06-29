@@ -3,7 +3,7 @@ package com.uragiristereo.mikansei.core.database.tag_category
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
+import java.time.OffsetDateTime
 
 @Entity(tableName = "tag_categories")
 data class TagCategoryRow(
@@ -15,5 +15,5 @@ data class TagCategoryRow(
     val category: String,
 
     @ColumnInfo(name = "updated_at")
-    val updatedAt: Date = Date(),
+    val updatedAt: OffsetDateTime = OffsetDateTime.now(),
 )
