@@ -3,7 +3,7 @@ package com.uragiristereo.mikansei.core.danbooru.model.saved_search
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.Date
+import java.time.OffsetDateTime
 
 @Serializable
 data class DanbooruSavedSearch(
@@ -18,11 +18,11 @@ data class DanbooruSavedSearch(
 
     @SerialName("created_at")
     @Serializable(DanbooruDateSerializer::class)
-    val createdAt: Date,
+    val createdAt: OffsetDateTime,
 
     @SerialName("updated_at")
     @Serializable(DanbooruDateSerializer::class)
-    val updatedAt: Date,
+    val updatedAt: OffsetDateTime,
 
     @SerialName("labels")
     val labels: List<String>,

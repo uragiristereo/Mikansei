@@ -3,13 +3,13 @@ package com.uragiristereo.mikansei.core.danbooru.model.profile
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.Date
+import java.time.OffsetDateTime
 
 @Serializable
 data class DanbooruProfile(
     @SerialName("last_logged_in_at")
     @Serializable(DanbooruDateSerializer::class)
-    val lastLoggedInAt: Date,
+    val lastLoggedInAt: OffsetDateTime,
 
     @SerialName("id")
     val id: Int,
@@ -26,19 +26,19 @@ data class DanbooruProfile(
     @SerialName("created_at")
 
     @Serializable(DanbooruDateSerializer::class)
-    val createdAt: Date,
+    val createdAt: OffsetDateTime,
 
     @SerialName("last_forum_read_at")
 
     @Serializable(DanbooruDateSerializer::class)
-    val lastForumReadAt: Date,
+    val lastForumReadAt: OffsetDateTime,
 
     @SerialName("comment_threshold")
     val commentThreshold: Int,
 
     @SerialName("updated_at")
     @Serializable(DanbooruDateSerializer::class)
-    val updatedAt: Date,
+    val updatedAt: OffsetDateTime,
 
     @SerialName("default_image_size")
     val defaultImageSize: String,
