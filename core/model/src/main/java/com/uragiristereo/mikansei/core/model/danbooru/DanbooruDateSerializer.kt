@@ -6,21 +6,21 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
-object DanbooruDateSerializer : KSerializer<Date> {
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ", Locale.US)
+object DanbooruDateSerializer : KSerializer<OffsetDateTime> {
+    private val dateFormat = DateTimeFormatter.ISO_DATE_TIME
 
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(serialName = "Date", kind = PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: Date) {
+    override fun serialize(encoder: Encoder, value: OffsetDateTime) {
         encoder.encodeString(dateFormat.format(value))
     }
 
-    override fun deserialize(decoder: Decoder): Date {
+    override fun deserialize(decoder: Decoder): OffsetDateTime {
         val string = decoder.decodeString()
 
-        return dateFormat.parse(string) ?: Date()
+        return OffsetDateTime.from(dateFormat.parse(string))
     }
 }
