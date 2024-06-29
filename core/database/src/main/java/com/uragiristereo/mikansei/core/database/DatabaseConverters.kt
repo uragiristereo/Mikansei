@@ -4,7 +4,9 @@ import androidx.room.TypeConverter
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.util.Date
+import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 
 class DatabaseConverters {
     private val json = Json {
@@ -12,13 +14,15 @@ class DatabaseConverters {
     }
 
     @TypeConverter
-    fun timestampToDate(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun timestampToOffsetDateTime(value: Long?): OffsetDateTime? {
+        return value?.let {
+            OffsetDateTime.ofInstant(Instant.ofEpochMilli(it), ZoneOffset.UTC)
+        }
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long? {
-        return date?.time
+    fun offsetDateTimeToTimestamp(date: OffsetDateTime?): Long? {
+        return date?.toInstant()?.toEpochMilli()
     }
 
     @TypeConverter
