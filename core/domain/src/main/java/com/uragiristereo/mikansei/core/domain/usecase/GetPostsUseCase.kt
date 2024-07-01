@@ -4,6 +4,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
 import com.uragiristereo.mikansei.core.domain.module.database.PostRepository
 import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
+import com.uragiristereo.mikansei.core.domain.module.database.entity.Session
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import kotlinx.coroutines.flow.first
@@ -21,6 +22,8 @@ class GetPostsUseCase(
     ): Result<PostsResult> {
         return danbooruRepository.getPosts(tags, page)
             .mapSuccess { postsResult ->
+                sessionRepository.addSession(Session(id = sessionId, tags = tags))
+
                 // if page == 1, it means refreshing and existing posts should be cleared
                 val existingPosts = when {
                     page > 1 -> {
