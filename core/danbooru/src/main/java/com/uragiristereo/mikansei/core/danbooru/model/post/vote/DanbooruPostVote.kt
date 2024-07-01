@@ -3,7 +3,7 @@ package com.uragiristereo.mikansei.core.danbooru.model.post.vote
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.Date
+import java.time.OffsetDateTime
 
 @Serializable
 data class DanbooruPostVote(
@@ -18,11 +18,11 @@ data class DanbooruPostVote(
 
     @SerialName("created_at")
     @Serializable(DanbooruDateSerializer::class)
-    val createdAt: Date,
+    val createdAt: OffsetDateTime,
 
     @SerialName("updated_at")
     @Serializable(DanbooruDateSerializer::class)
-    val updatedAt: Date,
+    val updatedAt: OffsetDateTime,
 
     @SerialName("score")
     val score: Int,

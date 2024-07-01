@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.uragiristereo.mikansei.core.model.danbooru.Post
-import java.util.Date
+import java.time.OffsetDateTime
 
 @Entity(tableName = "posts")
 data class PostRow(
@@ -19,5 +19,5 @@ data class PostRow(
     val uploaderName: String? = null,
 
     @ColumnInfo(name = "updated_at")
-    val updatedAt: Date = Date(),
+    val updatedAt: OffsetDateTime = OffsetDateTime.now(),
 )

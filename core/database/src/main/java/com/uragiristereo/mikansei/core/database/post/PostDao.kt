@@ -6,7 +6,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import kotlinx.coroutines.flow.Flow
-import java.util.Date
+import java.time.OffsetDateTime
 
 @Dao
 interface PostDao {
@@ -25,7 +25,7 @@ interface PostDao {
             where post_id = :postId
         """
     )
-    suspend fun update(postId: Int, post: Post, updatedAt: Date = Date())
+    suspend fun update(postId: Int, post: Post, updatedAt: OffsetDateTime = OffsetDateTime.now())
 
     @Transaction
     suspend fun update(posts: List<Post>) {
@@ -51,7 +51,7 @@ interface PostDao {
     suspend fun updateUploaderName(
         postId: Int,
         uploaderName: String,
-        updatedAt: Date = Date(),
+        updatedAt: OffsetDateTime = OffsetDateTime.now(),
     )
 
     @Query("delete from posts")

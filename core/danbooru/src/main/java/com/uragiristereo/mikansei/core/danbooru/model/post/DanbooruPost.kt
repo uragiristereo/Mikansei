@@ -4,7 +4,7 @@ package com.uragiristereo.mikansei.core.danbooru.model.post
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruDateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.Date
+import java.time.OffsetDateTime
 
 @Serializable
 data class DanbooruPost(
@@ -13,7 +13,7 @@ data class DanbooruPost(
 
     @SerialName("created_at")
     @Serializable(with = DanbooruDateSerializer::class)
-    val createdAt: Date,
+    val createdAt: OffsetDateTime,
 
     @SerialName("uploader_id")
     val uploaderId: Int,
@@ -95,7 +95,7 @@ data class DanbooruPost(
 
     @SerialName("updated_at")
     @Serializable(with = DanbooruDateSerializer::class)
-    val updatedAt: Date,
+    val updatedAt: OffsetDateTime,
 
     @SerialName("is_banned")
     val isBanned: Boolean,
