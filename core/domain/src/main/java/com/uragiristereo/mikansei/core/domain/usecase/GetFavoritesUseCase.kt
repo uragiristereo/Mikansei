@@ -5,14 +5,12 @@ import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
-import kotlinx.coroutines.flow.first
 import java.util.UUID
 
 class GetFavoritesUseCase(
     private val userRepository: UserRepository,
     private val sessionRepository: SessionRepository,
     private val getPostsUseCase: GetPostsUseCase,
-    private val filterPostsUseCase: FilterPostsUseCase,
 ) {
     suspend operator fun invoke(): Result<Favorite> {
         val activeUser = userRepository.active.value
@@ -23,16 +21,7 @@ class GetFavoritesUseCase(
             page = 1,
             sessionId = sessionId,
         ).mapSuccess { postsResult ->
-            val posts = when {
-                !postsResult.isEmpty -> {
-                    filterPostsUseCase(
-                        posts = sessionRepository.getPosts(sessionId).first(),
-                        tags = "",
-                    )
-                }
-
-                else -> emptyList()
-            }
+            val posts = postsResult.posts
 
             val thumbnailUrl = when {
                 posts.isNotEmpty() -> {
