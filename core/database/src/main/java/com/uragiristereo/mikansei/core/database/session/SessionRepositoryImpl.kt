@@ -18,6 +18,10 @@ class SessionRepositoryImpl(
         }
     }
 
+    override suspend fun addSession(session: Session) {
+        sessionDao.add(session.toSessionRow())
+    }
+
     override suspend fun updateSession(session: Session) {
         sessionDao.update(session.toSessionRow())
     }
