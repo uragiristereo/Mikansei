@@ -94,12 +94,7 @@ class NewFavGroupViewModel(
 
     private fun updateAndCacheFavoriteGroups() {
         viewModelScope.launch(SupervisorJob()) {
-            val result = getFavoriteGroupsUseCase(
-                forceCache = true,
-                forceRefresh = true,
-            )
-
-            when (result) {
+            when (val result = getFavoriteGroupsUseCase(forceRefresh = true)) {
                 is Result.Success -> Timber.d("updateAndCacheFavoriteGroups success")
                 is Result.Failed -> Timber.d(result.message)
                 is Result.Error -> Timber.d(result.t)

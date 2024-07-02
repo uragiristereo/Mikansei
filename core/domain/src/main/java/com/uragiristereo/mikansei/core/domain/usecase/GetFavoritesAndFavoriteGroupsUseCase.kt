@@ -14,10 +14,7 @@ class GetFavoritesAndFavoriteGroupsUseCase(
                 getFavoritesUseCase()
             },
             other = {
-                getFavoriteGroupsUseCase(
-                    forceCache = false,
-                    forceRefresh = true,
-                )
+                getFavoriteGroupsUseCase(forceRefresh = true)
             },
             transform = { result1, result2 ->
                 listOf(result1) + result2

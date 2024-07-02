@@ -54,10 +54,7 @@ class AddToFavGroupViewModel(
         viewModelScope.launch {
             isLoading = true
 
-            val result = getFavoriteGroupsUseCase(
-                forceCache = true,
-                forceRefresh = false,
-            )
+            val result = getFavoriteGroupsUseCase(forceRefresh = false)
 
             when (result) {
                 is Result.Success -> {
@@ -113,12 +110,7 @@ class AddToFavGroupViewModel(
                 isLoading = true
             }
 
-            val result = getFavoriteGroupsUseCase(
-                forceCache = true,
-                forceRefresh = true,
-            )
-
-            when (result) {
+            when (val result = getFavoriteGroupsUseCase(forceRefresh = true)) {
                 is Result.Success -> {
                     items = mapResult(result.data)
 

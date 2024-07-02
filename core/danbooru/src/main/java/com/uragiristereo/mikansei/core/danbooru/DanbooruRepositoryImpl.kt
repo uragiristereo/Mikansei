@@ -137,6 +137,7 @@ class DanbooruRepositoryImpl(
     }.mapSuccess {
         PostsResult(
             posts = it.toPostList(),
+            isEmpty = it.isEmpty(),
             canLoadMore = it.size == Constants.POSTS_PER_PAGE,
         )
     }
