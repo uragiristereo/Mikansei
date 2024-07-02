@@ -13,8 +13,8 @@ android {
     defaultConfig {
         applicationId "com.uragiristereo.mikansei"
         targetSdk 34
-        versionName "1.0.0"
-        versionCode 100
+        versionName "1.0.1"
+        versionCode 101
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
