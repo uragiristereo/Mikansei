@@ -1,6 +1,7 @@
 package com.uragiristereo.mikansei.ui.content
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
@@ -58,8 +59,14 @@ fun MainContentMediumWide(
         startBar = {
             AnimatedVisibility(
                 visible = navigationBarsVisible,
-                enter = slideInHorizontally(initialOffsetX = { -it }),
-                exit = slideOutHorizontally(targetOffsetX = { -it }),
+                enter = slideInHorizontally(
+                    animationSpec = tween(durationMillis = 200),
+                    initialOffsetX = { -it },
+                ),
+                exit = slideOutHorizontally(
+                    animationSpec = tween(durationMillis = 200),
+                    targetOffsetX = { -it },
+                ),
             ) {
                 DimensionSubcomposeLayout {
                     LaunchedEffect(key1 = size.width) {

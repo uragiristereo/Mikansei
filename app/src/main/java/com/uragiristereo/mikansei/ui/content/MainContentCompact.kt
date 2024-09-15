@@ -1,6 +1,7 @@
 package com.uragiristereo.mikansei.ui.content
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,8 +30,14 @@ fun MainContentCompact(
         bottomBar = {
             AnimatedVisibility(
                 visible = navigationBarsVisible,
-                enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it }),
+                enter = slideInVertically(
+                    animationSpec = tween(durationMillis = 200),
+                    initialOffsetY = { it },
+                ),
+                exit = slideOutVertically(
+                    animationSpec = tween(durationMillis = 200),
+                    targetOffsetY = { it },
+                ),
             ) {
                 MainBottomNavigationBar(
                     currentRoute = currentRoute,

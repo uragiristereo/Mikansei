@@ -2,8 +2,6 @@ package com.uragiristereo.mikansei.core.ui.animation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -31,6 +29,7 @@ fun translateYFadeOut(
 fun translateXFadeIn(
     forward: Boolean,
 ): EnterTransition = slideInHorizontally(
+    animationSpec = tween(durationMillis = 200),
     initialOffsetX = {
         when {
             forward -> it
@@ -38,7 +37,7 @@ fun translateXFadeIn(
         } / 6
     },
 ) + fadeIn(
-    animationSpec = spring(stiffness = Spring.StiffnessMedium),
+    animationSpec = tween(durationMillis = 200),
     initialAlpha = when {
         forward -> 0f
         else -> 0.5f
@@ -48,6 +47,7 @@ fun translateXFadeIn(
 fun translateXFadeOut(
     forward: Boolean,
 ): ExitTransition = slideOutHorizontally(
+    animationSpec = tween(durationMillis = 200),
     targetOffsetX = {
         when {
             forward -> -it / 6
@@ -55,7 +55,7 @@ fun translateXFadeOut(
         } / 6
     },
 ) + fadeOut(
-    animationSpec = spring(stiffness = Spring.StiffnessMedium),
+    animationSpec = tween(durationMillis = 200),
     targetAlpha = when {
         forward -> 0.5f
         else -> 0f
