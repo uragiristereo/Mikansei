@@ -6,7 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,7 +40,7 @@ internal fun PostItem(
                 onClick = onClick,
                 onLongClick = onLongPress,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = Color.Black),
+                indication = ripple(color = Color.Black),
             ),
     ) {
         PostPlaceholder()

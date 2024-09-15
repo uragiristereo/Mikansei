@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -47,14 +47,14 @@ fun FavoriteItem(
                         it.clickable(
                             onClick = onClick,
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(color = Color.Black),
+                            indication = ripple(color = Color.Black),
                         )
                     } else {
                         it.combinedClickable(
                             onClick = onClick,
                             onLongClick = onLongClick,
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(color = Color.Black),
+                            indication = ripple(color = Color.Black),
                         )
                     }
                 },
