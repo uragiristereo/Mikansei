@@ -98,6 +98,10 @@ class GenerateChipsFromTagsUseCase {
         val qualifiers = listOf(
             "search:",
             "ordfav:",
+            "favgroup:",
+            "id:",
+            "status:",
+            "order:",
         )
     }
 }
