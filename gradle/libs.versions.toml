@@ -1,10 +1,9 @@
 [versions]
 gradle = "8.5.1"
-kotlin = "1.9.22"
-ksp = "1.9.22-1.0.17"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.25"
 lifecycle = "2.8.5"
 compose = "1.7.1"
-compose-compiler = "1.5.10"
 room = "2.6.1"
 accompanist = "0.36.0"
 koin = "3.5.6"
@@ -29,6 +28,7 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 gms = { id = "com.google.gms.google-services", version.ref = "gms" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 
 [libraries]

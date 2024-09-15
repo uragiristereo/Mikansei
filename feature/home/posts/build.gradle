@@ -1,9 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -11,10 +10,6 @@ android {
 
     buildFeatures {
         compose true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
     }
 }
 
@@ -38,11 +33,4 @@ dependencies {
     implementation(libs.bundles.coil)
     implementation(libs.timber)
     implementation(libs.kotlinx.serialization.json)
-}
-
-tasks.withType(KotlinCompile).configureEach {
-    compilerOptions.freeCompilerArgs.addAll(
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:experimentalStrongSkipping=true",
-    )
 }
