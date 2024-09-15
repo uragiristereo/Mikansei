@@ -17,43 +17,42 @@ class GenerateChipsFromTagsUseCase {
         if (tagsResult.isEmpty()) {
             return emptyList()
         }
-
-        while (true) {
-            val orStartIndex = when {
-                tagsResult.startsWith('(') -> 0
-                tagsResult.indexOf(" (") == -1 -> -1
-                else -> tagsResult.indexOf(" (") + 1
-            }
-
-            val orEndIndex = tagsResult.indexOf(") ").let {
-                if (it == -1 && tagsResult.endsWith(')')) {
-                    tagsResult.lastIndex
-                } else {
-                    it
-                }
-            }
-
-            if (orStartIndex >= 0 && orEndIndex >= 0) {
-                var orTags = tagsResult.substring(orStartIndex, orEndIndex + 1)
-                val orSplit = orTags.split("__or__")
-                val orCount = orSplit.size - 1
-
-                if (orCount > 0) {
-                    orTags = orTags.removeSurrounding(prefix = "(", suffix = ")")
-                    tagsResult = tagsResult.replaceRange(
-                        startIndex = orStartIndex,
-                        endIndex = orEndIndex + 1,
-                        replacement = orTags,
-                    )
-                } else {
-                    break
-                }
-            } else {
-                break
-            }
+        if (tagsResult.startsWith("(")) {
+            tagsResult = " $tagsResult"
+        }
+        if (tagsResult.endsWith(")")) {
+            tagsResult = "$tagsResult "
         }
 
-        val result = tagsResult
+        var startFrom = 0
+        val orTags = mutableListOf<String>()
+
+        while (true) {
+            val startIndex = tagsResult.substring(startFrom).indexOf(" (")
+            if (startIndex == -1) {
+                break
+            }
+            val finalStartIndex = startIndex + startFrom + 1
+
+            val endIndex = tagsResult.substring(finalStartIndex).indexOf(") ")
+            if (endIndex == -1) {
+                break
+            }
+            val finalEndIndex = endIndex + finalStartIndex + 1
+
+            val tag = tagsResult.substring(finalStartIndex, finalEndIndex)
+            startFrom = finalEndIndex
+            orTags.add(tag)
+        }
+        var tags2 = tagsResult
+
+        orTags.forEach {
+            val withoutBraces = it.removeSurrounding("(", ")")
+            tags2 = tags2.replaceFirst(it, withoutBraces)
+        }
+
+        val result = tags2
+            .trim()
             .split(" ")
             .map {
                 it.split("__or__").map { singleTag ->
