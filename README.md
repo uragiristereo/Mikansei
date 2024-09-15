@@ -45,11 +45,11 @@
 
 ## Download
 
-- Version: **1.0.1** (101)
-- Updated at: 2024-07-02
+- Version: **1.0.2** (102)
+- Updated at: 2024-09-15
 - Min. Android version: Android 5.0 Lollipop (API level 21)
-- Download: Play Store _(coming soon)_ • [APK](https://github.com/uragiristereo/Mikansei/releases/download/101-1.0.1/Mikansei_v1.0.1_101-oss.apk)
-- Changelogs: [here](https://github.com/uragiristereo/Mikansei/releases/tag/101-1.0.1)
+- Download: Play Store _(coming soon)_ • [APK](https://github.com/uragiristereo/Mikansei/releases/download/102-1.0.2/Mikansei_v1.0.2_102-oss.apk)
+- Changelogs: [here](https://github.com/uragiristereo/Mikansei/releases/tag/102-1.0.2)
 
 ## Tech Stacks
 
