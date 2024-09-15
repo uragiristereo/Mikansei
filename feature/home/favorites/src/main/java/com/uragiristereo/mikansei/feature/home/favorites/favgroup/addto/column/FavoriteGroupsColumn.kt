@@ -31,7 +31,7 @@ fun FavoriteGroupsColumn(
                 enabled = enabled,
                 onAddClick = onAddClick,
                 onRemoveClick = onRemoveClick,
-                modifier = Modifier.animateItemPlacement(),
+                modifier = Modifier.animateItem(),
             )
         }
     }

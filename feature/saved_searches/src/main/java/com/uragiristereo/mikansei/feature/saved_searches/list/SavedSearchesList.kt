@@ -61,7 +61,7 @@ fun SavedSearchesList(
                         }
                     },
                     actions = actions,
-                    modifier = Modifier.animateItemPlacement(),
+                    modifier = Modifier.animateItem(),
                 )
             }
         } else {

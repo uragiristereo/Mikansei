@@ -108,7 +108,7 @@ internal fun ManageUserScreen(
                     onLogoutClick = { },
                     modifier = Modifier
                         .padding(bottom = 16.dp)
-                        .animateItemPlacement(),
+                        .animateItem(),
                 )
 
             }
@@ -133,7 +133,7 @@ internal fun ManageUserScreen(
                     onLogoutClick = viewModel::logoutUser,
                     modifier = Modifier
                         .padding(bottom = 8.dp)
-                        .animateItemPlacement(),
+                        .animateItem(),
                 )
             }
         }

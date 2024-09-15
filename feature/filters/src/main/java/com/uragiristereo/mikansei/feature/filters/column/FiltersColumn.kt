@@ -71,7 +71,7 @@ internal fun FiltersColumn(
                     onLongClick = {
                         onItemSelected(item.copy(selected = true))
                     },
-                    modifier = Modifier.animateItemPlacement(),
+                    modifier = Modifier.animateItem(),
                 )
             }
 
