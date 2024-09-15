@@ -138,4 +138,27 @@ class BrowseChipsTest {
             "expected : $expected\nresult   : $result"
         }
     }
+
+    @Test
+    fun `generate chips 8`() {
+        val tags = "(ebizuka_tomo or rupa_(girls_band_cry)) (highres or iseri)"
+        val expected = listOf(
+            BrowseChipType.Or(
+                listOf(
+                    tomoChip,
+                    rupaChip,
+                ),
+            ),
+            BrowseChipType.Or(
+                listOf(
+                    highresChip,
+                    iseriChip,
+                ),
+            ),
+        )
+        val result = generateChipsFromTagsUseCase(tags, cachedTags)
+        assert(result == expected) {
+            "expected : $expected\nresult   : $result"
+        }
+    }
 }
