@@ -1,6 +1,7 @@
 package com.uragiristereo.mikansei.feature.home.posts
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -86,6 +87,7 @@ class PostsViewModel(
     }
 
     private var postsJob: Job? = null
+    val gridState = LazyStaggeredGridState()
 
     // session
     private val sessionId = savedStateHandle.get<String>(Constants.STATE_KEY_POSTS_SESSION_ID).run {

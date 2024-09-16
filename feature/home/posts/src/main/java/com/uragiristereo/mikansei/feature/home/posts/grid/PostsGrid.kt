@@ -61,6 +61,7 @@ internal fun PostsGrid(
                 onLongPress = {
                     onItemLongPress(item)
                 },
+                modifier = Modifier.animateItem(),
             )
         }
 

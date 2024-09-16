@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -90,7 +89,7 @@ internal fun PostsScreen(
     val scaffoldState = LocalScaffoldState.current
 
     val scope = rememberCoroutineScope()
-    val gridState = rememberLazyStaggeredGridState()
+    val gridState = viewModel.gridState
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.loading == PostsLoadingState.FROM_REFRESH,
         onRefresh = viewModel::retryGetPosts,

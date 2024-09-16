@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.composable.DimensionSubcomposeLayout
 import com.uragiristereo.mikansei.core.ui.composable.RailScaffold
@@ -38,13 +37,11 @@ import com.uragiristereo.mikansei.core.ui.extension.copy
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.ui.appbars.MainNavigationRail
-import com.uragiristereo.mikansei.ui.navgraphs.MainNavGraph
 import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 import com.uragiristereo.serializednavigationextension.runtime.routeOf
 
 @Composable
 fun MainContentMediumWide(
-    navController: NavHostController,
     navigationBarsVisible: Boolean,
     currentRoute: String?,
     previousRoute: String?,
@@ -54,6 +51,7 @@ fun MainContentMediumWide(
     onNavigateSearch: () -> Unit,
     onRequestScrollToTop: () -> Unit,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
     RailScaffold(
         startBar = {
@@ -122,7 +120,7 @@ fun MainContentMediumWide(
                         .align(Alignment.CenterStart),
                 )
 
-                MainNavGraph(navController = navController)
+                content()
 
                 if (currentRoute !in listOf(
                         routeOf<MainRoute.Image>(),

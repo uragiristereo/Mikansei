@@ -8,6 +8,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
+import com.uragiristereo.mikansei.ui.navgraphs.MainNavGraph
 import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 
 @Composable
@@ -33,10 +36,15 @@ fun MainContentResponsive(
     onRequestScrollToTop: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val mainNavGraphContent = remember(navController) {
+        movableContentOf {
+            MainNavGraph(navController = navController)
+        }
+    }
+
     Box {
         if (LocalWindowSizeHorizontal.current == WindowSize.COMPACT) {
             MainContentCompact(
-                navController = navController,
                 navigationBarsVisible = navigationBarsVisible,
                 currentRoute = currentRoute,
                 previousRoute = previousRoute,
@@ -44,10 +52,10 @@ fun MainContentResponsive(
                 onNavigateSearch = onNavigateSearch,
                 onRequestScrollToTop = onRequestScrollToTop,
                 modifier = modifier,
+                content = mainNavGraphContent,
             )
         } else {
             MainContentMediumWide(
-                navController = navController,
                 navigationBarsVisible = navigationBarsVisible,
                 currentRoute = currentRoute,
                 previousRoute = previousRoute,
@@ -57,6 +65,7 @@ fun MainContentResponsive(
                 onNavigateSearch = onNavigateSearch,
                 onRequestScrollToTop = onRequestScrollToTop,
                 modifier = modifier,
+                content = mainNavGraphContent,
             )
         }
 
