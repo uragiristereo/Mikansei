@@ -10,6 +10,10 @@ android {
     buildFeatures {
         compose true
     }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+    }
 }
 
 kotlin {
@@ -23,6 +27,8 @@ dependencies {
     implementation(project(":core:resources"))
     implementation(project(":core:domain"))
     implementation(project(":core:ui"))
+    testImplementation(project(":feature:search:mock"))
+    androidTestImplementation(project(":feature:search:mock"))
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
@@ -30,4 +36,5 @@ dependencies {
     implementation(libs.timber)
 
     testImplementation(libs.bundles.test)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
