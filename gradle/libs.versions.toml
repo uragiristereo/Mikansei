@@ -1,22 +1,44 @@
 [versions]
 gradle = "8.5.1"
+
+# Kotlin
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
+serialization = "1.6.0"
+
+# AndroidX
 lifecycle = "2.8.5"
-compose = "1.7.1"
 room = "2.6.1"
+media3 = "1.4.1"
+core = "1.13.1"
+savedstate = "1.2.1"
+splashscreen = "1.0.1"
+datastore = "1.1.1"
+browser = "1.8.0"
+
+# Jetpack Compose
+compose = "1.7.1"
 accompanist = "0.36.0"
-koin = "3.5.6"
-coil = "2.6.0"
+activity = "1.9.2"
+constraintlayout = "1.0.1"
+
+# Retrofit
 okhttp = "5.0.0-alpha.11"
 retrofit = "2.11.0"
-serialized-navigation-extension = "e23f84fc1f"
-media3 = "1.4.1"
-gms = "4.4.2"
+
+# Firebase & Google Mobile Services (GMS)
 firebase-bom = "33.3.0"
 firebase-crashlytics = "3.0.2"
+gms = "4.4.2"
+
+# Etc.
+koin = "3.5.6"
+coil = "2.6.0"
+serialized-navigation-extension = "e23f84fc1f"
 junit = "4.13.2"
 desugar-jdk-libs = "2.1.2"
+touchimageview = "3.2.1"
+timber = "5.0.1"
 
 
 [plugins]
@@ -33,12 +55,12 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 
 [libraries]
 # AndroidX
-androidx-core = { module = "androidx.core:core-ktx", version = "1.13.1" }
+androidx-core = { module = "androidx.core:core-ktx", version.ref = "core" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
-androidx-savedstate = { module = "androidx.savedstate:savedstate-ktx", version = "1.2.1" }
-androidx-splashscreen = { module = "androidx.core:core-splashscreen", version = "1.0.1" }
-androidx-datastore = { module = "androidx.datastore:datastore", version = "1.1.1" }
-androidx-browser = { module = "androidx.browser:browser", version = "1.8.0" }
+androidx-savedstate = { module = "androidx.savedstate:savedstate-ktx", version.ref = "savedstate" }
+androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
 
 # Jetpack Compose
 compose = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -46,9 +68,9 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 compose-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
 compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version = "1.9.2" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version = "1.0.1" }
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayout" }
 
 # Room Database
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
@@ -71,7 +93,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 
 # TouchImageView
-touchimageview = { module = "com.github.MikeOrtiz:TouchImageView", version = "3.2.1" }
+touchimageview = { module = "com.github.MikeOrtiz:TouchImageView", version.ref = "touchimageview" }
 
 # OkHttp HTTP Client
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
@@ -83,10 +105,10 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
 
 # Kotlinx.Serialization JSON Serialization
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.0" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 
 # Timber Logger
-timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 # Serialized Navigation Extension
 serialized-navigation-extension-compose = { module = "com.github.uragiristereo.serialized-navigation-extension:navigation-compose", version.ref = "serialized-navigation-extension" }
