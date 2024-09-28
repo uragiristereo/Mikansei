@@ -1,7 +1,6 @@
 package com.uragiristereo.mikansei.core.danbooru
 
 import android.content.Context
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruAuthInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruHostInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceCacheResponseInterceptor
@@ -50,6 +49,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.internal.http.HTTP_NO_CONTENT
 import okhttp3.internal.http.HTTP_OK
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.zip.GZIPInputStream
 
 @OptIn(ExperimentalSerializationApi::class)

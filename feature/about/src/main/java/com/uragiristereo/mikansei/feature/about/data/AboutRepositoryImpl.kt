@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.about.data
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
@@ -11,6 +10,7 @@ import com.uragiristereo.mikansei.feature.about.domain.entity.GitHubContributor
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 class AboutRepositoryImpl(
     networkRepository: NetworkRepository,

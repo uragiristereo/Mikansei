@@ -7,7 +7,6 @@ import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.datasource.okhttp.OkHttpDataSource
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.CacheUtil
 import com.uragiristereo.mikansei.core.model.Environment
@@ -23,6 +22,7 @@ import okhttp3.ResponseBody
 import okhttp3.dnsoverhttps.DnsOverHttps
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.io.File
 import kotlin.coroutines.cancellation.CancellationException
 
