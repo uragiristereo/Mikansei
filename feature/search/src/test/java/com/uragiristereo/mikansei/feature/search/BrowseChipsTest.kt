@@ -3,14 +3,14 @@ package com.uragiristereo.mikansei.feature.search
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.search.BrowseChipType
 import com.uragiristereo.mikansei.core.domain.usecase.GenerateChipsFromTagsUseCase
-import com.uragiristereo.mikansei.feature.search.browse_chips.expectedChips
-import com.uragiristereo.mikansei.feature.search.browse_chips.highresChip
-import com.uragiristereo.mikansei.feature.search.browse_chips.iseriChip
-import com.uragiristereo.mikansei.feature.search.browse_chips.microphoneChip
-import com.uragiristereo.mikansei.feature.search.browse_chips.oneBoyChip
-import com.uragiristereo.mikansei.feature.search.browse_chips.ordfavChip
-import com.uragiristereo.mikansei.feature.search.browse_chips.rupaChip
-import com.uragiristereo.mikansei.feature.search.browse_chips.tomoChip
+import com.uragiristereo.mikansei.feature.search.mock.expectedChips
+import com.uragiristereo.mikansei.feature.search.mock.highresChip
+import com.uragiristereo.mikansei.feature.search.mock.iseriChip
+import com.uragiristereo.mikansei.feature.search.mock.microphoneChip
+import com.uragiristereo.mikansei.feature.search.mock.oneBoyChip
+import com.uragiristereo.mikansei.feature.search.mock.ordfavChip
+import com.uragiristereo.mikansei.feature.search.mock.rupaChip
+import com.uragiristereo.mikansei.feature.search.mock.tomoChip
 import kotlin.test.Test
 
 class BrowseChipsTest {

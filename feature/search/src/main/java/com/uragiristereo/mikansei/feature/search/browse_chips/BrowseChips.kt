@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -26,14 +25,11 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.getCategoryColor
 import com.uragiristereo.mikansei.core.domain.module.search.BrowseChipType
 import com.uragiristereo.mikansei.core.domain.module.search.TagType
-import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 
@@ -257,101 +253,3 @@ private fun BrowseChipContainer(
             ),
     )
 }
-
-@Preview
-@Composable
-private fun BrowseChipPreview() {
-    MikanseiTheme {
-        Surface {
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                BrowseChip(iseriChip)
-                BrowseChip(oneBoyChip)
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun BrowseChipOrPreview() {
-    MikanseiTheme {
-        Surface {
-            BrowseChip(
-                chips = BrowseChipType.Or(
-                    tags = listOf(
-                        tomoChip,
-                        rupaChip,
-                    ),
-                ),
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun BrowseChipsPreview() {
-    MikanseiTheme {
-        Surface {
-            BrowseChips(
-                chips = expectedChips,
-                onClick = {},
-            )
-        }
-    }
-}
-
-val tomoChip = BrowseChipType.Single.Regular(
-    tag = "ebizuka_tomo",
-    category = Tag.Category.CHARACTER,
-    tagType = TagType.INCLUDE,
-)
-
-val rupaChip = BrowseChipType.Single.Regular(
-    tag = "rupa_(girls_band_cry)",
-    category = Tag.Category.CHARACTER,
-    tagType = TagType.INCLUDE,
-)
-
-val oneBoyChip = BrowseChipType.Single.Regular(
-    tag = "1boy",
-    category = null,
-    tagType = TagType.EXCLUDE,
-)
-
-val iseriChip = BrowseChipType.Single.Regular(
-    tag = "iseri",
-    category = Tag.Category.ARTIST,
-    tagType = TagType.INCLUDE,
-)
-
-val highresChip = BrowseChipType.Single.Regular(
-    tag = "highres",
-    category = Tag.Category.META,
-    tagType = TagType.INCLUDE,
-)
-
-val microphoneChip = BrowseChipType.Single.Regular(
-    tag = "microphone",
-    category = Tag.Category.GENERAL,
-    tagType = TagType.INCLUDE,
-)
-
-val ordfavChip = BrowseChipType.Single.Qualifier(
-    first = "ordfav",
-    second = "Mikansei_GitHub",
-)
-
-val expectedChips = listOf(
-    highresChip,
-    microphoneChip,
-    oneBoyChip,
-    BrowseChipType.Or(
-        tags = listOf(
-            tomoChip,
-            rupaChip,
-        ),
-    ),
-    iseriChip,
-    ordfavChip,
-)
