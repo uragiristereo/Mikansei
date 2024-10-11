@@ -2,7 +2,6 @@ package com.uragiristereo.mikansei.feature.home.posts.grid
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,6 +23,7 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 @Composable
 internal fun PostItem(
     post: Post,
+    maxWidth: Int,
     onClick: () -> Unit,
     onLongPress: () -> Unit,
     modifier: Modifier = Modifier,
@@ -39,7 +39,7 @@ internal fun PostItem(
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongPress,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = null,
                 indication = ripple(color = Color.Black),
             ),
     ) {
@@ -49,6 +49,10 @@ internal fun PostItem(
             model = remember {
                 ImageRequest.Builder(context)
                     .data(post.medias.preview.url)
+                    .size(
+                        width = maxWidth,
+                        height = (maxWidth * post.aspectRatio).toInt(),
+                    )
                     .crossfade(durationMillis = 170)
                     .build()
             },
