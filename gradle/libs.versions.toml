@@ -1,13 +1,13 @@
 [versions]
-gradle = "8.5.1"
+gradle = "8.5.2"
 
 # Kotlin
 kotlin = "2.0.20"
 ksp = "2.0.20-1.0.25"
-serialization = "1.6.0"
+serialization = "1.6.3"
 
 # AndroidX
-lifecycle = "2.8.5"
+lifecycle = "2.8.6"
 room = "2.6.1"
 media3 = "1.4.1"
 core = "1.13.1"
@@ -17,7 +17,7 @@ datastore = "1.1.1"
 browser = "1.8.0"
 
 # Jetpack Compose
-compose = "1.7.1"
+compose = "1.7.3"
 accompanist = "0.36.0"
 activity = "1.9.2"
 constraintlayout = "1.0.1"
@@ -27,13 +27,13 @@ okhttp = "5.0.0-alpha.11"
 retrofit = "2.11.0"
 
 # Firebase & Google Mobile Services (GMS)
-firebase-bom = "33.3.0"
+firebase-bom = "33.4.0"
 firebase-crashlytics = "3.0.2"
 gms = "4.4.2"
 
 # Etc.
 koin = "3.5.6"
-coil = "2.6.0"
+coil = "2.7.0"
 serialized-navigation-extension = "e23f84fc1f"
 junit = "4.13.2"
 desugar-jdk-libs = "2.1.2"
