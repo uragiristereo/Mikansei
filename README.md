@@ -1,6 +1,7 @@
 # 🍊 Mikansei
 
 [![Discord](https://img.shields.io/discord/1084015982198145065?logo=discord&logoColor=white&label=discord)](https://discord.gg/YMyVNsFvpC)
+[![Downloads](https://img.shields.io/github/downloads/uragiristereo/Mikansei/total)](https://github.com/uragiristereo/Mikansei/releases)
 
 **Mikansei 未完成** _(lit. unfinished)_ is a [Danbooru](https://safebooru.donmai.us/posts) client for Android. Made with Jetpack Compose 🚀.
 
@@ -48,27 +49,19 @@
 - Version: **1.0.2** (102)
 - Updated at: 2024-09-15
 - Min. Android version: Android 5.0 Lollipop (API level 21)
-- Download: Play Store _(coming soon)_ • [APK](https://github.com/uragiristereo/Mikansei/releases/download/102-1.0.2/Mikansei_v1.0.2_102-oss.apk)
+- Download: [APK](https://github.com/uragiristereo/Mikansei/releases/download/102-1.0.2/Mikansei_v1.0.2_102-oss.apk)
 - Changelogs: [here](https://github.com/uragiristereo/Mikansei/releases/tag/102-1.0.2)
 
 ## Tech Stacks
 
-This project is trying to use the latest Android tech stacks.
-
 - Language: [Kotlin](https://kotlinlang.org)
-- Architecture: [Android App Architecture](https://developer.android.com/topic/architecture)
 - User Interface: [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - Concurrency: [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) & [Flow](https://kotlinlang.org/docs/flow.html)
 - Dependency Injection: [Koin](https://insert-koin.io)
 - Local Database: [Room](https://developer.android.com/training/data-storage/room)
 - Networking: [OkHttp](https://square.github.io/okhttp) & [Retrofit](https://square.github.io/retrofit)
-- Image Loading: [Coil](https://coil-kt.github.io) & [TouchImageView](https://github.com/MikeOrtiz/TouchImageView)
-- Others:
-  - [Kotlinx.Serialization](https://github.com/Kotlin/kotlinx.serialization) (Serializer)
-  - [Accompanist](https://google.github.io/accompanist) (Jetpack Compose Extensions)
-  - [Serialized Navigation Extension](https://github.com/uragiristereo/serialized-navigation-extension) (Navigation)
-  - [Timber](https://github.com/JakeWharton/timber) (Logger)
-  - [Media3 ExoPlayer](https://github.com/androidx/media) (Video Loading)
+- Image Loading: [Coil](https://coil-kt.github.io)
+- Video Loading: [Media3](https://developer.android.com/media/media3)
 
 ## Resources Used
 
