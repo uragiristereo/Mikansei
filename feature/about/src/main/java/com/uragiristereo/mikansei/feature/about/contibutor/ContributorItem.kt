@@ -38,8 +38,8 @@ fun ContributorItem(
     modifier: Modifier = Modifier,
 ) {
     val contributions: Any = when {
-        item.contributions > 0 -> item.contributions
-        else -> "-"
+        item.contributions == null || item.contributions <= 0 -> "?"
+        else -> item.contributions
     }
 
     Row(

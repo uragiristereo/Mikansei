@@ -15,10 +15,14 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 class AboutRepositoryImpl(
     networkRepository: NetworkRepository,
 ) : AboutRepository {
+    private val json = Json {
+        ignoreUnknownKeys = true
+    }
+
     private val githubClient: GitHubApi = Retrofit.Builder()
         .baseUrl("https://api.github.com")
         .client(networkRepository.okHttpClient)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create(GitHubApi::class.java)
 

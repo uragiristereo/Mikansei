@@ -5,5 +5,5 @@ data class GitHubContributor(
     val id: Int,
     val avatarUrl: String,
     val htmlUrl: String,
-    val contributions: Int,
+    val contributions: Int?,
 )

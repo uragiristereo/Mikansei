@@ -30,7 +30,7 @@ class AboutViewModel(
         id = 52477630,
         avatarUrl = "https://avatars.githubusercontent.com/u/52477630?v=4",
         htmlUrl = "https://github.com/uragiristereo",
-        contributions = 0,
+        contributions = null,
     )
 
     init {
