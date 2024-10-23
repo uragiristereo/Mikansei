@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.user.deactivation
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -13,19 +12,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.feature.user.deactivation.core.UserDeactivationTopAppBar
-import com.uragiristereo.mikansei.feature.user.deactivation.in_app.UserDeactivationInAppConfirmationDialog
-import com.uragiristereo.mikansei.feature.user.deactivation.navigation.Page
 import com.uragiristereo.mikansei.feature.user.deactivation.navigation.UserDeactivationNavGraph
+import com.uragiristereo.mikansei.feature.user.deactivation.navigation.UserDeactivationRoute
+import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -37,25 +35,21 @@ fun UserDeactivationScreen(
 ) {
     val scaffoldState = LocalScaffoldState.current
     val activeUser by viewModel.activeUser.collectAsState()
-    val scope = rememberCoroutineScope()
+    val navController = rememberNavController()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+
+    val currentPage = when (currentRoute) {
+        routeOf<UserDeactivationRoute.Agreement>() -> UserDeactivationRoute.Agreement
+        routeOf<UserDeactivationRoute.Methods>() -> UserDeactivationRoute.Methods
+        routeOf<UserDeactivationRoute.InApp>() -> UserDeactivationRoute.InApp
+        routeOf<UserDeactivationRoute.InWeb>() -> UserDeactivationRoute.InWeb
+        else -> UserDeactivationRoute.Agreement
+    }
 
     val popPage: () -> Unit = {
-        if (!viewModel.isLoading) {
-            when (viewModel.currentPage) {
-                Page.AGREEMENT -> onNavigateBack()
-                Page.METHODS -> viewModel.currentPage = Page.AGREEMENT
-
-                Page.IN_APP -> {
-                    viewModel.currentPage = Page.METHODS
-
-                    scope.launch {
-                        delay(timeMillis = 500L)
-                        viewModel.passwordTextField = TextFieldValue()
-                    }
-                }
-
-                Page.IN_BROWSER -> viewModel.currentPage = Page.METHODS
-            }
+        if (!navController.navigateUp()) {
+            onNavigateBack()
         }
     }
 
@@ -88,25 +82,12 @@ fun UserDeactivationScreen(
         }
     }
 
-    BackHandler(
-        enabled = viewModel.currentPage != Page.AGREEMENT,
-        onBack = popPage,
-    )
-
-    UserDeactivationInAppConfirmationDialog(
-        isVisible = viewModel.showInAppConfirmationDialog,
-        onDismissRequest = {
-            viewModel.showInAppConfirmationDialog = false
-        },
-        onConfirm = viewModel::deactivateAccount,
-    )
-
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             UserDeactivationTopAppBar(
                 activeUserName = activeUser.name,
-                currentPage = viewModel.currentPage,
+                currentPage = currentPage,
                 isNavigationButtonEnabled = !viewModel.isLoading,
                 isLoading = viewModel.isLoading,
                 onNavigateBack = popPage,
@@ -121,8 +102,8 @@ fun UserDeactivationScreen(
             .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     ) { innerPadding ->
         UserDeactivationNavGraph(
+            navController = navController,
             innerPadding = innerPadding,
-            viewModel = viewModel,
         )
     }
 }

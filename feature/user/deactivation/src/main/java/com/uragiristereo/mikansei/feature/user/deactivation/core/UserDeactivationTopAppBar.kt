@@ -18,12 +18,12 @@ import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.product.component.ProductTopAppBar
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.feature.user.deactivation.navigation.Page
+import com.uragiristereo.mikansei.feature.user.deactivation.navigation.UserDeactivationRoute
 
 @Composable
 fun UserDeactivationTopAppBar(
     activeUserName: String,
-    currentPage: Page,
+    currentPage: UserDeactivationRoute,
     isLoading: Boolean,
     isNavigationButtonEnabled: Boolean,
     onNavigateBack: () -> Unit,
@@ -31,20 +31,20 @@ fun UserDeactivationTopAppBar(
 ) {
     val progress by animateFloatAsState(
         targetValue = when (currentPage) {
-            Page.AGREEMENT -> 0.33f
-            Page.METHODS -> 0.66f
-            Page.IN_APP, Page.IN_BROWSER -> 1f
+            UserDeactivationRoute.Agreement -> 0.33f
+            UserDeactivationRoute.Methods -> 0.66f
+            UserDeactivationRoute.InApp, UserDeactivationRoute.InWeb -> 1f
         },
         label = "ProgressSteps",
     )
 
     val currentStep = when (currentPage) {
-        Page.AGREEMENT -> 1
-        Page.METHODS -> 2
-        Page.IN_APP, Page.IN_BROWSER -> 3
+        UserDeactivationRoute.Agreement -> 1
+        UserDeactivationRoute.Methods -> 2
+        UserDeactivationRoute.InApp, UserDeactivationRoute.InWeb -> 3
     }
 
-    val totalSteps = Page.TOTAL_STEPS
+    val totalSteps = UserDeactivationRoute.TOTAL_STEPS
 
     ProductStatusBarSpacer {
         ProductTopAppBar(

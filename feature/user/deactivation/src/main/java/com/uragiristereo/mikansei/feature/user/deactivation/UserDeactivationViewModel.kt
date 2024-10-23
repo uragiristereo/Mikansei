@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -16,7 +15,6 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.usecase.DeactivateAccountUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
-import com.uragiristereo.mikansei.feature.user.deactivation.navigation.Page
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -35,21 +33,15 @@ class UserDeactivationViewModel(
     var isLoading by mutableStateOf(false)
     var showInAppConfirmationDialog by mutableStateOf(false)
 
-    var currentPage by savedStateHandle.saveable {
-        mutableStateOf(Page.AGREEMENT)
-    }
     var isConfirming by savedStateHandle.saveable {
         mutableStateOf(false)
     }
-    var passwordTextField by savedStateHandle.saveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue())
-    }
 
-    fun deactivateAccount() {
+    fun deactivateAccount(password: String) {
         viewModelScope.launch {
             isLoading = true
 
-            when (val result = deactivateAccountUseCase(passwordTextField.text)) {
+            when (val result = deactivateAccountUseCase(password)) {
                 is Result.Success -> channel.send(Event.OnDeactivateSuccess)
                 is Result.Failed -> channel.send(Event.OnDeactivateFailed(result.message))
                 is Result.Error -> channel.send(Event.OnDeactivateFailed(result.t.toString()))
