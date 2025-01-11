@@ -8,6 +8,10 @@ plugins {
 android {
     namespace "com.uragiristereo.mikansei.core.ui"
 
+    defaultConfig {
+        consumerProguardFile("navigation-rules.pro")
+    }
+
     buildFeatures {
         compose true
     }
