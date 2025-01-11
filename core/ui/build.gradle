@@ -29,6 +29,6 @@ dependencies {
     api(libs.accompanist.insets.ui)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
-    api(libs.serialized.navigation.extension.compose)
+    api(libs.androidx.navigation)
     implementation(libs.bundles.coil)
 }
