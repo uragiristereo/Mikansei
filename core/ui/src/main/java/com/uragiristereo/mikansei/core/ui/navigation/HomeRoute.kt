@@ -1,9 +1,8 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.model.danbooru.Post
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
-import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import kotlinx.serialization.Serializable
 
 sealed interface HomeRoute : NavRoute {
@@ -53,9 +52,12 @@ sealed interface HomeRoute : NavRoute {
     ) : HomeRoute
 }
 
-val HomeRoutesString: List<String>
-    get() = listOf(
-        routeOf<HomeRoute.Posts>(),
-        routeOf<HomeRoute.Favorites>(),
-        routeOf<HomeRoute.More>(),
-    )
+val HomeRoutesString = listOf(
+    routeOf<HomeRoute.Posts>(),
+    routeOf<HomeRoute.Favorites>(),
+    routeOf<HomeRoute.More>(),
+)
+
+val PostNavType = navTypeMapOf<Post>()
+val FavoriteNavType = navTypeMapOf<Favorite>()
+val SavedSearchTypes = navTypeMapOf<SavedSearch>()

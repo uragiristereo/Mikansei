@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.database.TagCategoryRepository
@@ -27,7 +28,7 @@ import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVote
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVoteImpl
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
+import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -41,7 +42,7 @@ class MoreBottomSheetViewModel(
     private val convertFileSizeUseCase: ConvertFileSizeUseCase,
 ) : ViewModel(),
     PostFavoriteVote by PostFavoriteVoteImpl() {
-    override var post = savedStateHandle.navArgsOf<MainRoute.Image>()!!.post
+    override var post = savedStateHandle.toRoute<MainRoute.Image>(PostNavType).post
 
     var infoExpanded by mutableStateOf(false)
     var tagsExpanded by mutableStateOf(false)

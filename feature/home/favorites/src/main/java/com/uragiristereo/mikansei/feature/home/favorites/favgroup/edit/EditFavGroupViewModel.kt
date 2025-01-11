@@ -11,12 +11,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.extension.strip
+import com.uragiristereo.mikansei.core.ui.navigation.FavoriteNavType
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.FabState
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -26,7 +27,7 @@ class EditFavGroupViewModel(
     savedStateHandle: SavedStateHandle,
     private val danbooruRepository: DanbooruRepository,
 ) : ViewModel() {
-    private val navArgs = checkNotNull(savedStateHandle.navArgsOf<HomeRoute.EditFavoriteGroup>())
+    private val navArgs = savedStateHandle.toRoute<HomeRoute.EditFavoriteGroup>(FavoriteNavType)
     val favoriteGroup = navArgs.favoriteGroup
     private val spaceSeparatedPostIds = favoriteGroup.postIds.joinToString(separator = " ")
 

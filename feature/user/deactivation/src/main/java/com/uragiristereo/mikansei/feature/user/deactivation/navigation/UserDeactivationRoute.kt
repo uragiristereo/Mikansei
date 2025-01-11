@@ -1,6 +1,6 @@
 package com.uragiristereo.mikansei.feature.user.deactivation.navigation
 
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
 import kotlinx.serialization.Serializable
 
 sealed interface UserDeactivationRoute : NavRoute {

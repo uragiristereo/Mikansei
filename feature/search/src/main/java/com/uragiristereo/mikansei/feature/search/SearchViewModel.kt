@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.database.TagCategoryRepository
 import com.uragiristereo.mikansei.core.domain.module.search.BrowseChipType
@@ -22,7 +23,6 @@ import com.uragiristereo.mikansei.core.domain.usecase.GetTagsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.search.state.SearchWordIndex
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -46,7 +46,7 @@ class SearchViewModel(
     private val generateChipsFromTagsUseCase: GenerateChipsFromTagsUseCase,
     private val getTagsUseCase: GetTagsUseCase,
 ) : ViewModel() {
-    private val tags = savedStateHandle.navArgsOf(MainRoute.Search()).tags
+    private val tags = savedStateHandle.toRoute<MainRoute.Search>().tags
 
     var query by savedStateHandle.saveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(

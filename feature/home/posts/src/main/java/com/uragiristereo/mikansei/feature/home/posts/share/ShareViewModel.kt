@@ -6,12 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
+import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import kotlinx.coroutines.launch
 
 class ShareViewModel(
@@ -20,7 +21,7 @@ class ShareViewModel(
     private val convertFileSizeUseCase: ConvertFileSizeUseCase,
     danbooruRepository: DanbooruRepository,
 ) : ViewModel() {
-    val navArgs = checkNotNull(savedStateHandle.navArgsOf<HomeRoute.Share>())
+    val navArgs = savedStateHandle.toRoute<HomeRoute.Share>(PostNavType)
 
     val postLink = danbooruRepository.host.parsePostLink(navArgs.post.id)
 

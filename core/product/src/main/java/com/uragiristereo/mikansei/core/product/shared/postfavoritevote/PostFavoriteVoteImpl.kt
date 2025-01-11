@@ -6,13 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
+import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     private val activeUser: Profile
         get() = userRepository.active.value
 
-    override var post = savedStateHandle.navArgsOf<MainRoute.Image>()!!.post
+    override var post = savedStateHandle.toRoute<MainRoute.Image>(PostNavType).post
 
     private val post2 by lazy { post }
 

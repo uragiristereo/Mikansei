@@ -4,24 +4,22 @@ import androidx.compose.animation.fadeOut
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import com.uragiristereo.mikansei.core.ui.animation.holdIn
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.search.SearchScreen
-import com.uragiristereo.serializednavigationextension.navigation.compose.composable
-import com.uragiristereo.serializednavigationextension.runtime.navigate
 
 fun NavGraphBuilder.searchRoute(
     navController: NavHostController,
 ) {
-    composable(
-        defaultValue = MainRoute.Search(),
+    composable<MainRoute.Search>(
         enterTransition = {
             holdIn()
         },
         exitTransition = {
-            when (targetState.destination.route) {
+            when (targetState.destination.id) {
                 in HomeRoutesString -> fadeOut()
                 else -> null
             }
@@ -30,7 +28,7 @@ fun NavGraphBuilder.searchRoute(
             null
         },
         popExitTransition = {
-            when (targetState.destination.route) {
+            when (targetState.destination.id) {
                 in HomeRoutesString -> fadeOut()
                 else -> null
             }

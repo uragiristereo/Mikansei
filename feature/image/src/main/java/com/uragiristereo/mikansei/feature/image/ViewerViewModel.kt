@@ -5,13 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
+import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 
 class ViewerViewModel(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    val post = checkNotNull(savedStateHandle.navArgsOf<MainRoute.Image>()).post
+    val post = savedStateHandle.toRoute<MainRoute.Image>(PostNavType).post
 
     var areAppBarsVisible by mutableStateOf(true)
         private set

@@ -10,12 +10,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.core.FabState
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -29,7 +29,7 @@ class NewFavGroupViewModel(
     private val danbooruRepository: DanbooruRepository,
     private val getFavoriteGroupsUseCase: GetFavoriteGroupsUseCase,
 ) : ViewModel() {
-    val postId = savedStateHandle.navArgsOf(MainRoute.NewFavGroup()).postId
+    val postId = savedStateHandle.toRoute<MainRoute.NewFavGroup>().postId
 
     private val channel = Channel<Event>()
     val event = channel.receiveAsFlow()

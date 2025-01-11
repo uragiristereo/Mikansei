@@ -18,16 +18,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheetState2
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.BottomSheetNavigator.Index
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState2
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
+import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import timber.log.Timber
 
 val LocalBottomSheetNavigator = staticCompositionLocalOf<BottomSheetNavigator> { error("No LocalBottomSheetNavigator provided!") }
@@ -77,13 +82,12 @@ class BottomSheetNavigator(
         block: (NavHostController) -> Unit,
     ) {
         val currentBackStackEntry = navController.currentBackStackEntry
-        val currentRoute = currentBackStackEntry?.destination?.route
 
         if (!bottomSheetState.isAnimationRunning) {
             coroutineScope.launch(SupervisorJob()) {
                 isNavigating = true
 
-                if (currentRoute != INDEX_ROUTE) {
+                if (currentBackStackEntry?.destination?.hasRoute<Index>() != true) {
                     bottomSheetState.hide()
 
                     if (popBackStack) {
@@ -94,7 +98,7 @@ class BottomSheetNavigator(
                 block(navController)
 
                 coroutineScope.launch(SupervisorJob()) {
-                    if (currentRoute != INDEX_ROUTE) {
+                    if (currentBackStackEntry?.destination?.hasRoute<Index>() != true) {
                         delay(timeMillis = 500L)
                     }
 
@@ -115,14 +119,15 @@ class BottomSheetNavigator(
     }
 
     companion object {
-        const val INDEX_ROUTE = "index"
-
         fun indexRoute(builder: NavGraphBuilder) {
-            builder.composable(route = INDEX_ROUTE) {
+            builder.composable<Index> {
                 Spacer(modifier = Modifier.size(1.dp))
             }
         }
     }
+
+    @Serializable
+    data object Index : NavRoute
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -132,13 +137,13 @@ fun InterceptBackGestureForBottomSheetNavigator() {
     val scope = rememberCoroutineScope()
 
     BackHandler(enabled = bottomSheetNavigator.bottomSheetState.isVisible) {
-        val previousRoute = bottomSheetNavigator.navController.previousBackStackEntry?.destination?.route
+        val previousRoute = bottomSheetNavigator.navController.previousBackStackEntry?.destination?.id
 
         scope.launch(SupervisorJob()) {
             bottomSheetNavigator.isNavigating = true
             bottomSheetNavigator.bottomSheetState.hide()
 
-            if (previousRoute !in listOf(null, BottomSheetNavigator.INDEX_ROUTE)) {
+            if (previousRoute !in listOf(null, routeOf<Index>())) {
                 bottomSheetNavigator.navController.popBackStack()
                 delay(timeMillis = 300L)
                 bottomSheetNavigator.expand()
@@ -171,7 +176,7 @@ fun NavigateToIndexWhenBottomSheetNavigatorHidden() {
             if (!bottomSheetNavigator.bottomSheetState.isVisible && !bottomSheetNavigator.isNavigating) {
                 Timber.d("popped")
 
-                bottomSheetNavigator.navController.navigate(BottomSheetNavigator.INDEX_ROUTE) {
+                bottomSheetNavigator.navController.navigate(Index) {
                     popUpTo(id = 0)
                 }
             }

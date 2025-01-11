@@ -6,7 +6,7 @@ import androidx.compose.runtime.Stable
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
 
 @Stable
 enum class MainNavigationItems(

@@ -10,14 +10,14 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
 import com.uragiristereo.mikansei.ui.appbars.MainBottomNavigationBar
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 
 @Composable
 fun MainContentCompact(
     navigationBarsVisible: Boolean,
-    currentRoute: String?,
-    previousRoute: String?,
+    currentRoute: Int?,
+    previousRoute: Int?,
     onNavigate: (NavRoute) -> Unit,
     onNavigateSearch: () -> Unit,
     onRequestScrollToTop: () -> Unit,

@@ -15,10 +15,11 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
+import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import kotlin.math.floor
 
 @androidx.annotation.OptIn(UnstableApi::class)
@@ -27,7 +28,7 @@ class VideoViewModel(
     private val networkRepository: NetworkRepository,
     private val applicationContext: Context,
 ) : ViewModel() {
-    val post = checkNotNull(savedStateHandle.navArgsOf<MainRoute.Image>()).post
+    val post = savedStateHandle.toRoute<MainRoute.Image>(PostNavType).post
 
     val exoPlayer = buildExoPlayer()
 

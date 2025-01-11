@@ -3,12 +3,11 @@ package com.uragiristereo.mikansei.feature.user.manage.core
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.manage.ManageUserScreen
 import com.uragiristereo.mikansei.feature.user.manage.switch_account.SwitchAccountContent
-import com.uragiristereo.serializednavigationextension.navigation.compose.composable
-import com.uragiristereo.serializednavigationextension.runtime.navigate
 
 fun NavGraphBuilder.manageRoute(
     navController: NavHostController,
