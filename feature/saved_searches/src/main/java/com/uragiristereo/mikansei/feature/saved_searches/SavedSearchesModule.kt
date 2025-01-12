@@ -10,7 +10,7 @@ import com.uragiristereo.mikansei.core.ui.extension.rememberParentNavBackStackEn
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchTypes
+import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchNavType
 import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchesRoute
 import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import com.uragiristereo.mikansei.feature.saved_searches.delete.DeleteSavedSearchContent
@@ -79,7 +79,7 @@ fun NavGraphBuilder.savedSearchesGraph(navController: NavHostController) {
             )
         }
 
-        composable<SavedSearchesRoute.NewOrEdit>(SavedSearchTypes) {
+        composable<SavedSearchesRoute.NewOrEdit>(SavedSearchNavType) {
             val parentViewModelStoreOwner = navController.rememberParentNavBackStackEntry()
             val savedSearchesViewModel: SavedSearchesViewModel = koinViewModel(
                 viewModelStoreOwner = parentViewModelStoreOwner,
@@ -94,7 +94,7 @@ fun NavGraphBuilder.savedSearchesGraph(navController: NavHostController) {
 }
 
 fun NavGraphBuilder.savedSearchesBottomRoute(navController: NavHostController) {
-    composable<SavedSearchesRoute.Delete>(SavedSearchTypes) { entry ->
+    composable<SavedSearchesRoute.Delete>(SavedSearchNavType) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val parentViewModelStoreOwner = navController.rememberParentNavBackStackEntry()
         val savedSearchesViewModel: SavedSearchesViewModel = koinViewModel(

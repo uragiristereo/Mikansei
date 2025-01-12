@@ -16,7 +16,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.extension.strip
-import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchTypes
+import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchNavType
 import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchesRoute
 import com.uragiristereo.mikansei.feature.saved_searches.new_or_edit.core.FabState
 import kotlinx.coroutines.channels.Channel
@@ -29,7 +29,7 @@ class NewOrEditSavedSearchViewModel(
     savedStateHandle: SavedStateHandle,
     private val danbooruRepository: DanbooruRepository,
 ) : ViewModel() {
-    private val navArgs = savedStateHandle.toRoute<SavedSearchesRoute.NewOrEdit>(SavedSearchTypes)
+    private val navArgs = savedStateHandle.toRoute<SavedSearchesRoute.NewOrEdit>(SavedSearchNavType)
     val savedSearchId = navArgs.savedSearch?.id
     val shouldFocusToLabelsTextField = navArgs.query != null
     private val defaultQuery = navArgs.query ?: navArgs.savedSearch?.query ?: ""
