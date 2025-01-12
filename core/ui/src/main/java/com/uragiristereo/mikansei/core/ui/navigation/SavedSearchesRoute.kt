@@ -10,9 +10,11 @@ sealed interface SavedSearchesRoute : NavRoute {
     @Serializable
     data class NewOrEdit(
         val query: String?,
-        val savedSearch: SavedSearch?,
+        val savedSearch: SavedSearch? = null,
     ) : SavedSearchesRoute
 
     @Serializable
     data class Delete(val savedSearch: SavedSearch) : SavedSearchesRoute
 }
+
+val SavedSearchNavType = navTypeMapOf<SavedSearch>()

@@ -1,7 +1,6 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
-import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import kotlinx.serialization.Serializable
 
@@ -60,4 +59,3 @@ val HomeRoutesString = listOf(
 
 val PostNavType = navTypeMapOf<Post>()
 val FavoriteNavType = navTypeMapOf<Favorite>()
-val SavedSearchTypes = navTypeMapOf<SavedSearch>()
