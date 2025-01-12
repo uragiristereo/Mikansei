@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
@@ -26,7 +27,6 @@ import com.uragiristereo.mikansei.core.ui.entity.immutableListOf
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsContentState
 import com.uragiristereo.mikansei.feature.home.posts.state.PostsLoadingState
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -49,7 +49,7 @@ class PostsViewModel(
     private val sessionRepository: SessionRepository,
     private val getPostsUseCase: GetPostsUseCase,
 ) : ViewModel() {
-    val tags = savedStateHandle.navArgsOf<HomeRoute.Posts>()?.tags ?: ""
+    val tags = savedStateHandle.toRoute<HomeRoute.Posts>().tags
 
     private val channel = Channel<Event>()
     val event = channel.receiveAsFlow()

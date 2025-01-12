@@ -11,13 +11,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.extension.strip
+import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchNavType
 import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchesRoute
 import com.uragiristereo.mikansei.feature.saved_searches.new_or_edit.core.FabState
-import com.uragiristereo.serializednavigationextension.runtime.navArgsOf
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -28,9 +29,7 @@ class NewOrEditSavedSearchViewModel(
     savedStateHandle: SavedStateHandle,
     private val danbooruRepository: DanbooruRepository,
 ) : ViewModel() {
-    private val navArgs = checkNotNull(
-        savedStateHandle.navArgsOf<SavedSearchesRoute.NewOrEdit>()
-    )
+    private val navArgs = savedStateHandle.toRoute<SavedSearchesRoute.NewOrEdit>(SavedSearchNavType)
     val savedSearchId = navArgs.savedSearch?.id
     val shouldFocusToLabelsTextField = navArgs.query != null
     private val defaultQuery = navArgs.query ?: navArgs.savedSearch?.query ?: ""

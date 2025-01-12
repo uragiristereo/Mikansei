@@ -30,9 +30,9 @@ import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.composable.SectionTitle
 import com.uragiristereo.mikansei.core.ui.extension.plus
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.manage.core.ProfileItem
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)

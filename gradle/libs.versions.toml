@@ -15,6 +15,7 @@ savedstate = "1.2.1"
 splashscreen = "1.0.1"
 datastore = "1.1.1"
 browser = "1.8.0"
+navigation = "2.8.5"
 
 # Jetpack Compose
 compose = "1.7.3"
@@ -34,7 +35,6 @@ gms = "4.4.2"
 # Etc.
 koin = "3.5.6"
 coil = "2.7.0"
-serialized-navigation-extension = "e23f84fc1f"
 junit = "4.13.2"
 desugar-jdk-libs = "2.1.2"
 touchimageview = "3.2.1"
@@ -61,6 +61,7 @@ androidx-savedstate = { module = "androidx.savedstate:savedstate-ktx", version.r
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
+androidx-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 
 # Jetpack Compose
 compose = { module = "androidx.compose.ui:ui", version.ref = "compose" }
@@ -109,10 +110,6 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 # Timber Logger
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-
-# Serialized Navigation Extension
-serialized-navigation-extension-compose = { module = "com.github.uragiristereo.serialized-navigation-extension:navigation-compose", version.ref = "serialized-navigation-extension" }
-serialized-navigation-extension-serializer-kotlinx = { module = "com.github.uragiristereo.serialized-navigation-extension:serializer-kotlinx", version.ref = "serialized-navigation-extension" }
 
 # AndroidX Media3
 media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }

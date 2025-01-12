@@ -8,6 +8,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
@@ -15,13 +17,12 @@ import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBa
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchesRoute
+import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
 import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreContent
 import com.uragiristereo.mikansei.feature.home.posts.share.ShareContent
-import com.uragiristereo.serializednavigationextension.navigation.compose.composable
-import com.uragiristereo.serializednavigationextension.runtime.navigate
-import com.uragiristereo.serializednavigationextension.runtime.routeOf
 
 @SuppressLint("RestrictedApi")
 fun NavGraphBuilder.postsRoute(
@@ -37,10 +38,9 @@ fun NavGraphBuilder.postsRoute(
         )
     }
 
-    composable(
-        defaultValue = HomeRoute.Posts(),
+    composable<HomeRoute.Posts>(
         enterTransition = {
-            when (initialState.destination.route) {
+            when (initialState.destination.id) {
                 routeOf<HomeRoute.Posts>() -> slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(durationMillis = 350),
@@ -51,7 +51,7 @@ fun NavGraphBuilder.postsRoute(
 
         },
         exitTransition = {
-            when (targetState.destination.route) {
+            when (targetState.destination.id) {
                 routeOf<HomeRoute.Posts>() -> slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(durationMillis = 350),
@@ -60,7 +60,7 @@ fun NavGraphBuilder.postsRoute(
                 else -> null
             }
         },
-    ) {
+    ) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         val isRouteFirstEntry = remember {
@@ -68,7 +68,7 @@ fun NavGraphBuilder.postsRoute(
             mainNavController.currentBackStack.value.size == 3
         }
 
-        val args = rememberNavArgsOf()
+        val args = entry.toRoute<HomeRoute.Posts>()
 
         LaunchedEffect(key1 = args.tags) {
             onCurrentTagsChange(args.tags)
@@ -102,7 +102,7 @@ fun NavGraphBuilder.postsBottomRoute(
     mainNavController: NavHostController,
     onNavigatedBackByGesture: (Boolean) -> Unit,
 ) {
-    composable<HomeRoute.PostMore> {
+    composable<HomeRoute.PostMore>(PostNavType) {
         val lambdaOnDownload = LocalLambdaOnDownload.current
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
@@ -131,7 +131,7 @@ fun NavGraphBuilder.postsBottomRoute(
         )
     }
 
-    composable<HomeRoute.Share> {
+    composable<HomeRoute.Share>(PostNavType) {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val lambdaOnShare = LocalLambdaOnShare.current
 

@@ -29,7 +29,7 @@ fun BottomNavGraph(
 
     NavHost(
         navController = bottomSheetNavigator.navController,
-        startDestination = BottomSheetNavigator.INDEX_ROUTE,
+        startDestination = BottomSheetNavigator.Index,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         modifier = modifier.fillMaxWidth(),

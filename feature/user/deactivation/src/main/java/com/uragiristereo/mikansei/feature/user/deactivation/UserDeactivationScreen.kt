@@ -19,10 +19,10 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
+import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import com.uragiristereo.mikansei.feature.user.deactivation.core.UserDeactivationTopAppBar
 import com.uragiristereo.mikansei.feature.user.deactivation.navigation.UserDeactivationNavGraph
 import com.uragiristereo.mikansei.feature.user.deactivation.navigation.UserDeactivationRoute
-import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -37,7 +37,7 @@ fun UserDeactivationScreen(
     val activeUser by viewModel.activeUser.collectAsState()
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStackEntry?.destination?.route
+    val currentRoute = currentBackStackEntry?.destination?.id
 
     val currentPage = when (currentRoute) {
         routeOf<UserDeactivationRoute.Agreement>() -> UserDeactivationRoute.Agreement

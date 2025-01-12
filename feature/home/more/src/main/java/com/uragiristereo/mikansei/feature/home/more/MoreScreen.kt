@@ -43,11 +43,11 @@ import com.uragiristereo.mikansei.core.ui.extension.plus
 import com.uragiristereo.mikansei.core.ui.extension.versionName
 import com.uragiristereo.mikansei.core.ui.extension.verticalOnly
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.home.more.core.MoreTopAppBar
 import com.uragiristereo.mikansei.feature.home.more.core.NavigationItem
 import com.uragiristereo.mikansei.feature.home.more.core.UserHeader
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel

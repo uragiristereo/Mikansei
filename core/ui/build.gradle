@@ -8,6 +8,10 @@ plugins {
 android {
     namespace "com.uragiristereo.mikansei.core.ui"
 
+    defaultConfig {
+        consumerProguardFile("navigation-rules.pro")
+    }
+
     buildFeatures {
         compose true
     }
@@ -29,6 +33,6 @@ dependencies {
     api(libs.accompanist.insets.ui)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
-    api(libs.serialized.navigation.extension.compose)
+    api(libs.androidx.navigation)
     implementation(libs.bundles.coil)
 }

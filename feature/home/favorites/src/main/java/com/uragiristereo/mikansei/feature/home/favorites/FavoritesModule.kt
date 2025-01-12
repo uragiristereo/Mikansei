@@ -6,10 +6,14 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import com.uragiristereo.mikansei.core.ui.extension.rememberParentViewModelStoreOwner
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import com.uragiristereo.mikansei.core.ui.extension.rememberParentNavBackStackEntry
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
+import com.uragiristereo.mikansei.core.ui.navigation.FavoriteNavType
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.AddToFavGroupContent
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.AddToFavGroupViewModel
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.delete.DeleteFavGroupContent
@@ -19,9 +23,6 @@ import com.uragiristereo.mikansei.feature.home.favorites.favgroup.more.FavGroupM
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.more.FavGroupMoreViewModel
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.NewFavGroupScreen
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.new.NewFavGroupViewModel
-import com.uragiristereo.serializednavigationextension.navigation.compose.composable
-import com.uragiristereo.serializednavigationextension.runtime.navigate
-import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
@@ -37,11 +38,7 @@ val favoritesModule = module {
 fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
     composable<HomeRoute.Favorites> {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
-
-        val homeViewModelStoreOwner = rememberParentViewModelStoreOwner(
-            navController = navController,
-            parentRoute = routeOf<MainRoute.Home>(),
-        )
+        val homeViewModelStoreOwner = navController.rememberParentNavBackStackEntry()
 
         CompositionLocalProvider(LocalViewModelStoreOwner provides homeViewModelStoreOwner) {
             FavoritesScreen(
@@ -67,12 +64,8 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
         }
     }
 
-    composable(defaultValue = MainRoute.NewFavGroup()) {
-        val homeViewModelStoreOwner = rememberParentViewModelStoreOwner(
-            navController = navController,
-            parentRoute = routeOf<MainRoute.Home>(),
-        )
-
+    composable<MainRoute.NewFavGroup> {
+        val homeViewModelStoreOwner = navController.rememberParentNavBackStackEntry()
         val favoritesViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = homeViewModelStoreOwner)
 
         NewFavGroupScreen(
@@ -81,12 +74,8 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
         )
     }
 
-    composable<HomeRoute.EditFavoriteGroup> {
-        val homeViewModelStoreOwner = rememberParentViewModelStoreOwner(
-            navController = navController,
-            parentRoute = routeOf<MainRoute.Home>(),
-        )
-
+    composable<HomeRoute.EditFavoriteGroup>(FavoriteNavType) {
+        val homeViewModelStoreOwner = navController.rememberParentNavBackStackEntry()
         val favoritesViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = homeViewModelStoreOwner)
 
         EditFavGroupScreen(
@@ -98,7 +87,7 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
 
 @OptIn(ExperimentalMaterialApi::class)
 fun NavGraphBuilder.favoritesBottomRoute(navController: NavHostController) {
-    composable<HomeRoute.AddToFavGroup> {
+    composable<HomeRoute.AddToFavGroup>(PostNavType) {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         AddToFavGroupContent(
@@ -111,59 +100,50 @@ fun NavGraphBuilder.favoritesBottomRoute(navController: NavHostController) {
         )
     }
 
-    composable<HomeRoute.FavoriteGroupMore> {
-        val args = rememberNavArgsOf()
+    composable<HomeRoute.FavoriteGroupMore>(FavoriteNavType) { entry ->
+        val args = entry.toRoute<HomeRoute.FavoriteGroupMore>()
 
-        if (args != null) {
-            val bottomSheetNavigator = LocalBottomSheetNavigator.current
-            val favoriteGroup = args.favoriteGroup
+        val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val favoriteGroup = args.favoriteGroup
 
-            FavGroupMoreContent(
-                onDismiss = bottomSheetNavigator.bottomSheetState::hide,
-                favoriteGroup = favoriteGroup,
-                onFavGroupClick = {
-                    bottomSheetNavigator.runHiding {
-                        val tags = "favgroup:${favoriteGroup.id} "
+        FavGroupMoreContent(
+            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            favoriteGroup = favoriteGroup,
+            onFavGroupClick = {
+                bottomSheetNavigator.runHiding {
+                    val tags = "favgroup:${favoriteGroup.id} "
 
-                        navController.navigate(HomeRoute.Posts(tags)) {
-                            popUpTo(id = navController.graph.findStartDestination().id)
-                        }
+                    navController.navigate(HomeRoute.Posts(tags)) {
+                        popUpTo(id = navController.graph.findStartDestination().id)
                     }
-                },
-                onEditFavGroupClick = {
-                    bottomSheetNavigator.runHiding {
-                        navController.navigate(HomeRoute.EditFavoriteGroup(favoriteGroup))
-                    }
-                },
-                onDeleteFavGroupClick = {
-                    bottomSheetNavigator.navigate {
-                        it.navigate(HomeRoute.DeleteFavoriteGroup(favoriteGroup))
-                    }
-                },
-            )
-        }
+                }
+            },
+            onEditFavGroupClick = {
+                bottomSheetNavigator.runHiding {
+                    navController.navigate(HomeRoute.EditFavoriteGroup(favoriteGroup))
+                }
+            },
+            onDeleteFavGroupClick = {
+                bottomSheetNavigator.navigate {
+                    it.navigate(HomeRoute.DeleteFavoriteGroup(favoriteGroup))
+                }
+            },
+        )
     }
 
-    composable<HomeRoute.DeleteFavoriteGroup> {
+    composable<HomeRoute.DeleteFavoriteGroup>(FavoriteNavType) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
-        val args = rememberNavArgsOf()
-
-        val homeViewModelStoreOwner = rememberParentViewModelStoreOwner(
-            navController = navController,
-            parentRoute = routeOf<MainRoute.Home>(),
-        )
-
+        val args = entry.toRoute<HomeRoute.DeleteFavoriteGroup>()
+        val homeViewModelStoreOwner = navController.rememberParentNavBackStackEntry()
         val favoritesViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = homeViewModelStoreOwner)
 
-        if (args != null) {
-            DeleteFavGroupContent(
-                favoriteGroup = args.favoriteGroup,
-                onDeleteClick = {
-                    bottomSheetNavigator.runHiding {
-                        favoritesViewModel.deleteFavoriteGroup(args.favoriteGroup)
-                    }
-                },
-            )
-        }
+        DeleteFavGroupContent(
+            favoriteGroup = args.favoriteGroup,
+            onDeleteClick = {
+                bottomSheetNavigator.runHiding {
+                    favoritesViewModel.deleteFavoriteGroup(args.favoriteGroup)
+                }
+            },
+        )
     }
 }

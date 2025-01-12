@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -45,15 +46,14 @@ import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottom
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.rememberBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
 import com.uragiristereo.mikansei.core.ui.navigation.NestedNavigationRoutes
+import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import com.uragiristereo.mikansei.core.ui.rememberWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.rememberWindowSizeVertical
 import com.uragiristereo.mikansei.ui.content.MainContentResponsive
 import com.uragiristereo.mikansei.ui.core.ShareDownloadDialog
 import com.uragiristereo.mikansei.ui.navgraphs.BottomNavGraph
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
-import com.uragiristereo.serializednavigationextension.runtime.navigate
-import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -73,16 +73,16 @@ fun MainScreen(
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val backStack by navController.currentBackStack.collectAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.id
 
     val previousRoute by remember {
         derivedStateOf {
             val backStackWithoutNested = backStack.filter {
-                it.destination.route !in NestedNavigationRoutes
+                it.destination.id !in NestedNavigationRoutes
             }
 
             runCatching {
-                backStackWithoutNested[backStackWithoutNested.size - 2].destination.route
+                backStackWithoutNested[backStackWithoutNested.size - 2].destination.id
             }.getOrElse {
                 null
             }
@@ -207,7 +207,7 @@ fun MainScreen(
     )
 
     BackHandler(
-        enabled = !viewModel.confirmExit && currentRoute == routeOf<MainRoute.Home>(),
+        enabled = !viewModel.confirmExit && navBackStackEntry?.destination?.hasRoute<MainRoute.Home>() == true,
         onBack = {
             (context as Activity).finishAffinity()
         },

@@ -1,8 +1,6 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
 import com.uragiristereo.mikansei.core.model.danbooru.Post
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
-import com.uragiristereo.serializednavigationextension.runtime.routeOf
 import kotlinx.serialization.Serializable
 
 sealed interface MainRoute : NavRoute {

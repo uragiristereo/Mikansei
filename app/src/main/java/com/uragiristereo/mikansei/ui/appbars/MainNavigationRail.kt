@@ -16,14 +16,13 @@ import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
-import com.uragiristereo.serializednavigationextension.runtime.route
-import com.uragiristereo.serializednavigationextension.runtime.routeOf
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
+import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 
 @Composable
 fun MainNavigationRail(
-    currentRoute: String?,
-    previousRoute: String?,
+    currentRoute: Int?,
+    previousRoute: Int?,
     onNavigate: (NavRoute) -> Unit,
     onNavigateSearch: () -> Unit,
     onRequestScrollToTop: () -> Unit,
@@ -39,7 +38,7 @@ fun MainNavigationRail(
             modifier = Modifier.fillMaxHeight(),
         ) {
             MainNavigationItems.entries.forEach { item ->
-                val itemRouteString = item.route.route
+                val itemRouteString = routeOf(item.route::class)
                 val currentRouteIsItem = currentRoute == itemRouteString
                 val previousRouteIsItem = previousRoute == itemRouteString
 
@@ -64,11 +63,11 @@ fun MainNavigationRail(
                     },
                     onClick = {
                         when {
-                            listOf(item.route.route, currentRoute).all {
+                            listOf(itemRouteString, currentRoute).all {
                                 it == routeOf<HomeRoute.Posts>()
                             } -> onRequestScrollToTop()
 
-                            item.route.route == routeOf<MainRoute.Search>() -> onNavigateSearch()
+                            itemRouteString == routeOf<MainRoute.Search>() -> onNavigateSearch()
                             else -> onNavigate(item.route)
                         }
                     },

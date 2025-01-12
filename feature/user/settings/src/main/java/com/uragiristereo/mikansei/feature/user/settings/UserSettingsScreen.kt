@@ -47,9 +47,9 @@ import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
 import com.uragiristereo.mikansei.core.ui.extension.alphabet
 import com.uragiristereo.mikansei.core.ui.extension.forEach
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.settings.core.UserSettingsTopAppBar
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

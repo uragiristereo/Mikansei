@@ -19,15 +19,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
 import com.uragiristereo.mikansei.ui.navgraphs.MainNavGraph
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 
 @Composable
 fun MainContentResponsive(
     navController: NavHostController,
     navigationBarsVisible: Boolean,
-    currentRoute: String?,
-    previousRoute: String?,
+    currentRoute: Int?,
+    previousRoute: Int?,
     navigationRailPadding: Dp,
     testMode: Boolean,
     onNavigationRailPaddingChange: (Dp) -> Unit,

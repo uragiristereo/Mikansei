@@ -28,7 +28,6 @@ import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.image.image.ImagePost
 import com.uragiristereo.mikansei.feature.image.more.MoreBottomSheet
 import com.uragiristereo.mikansei.feature.image.video.VideoPost
-import com.uragiristereo.serializednavigationextension.runtime.navigate
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

@@ -5,34 +5,33 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.navigation
 import com.uragiristereo.mikansei.core.ui.animation.holdIn
 import com.uragiristereo.mikansei.core.ui.animation.holdOut
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import com.uragiristereo.mikansei.feature.home.favorites.favoritesRoute
 import com.uragiristereo.mikansei.feature.home.more.core.moreRoute
 import com.uragiristereo.mikansei.feature.home.posts.core.postsRoute
-import com.uragiristereo.serializednavigationextension.navigation.compose.navigation
-import com.uragiristereo.serializednavigationextension.runtime.routeOf
 
 fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
     onNavigatedBackByGesture: (Boolean) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
 ) {
-    navigation(
-        startDestination = HomeRoute.Posts::class,
-        route = MainRoute.Home::class,
+    navigation<MainRoute.Home>(
+        startDestination = HomeRoute.Posts(),
         enterTransition = {
-            when (initialState.destination.route) {
+            when (initialState.destination.id) {
                 in HomeRoutesString -> fadeIn(animationSpec = tween(durationMillis = 300))
                 routeOf<MainRoute.Search>() -> holdIn()
                 else -> null
             }
         },
         exitTransition = {
-            when (targetState.destination.route) {
+            when (targetState.destination.id) {
                 in HomeRoutesString -> fadeOut(animationSpec = tween(durationMillis = 300))
                 routeOf<MainRoute.Search>() -> holdOut()
                 routeOf<MainRoute.Image>() -> holdOut()
@@ -40,7 +39,7 @@ fun NavGraphBuilder.homeGraph(
             }
         },
         popEnterTransition = {
-            when (initialState.destination.route) {
+            when (initialState.destination.id) {
                 in HomeRoutesString -> fadeIn(animationSpec = tween(durationMillis = 300))
                 routeOf<MainRoute.Search>() -> fadeIn()
                 routeOf<MainRoute.Image>() -> holdIn()
@@ -48,7 +47,7 @@ fun NavGraphBuilder.homeGraph(
             }
         },
         popExitTransition = {
-            when (targetState.destination.route) {
+            when (targetState.destination.id) {
                 in HomeRoutesString -> fadeOut(animationSpec = tween(durationMillis = 300))
                 routeOf<MainRoute.Search>() -> holdOut()
                 routeOf<MainRoute.Image>() -> holdOut()

@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeIn
 import com.uragiristereo.mikansei.core.ui.animation.translateXFadeOut
 import com.uragiristereo.mikansei.feature.user.deactivation.UserDeactivationViewModel
@@ -22,9 +24,6 @@ import com.uragiristereo.mikansei.feature.user.deactivation.in_app.UserDeactivat
 import com.uragiristereo.mikansei.feature.user.deactivation.in_app.UserDeactivationInAppScreen
 import com.uragiristereo.mikansei.feature.user.deactivation.in_web.UserDeactivationInWebScreen
 import com.uragiristereo.mikansei.feature.user.deactivation.methods.UserDeactivationMethodsScreen
-import com.uragiristereo.serializednavigationextension.navigation.compose.NavHost
-import com.uragiristereo.serializednavigationextension.navigation.compose.composable
-import com.uragiristereo.serializednavigationextension.runtime.navigate
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -64,7 +63,7 @@ private fun NavGraphBuilder.agreementRoute(
     innerPadding: PaddingValues,
     parentViewModelStoreOwner: ViewModelStoreOwner,
 ) {
-    composable(UserDeactivationRoute.Agreement) {
+    composable<UserDeactivationRoute.Agreement> {
         val viewModel = koinViewModel<UserDeactivationViewModel>(
             viewModelStoreOwner = parentViewModelStoreOwner,
         )
@@ -89,7 +88,7 @@ private fun NavGraphBuilder.methodsRoute(
     navController: NavHostController,
     innerPadding: PaddingValues,
 ) {
-    composable(UserDeactivationRoute.Methods) {
+    composable<UserDeactivationRoute.Methods> {
         UserDeactivationMethodsScreen(
             innerPadding = innerPadding,
             onInAppClick = {
@@ -106,7 +105,7 @@ private fun NavGraphBuilder.inAppRoute(
     innerPadding: PaddingValues,
     parentViewModelStoreOwner: ViewModelStoreOwner,
 ) {
-    composable(UserDeactivationRoute.InApp) {
+    composable<UserDeactivationRoute.InApp> {
         val viewModel = koinViewModel<UserDeactivationViewModel>(
             viewModelStoreOwner = parentViewModelStoreOwner,
         )
@@ -143,7 +142,7 @@ private fun NavGraphBuilder.inWebRoute(
     innerPadding: PaddingValues,
     parentViewModelStoreOwner: ViewModelStoreOwner,
 ) {
-    composable(UserDeactivationRoute.InWeb) {
+    composable<UserDeactivationRoute.InWeb> {
         val context = LocalContext.current
 
         val viewModel = koinViewModel<UserDeactivationViewModel>(

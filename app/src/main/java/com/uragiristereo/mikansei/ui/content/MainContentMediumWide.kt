@@ -36,15 +36,15 @@ import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.extension.copy
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
+import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
+import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import com.uragiristereo.mikansei.ui.appbars.MainNavigationRail
-import com.uragiristereo.serializednavigationextension.runtime.NavRoute
-import com.uragiristereo.serializednavigationextension.runtime.routeOf
 
 @Composable
 fun MainContentMediumWide(
     navigationBarsVisible: Boolean,
-    currentRoute: String?,
-    previousRoute: String?,
+    currentRoute: Int?,
+    previousRoute: Int?,
     navigationRailPadding: Dp,
     onNavigationRailPaddingChange: (Dp) -> Unit,
     onNavigate: (NavRoute) -> Unit,
