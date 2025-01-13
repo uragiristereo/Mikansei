@@ -68,7 +68,6 @@ class NewOrEditSavedSearchViewModel(
 
     val areLabelsEdited by derivedStateOf {
         labelsTextField.text.strip(splitter = " ") != spaceSeparatedLabels
-                || spaceSeparatedLabels == ""
     }
 
     val fabState by derivedStateOf {
