@@ -7,12 +7,12 @@ pluginManagement {
 }
 
 plugins {
-    id("com.android.settings") version("8.5.2")
+    id("com.android.settings") version("8.8.0")
 }
 
 android {
-    buildToolsVersion "34.0.0"
-    compileSdk 34
+    buildToolsVersion "35.0.0"
+    compileSdk 35
     minSdk 21
 }
 
