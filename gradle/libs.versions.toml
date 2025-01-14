@@ -2,15 +2,15 @@
 gradle = "8.8.0"
 
 # Kotlin
-kotlin = "2.0.20"
-ksp = "2.0.20-1.0.25"
-serialization = "1.6.3"
+kotlin = "2.1.0"
+ksp = "2.1.0-1.0.29"
+serialization = "1.8.0"
 
 # AndroidX
-lifecycle = "2.8.6"
+lifecycle = "2.8.7"
 room = "2.6.1"
-media3 = "1.4.1"
-core = "1.13.1"
+media3 = "1.5.1"
+core = "1.15.0"
 savedstate = "1.2.1"
 splashscreen = "1.0.1"
 datastore = "1.1.1"
@@ -18,27 +18,29 @@ browser = "1.8.0"
 navigation = "2.8.5"
 
 # Jetpack Compose
-compose = "1.7.3"
-accompanist = "0.36.0"
-activity = "1.9.2"
-constraintlayout = "1.0.1"
+compose = "1.7.6"
+accompanist = "0.36.0" #*
+activity = "1.9.3"
+constraintlayout = "1.1.0"
 
 # Retrofit
-okhttp = "5.0.0-alpha.11"
+okhttp = "5.0.0-alpha.14"
 retrofit = "2.11.0"
 
 # Firebase & Google Mobile Services (GMS)
-firebase-bom = "33.4.0"
+firebase-bom = "33.7.0"
 firebase-crashlytics = "3.0.2"
 gms = "4.4.2"
 
 # Etc.
-koin = "3.5.6"
-coil = "2.7.0"
+koin = "3.5.6" #*
+coil = "2.7.0" #*
 junit = "4.13.2"
-desugar-jdk-libs = "2.1.2"
+desugar-jdk-libs = "2.1.4"
 touchimageview = "3.2.1"
 timber = "5.0.1"
+
+#* breaking changes ahead
 
 
 [plugins]
