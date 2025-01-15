@@ -42,17 +42,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Credentials
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.internal.http.HTTP_NO_CONTENT
-import okhttp3.internal.http.HTTP_OK
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import java.net.HttpURLConnection.HTTP_NO_CONTENT
+import java.net.HttpURLConnection.HTTP_OK
 import java.util.zip.GZIPInputStream
 
-@OptIn(ExperimentalSerializationApi::class)
 class DanbooruRepositoryImpl(
     private val context: Context,
     private val coroutineScope: CoroutineScope,

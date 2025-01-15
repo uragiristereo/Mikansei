@@ -70,7 +70,7 @@ internal fun FiltersAddTagsDialog(
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Default,
                             keyboardType = KeyboardType.Uri,
-                            autoCorrect = false,
+                            autoCorrectEnabled = false,
                         ),
                         keyboardActions = KeyboardActions(
                             onDone = {

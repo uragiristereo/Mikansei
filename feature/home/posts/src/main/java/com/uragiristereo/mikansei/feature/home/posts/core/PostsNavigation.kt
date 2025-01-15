@@ -3,9 +3,24 @@ package com.uragiristereo.mikansei.feature.home.posts.core
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -18,11 +33,11 @@ import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottom
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
-import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchesRoute
 import com.uragiristereo.mikansei.core.ui.navigation.routeOf
-import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
 import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreContent
 import com.uragiristereo.mikansei.feature.home.posts.share.ShareContent
+import timber.log.Timber
+import java.util.UUID
 
 @SuppressLint("RestrictedApi")
 fun NavGraphBuilder.postsRoute(
@@ -76,24 +91,68 @@ fun NavGraphBuilder.postsRoute(
 
         InterceptBackGestureForBottomSheetNavigator()
 
-        PostsScreen(
-            isRouteFirstEntry = isRouteFirstEntry,
-            onNavigateBack = mainNavController::navigateUp,
-            onNavigateImage = lambdaOnNavigateImage,
-            onNavigateMore = { post ->
-                bottomSheetNavigator.navigate {
-                    it.navigate(HomeRoute.PostMore(post))
-                }
-            },
-            onNavigateNewSavedSearch = { tags ->
-                mainNavController.navigate(
-                    route = SavedSearchesRoute.NewOrEdit(
-                        query = tags,
-                        savedSearch = null,
-                    ),
+        val pagerViewModel = viewModel<PagerViewModel>()
+        val pagerState = rememberPagerState {
+            pagerViewModel.owners.size
+        }
+        val saveableStateHolder = rememberSaveableStateHolder()
+
+        HorizontalPager(
+            state = pagerState,
+            beyondViewportPageCount = 1,
+        ) { index ->
+            saveableStateHolder.SaveableStateProvider(index) {
+                val id = rememberSaveable { UUID.randomUUID().toString() }
+                val owner = pagerViewModel.owners[index]
+
+                PagerContent(
+                    postId = index,
+                    id = id,
+                    viewModel = viewModel(viewModelStoreOwner = owner),
                 )
             }
-        )
+        }
+    }
+}
+
+@Composable
+fun PagerContent(
+    postId: Int,
+    id: String,
+    viewModel: PagerItemViewModel,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier.fillMaxSize(),
+    ) {
+        Text("VM ${viewModel.id}")
+        Text("Saveable $id")
+        Text("Post $postId")
+    }
+}
+
+class PagerViewModel : ViewModel() {
+    val owners = listOf(
+        generate(),
+        generate(),
+        generate(),
+        generate(),
+    )
+
+    fun generate(): ViewModelStoreOwner {
+        return object : ViewModelStoreOwner {
+            override val viewModelStore = ViewModelStore()
+        }
+    }
+}
+
+class PagerItemViewModel : ViewModel() {
+    val id = UUID.randomUUID().toString()
+
+    init {
+        Timber.d("invoked $id")
     }
 }
 

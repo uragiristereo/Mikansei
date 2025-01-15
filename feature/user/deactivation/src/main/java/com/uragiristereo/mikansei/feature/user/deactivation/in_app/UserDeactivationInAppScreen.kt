@@ -75,7 +75,7 @@ fun UserDeactivationInAppScreen(
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Default,
                 keyboardType = KeyboardType.Password,
-                autoCorrect = false,
+                autoCorrectEnabled = false,
             ),
             label = {
                 Text(text = "Password")

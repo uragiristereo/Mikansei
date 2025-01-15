@@ -120,7 +120,7 @@ internal fun SearchBar(
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Search,
                 keyboardType = KeyboardType.Uri,
-                autoCorrect = false,
+                autoCorrectEnabled = false,
             ),
             keyboardActions = KeyboardActions(
                 onSearch = {
