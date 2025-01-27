@@ -6,7 +6,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,6 +22,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.viewinterop.AndroidView
 import com.ortiz.touchview.TouchImageView
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun ImageViewer(
     imageView: TouchImageView,
@@ -27,6 +34,9 @@ internal fun ImageViewer(
     Box(
         modifier = Modifier
             .background(Color.Black)
+            .windowInsetsPadding(
+                WindowInsets.systemBarsIgnoringVisibility.only(WindowInsetsSides.Bottom)
+            )
             .pointerInput(key1 = Unit) {
                 detectTapGestures(
                     onTap = {
