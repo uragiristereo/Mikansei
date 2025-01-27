@@ -170,7 +170,7 @@ fun VideoPost(
                 playerView = playerView,
                 isBuffering = viewModel.isBuffering,
                 onTap = {
-                    // onAppBarsVisibleChange(!areAppBarsVisible)
+                     onAppBarsVisibleChange(!areAppBarsVisible)
                 },
                 onDoubleTap = {
                     viewModel.onPlayPauseToggle(!viewModel.isPlaying)

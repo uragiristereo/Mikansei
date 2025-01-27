@@ -3,7 +3,8 @@ package com.uragiristereo.mikansei.feature.image.video
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
@@ -17,19 +18,17 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.ui.PlayerView
 
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun VideoPlayer(
     playerView: PlayerView,
     isBuffering: Boolean,
     onTap: () -> Unit,
-    onDoubleTap: (Offset) -> Unit,
-    onLongPress: (Offset) -> Unit,
+    onDoubleTap: () -> Unit,
+    onLongPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -47,13 +46,13 @@ fun VideoPlayer(
                 .windowInsetsPadding(
                     WindowInsets.systemBarsIgnoringVisibility.only(WindowInsetsSides.Bottom)
                 )
-                .pointerInput(key1 = Unit) {
-                    detectTapGestures(
-                        onTap = { onTap() },
-                        onDoubleTap = onDoubleTap,
-                        onLongPress = onLongPress,
-                    )
-                },
+                .combinedClickable(
+                    interactionSource = null,
+                    indication = null,
+                    onClick = onTap,
+                    onDoubleClick = onDoubleTap,
+                    onLongClick = onLongPress,
+                ),
         )
 
         AnimatedVisibility(
