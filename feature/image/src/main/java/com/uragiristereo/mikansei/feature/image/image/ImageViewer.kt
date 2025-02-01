@@ -32,22 +32,24 @@ internal fun ImageViewer(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
-            .background(Color.Black)
-            .windowInsetsPadding(
-                WindowInsets.systemBarsIgnoringVisibility.only(WindowInsetsSides.Bottom)
-            )
-            .pointerInput(key1 = Unit) {
-                detectTapGestures(
-                    onTap = {
-                        onTap()
-                    },
-                    onLongPress = {
-                        onLongPress()
-                    },
-                )
-            },
+        modifier = Modifier.background(Color.Black),
     ) {
+        Box(
+            modifier = Modifier
+                .windowInsetsPadding(
+                    WindowInsets.systemBarsIgnoringVisibility.only(WindowInsetsSides.Bottom)
+                )
+                .pointerInput(key1 = Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            onTap()
+                        },
+                        onLongPress = {
+                            onLongPress()
+                        },
+                    )
+                },
+        )
         AndroidView(
             factory = { imageView },
             modifier = modifier.fillMaxSize(),
