@@ -3,11 +3,15 @@ package com.uragiristereo.mikansei.feature.image.more
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
@@ -43,7 +47,6 @@ import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.DragHandle
-import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheetState2
 import com.uragiristereo.mikansei.feature.image.more.core.MoreActionsRow
 import com.uragiristereo.mikansei.feature.image.more.core.MoreCloseButton
@@ -57,7 +60,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class,
+    ExperimentalLayoutApi::class
+)
 @Composable
 internal fun MoreBottomSheet(
     post: Post,
@@ -334,7 +339,11 @@ internal fun MoreBottomSheet(
                     }
 
                     item {
-                        NavigationBarSpacer()
+                        Spacer(
+                            modifier = Modifier.windowInsetsPadding(
+                                insets = WindowInsets.navigationBarsIgnoringVisibility,
+                            ),
+                        )
                     }
                 }
 
