@@ -10,13 +10,17 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
+import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
 import com.uragiristereo.mikansei.core.ui.extension.areNavigationBarsButtons
 import com.uragiristereo.mikansei.core.ui.extension.hideSystemBars
@@ -43,9 +47,11 @@ internal fun ImageScreen(
     val hapticFeedback = LocalHapticFeedback.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
     val bottomSheetNavigator = LocalBottomSheetNavigator.current
+    val snackbarHostState = LocalSnackbarHostState.current
 
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState2(initialValue = ModalBottomSheetValue.Hidden)
+    val activeUser by viewModel.activeUser.collectAsState()
 
     val shouldNavigationBarDarkIcons = when {
         MaterialTheme.colors.isLight -> sheetState.targetValue != ModalBottomSheetValue.Hidden || sheetState.currentValue != ModalBottomSheetValue.Hidden
@@ -141,7 +147,11 @@ internal fun ImageScreen(
             scope.launch {
                 sheetState.hide()
 
-                onNavigateToAddToFavGroup(viewModel.post)
+                if (activeUser.isNotAnonymous()) {
+                    onNavigateToAddToFavGroup(viewModel.post)
+                } else {
+                    snackbarHostState.showSnackbar(message = context.getString(R.string.please_login))
+                }
             }
         },
         onShareClick = lambdaOnShareClick,
