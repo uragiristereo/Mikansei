@@ -25,7 +25,10 @@ data class Preferences(
     val testMode: Boolean = false,
 
     @SerialName(value = "flags")
-    val flags: Flags = Flags()
+    val flags: Flags = Flags(),
+
+    @SerialName(value = "video_muted")
+    val videoMuted: Boolean = true,
 ) {
     @Serializable
     data class Flags(
