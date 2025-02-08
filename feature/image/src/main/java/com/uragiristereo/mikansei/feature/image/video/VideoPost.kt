@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -19,6 +20,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.C
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
@@ -47,6 +49,7 @@ fun VideoPost(
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
+    val videoMuted by viewModel.videoMuted.collectAsStateWithLifecycle()
 
     val player = viewModel.exoPlayer
 
@@ -57,6 +60,11 @@ fun VideoPost(
             controllerAutoShow = false
 
             videoSurfaceView?.isHapticFeedbackEnabled = false
+
+            player.volume = when {
+                videoMuted -> 0f
+                else -> 1f
+            }
 
             player.prepare()
         }
@@ -113,6 +121,13 @@ fun VideoPost(
         player.playWhenReady = viewModel.isPlaying
     }
 
+    LaunchedEffect(key1 = videoMuted) {
+        player.volume = when {
+            videoMuted -> 0f
+            else -> 1f
+        }
+    }
+
     Scaffold(
         scaffoldState = LocalScaffoldState.current,
         topBar = {
@@ -152,6 +167,8 @@ fun VideoPost(
                     sliderValueFmt = viewModel.sliderValueFmt,
                     elapsedFmt = viewModel.elapsedFmt,
                     totalFmt = viewModel.totalFmt,
+                    noSound = viewModel.noSound,
+                    muted = videoMuted,
                     onSeek = viewModel::onSeek,
                     onJump = {
                         player.seekTo(viewModel.sliderValue.toLong())
@@ -160,10 +177,13 @@ fun VideoPost(
                     onPlayingChange = viewModel::onPlayPauseToggle,
                     onDownloadClick = onDownloadClick,
                     onShareClick = onShareClick,
+                    onToggleMuted = viewModel::onToggleVideoMuted,
                 )
             }
         },
         contentPadding = PaddingValues(0.dp),
+        backgroundColor = Color.Black,
+        contentColor = Color.White,
         modifier = modifier.fillMaxSize(),
         content = {
             VideoPlayer(

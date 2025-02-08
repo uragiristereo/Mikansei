@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.image.core
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -15,7 +16,10 @@ internal fun DownloadShareRow(
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier) {
+    Row(
+        horizontalArrangement = Arrangement.End,
+        modifier = modifier,
+    ) {
         IconButton(
             onClick = onDownloadClick,
             content = {
