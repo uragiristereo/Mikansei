@@ -51,6 +51,8 @@ data class Post(
         ANIMATED_GIF,
         VIDEO,
         UGOIRA,
+        FLASH,
+        UNSUPPORTED,
     }
 
     enum class Status {
