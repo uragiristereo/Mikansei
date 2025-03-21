@@ -30,6 +30,7 @@ import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottom
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState2
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.feature.image.image.ImagePost
+import com.uragiristereo.mikansei.feature.image.image.UnsupportedPost
 import com.uragiristereo.mikansei.feature.image.more.MoreBottomSheet
 import com.uragiristereo.mikansei.feature.image.video.VideoPost
 import kotlinx.coroutines.launch
@@ -133,6 +134,14 @@ internal fun ImageScreen(
                 onDownloadClick = {
                     lambdaOnDownload(viewModel.post)
                 },
+                onShareClick = lambdaOnShareClick,
+            )
+        }
+
+        Post.Type.FLASH, Post.Type.UNSUPPORTED -> {
+            UnsupportedPost(
+                onNavigateBack = onNavigateBack,
+                onMoreClick = lambdaOnMoreClick,
                 onShareClick = lambdaOnShareClick,
             )
         }
