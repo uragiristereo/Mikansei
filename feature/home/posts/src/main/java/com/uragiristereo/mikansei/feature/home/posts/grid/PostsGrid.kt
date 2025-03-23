@@ -3,9 +3,11 @@ package com.uragiristereo.mikansei.feature.home.posts.grid
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -59,11 +61,22 @@ internal fun PostsGrid(
     LazyVerticalStaggeredGrid(
         state = gridState,
         columns = StaggeredGridCells.Fixed(columnSize),
-        contentPadding = contentPadding + PaddingValues(all = 8.dp),
+        contentPadding = contentPadding + PaddingValues(
+            start = 8.dp,
+            end = 8.dp,
+            bottom = 8.dp,
+        ),
         verticalItemSpacing = 8.dp,
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
         modifier = modifier.fillMaxSize(),
     ) {
+        item(
+            key = Constants.KEY_TOP_SPACER,
+            span = StaggeredGridItemSpan.FullLine
+        ) {
+            Spacer(modifier = Modifier.size(1.dp))
+        }
+
         items(
             items = posts.value,
             key = { it.id },
