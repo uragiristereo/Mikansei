@@ -40,7 +40,7 @@ fun DanbooruPost.toPost(): Post {
         downScore = downScore,
         favorites = favCount,
         type = when (original.fileExt) {
-            in listOf("jpg", "jpeg", "png") -> Post.Type.IMAGE
+            in listOf("jpg", "jpeg", "png", "avif", "webp") -> Post.Type.IMAGE
             "gif" -> Post.Type.ANIMATED_GIF
             in listOf("mp4", "webm") -> Post.Type.VIDEO
             "zip" -> Post.Type.UGOIRA
