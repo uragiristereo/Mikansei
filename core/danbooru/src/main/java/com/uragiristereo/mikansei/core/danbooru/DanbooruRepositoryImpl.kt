@@ -15,6 +15,7 @@ import com.uragiristereo.mikansei.core.danbooru.model.post.toPostVote
 import com.uragiristereo.mikansei.core.danbooru.model.profile.toProfile
 import com.uragiristereo.mikansei.core.danbooru.model.saved_search.toSavedSearch
 import com.uragiristereo.mikansei.core.danbooru.model.saved_search.toSavedSearchList
+import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagPayload
 import com.uragiristereo.mikansei.core.danbooru.model.tag.toTagList
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserFieldData
@@ -149,7 +150,7 @@ class DanbooruRepositoryImpl(
     }
 
     override suspend fun getTags(tags: List<String>): Result<List<Tag>> = resultOf {
-        client.getTags(tags)
+        client.getTags(body = DanbooruTagPayload.create(tags))
     }.mapSuccess {
         it.toTagList()
     }
