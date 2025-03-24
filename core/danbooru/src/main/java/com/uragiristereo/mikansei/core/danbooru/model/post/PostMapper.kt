@@ -14,6 +14,7 @@ fun DanbooruPost.toPost(): Post {
         uploaderId = uploaderId,
         source = when {
             pixivId != null -> "https://pixiv.net/artworks/$pixivId"
+            source?.isEmpty() == true -> null
             else -> source
         },
         rating = when (rating) {
