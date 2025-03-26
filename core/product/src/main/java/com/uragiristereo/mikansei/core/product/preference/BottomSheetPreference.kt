@@ -2,13 +2,12 @@ package com.uragiristereo.mikansei.core.product.preference
 
 import android.os.Parcelable
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -22,17 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.preferences.base.Preference
-import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.core.ui.composable.DragHandle
 import com.uragiristereo.mikansei.core.ui.composable.NavigationBarSpacer
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheetState2
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState2
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheet3
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.SheetState3
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState3
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheetPreference(
     state: BottomSheetPreferenceState,
@@ -40,12 +37,11 @@ fun BottomSheetPreference(
 ) {
     val scope = rememberCoroutineScope()
 
-    ProductModalBottomSheet(
+    ModalBottomSheet3(
         sheetState = state.sheetState,
         modifier = modifier,
-        content = {
-            DragHandle()
-
+    ) { contentPadding ->
+        Column(modifier = Modifier.padding(contentPadding)) {
             Text(
                 text = stringResource(id = state.data.preferenceTextResId),
                 style = MaterialTheme.typography.h6,
@@ -77,8 +73,8 @@ fun BottomSheetPreference(
                     NavigationBarSpacer()
                 }
             }
-        },
-    )
+        }
+    }
 }
 
 @Parcelize
@@ -88,11 +84,10 @@ data class BottomSheetPreferenceData<T : Preference>(
     val selectedItem: @RawValue T? = null,
 ) : Parcelable
 
-@OptIn(ExperimentalMaterialApi::class)
 @Suppress("UNCHECKED_CAST")
 @Stable
 class BottomSheetPreferenceState(
-    val sheetState: ModalBottomSheetState2,
+    val sheetState: SheetState3,
     val onItemSelected: (Preference) -> Unit,
 ) {
     var data by mutableStateOf(BottomSheetPreferenceData<Preference>())
@@ -113,7 +108,7 @@ class BottomSheetPreferenceState(
 
     companion object {
         fun saver(
-            sheetState: ModalBottomSheetState2,
+            sheetState: SheetState3,
             onItemSelected: (Preference) -> Unit,
         ): Saver<BottomSheetPreferenceState, *> {
             return Saver(
@@ -135,10 +130,9 @@ class BottomSheetPreferenceState(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun rememberBottomSheetPreferenceState(
-    sheetState: ModalBottomSheetState2 = rememberModalBottomSheetState2(initialValue = ModalBottomSheetValue.Hidden),
+    sheetState: SheetState3 = rememberModalBottomSheetState3(),
     onItemSelected: (Preference) -> Unit,
 ): BottomSheetPreferenceState {
     return rememberSaveable(

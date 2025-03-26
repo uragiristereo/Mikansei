@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import androidx.activity.compose.BackHandler
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -29,7 +28,6 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.preferences.model.ThemePreference
-import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheetLayout
 import com.uragiristereo.mikansei.core.product.shared.downloadshare.DownloadShareViewModel
 import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme
 import com.uragiristereo.mikansei.core.product.theme.Theme
@@ -42,8 +40,7 @@ import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeVertical
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.rememberBottomSheetNavigator
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.ProvideBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
@@ -53,13 +50,13 @@ import com.uragiristereo.mikansei.core.ui.rememberWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.rememberWindowSizeVertical
 import com.uragiristereo.mikansei.ui.content.MainContentResponsive
 import com.uragiristereo.mikansei.ui.core.ShareDownloadDialog
-import com.uragiristereo.mikansei.ui.navgraphs.BottomNavGraph
+import com.uragiristereo.mikansei.ui.navgraphs.bottomNavGraph
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.util.UUID
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("RestrictedApi")
 @Composable
 fun MainScreen(
@@ -69,7 +66,6 @@ fun MainScreen(
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    val bottomNavController = rememberNavController()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val backStack by navController.currentBackStack.collectAsState()
@@ -229,7 +225,6 @@ fun MainScreen(
                 LocalScrollToTopChannel provides viewModel.scrollToTopChannel,
                 LocalWindowSizeHorizontal provides rememberWindowSizeHorizontal(),
                 LocalWindowSizeVertical provides rememberWindowSizeVertical(),
-                LocalBottomSheetNavigator provides rememberBottomSheetNavigator(navController = bottomNavController),
                 LocalScaffoldState provides scaffoldState,
                 LocalSnackbarHostState provides scaffoldState.snackbarHostState,
             ),
@@ -266,11 +261,13 @@ fun MainScreen(
             }
 
             Surface {
-                ProductModalBottomSheetLayout(
-                    sheetState = LocalBottomSheetNavigator.current.bottomSheetState,
-                    sheetContent = {
-                        BottomNavGraph(mainNavController = navController)
-                    }
+                ProvideBottomSheetNavigator(
+                    navGraphBuilder = {
+                        bottomNavGraph(
+                            mainNavController = navController,
+                            viewModel = viewModel,
+                        )
+                    },
                 ) {
                     MainContentResponsive(
                         navController = navController,

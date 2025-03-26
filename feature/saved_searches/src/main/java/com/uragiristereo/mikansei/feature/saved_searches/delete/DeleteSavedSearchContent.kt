@@ -28,13 +28,14 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.product.theme.MikanseiTheme
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheetContentPadding
 
 @Composable
 fun DeleteSavedSearchContent(
     savedSearch: SavedSearch,
     onDeleteClick: () -> Unit = {},
 ) {
-    Column {
+    Column(modifier = Modifier.bottomSheetContentPadding()) {
         Text(
             text = buildAnnotatedString {
                 append(text = "Are you sure want to delete this saved search?\n\n")
@@ -61,10 +62,8 @@ fun DeleteSavedSearchContent(
             color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
             modifier = Modifier
                 .padding(
-                    top = 24.dp,
-                    bottom = 8.dp,
-                    start = 16.dp,
-                    end = 16.dp,
+                    vertical = 8.dp,
+                    horizontal = 16.dp,
                 ),
         )
 

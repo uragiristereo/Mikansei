@@ -1,50 +1,28 @@
 package com.uragiristereo.mikansei.ui.navgraphs
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.BottomSheetNavigator
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.NavigateToIndexWhenBottomSheetNavigatorHidden
 import com.uragiristereo.mikansei.feature.home.favorites.favoritesBottomRoute
 import com.uragiristereo.mikansei.feature.home.posts.core.postsBottomRoute
+import com.uragiristereo.mikansei.feature.image.core.imageBottomRoute
 import com.uragiristereo.mikansei.feature.saved_searches.savedSearchesBottomRoute
 import com.uragiristereo.mikansei.feature.user.manage.core.manageBottomRoute
 import com.uragiristereo.mikansei.ui.MainViewModel
-import org.koin.androidx.compose.koinViewModel
 
-@Composable
-fun BottomNavGraph(
+fun NavGraphBuilder.bottomNavGraph(
     mainNavController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: MainViewModel = koinViewModel(),
+    viewModel: MainViewModel,
 ) {
-    val bottomSheetNavigator = LocalBottomSheetNavigator.current
+    postsBottomRoute(
+        mainNavController = mainNavController,
+        onNavigatedBackByGesture = viewModel::setNavigatedBackByGesture,
+    )
 
-    NavigateToIndexWhenBottomSheetNavigatorHidden()
+    manageBottomRoute(mainNavController)
 
-    NavHost(
-        navController = bottomSheetNavigator.navController,
-        startDestination = BottomSheetNavigator.Index,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None },
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        BottomSheetNavigator.indexRoute(builder = this)
+    favoritesBottomRoute(mainNavController)
 
-        postsBottomRoute(
-            mainNavController = mainNavController,
-            onNavigatedBackByGesture = viewModel::setNavigatedBackByGesture,
-        )
+    savedSearchesBottomRoute(mainNavController)
 
-        manageBottomRoute(mainNavController)
-
-        favoritesBottomRoute(mainNavController)
-
-        savedSearchesBottomRoute(mainNavController)
-    }
+    imageBottomRoute()
 }
