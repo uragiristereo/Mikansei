@@ -3,8 +3,12 @@ package com.uragiristereo.mikansei.core.ui.composable
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.uragiristereo.mikansei.core.ui.extension.findActivity
 
 @Composable
 fun SetSystemBarsColors(
@@ -76,4 +80,24 @@ fun SetSystemBarsColors(
         statusBarDarkIcons = isLight,
         navigationBarDarkIcons = isLight,
     )
+}
+
+@Composable
+fun SetSystemBarsColorsFromActivity() {
+    val context = LocalContext.current
+    val activity = remember { context.findActivity() }
+    val window = remember { activity?.window }
+
+    if (window != null) {
+        val insetsController = remember {
+            WindowCompat.getInsetsController(window, window.decorView)
+        }
+
+        SetSystemBarsColors(
+            statusBarColor = Color(window.statusBarColor),
+            navigationBarColor = Color(window.navigationBarColor),
+            statusBarDarkIcons = insetsController.isAppearanceLightStatusBars,
+            navigationBarDarkIcons = insetsController.isAppearanceLightNavigationBars,
+        )
+    }
 }
