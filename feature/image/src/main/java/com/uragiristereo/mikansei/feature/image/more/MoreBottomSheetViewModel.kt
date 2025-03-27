@@ -11,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +22,6 @@ import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.domain.usecase.ConvertFileSizeUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsUseCase
-import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVote
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVoteImpl
@@ -42,11 +40,10 @@ class MoreBottomSheetViewModel(
     private val convertFileSizeUseCase: ConvertFileSizeUseCase,
 ) : ViewModel(),
     PostFavoriteVote by PostFavoriteVoteImpl() {
-    override var post = savedStateHandle.toRoute<MainRoute.Image>(PostNavType).post
+    override var post = savedStateHandle.toRoute<MainRoute.More>(PostNavType).post
 
     var infoExpanded by mutableStateOf(false)
     var tagsExpanded by mutableStateOf(false)
-    var closeButtonHeight by mutableStateOf(0.dp)
 
     var loading by mutableStateOf(false)
     val tags = mutableStateListOf<Tag>()
@@ -72,14 +69,14 @@ class MoreBottomSheetViewModel(
         tagsExpanded = false
     }
 
-    fun getTags(tagsString: List<String>) {
+    fun getTags() {
         tagsExpanded = true
 
         if (tags.isEmpty()) {
             viewModelScope.launch {
                 loading = true
 
-                when (val result = getTagsUseCase(tags = tagsString)) {
+                when (val result = getTagsUseCase(tags = post.tags)) {
                     is Result.Success -> {
                         errorMessage = null
                         tags.addAll(result.data)
@@ -104,7 +101,7 @@ class MoreBottomSheetViewModel(
         }
     }
 
-    fun getImagesFileSize(post: Post) {
+    fun getImagesFileSize() {
         viewModelScope.launch {
             launch {
                 post.medias.scaled?.let { media ->

@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.ui.extension.rememberParentNavBackStackEntry
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
@@ -101,6 +102,8 @@ fun NavGraphBuilder.savedSearchesBottomRoute(navController: NavHostController) {
             viewModelStoreOwner = parentViewModelStoreOwner,
         )
         val args = entry.toRoute<SavedSearchesRoute.Delete>()
+
+        InterceptBackGestureForBottomSheetNavigator()
 
         DeleteSavedSearchContent(
             savedSearch = args.savedSearch,

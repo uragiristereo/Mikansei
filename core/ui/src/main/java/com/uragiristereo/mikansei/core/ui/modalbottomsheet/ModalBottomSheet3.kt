@@ -75,7 +75,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
+import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColorsFromActivity
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.SheetValue.Expanded
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.SheetValue.Hidden
@@ -271,10 +271,7 @@ internal fun BoxScope.ModalBottomSheetContent(
                     transformOrigin = PredictiveBackChildTransformOrigin
                 }
         ) {
-            SetSystemBarsColors(
-                color = Color.Transparent,
-                darkIcons = MaterialTheme.colors.isLight,
-            )
+            SetSystemBarsColorsFromActivity()
 
             ModalBottomSheetContentLayout(
                 dragHandle = {

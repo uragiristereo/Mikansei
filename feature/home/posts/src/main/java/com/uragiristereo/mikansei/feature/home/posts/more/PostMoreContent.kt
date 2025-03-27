@@ -25,6 +25,7 @@ import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
 import com.uragiristereo.mikansei.core.ui.composable.PostHeader
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheetContentPadding
 import com.uragiristereo.mikansei.feature.home.posts.more.core.FavoriteSection
 import com.uragiristereo.mikansei.feature.home.posts.more.core.ScoreSection
 import kotlinx.coroutines.SupervisorJob
@@ -64,7 +65,7 @@ internal fun PostMoreContent(
         modifier = Modifier
             .fillMaxWidth()
             .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
-            .padding(top = 16.dp),
+            .bottomSheetContentPadding(),
     ) {
         PostHeader(
             title = "#${post.id}",
@@ -100,11 +101,10 @@ internal fun PostMoreContent(
                 title = stringResource(id = R.string.add_to_action),
                 onClick = {
                     scope.launch(SupervisorJob()) {
-                        onDismiss()
-
                         if (viewModel.activeUser.value.isNotAnonymous()) {
                             onAddToFavoriteGroupClick(post)
                         } else {
+                            onDismiss()
                             snackbarHostState.showSnackbar(
                                 message = context.getString(R.string.please_login),
                             )
@@ -130,10 +130,7 @@ internal fun PostMoreContent(
             ClickableSection(
                 title = stringResource(id = R.string.share_action),
                 onClick = {
-                    scope.launch {
-                        onDismiss()
-                        onShareClick(post)
-                    }
+                    onShareClick(post)
                 },
                 icon = painterResource(id = R.drawable.share),
             )

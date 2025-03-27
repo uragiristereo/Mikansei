@@ -3,7 +3,6 @@ package com.uragiristereo.mikansei.feature.home.posts.core
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
@@ -74,8 +73,6 @@ fun NavGraphBuilder.postsRoute(
             onCurrentTagsChange(args.tags)
         }
 
-        InterceptBackGestureForBottomSheetNavigator()
-
         PostsScreen(
             isRouteFirstEntry = isRouteFirstEntry,
             onNavigateBack = mainNavController::navigateUp,
@@ -97,7 +94,6 @@ fun NavGraphBuilder.postsRoute(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 fun NavGraphBuilder.postsBottomRoute(
     mainNavController: NavHostController,
     onNavigatedBackByGesture: (Boolean) -> Unit,
@@ -106,8 +102,10 @@ fun NavGraphBuilder.postsBottomRoute(
         val lambdaOnDownload = LocalLambdaOnDownload.current
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
+        InterceptBackGestureForBottomSheetNavigator()
+
         PostMoreContent(
-            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            onDismiss = bottomSheetNavigator::hideSheet,
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
                     onNavigatedBackByGesture(false)
@@ -135,8 +133,10 @@ fun NavGraphBuilder.postsBottomRoute(
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val lambdaOnShare = LocalLambdaOnShare.current
 
+        InterceptBackGestureForBottomSheetNavigator()
+
         ShareContent(
-            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            onDismiss = bottomSheetNavigator::hideSheet,
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
                     onNavigatedBackByGesture(false)

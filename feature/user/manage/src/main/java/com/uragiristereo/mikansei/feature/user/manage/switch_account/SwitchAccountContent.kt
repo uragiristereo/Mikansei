@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.ui.composable.SectionTitle
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheetContentPadding
 import com.uragiristereo.mikansei.feature.user.manage.ManageUserViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -41,7 +42,7 @@ fun SwitchAccountContent(
         modifier = Modifier
             .fillMaxWidth()
             .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
-            .padding(top = 16.dp),
+            .bottomSheetContentPadding(),
     ) {
         SectionTitle(
             text = "Switch account",

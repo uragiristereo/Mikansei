@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.home.favorites
 
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -9,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.ui.extension.rememberParentNavBackStackEntry
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.FavoriteNavType
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
@@ -85,13 +85,14 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 fun NavGraphBuilder.favoritesBottomRoute(navController: NavHostController) {
     composable<HomeRoute.AddToFavGroup>(PostNavType) {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
+        InterceptBackGestureForBottomSheetNavigator()
+
         AddToFavGroupContent(
-            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            onDismiss = bottomSheetNavigator::hideSheet,
             onNewFavoriteGroupClick = { postId ->
                 bottomSheetNavigator.runHiding {
                     navController.navigate(MainRoute.NewFavGroup(postId))
@@ -106,8 +107,10 @@ fun NavGraphBuilder.favoritesBottomRoute(navController: NavHostController) {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val favoriteGroup = args.favoriteGroup
 
+        InterceptBackGestureForBottomSheetNavigator()
+
         FavGroupMoreContent(
-            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            onDismiss = bottomSheetNavigator::hideSheet,
             favoriteGroup = favoriteGroup,
             onFavGroupClick = {
                 bottomSheetNavigator.runHiding {
@@ -136,6 +139,8 @@ fun NavGraphBuilder.favoritesBottomRoute(navController: NavHostController) {
         val args = entry.toRoute<HomeRoute.DeleteFavoriteGroup>()
         val homeViewModelStoreOwner = navController.rememberParentNavBackStackEntry()
         val favoritesViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = homeViewModelStoreOwner)
+
+        InterceptBackGestureForBottomSheetNavigator()
 
         DeleteFavGroupContent(
             favoriteGroup = args.favoriteGroup,
