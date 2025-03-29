@@ -1,6 +1,9 @@
 package com.uragiristereo.mikansei.feature.image.core
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -15,13 +18,19 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.extension.copyToClipboard
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ViewerTopAppBar(
     postId: Int,
@@ -29,6 +38,9 @@ internal fun ViewerTopAppBar(
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit,
 ) {
+    val context = LocalContext.current
+    val hapticFeedback = LocalHapticFeedback.current
+
     TopAppBar(
         elevation = 0.dp,
         backgroundColor = Color.Transparent,
@@ -37,6 +49,18 @@ internal fun ViewerTopAppBar(
             Text(
                 text = "#$postId",
                 color = Color.White,
+                modifier = Modifier.combinedClickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onLongClick = {
+                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                        context.copyToClipboard(
+                            text = postId.toString(),
+                            message = "Post ID copied to clipboard!",
+                        )
+                    },
+                    onClick = {},
+                ),
             )
         },
         navigationIcon = {

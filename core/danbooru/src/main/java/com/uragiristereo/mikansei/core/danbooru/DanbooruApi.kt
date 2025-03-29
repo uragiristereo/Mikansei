@@ -87,6 +87,7 @@ interface DanbooruApi {
         @Query("search[creator_id]") creatorId: Int,
         @Header("force-refresh") forceRefresh: Boolean,
         @Header("force-cache") forceCache: Boolean = true,
+        @Header("force-load-from-cache") forceLoadFromCache: Boolean = false,
     ): Response<List<DanbooruFavoriteGroup>>
 
     @POST("/favorites.json")

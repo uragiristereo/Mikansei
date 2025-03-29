@@ -31,3 +31,49 @@ fun Modifier.alphabet(
         }
     }
 }
+
+fun Modifier.thenIf(
+    predicate: Boolean,
+    ifTrue: Modifier.() -> Modifier,
+): Modifier {
+    return when {
+        predicate -> then(ifTrue(Modifier))
+        else -> this
+    }
+}
+
+fun Modifier.thenIf(
+    predicate: Boolean,
+    ifTrue: Modifier.() -> Modifier,
+    ifFalse: Modifier.() -> Modifier,
+): Modifier {
+    return then(
+        when {
+            predicate -> ifTrue(Modifier)
+            else -> ifFalse(Modifier)
+        }
+    )
+}
+
+fun <T : Any> Modifier.thenIfNotNull(
+    element: T?,
+    ifTrue: Modifier.(T) -> Modifier,
+): Modifier {
+    return when {
+        element != null -> then(ifTrue(element))
+        else -> this
+    }
+}
+
+fun <T> Modifier.thenIfNotNull(
+    element: T?,
+    ifTrue: Modifier.(T) -> Modifier,
+    ifFalse: Modifier.() -> Modifier,
+): Modifier {
+    return then(
+        when {
+            element != null -> ifTrue(element)
+            else -> ifFalse(Modifier)
+        }
+    )
+}

@@ -20,6 +20,7 @@ class GetFavoriteGroupsUseCase(
         val result = danbooruRepository.getFavoriteGroups(
             creatorId = activeUser.id,
             forceRefresh = forceRefresh,
+            forceLoadFromCache = false,
         )
 
         when (result) {

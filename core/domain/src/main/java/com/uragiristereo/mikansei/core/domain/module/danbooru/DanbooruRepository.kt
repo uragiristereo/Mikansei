@@ -38,7 +38,7 @@ interface DanbooruRepository {
 
     suspend fun updateUserSettings(id: Int, field: ProfileSettingsField): Result<Unit>
 
-    suspend fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean): Result<List<Favorite>>
+    suspend fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean, forceLoadFromCache: Boolean): Result<List<Favorite>>
 
     suspend fun getPostsByIds(ids: List<Int>, forceCache: Boolean, forceRefresh: Boolean): Result<List<Post>>
 

@@ -37,9 +37,12 @@ fun rememberBottomSheetNavigator(
 @Stable
 class BottomSheetNavigator internal constructor(
     internal val navController: NavHostController,
-    internal val sheetState: SheetState3,
+    val sheetState: SheetState3,
     internal val coroutineScope: CoroutineScope,
 ) {
+    val isAnimationRunning: Boolean
+        get() = sheetState.isAnimationRunning
+
     fun runHiding(block: suspend () -> Unit) {
         coroutineScope.launch {
             sheetState.hide()
