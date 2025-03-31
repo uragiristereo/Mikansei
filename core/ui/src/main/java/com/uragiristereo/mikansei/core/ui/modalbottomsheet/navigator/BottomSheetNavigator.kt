@@ -5,9 +5,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.SheetState3
@@ -88,18 +92,30 @@ fun InterceptBackGestureForBottomSheetNavigator() {
     val sheetState = bottomSheetNavigator.sheetState
     val scope = bottomSheetNavigator.coroutineScope
 
-    BackHandler(enabled = true) {
-        val previousRoute = navController.previousBackStackEntry?.destination?.id
-        val indexId = navController.getBackStackEntry(INDEX_ROUTE).destination.id
+    var enabled by remember { mutableStateOf(false) }
 
-        if (!sheetState.isAnimationRunning) {
-            scope.launch(SupervisorJob()) {
-                if (previousRoute !in listOf(null, indexId)) {
-                    sheetState.hideTemporarily()
-                    navController.popBackStack()
-                    sheetState.expand()
-                } else {
-                    sheetState.hide()
+    LifecycleResumeEffect(Unit) {
+        enabled = true
+
+        onPauseOrDispose {
+            enabled = false
+        }
+    }
+
+    if (enabled) {
+        BackHandler {
+            val previousRoute = navController.previousBackStackEntry?.destination?.id
+            val indexId = navController.getBackStackEntry(INDEX_ROUTE).destination.id
+
+            if (!sheetState.isAnimationRunning) {
+                scope.launch(SupervisorJob()) {
+                    if (previousRoute !in listOf(null, indexId)) {
+                        sheetState.hideTemporarily()
+                        navController.popBackStack()
+                        sheetState.expand()
+                    } else {
+                        sheetState.hide()
+                    }
                 }
             }
         }
