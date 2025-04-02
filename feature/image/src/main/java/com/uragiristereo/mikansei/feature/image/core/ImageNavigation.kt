@@ -1,7 +1,6 @@
 package com.uragiristereo.mikansei.feature.image.core
 
 import androidx.compose.animation.fadeOut
-import androidx.compose.runtime.State
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -17,8 +16,6 @@ import com.uragiristereo.mikansei.feature.image.more.MoreBottomSheet
 
 fun NavGraphBuilder.imageRoute(
     navController: NavHostController,
-    navigatedBackByGesture: State<Boolean>,
-    onNavigatedBackByGesture: (Boolean) -> Unit,
 ) {
     composable<MainRoute.Image>(
         typeMap = PostNavType,
@@ -29,20 +26,23 @@ fun NavGraphBuilder.imageRoute(
             )
         },
         popExitTransition = {
+            val navigatedBackByGesture =
+                initialState.savedStateHandle["navigatedBackByGesture"] ?: false
+
             when {
-                navigatedBackByGesture.value -> fadeOut()
+                navigatedBackByGesture -> fadeOut()
                 else -> translateYFadeOut(
                     targetOffsetY = { it / 5 },
                     durationMillis = 350,
                 )
             }
         },
-    ) {
+    ) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         ImageScreen(
-            onNavigateBack = {
-                onNavigatedBackByGesture(it)
+            onNavigateBack = { navigatedBackByGesture ->
+                entry.savedStateHandle["navigatedBackByGesture"] = navigatedBackByGesture
 
                 navController.navigateUp()
             },

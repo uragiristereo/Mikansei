@@ -26,12 +26,9 @@ import com.uragiristereo.mikansei.feature.home.posts.share.ShareContent
 @SuppressLint("RestrictedApi")
 fun NavGraphBuilder.postsRoute(
     mainNavController: NavHostController,
-    onNavigatedBackByGesture: (Boolean) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
 ) {
     val lambdaOnNavigateImage: (Post) -> Unit = { item ->
-        onNavigatedBackByGesture(false)
-
         mainNavController.navigate(
             MainRoute.Image(post = item)
         )
@@ -94,10 +91,7 @@ fun NavGraphBuilder.postsRoute(
     }
 }
 
-fun NavGraphBuilder.postsBottomRoute(
-    mainNavController: NavHostController,
-    onNavigatedBackByGesture: (Boolean) -> Unit,
-) {
+fun NavGraphBuilder.postsBottomRoute(mainNavController: NavHostController) {
     composable<HomeRoute.PostMore>(PostNavType) {
         val lambdaOnDownload = LocalLambdaOnDownload.current
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
@@ -108,8 +102,6 @@ fun NavGraphBuilder.postsBottomRoute(
             onDismiss = bottomSheetNavigator::hideSheet,
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
-                    onNavigatedBackByGesture(false)
-
                     mainNavController.navigate(
                         MainRoute.Image(post)
                     )
@@ -139,8 +131,6 @@ fun NavGraphBuilder.postsBottomRoute(
             onDismiss = bottomSheetNavigator::hideSheet,
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
-                    onNavigatedBackByGesture(false)
-
                     mainNavController.navigate(
                         MainRoute.Image(post)
                     )

@@ -265,7 +265,6 @@ fun MainScreen(
                     navGraphBuilder = {
                         bottomNavGraph(
                             mainNavController = navController,
-                            viewModel = viewModel,
                         )
                     },
                 ) {

@@ -18,7 +18,6 @@ import com.uragiristereo.mikansei.core.product.shared.downloadshare.DownloadShar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class MainViewModel(
     savedStateHandle: SavedStateHandle,
@@ -30,8 +29,6 @@ class MainViewModel(
     val preferences = preferencesRepository.data
 
     var confirmExit by mutableStateOf(true)
-
-    val navigatedBackByGesture = mutableStateOf(false)
 
     var currentTags by mutableStateOf("")
         private set
@@ -54,12 +51,6 @@ class MainViewModel(
         }
 
         removeTempFiles()
-    }
-
-    @JvmName(name = "setNavigatedBackByGesture2")
-    fun setNavigatedBackByGesture(value: Boolean) {
-        Timber.d("navigatedBackByGesture $value")
-        navigatedBackByGesture.value = value
     }
 
     @JvmName(name = "setCurrentTags2")

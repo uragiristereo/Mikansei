@@ -44,17 +44,12 @@ fun MainNavGraph(
     ) {
         homeGraph(
             navController = navController,
-            onNavigatedBackByGesture = viewModel::setNavigatedBackByGesture,
             onCurrentTagsChange = viewModel::setCurrentTags,
         )
 
         searchRoute(navController)
 
-        imageRoute(
-            navController = navController,
-            navigatedBackByGesture = viewModel.navigatedBackByGesture,
-            onNavigatedBackByGesture = viewModel::setNavigatedBackByGesture,
-        )
+        imageRoute(navController)
 
         settingsGraph(navController)
 
