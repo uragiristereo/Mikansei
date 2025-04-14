@@ -100,7 +100,10 @@ internal fun ProfileItem(
                         style = MaterialTheme.typography.body2,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colors.primary,
+                        color = when {
+                            MaterialTheme.colors.isLight -> user.level.lightColor
+                            else -> user.level.darkColor
+                        },
                     )
                 }
 

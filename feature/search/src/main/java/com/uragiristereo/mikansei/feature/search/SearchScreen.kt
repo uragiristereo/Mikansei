@@ -27,14 +27,13 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ui.Scaffold
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.AutoComplete
 import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpacer
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
-import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 import com.uragiristereo.mikansei.core.ui.extension.copy
@@ -108,13 +107,11 @@ internal fun SearchScreen(
             ProductStatusBarSpacer {
                 SearchBar(
                     query = viewModel.query,
-                    placeholder = stringResource(id = R.string.field_placeholder_example),
+                    searchType = viewModel.searchType,
                     loading = viewModel.loading,
                     focusRequester = focusRequester,
                     onNavigateBack = onNavigateBack,
-                    onQueryChange = {
-                        viewModel.query = it.copy(text = it.text.lowercase())
-                    },
+                    onQueryChange = viewModel::processQueryChange,
                     onQuerySubmit = {
                         onSearchSubmit(viewModel.parsedQuery)
                     },
@@ -128,6 +125,7 @@ internal fun SearchScreen(
             Column {
                 SearchQuickShortcutBar(
                     query = viewModel.query,
+                    searchType = viewModel.searchType,
                     onQueryChange = {
                         viewModel.query = it
                     },
@@ -153,13 +151,15 @@ internal fun SearchScreen(
             ),
             modifier = Modifier.fillMaxSize(),
         ) {
-            item {
-                BrowseChips(
-                    chips = browseChips,
-                    onClick = {
-                        onSearchSubmit(viewModel.parsedQuery)
-                    },
-                )
+            if (viewModel.searchType == AutoComplete.SearchType.TAG_QUERY) {
+                item {
+                    BrowseChips(
+                        chips = browseChips,
+                        onClick = {
+                            onSearchSubmit(viewModel.parsedQuery)
+                        },
+                    )
+                }
             }
 
             item {
@@ -173,32 +173,39 @@ internal fun SearchScreen(
                 ) { item ->
                     SearchResultItem(
                         tag = item,
+                        searchType = viewModel.searchType,
                         delimiter = viewModel.delimiter,
                         boldWord = viewModel.boldWord,
-                        onClick = remember {
-                            {
-                                viewModel.searchAllowed = false
+                        onClick = {
+                            when (viewModel.searchType) {
+                                AutoComplete.SearchType.TAG_QUERY -> {
+                                    viewModel.searchAllowed = false
 
-                                val result = viewModel.query.text.replaceRange(
-                                    startIndex = viewModel.searchWord.startIndex,
-                                    endIndex = viewModel.searchWord.endIndex,
-                                    replacement = "${viewModel.delimiter}${item.name} ",
-                                )
+                                    val result = viewModel.query.text.replaceRange(
+                                        startIndex = viewModel.searchWord.startIndex,
+                                        endIndex = viewModel.searchWord.endIndex,
+                                        replacement = "${viewModel.delimiter}${item.value} ",
+                                    )
 
-                                val newQuery = "$result "
-                                    .replace("\\s+".toRegex(), " ")
-                                    .lowercase()
+                                    val newQuery = "$result "
+                                        .replace("\\s+".toRegex(), " ")
+                                        .lowercase()
 
-                                viewModel.query = TextFieldValue(
-                                    text = newQuery,
-                                    selection = TextRange(index = newQuery.length)
-                                )
+                                    viewModel.query = TextFieldValue(
+                                        text = newQuery,
+                                        selection = TextRange(index = newQuery.length)
+                                    )
 
-                                viewModel.searchAllowed = true
-                                viewModel.searchTerm()
+                                    viewModel.searchAllowed = true
+                                    viewModel.searchTerm()
 
-                                focusRequester.requestFocus()
-                                keyboardController?.show()
+                                    focusRequester.requestFocus()
+                                    keyboardController?.show()
+                                }
+
+                                AutoComplete.SearchType.WIKI_PAGE -> {
+                                    onSearchSubmit(item.value)
+                                }
                             }
                         },
                         onLongClick = { /*TODO*/ },

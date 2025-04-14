@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.core.domain.module.danbooru.entity
 
+import androidx.compose.ui.graphics.Color
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 
@@ -11,19 +12,71 @@ data class Profile(
     val danbooru: DanbooruSettings,
     val mikansei: MikanseiSettings = MikanseiSettings(),
 ) {
-    enum class Level(val id: Int) {
-        Unknown(id = -1),
-        Lurker(id = 0),
-        Restricted(id = 10),
-        Member(id = 20),
-        Gold(id = 30),
-        Platinum(id = 31),
-        Builder(id = 32),
-        Contributor(id = 35),
-        Approver(id = 37),
-        Moderator(id = 40),
-        Admin(id = 50),
-        Owner(id = 60);
+    enum class Level(
+        val id: Int,
+        val lightColor: Color,
+        val darkColor: Color,
+    ) {
+        Unknown(
+            id = -1,
+            lightColor = Color(0xFF0075F8),
+            darkColor = Color(0xFF009BE6),
+        ),
+        Lurker(
+            id = 0,
+            lightColor = Color(0xFF0075F8),
+            darkColor = Color(0xFF009BE6),
+        ),
+        Restricted(
+            id = 10,
+            lightColor = Color(0xFF0075F8),
+            darkColor = Color(0xFF009BE6),
+        ),
+        Member(
+            id = 20,
+            lightColor = Color(0xFF0075F8),
+            darkColor = Color(0xFF009BE6),
+        ),
+        Gold(
+            id = 30,
+            lightColor = Color(0xFFFD9200),
+            darkColor = Color(0xFFEAD084),
+        ),
+        Platinum(
+            id = 31,
+            lightColor = Color(0xFF777892),
+            darkColor = Color(0xFFABABBC),
+        ),
+        Builder(
+            id = 32,
+            lightColor = Color(0xFFA800AA),
+            darkColor = Color(0xFFC797FF),
+        ),
+        Contributor(
+            id = 35,
+            lightColor = Color(0xFFA800AA),
+            darkColor = Color(0xFFC797FF),
+        ),
+        Approver(
+            id = 37,
+            lightColor = Color(0xFFA800AA),
+            darkColor = Color(0xFFC797FF),
+        ),
+        Moderator(
+            id = 40,
+            lightColor = Color(0xFF00AB2C),
+            darkColor = Color(0xFF35C64A),
+        ),
+        Admin(
+            id = 50,
+            lightColor = Color(0xFFED2426),
+            darkColor = Color(0xFFFF8A8B),
+        ),
+        Owner(
+            id = 60,
+            lightColor = Color(0xFFED2426),
+            darkColor = Color(0xFFFF8A8B),
+        );
 
         companion object {
             fun getLevelById(id: Int): Level {

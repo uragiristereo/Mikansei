@@ -9,9 +9,11 @@ import com.uragiristereo.mikansei.core.domain.usecase.GenerateChipsFromTagsUseCa
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesUseCase
+import com.uragiristereo.mikansei.core.domain.usecase.GetPostUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsAutoCompleteUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsUseCase
+import com.uragiristereo.mikansei.core.domain.usecase.GetWikiUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.PerformLoginUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.SyncUserSettingsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.UpdateUserSettingsUseCase
@@ -34,4 +36,6 @@ val domainModule = module {
         factoryOf(::DeactivateAccountUseCase)
         factoryOf(::FilterPostsUseCase)
         factoryOf(::GenerateChipsFromTagsUseCase)
+        factoryOf(::GetWikiUseCase)
+        factoryOf(::GetPostUseCase)
     }

@@ -5,6 +5,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
 import com.uragiristereo.mikansei.core.domain.module.database.PostRepository
 import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.entity.Session
+import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import kotlinx.coroutines.flow.first
@@ -19,8 +20,9 @@ class GetPostsUseCase(
         sessionId: String,
         tags: String,
         page: Int,
+        limit: Int = Constants.POSTS_PER_PAGE,
     ): Result<PostsResult> {
-        return danbooruRepository.getPosts(tags, page)
+        return danbooruRepository.getPosts(tags, page, limit)
             .mapSuccess { postsResult ->
                 sessionRepository.addSession(Session(id = sessionId, tags = tags))
 

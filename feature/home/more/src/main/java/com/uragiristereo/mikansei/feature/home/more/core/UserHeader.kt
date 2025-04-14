@@ -95,7 +95,10 @@ internal fun UserHeader(
                 style = MaterialTheme.typography.body2,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colors.primary,
+                color = when {
+                    MaterialTheme.colors.isLight -> level.lightColor
+                    else -> level.darkColor
+                },
             )
         }
 

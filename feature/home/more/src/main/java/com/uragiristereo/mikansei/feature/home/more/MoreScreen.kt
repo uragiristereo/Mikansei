@@ -228,6 +228,25 @@ internal fun MoreScreen(
 
             item {
                 NavigationItem(
+                    text = "Wiki",
+                    painter = painterResource(id = R.drawable.lightbulb),
+                    onClick = {
+                        if (activeUser.isNotAnonymous()) {
+                            onNavigate(MainRoute.Wiki)
+                        } else {
+                            scope.launch(SupervisorJob()) {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = context.getString(R.string.please_login),
+                                )
+                            }
+                        }
+                    },
+                    modifier = Modifier.padding(bottom = 12.dp),
+                )
+            }
+
+            item {
+                NavigationItem(
                     text = "Settings",
                     painter = painterResource(id = R.drawable.settings),
                     onClick = {

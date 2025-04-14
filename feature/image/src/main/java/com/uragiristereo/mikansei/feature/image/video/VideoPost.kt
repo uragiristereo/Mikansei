@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.media3.common.C
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
@@ -59,6 +60,36 @@ fun VideoPost(
             videoSurfaceView?.isHapticFeedbackEnabled = false
 
             player.prepare()
+        }
+    }
+
+    LifecycleResumeEffect(key1 = Unit) {
+        val positionUpdaterJob = scope.launch {
+            var lastPosition = 0L
+
+            while (true) {
+                viewModel.updatePosition(
+                    position = player.currentPosition,
+                    total = when (player.duration) {
+                        C.TIME_UNSET -> 0
+                        else -> player.duration
+                    },
+                )
+
+                viewModel.onPlaybackStateChange(
+                    isBuffering = lastPosition == viewModel.elapsed && viewModel.isPlaying,
+                )
+
+                if (viewModel.isPlaying) {
+                    lastPosition = viewModel.elapsed
+                }
+
+                delay(timeMillis = 50L)
+            }
+        }
+
+        onPauseOrDispose {
+            positionUpdaterJob.cancel()
         }
     }
 

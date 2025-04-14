@@ -6,6 +6,7 @@ import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruHostIntercep
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceCacheResponseInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceRefreshInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.UserDelegationInterceptor
+import com.uragiristereo.mikansei.core.danbooru.model.autocomplete.toAutoCompleteList
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavoriteList
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
@@ -19,7 +20,9 @@ import com.uragiristereo.mikansei.core.danbooru.model.tag.toTagList
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserFieldData
 import com.uragiristereo.mikansei.core.danbooru.model.user.toUser
+import com.uragiristereo.mikansei.core.danbooru.model.wiki.toWiki
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.AutoComplete
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
@@ -28,6 +31,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSett
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Wiki
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.CacheUtil
 import com.uragiristereo.mikansei.core.model.Constants
@@ -46,10 +50,12 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Credentials
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.internal.http.HTTP_NOT_FOUND
 import okhttp3.internal.http.HTTP_NO_CONTENT
 import okhttp3.internal.http.HTTP_OK
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.zip.GZIPInputStream
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -90,6 +96,7 @@ class DanbooruRepositoryImpl(
     private val client = Retrofit.Builder()
         .client(okHttpClient)
         .baseUrl(DanbooruHost.Safebooru.getBaseUrl())
+        .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create(DanbooruApi::class.java)
@@ -132,8 +139,12 @@ class DanbooruRepositoryImpl(
         client.getPost(id)
     }.mapSuccess(DanbooruPost::toPost)
 
-    override suspend fun getPosts(tags: String, page: Int): Result<PostsResult> = resultOf {
-        client.getPosts(tags, page)
+    override suspend fun getPosts(
+        tags: String,
+        page: Int,
+        limit: Int,
+    ): Result<PostsResult> = resultOf {
+        client.getPosts(tags, page, limit)
     }.mapSuccess {
         PostsResult(
             posts = it.toPostList(),
@@ -339,9 +350,13 @@ class DanbooruRepositoryImpl(
         userId: Int,
         password: String,
     ): Result<Unit> {
-        val response = client.deactivateAccount(userId, password)
+        var responseCode = 0
 
-        return when (response.code()) {
+        val result = resultOf {
+            client.deactivateAccount(userId, password).also { responseCode = it.code() }
+        }
+
+        return when (responseCode) {
             // the actual success response code
             HTTP_NO_CONTENT -> Result.Success(Unit)
 
@@ -349,7 +364,38 @@ class DanbooruRepositoryImpl(
             HTTP_OK -> Result.Failed(message = "Incorrect password")
 
             // other error
-            else -> resultOf { response }
+            else -> result
+        }
+    }
+
+    override suspend fun getAutoComplete(
+        query: String,
+        searchType: AutoComplete.SearchType,
+    ): Result<List<AutoComplete>> = resultOf {
+        val type = when (searchType) {
+            AutoComplete.SearchType.TAG_QUERY -> "tag_query"
+            AutoComplete.SearchType.WIKI_PAGE -> "wiki_page"
+        }
+
+        client.getAutoComplete(query, type)
+    }.mapSuccess {
+        it.toAutoCompleteList(searchType)
+    }
+
+    override suspend fun parseDtextAsHtml(dtext: String): Result<String> = resultOf {
+        client.parseDtextAsHtml(body = dtext)
+    }
+
+    override suspend fun getWiki(tag: String): Result<Wiki?> {
+        var responseCode = 0
+
+        val result = resultOf {
+            client.getWiki(tag).also { responseCode = it.code() }
+        }
+
+        return when (responseCode) {
+            HTTP_NOT_FOUND -> Result.Success(null)
+            else -> result.mapSuccess { it.toWiki() }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.AutoComplete
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.serializednavigationextension.runtime.NavRoute
 import com.uragiristereo.serializednavigationextension.runtime.routeOf
@@ -12,6 +13,7 @@ sealed interface MainRoute : NavRoute {
     @Serializable
     data class Search(
         val tags: String = "",
+        val searchType: AutoComplete.SearchType = AutoComplete.SearchType.TAG_QUERY,
     ) : MainRoute
 
     @Serializable
@@ -41,10 +43,14 @@ sealed interface MainRoute : NavRoute {
 
     @Serializable
     data object SavedSearches : MainRoute
+
+    @Serializable
+    data object Wiki : MainRoute
 }
 
 val NestedNavigationRoutes = listOf(
     routeOf<MainRoute.Home>(),
     routeOf<MainRoute.Settings>(),
     routeOf<MainRoute.User>(),
+    routeOf<MainRoute.Wiki>(),
 )

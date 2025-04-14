@@ -12,12 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.AutoComplete
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 
 @Composable
 internal fun SearchQuickShortcutBar(
     query: TextFieldValue,
+    searchType: AutoComplete.SearchType,
     onQueryChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -39,22 +41,24 @@ internal fun SearchQuickShortcutBar(
                 )
             }
 
-            item {
-                SearchQuickShortcutItem(
-                    text = stringResource(id = R.string.search_space).uppercase(),
-                    onClick = {
-                        onQueryChange(
-                            TextFieldValue(
-                                text = query.text.replaceRange(
-                                    startIndex = query.selection.start,
-                                    endIndex = query.selection.start,
-                                    replacement = " ",
-                                ),
-                                selection = TextRange(index = query.selection.start + 1),
+            if (searchType == AutoComplete.SearchType.TAG_QUERY) {
+                item {
+                    SearchQuickShortcutItem(
+                        text = stringResource(id = R.string.search_space).uppercase(),
+                        onClick = {
+                            onQueryChange(
+                                TextFieldValue(
+                                    text = query.text.replaceRange(
+                                        startIndex = query.selection.start,
+                                        endIndex = query.selection.start,
+                                        replacement = " ",
+                                    ),
+                                    selection = TextRange(index = query.selection.start + 1),
+                                )
                             )
-                        )
-                    },
-                )
+                        },
+                    )
+                }
             }
 
             item {

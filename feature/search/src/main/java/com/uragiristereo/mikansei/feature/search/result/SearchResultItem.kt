@@ -4,7 +4,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -24,14 +26,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.AutoComplete
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.getCategoryColor
+import com.uragiristereo.mikansei.core.model.UnitConverter
 import com.uragiristereo.mikansei.core.resources.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SearchResultItem(
-    tag: Tag,
+    tag: AutoComplete,
+    searchType: AutoComplete.SearchType,
     delimiter: String,
     boldWord: String,
     onClick: () -> Unit,
@@ -41,7 +45,11 @@ internal fun SearchResultItem(
     val isLight = MaterialTheme.colors.isLight
 
     val tagColor = remember(tag, isLight) {
-        tag.category.getCategoryColor(isLight)
+        when (tag) {
+            is AutoComplete.Tag -> {
+                tag.category.getCategoryColor(isLight)
+            }
+        }
     }
 
     Box(
@@ -73,8 +81,14 @@ internal fun SearchResultItem(
 
             Text(
                 text = buildAnnotatedString {
-                    val hasAntecedent = tag.antecedent != null
-                    val tagToBold = tag.antecedent ?: tag.name
+                    val hasAntecedent = when (tag) {
+                        is AutoComplete.Tag -> tag.antecedent != null
+                    }
+
+                    val tagToBold = when (tag) {
+                        is AutoComplete.Tag -> tag.antecedent ?: tag.value
+                    }
+
                     val newTag = "$delimiter${tagToBold}".lowercase()
                     val boldStartIndex = newTag.indexOf(string = boldWord)
                     val boldEndIndex = boldStartIndex + boldWord.length
@@ -111,7 +125,7 @@ internal fun SearchResultItem(
                             append(text = "  ›  ")
                         }
 
-                        append(text = tag.name)
+                        append(text = tag.value)
                     }
                 },
                 modifier = Modifier
@@ -119,19 +133,25 @@ internal fun SearchResultItem(
                     .padding(end = 8.dp),
             )
 
-            Text(
-                text = tag.postCountFormatted,
-                textAlign = TextAlign.End,
-                color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
-                modifier = Modifier
-                    .widthIn(min = 48.dp)
-                    .padding(end = 16.dp),
-            )
+            if (tag is AutoComplete.Tag && searchType == AutoComplete.SearchType.TAG_QUERY) {
+                tag.postCount?.let { postCount ->
+                    Text(
+                        text = UnitConverter.convertToUnit(postCount.toInt()),
+                        textAlign = TextAlign.End,
+                        color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
+                        modifier = Modifier
+                            .widthIn(min = 48.dp)
+                            .padding(end = 16.dp),
+                    )
+                }
 
-            Icon(
-                painter = painterResource(id = R.drawable.north_west),
-                contentDescription = null,
-            )
+                Icon(
+                    painter = painterResource(id = R.drawable.north_west),
+                    contentDescription = null,
+                )
+            } else {
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
     }
 }

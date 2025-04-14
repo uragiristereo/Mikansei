@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.AutoComplete
 import com.uragiristereo.mikansei.core.domain.module.database.TagCategoryRepository
 import com.uragiristereo.mikansei.core.domain.module.search.BrowseChipType
 import com.uragiristereo.mikansei.core.domain.usecase.GenerateChipsFromTagsUseCase
@@ -46,13 +46,14 @@ class SearchViewModel(
     private val generateChipsFromTagsUseCase: GenerateChipsFromTagsUseCase,
     private val getTagsUseCase: GetTagsUseCase,
 ) : ViewModel() {
-    private val tags = savedStateHandle.navArgsOf(MainRoute.Search()).tags
+    private val args = savedStateHandle.navArgsOf(MainRoute.Search())
+    val searchType = args.searchType
 
     var query by savedStateHandle.saveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(
             TextFieldValue(
-                text = tags,
-                selection = TextRange(index = tags.length),
+                text = args.tags,
+                selection = TextRange(index = args.tags.length),
             )
         )
     }
@@ -60,7 +61,7 @@ class SearchViewModel(
     var searchAllowed by mutableStateOf(true)
     var boldWord by mutableStateOf("")
 
-    val searches = mutableStateListOf<Tag>()
+    val searches = mutableStateListOf<AutoComplete>()
 
     var loading by mutableStateOf(false)
         private set
@@ -101,6 +102,9 @@ class SearchViewModel(
     private var tagCategoriesJob: Job? = null
 
     val browseChips = snapshotFlow { parsedQuery }
+        .filter {
+            searchType == AutoComplete.SearchType.TAG_QUERY
+        }
         .distinctUntilChanged()
         .flatMapLatest {
             val tags = generateChipsFromTagsUseCase(it, emptyMap())
@@ -144,19 +148,61 @@ class SearchViewModel(
         collectBrowseChips()
     }
 
+    fun processQueryChange(value: TextFieldValue) {
+        var result = value.copy(text = value.text.lowercase())
+
+        result = when (searchType) {
+            AutoComplete.SearchType.TAG_QUERY -> result
+
+            AutoComplete.SearchType.WIKI_PAGE -> {
+                val text = result.text
+                val selection = result.selection
+                val composition = result.composition
+                val predicate: (Char) -> Boolean = { it != ' ' }
+
+                result.copy(
+                    text = text.filter(predicate),
+                    selection = TextRange(
+                        start = text.subSequence(0, selection.start).count(predicate),
+                        end = text.subSequence(0, selection.end).count(predicate),
+                    ),
+                    composition = composition?.let { range ->
+                        TextRange(
+                            start = text.subSequence(0, range.start).count(predicate),
+                            end = text.subSequence(0, range.end).count(predicate),
+                        )
+                    },
+                )
+            }
+        }
+
+        query = result
+    }
+
     private fun getTags(term: String) {
         job?.cancel()
 
         job = viewModelScope.launch {
             loading = true
 
-            when (val result = getTagsAutoCompleteUseCase(query = term)) {
+            val result = getTagsAutoCompleteUseCase(
+                query = term,
+                searchType = searchType,
+            )
+
+            when (result) {
                 is Result.Success -> {
                     searches.apply {
                         clear()
                         addAll(result.data)
                     }
-                    cacheTags(result.data)
+
+                    if (searchType == AutoComplete.SearchType.TAG_QUERY) {
+                        val tagsMap = result.data.filterIsInstance<AutoComplete.Tag>().associate {
+                            it.value to it.category
+                        }
+                        tagCategoryRepository.update(tagsMap)
+                    }
 
                     errorMessage = null
                 }
@@ -286,14 +332,12 @@ class SearchViewModel(
             val result = getTagsUseCase(flattenedTags)
 
             if (result is Result.Success) {
-                cacheTags(result.data)
+                val tagsMap = result.data.associate {
+                    it.name to it.category
+                }
+                tagCategoryRepository.update(tagsMap)
             }
         }
-    }
-
-    private suspend fun cacheTags(tags: List<Tag>) {
-        val tagsMap = tags.associate { it.name to it.category }
-        tagCategoryRepository.update(tagsMap)
     }
 
     private fun flattenTags(tags: List<BrowseChipType>): List<String> {

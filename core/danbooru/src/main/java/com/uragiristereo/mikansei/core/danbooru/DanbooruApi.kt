@@ -2,6 +2,7 @@ package com.uragiristereo.mikansei.core.danbooru
 
 import com.uragiristereo.mikansei.core.danbooru.annotation.NoAuth
 import com.uragiristereo.mikansei.core.danbooru.annotation.NoSafeHost
+import com.uragiristereo.mikansei.core.danbooru.model.autocomplete.DanbooruAutoComplete
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavorite
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.DanbooruFavoriteGroup
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
@@ -12,10 +13,13 @@ import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
+import com.uragiristereo.mikansei.core.danbooru.model.wiki.DanbooruWikiResponse
 import com.uragiristereo.mikansei.core.model.Constants
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -169,4 +173,23 @@ interface DanbooruApi {
         @Path("id") userId: Int,
         @Query("user[password]") password: String,
     ): Response<Unit>
+
+    @NoAuth
+    @GET("/autocomplete.json")
+    suspend fun getAutoComplete(
+        @Query("search[query]") query: String,
+        @Query("search[type]") type: String,
+        @Query("limit") limit: Int = 20,
+    ): Response<List<DanbooruAutoComplete>>
+
+    @FormUrlEncoded
+    @POST("/dtext_preview.json")
+    suspend fun parseDtextAsHtml(
+        @Field("body") body: String,
+        @Field("inline") inline: Boolean = false,
+        @Field("media_embeds") mediaEmbeds: Boolean = false,
+    ): Response<String>
+
+    @GET("/wiki_pages/{tag}.json")
+    suspend fun getWiki(@Path("tag") tag: String): Response<DanbooruWikiResponse>
 }

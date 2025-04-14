@@ -31,19 +31,20 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.AutoComplete
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 
 @Composable
 internal fun SearchBar(
     query: TextFieldValue,
+    searchType: AutoComplete.SearchType,
     loading: Boolean,
     onQueryChange: (TextFieldValue) -> Unit,
     onQuerySubmit: (TextFieldValue) -> Unit,
     onNavigateBack: () -> Unit,
     onClearClick: () -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "",
     focusRequester: FocusRequester = remember { FocusRequester() },
 ) {
     Column(
@@ -53,7 +54,17 @@ internal fun SearchBar(
             value = query,
             onValueChange = onQueryChange,
             placeholder = {
-                Text(text = placeholder)
+                Text(
+                    text = when (searchType) {
+                        AutoComplete.SearchType.TAG_QUERY -> {
+                            stringResource(id = R.string.field_placeholder_example)
+                        }
+
+                        AutoComplete.SearchType.WIKI_PAGE -> {
+                            "Search wiki pages"
+                        }
+                    },
+                )
             },
             leadingIcon = {
                 IconButton(
@@ -118,9 +129,12 @@ internal fun SearchBar(
                 backgroundColor = Color.Transparent,
             ),
             keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search,
+                imeAction = when (searchType) {
+                    AutoComplete.SearchType.TAG_QUERY -> ImeAction.Search
+                    AutoComplete.SearchType.WIKI_PAGE -> ImeAction.Done
+                },
                 keyboardType = KeyboardType.Uri,
-                autoCorrect = false,
+                autoCorrectEnabled = false,
             ),
             keyboardActions = KeyboardActions(
                 onSearch = {

@@ -17,6 +17,7 @@ import com.uragiristereo.mikansei.feature.saved_searches.savedSearchesModule
 import com.uragiristereo.mikansei.feature.search.SearchViewModel
 import com.uragiristereo.mikansei.feature.settings.SettingsViewModel
 import com.uragiristereo.mikansei.feature.user.UserModule
+import com.uragiristereo.mikansei.feature.wiki.wikiModule
 import com.uragiristereo.mikansei.ui.MainViewModel
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
@@ -42,6 +43,7 @@ object MikanseiModule {
                 ProductModule(),
                 savedSearchesModule,
                 aboutModule,
+                wikiModule,
             )
         )
 

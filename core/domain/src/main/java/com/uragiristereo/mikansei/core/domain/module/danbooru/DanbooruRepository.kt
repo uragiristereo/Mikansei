@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.core.domain.module.danbooru
 
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.AutoComplete
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostsResult
@@ -8,6 +9,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.ProfileSett
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.SavedSearch
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.User
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Wiki
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -20,7 +22,7 @@ interface DanbooruRepository {
 
     suspend fun getPost(id: Int): Result<Post>
 
-    suspend fun getPosts(tags: String, page: Int): Result<PostsResult>
+    suspend fun getPosts(tags: String, page: Int, limit: Int): Result<PostsResult>
 
     suspend fun getTagsAutoComplete(query: String): Result<List<Tag>>
 
@@ -69,4 +71,10 @@ interface DanbooruRepository {
     suspend fun deleteSavedSearch(id: Int): Result<Unit>
 
     suspend fun deactivateAccount(userId: Int, password: String): Result<Unit>
+
+    suspend fun getAutoComplete(query: String, searchType: AutoComplete.SearchType): Result<List<AutoComplete>>
+
+    suspend fun parseDtextAsHtml(dtext: String): Result<String>
+
+    suspend fun getWiki(tag: String): Result<Wiki?>
 }

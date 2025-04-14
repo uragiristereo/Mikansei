@@ -103,6 +103,7 @@ okhttp-dnsoverhttps = { module = "com.squareup.okhttp3:okhttp-dnsoverhttps", ver
 # Retrofit HTTP Client
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "retrofit" }
+retrofit-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 
 # Kotlinx.Serialization JSON Serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
@@ -139,7 +140,7 @@ compose = ["compose", "compose-material", "compose-tooling-preview"]
 compose-debug = ["compose-ui-tooling", "compose-ui-test-manifest"]
 room = ["room-runtime", "room-ktx"]
 koin = ["koin", "koin-androidx-navigation", "koin-androidx-compose"]
-retrofit = ["okhttp", "retrofit", "retrofit-converter-kotlinx-serialization"]
+retrofit = ["okhttp", "retrofit", "retrofit-converter-kotlinx-serialization", "retrofit-converter-scalars"]
 coil = ["coil", "coil-compose"]
 core = ["koin", "timber"]
 media3 = ["media3-exoplayer", "media3-okhttp", "media3-ui"]

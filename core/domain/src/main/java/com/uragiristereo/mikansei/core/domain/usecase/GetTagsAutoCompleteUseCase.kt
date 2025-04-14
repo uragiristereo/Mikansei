@@ -1,7 +1,7 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
-import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.AutoComplete
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.model.result.Result
@@ -11,11 +11,13 @@ class GetTagsAutoCompleteUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val userRepository: UserRepository,
 ) {
-    suspend operator fun invoke(query: String): Result<List<Tag>> {
-        return danbooruRepository.getTagsAutoComplete(query)
-            .mapSuccess { tags ->
+    suspend operator fun invoke(
+        query: String,
+        searchType: AutoComplete.SearchType,
+    ): Result<List<AutoComplete>> {
+        return danbooruRepository.getAutoComplete(query, searchType)
+            .mapSuccess { items ->
                 val activeUser = userRepository.active.value
-
                 val filters = activeUser.danbooru.blacklistedTags
 
                 val safeRatings = listOf(
@@ -28,8 +30,8 @@ class GetTagsAutoCompleteUseCase(
                     else -> listOf()
                 }
 
-                val filtered = tags.filter { item ->
-                    item.name !in filters && item.name !in unsafeTags
+                val filtered = items.filter { item ->
+                    item.value !in filters && item.value !in unsafeTags
                 }
 
                 filtered

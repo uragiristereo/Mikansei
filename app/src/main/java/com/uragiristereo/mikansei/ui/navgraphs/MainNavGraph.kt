@@ -15,6 +15,7 @@ import com.uragiristereo.mikansei.feature.saved_searches.savedSearchesGraph
 import com.uragiristereo.mikansei.feature.search.core.searchRoute
 import com.uragiristereo.mikansei.feature.settings.core.settingsGraph
 import com.uragiristereo.mikansei.feature.user.userGraph
+import com.uragiristereo.mikansei.feature.wiki.wikiGraph
 import com.uragiristereo.mikansei.ui.MainViewModel
 import com.uragiristereo.serializednavigationextension.navigation.compose.NavHost
 import org.koin.androidx.compose.koinViewModel
@@ -65,5 +66,7 @@ fun MainNavGraph(
         userGraph(navController)
 
         savedSearchesGraph(navController)
+
+        wikiGraph(navController)
     }
 }
