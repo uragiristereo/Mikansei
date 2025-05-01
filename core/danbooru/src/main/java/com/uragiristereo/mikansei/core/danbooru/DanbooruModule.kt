@@ -2,6 +2,7 @@ package com.uragiristereo.mikansei.core.danbooru
 
 import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruAuthInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruHostInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceLoadFromCacheInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.UserDelegationInterceptor
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import org.koin.core.module.dsl.singleOf
@@ -13,4 +14,5 @@ val danbooruModule = module {
     singleOf(::DanbooruAuthInterceptor)
     singleOf(::DanbooruHostInterceptor)
     singleOf(::UserDelegationInterceptor)
+    singleOf(::ForceLoadFromCacheInterceptor)
 }
