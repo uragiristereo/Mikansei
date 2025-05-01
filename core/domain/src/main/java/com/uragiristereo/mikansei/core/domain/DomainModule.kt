@@ -6,6 +6,7 @@ import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.DownloadPostWithNotificationUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.FilterPostsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GenerateChipsFromTagsUseCase
+import com.uragiristereo.mikansei.core.domain.usecase.GetCachedFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesUseCase
@@ -34,4 +35,5 @@ val domainModule = module {
         factoryOf(::DeactivateAccountUseCase)
         factoryOf(::FilterPostsUseCase)
         factoryOf(::GenerateChipsFromTagsUseCase)
+        factoryOf(::GetCachedFavoriteGroupsUseCase)
     }

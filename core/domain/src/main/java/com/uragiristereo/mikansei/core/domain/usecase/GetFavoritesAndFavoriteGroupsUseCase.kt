@@ -14,7 +14,11 @@ class GetFavoritesAndFavoriteGroupsUseCase(
                 getFavoritesUseCase()
             },
             other = {
-                getFavoriteGroupsUseCase(forceRefresh = true)
+                getFavoriteGroupsUseCase.invoke(
+                    forceRefresh = true,
+                    forceLoadFromCache = false,
+                    shouldLoadThumbnails = true,
+                )
             },
             transform = { result1, result2 ->
                 listOf(result1) + result2
