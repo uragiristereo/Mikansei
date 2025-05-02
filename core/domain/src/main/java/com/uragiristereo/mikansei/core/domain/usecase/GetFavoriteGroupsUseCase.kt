@@ -14,17 +14,26 @@ class GetFavoriteGroupsUseCase(
     private val userRepository: UserRepository,
     private val getPostsUseCase: GetPostsUseCase,
 ) {
-    suspend operator fun invoke(forceRefresh: Boolean): Result<List<Favorite>> {
+    suspend operator fun invoke(
+        forceRefresh: Boolean,
+        forceLoadFromCache: Boolean,
+        shouldLoadThumbnails: Boolean,
+    ): Result<List<Favorite>> {
         val activeUser = userRepository.active.value
 
         val result = danbooruRepository.getFavoriteGroups(
             creatorId = activeUser.id,
             forceRefresh = forceRefresh,
+            forceLoadFromCache = forceLoadFromCache,
         )
 
         when (result) {
             is Result.Success -> {
                 val favoriteGroups = result.data
+
+                if (!shouldLoadThumbnails) {
+                    return result
+                }
 
                 val thumbnailPostIds = favoriteGroups.mapNotNull {
                     it.postIds.maxOrNull()

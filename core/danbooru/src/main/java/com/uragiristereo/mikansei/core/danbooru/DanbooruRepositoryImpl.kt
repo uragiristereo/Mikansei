@@ -4,6 +4,7 @@ import android.content.Context
 import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruAuthInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruHostInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceCacheResponseInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceLoadFromCacheInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceRefreshInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.UserDelegationInterceptor
 import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavorite
@@ -61,6 +62,7 @@ class DanbooruRepositoryImpl(
     authInterceptor: DanbooruAuthInterceptor,
     userDelegationInterceptor: UserDelegationInterceptor,
     private val hostInterceptor: DanbooruHostInterceptor,
+    forceLoadFromCacheInterceptor: ForceLoadFromCacheInterceptor,
 ) : DanbooruRepository {
     override var unsafeTags: List<String> = listOf()
 
@@ -86,6 +88,7 @@ class DanbooruRepositoryImpl(
         .addNetworkInterceptor(userDelegationInterceptor)
         .addNetworkInterceptor(ForceCacheResponseInterceptor)
         .addInterceptor(ForceRefreshInterceptor)
+        .addInterceptor(forceLoadFromCacheInterceptor)
         .build()
 
     private val client = Retrofit.Builder()
@@ -212,8 +215,13 @@ class DanbooruRepositoryImpl(
     override suspend fun getFavoriteGroups(
         creatorId: Int,
         forceRefresh: Boolean,
+        forceLoadFromCache: Boolean,
     ): Result<List<Favorite>> = resultOf {
-        client.getFavoriteGroups(creatorId, forceRefresh = forceRefresh)
+        client.getFavoriteGroups(
+            creatorId = creatorId,
+            forceRefresh = forceRefresh,
+            forceLoadFromCache = forceLoadFromCache,
+        )
     }.mapSuccess { favoriteGroups ->
         favoriteGroups.sortedByDescending { it.updatedAt }.toFavoriteList()
     }

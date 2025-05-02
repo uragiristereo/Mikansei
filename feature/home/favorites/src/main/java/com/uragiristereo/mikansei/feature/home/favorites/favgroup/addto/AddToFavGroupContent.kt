@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.PostHeader
+import com.uragiristereo.mikansei.core.ui.extension.thenIf
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheetContentPadding
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.column.FavoriteGroupsColumn
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.CreateNewFavGroupButton
@@ -38,6 +40,7 @@ fun AddToFavGroupContent(
     viewModel: AddToFavGroupViewModel = koinViewModel(),
 ) {
     val snackbarHostState = LocalSnackbarHostState.current
+    val bottomSheetNavigator = LocalBottomSheetNavigator.current
     val scope = rememberCoroutineScope()
     val post = viewModel.post
 
@@ -58,11 +61,13 @@ fun AddToFavGroupContent(
 
         Box(
             modifier = Modifier
-                .animateContentSize()
-                .weight(1f, fill = false),
+                .weight(1f, fill = false)
+                .thenIf(viewModel.allowAnimation) {
+                    animateContentSize()
+                }
         ) {
             when {
-                viewModel.isLoading && viewModel.items.isEmpty() -> {
+                viewModel.isLoading && viewModel.items == null || (!bottomSheetNavigator.isVisible && !viewModel.hasCache) -> {
                     // Loading indicator
                     Box(
                         contentAlignment = Alignment.Center,
@@ -75,7 +80,7 @@ fun AddToFavGroupContent(
                     )
                 }
 
-                viewModel.items.isEmpty() -> {
+                viewModel.items?.isEmpty() == true -> {
                     // Item empty label
                     Text(
                         text = stringResource(id = R.string.no_favorite_groups),
@@ -91,25 +96,27 @@ fun AddToFavGroupContent(
                 }
 
                 else -> {
-                    FavoriteGroupsColumn(
-                        items = viewModel.items,
-                        enabled = !viewModel.isLoading && !viewModel.isRemoving,
-                        onAddClick = { item ->
-                            scope.launch {
-                                onDismiss()
-                                viewModel.addPostToFavoriteGroup(
-                                    item = item,
-                                    onShowMessage = { message, duration ->
-                                        snackbarHostState.showSnackbar(
-                                            message = message,
-                                            duration = duration
-                                        )
-                                    }
-                                )
-                            }
-                        },
-                        onRemoveClick = viewModel::removePostFromFavoriteGroup,
-                    )
+                    viewModel.items?.let {
+                        FavoriteGroupsColumn(
+                            items = it,
+                            enabled = !viewModel.isLoading && !viewModel.isRemoving,
+                            onAddClick = { item ->
+                                scope.launch {
+                                    onDismiss()
+                                    viewModel.addPostToFavoriteGroup(
+                                        item = item,
+                                        onShowMessage = { message, duration ->
+                                            snackbarHostState.showSnackbar(
+                                                message = message,
+                                                duration = duration
+                                            )
+                                        }
+                                    )
+                                }
+                            },
+                            onRemoveClick = viewModel::removePostFromFavoriteGroup,
+                        )
+                    }
                 }
             }
         }
