@@ -83,6 +83,16 @@ class BottomSheetNavigator internal constructor(
     suspend fun hideSheet() {
         sheetState.hide()
     }
+
+    fun navigateUp() {
+        if (!sheetState.isAnimationRunning && !sheetState.temporarilyHidden) {
+            coroutineScope.launch(SupervisorJob()) {
+                sheetState.hideTemporarily()
+                navController.popBackStack()
+                sheetState.expand()
+            }
+        }
+    }
 }
 
 @Composable
@@ -110,9 +120,7 @@ fun InterceptBackGestureForBottomSheetNavigator() {
             if (!sheetState.isAnimationRunning) {
                 scope.launch(SupervisorJob()) {
                     if (previousRoute !in listOf(null, indexId)) {
-                        sheetState.hideTemporarily()
-                        navController.popBackStack()
-                        sheetState.expand()
+                        bottomSheetNavigator.navigateUp()
                     } else {
                         sheetState.hide()
                     }
