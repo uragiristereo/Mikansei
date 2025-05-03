@@ -44,6 +44,9 @@ class BottomSheetNavigator internal constructor(
     internal val sheetState: SheetState3,
     internal val coroutineScope: CoroutineScope,
 ) {
+    val isVisible: Boolean
+        get() = sheetState.isVisible
+
     fun runHiding(block: suspend () -> Unit) {
         coroutineScope.launch {
             sheetState.hide()
