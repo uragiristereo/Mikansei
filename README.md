@@ -46,11 +46,11 @@
 
 ## Download
 
-- Version: **1.0.4** (104)
-- Updated at: 2025-02-08
+- Version: **1.0.5** (105)
+- Updated at: 2025-05-03
 - Min. Android version: Android 5.0 Lollipop (API level 21)
-- Download: [APK](https://github.com/uragiristereo/Mikansei/releases/download/104-1.0.4/Mikansei_v1.0.4_104-oss.apk)
-- Changelogs: [here](https://github.com/uragiristereo/Mikansei/releases/tag/104-1.0.4)
+- Download: [APK](https://github.com/uragiristereo/Mikansei/releases/download/105-1.0.5/Mikansei_v1.0.5_105-oss.apk)
+- Changelogs: [here](https://github.com/uragiristereo/Mikansei/releases/tag/105-1.0.5)
 
 ## Tech Stacks
 
