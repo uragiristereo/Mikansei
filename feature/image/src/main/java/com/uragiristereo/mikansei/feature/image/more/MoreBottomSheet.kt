@@ -61,6 +61,7 @@ internal fun MoreBottomSheet(
     onExpandClick: () -> Unit,
     onAddToClick: (Post) -> Unit,
     onShareClick: (Post) -> Unit,
+    onTagClick: (String) -> Unit,
     viewModel: MoreBottomSheetViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
@@ -242,6 +243,7 @@ internal fun MoreBottomSheet(
                     MoreTagsRow(
                         tags = viewModel.tags,
                         tagsCount = tagsCount,
+                        onTagClick = onTagClick,
                         modifier = Modifier
                             .padding(bottom = 16.dp)
                             .windowInsetsPadding(WindowInsets.navigationBarsIgnoringVisibility),
