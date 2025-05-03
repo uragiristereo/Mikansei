@@ -36,6 +36,7 @@ import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
+import com.uragiristereo.mikansei.core.ui.LocalSharedViewModel
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeVertical
@@ -48,6 +49,7 @@ import com.uragiristereo.mikansei.core.ui.navigation.NestedNavigationRoutes
 import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import com.uragiristereo.mikansei.core.ui.rememberWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.rememberWindowSizeVertical
+import com.uragiristereo.mikansei.core.ui.shared.SharedViewModel
 import com.uragiristereo.mikansei.ui.content.MainContentResponsive
 import com.uragiristereo.mikansei.ui.core.ShareDownloadDialog
 import com.uragiristereo.mikansei.ui.navgraphs.bottomNavGraph
@@ -66,6 +68,7 @@ fun MainScreen(
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    val sharedViewModel = koinViewModel<SharedViewModel>()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val backStack by navController.currentBackStack.collectAsState()
@@ -227,6 +230,7 @@ fun MainScreen(
                 LocalWindowSizeVertical provides rememberWindowSizeVertical(),
                 LocalScaffoldState provides scaffoldState,
                 LocalSnackbarHostState provides scaffoldState.snackbarHostState,
+                LocalSharedViewModel provides sharedViewModel,
             ),
         ) {
             SetSystemBarsColors(Color.Transparent)

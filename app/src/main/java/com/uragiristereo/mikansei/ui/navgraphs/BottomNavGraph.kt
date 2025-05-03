@@ -19,5 +19,5 @@ fun NavGraphBuilder.bottomNavGraph(
 
     savedSearchesBottomRoute(mainNavController)
 
-    imageBottomRoute()
+    imageBottomRoute(mainNavController)
 }

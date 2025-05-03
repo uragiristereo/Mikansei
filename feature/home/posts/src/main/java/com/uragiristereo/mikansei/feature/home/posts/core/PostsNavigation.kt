@@ -12,6 +12,7 @@ import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
+import com.uragiristereo.mikansei.core.ui.LocalSharedViewModel
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
@@ -58,6 +59,7 @@ fun NavGraphBuilder.postsRoute(
         },
     ) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val sharedViewModel = LocalSharedViewModel.current
 
         val isRouteFirstEntry = remember {
             // 3 from list of null, MainRoute.Home, HomeRoute.Posts
@@ -68,6 +70,7 @@ fun NavGraphBuilder.postsRoute(
 
         LaunchedEffect(key1 = args.tags) {
             onCurrentTagsChange(args.tags)
+            sharedViewModel.currentTags = args.tags
         }
 
         PostsScreen(

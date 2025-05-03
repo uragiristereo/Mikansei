@@ -8,6 +8,7 @@ import com.uragiristereo.mikansei.core.network.NetworkModule
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepositoryImpl
 import com.uragiristereo.mikansei.core.product.ProductModule
+import com.uragiristereo.mikansei.core.ui.shared.SharedViewModel
 import com.uragiristereo.mikansei.feature.about.aboutModule
 import com.uragiristereo.mikansei.feature.filters.FiltersViewModel
 import com.uragiristereo.mikansei.feature.home.HomeModule
@@ -56,5 +57,6 @@ object MikanseiModule {
         viewModelOf(::MoreViewModel)
         viewModelOf(::FiltersViewModel)
         viewModelOf(::SettingsViewModel)
+        viewModelOf(::SharedViewModel)
     }
 }

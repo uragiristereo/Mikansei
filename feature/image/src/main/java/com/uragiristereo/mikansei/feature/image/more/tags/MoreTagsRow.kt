@@ -23,6 +23,7 @@ import com.uragiristereo.mikansei.core.resources.R
 internal fun MoreTagsRow(
     tags: SnapshotStateList<Tag>,
     tagsCount: Int,
+    onTagClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -50,7 +51,9 @@ internal fun MoreTagsRow(
                 MoreTagItem(
                     tag = tag,
                     selected = false,
-                    onSelectedChange = { },
+                    onSelectedChange = {
+                        onTagClick(tag.name)
+                    },
                     modifier = Modifier.padding(bottom = 12.dp),
                 )
             }
