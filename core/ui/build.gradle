@@ -35,4 +35,5 @@ dependencies {
     implementation(libs.timber)
     api(libs.androidx.navigation)
     implementation(libs.bundles.coil)
+    implementation(libs.bundles.core)
 }
