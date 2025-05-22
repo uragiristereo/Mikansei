@@ -10,6 +10,7 @@ import com.uragiristereo.mikansei.core.danbooru.model.profile.DanbooruProfile
 import com.uragiristereo.mikansei.core.danbooru.model.saved_search.DanbooruSavedSearch
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTag
 import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagAutoComplete
+import com.uragiristereo.mikansei.core.danbooru.model.tag.DanbooruTagPayload
 import com.uragiristereo.mikansei.core.danbooru.model.user.DanbooruUser
 import com.uragiristereo.mikansei.core.danbooru.model.user.field.DanbooruUserField
 import com.uragiristereo.mikansei.core.model.Constants
@@ -18,6 +19,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -47,10 +49,12 @@ interface DanbooruApi {
     ): Response<List<DanbooruTagAutoComplete>>
 
     @NoAuth
-    @GET("/tags.json")
+    @Headers("X-HTTP-Method-Override: get")
+    @POST("/tags.json")
     suspend fun getTags(
-        @Query("search[name][]") tags: List<String>,
+        @Query("_method") method: String = "get",
         @Query("limit") limit: Int = 100,
+        @Body body: DanbooruTagPayload,
     ): Response<List<DanbooruTag>>
 
     @GET("/favorites.json")
@@ -83,6 +87,7 @@ interface DanbooruApi {
         @Query("search[creator_id]") creatorId: Int,
         @Header("force-refresh") forceRefresh: Boolean,
         @Header("force-cache") forceCache: Boolean = true,
+        @Header("force-load-from-cache") forceLoadFromCache: Boolean = false,
     ): Response<List<DanbooruFavoriteGroup>>
 
     @POST("/favorites.json")

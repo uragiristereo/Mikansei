@@ -1,9 +1,9 @@
 package com.uragiristereo.mikansei.feature.user.manage.core
 
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.manage.ManageUserScreen
@@ -20,13 +20,14 @@ fun NavGraphBuilder.manageRoute(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 fun NavGraphBuilder.manageBottomRoute(mainNavController: NavHostController) {
     composable<UserRoute.Switch> {
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
+        InterceptBackGestureForBottomSheetNavigator()
+
         SwitchAccountContent(
-            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            onDismiss = bottomSheetNavigator::hideSheet,
             onNavigateToManage = {
                 bottomSheetNavigator.runHiding {
                     mainNavController.navigate(UserRoute.Manage)

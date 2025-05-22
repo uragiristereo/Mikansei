@@ -4,13 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
@@ -34,11 +31,14 @@ internal fun VideoControls(
     sliderValueFmt: String,
     elapsedFmt: String,
     totalFmt: String,
+    muted: Boolean,
+    noSound: Boolean,
     onSeek: (Float) -> Unit,
     onJump: () -> Unit,
     onPlayingChange: (Boolean) -> Unit,
     onDownloadClick: () -> Unit,
     onShareClick: () -> Unit,
+    onToggleMuted: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sliderInteractionSource = remember { MutableInteractionSource() }
@@ -81,22 +81,27 @@ internal fun VideoControls(
             backgroundColor = Color.Transparent,
             contentColor = Color.White,
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                PlayPauseButton(
-                    isPlaying = isPlaying,
-                    onPlayClick = {
-                        onPlayingChange(true)
-                    },
-                    onPauseClick = {
-                        onPlayingChange(false)
-                    },
-                )
+            PlayPauseButton(
+                isPlaying = isPlaying,
+                onPlayClick = {
+                    onPlayingChange(true)
+                },
+                onPauseClick = {
+                    onPlayingChange(false)
+                },
+            )
 
-                DownloadShareRow(onDownloadClick, onShareClick)
-            }
+            SoundButton(
+                noSound = noSound,
+                muted = muted,
+                onToggleMuted = onToggleMuted,
+            )
+
+            DownloadShareRow(
+                onDownloadClick = onDownloadClick,
+                onShareClick = onShareClick,
+                modifier = Modifier.weight(1f, fill = true),
+            )
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -24,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.PostHeader
+import com.uragiristereo.mikansei.core.ui.extension.thenIf
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheetContentPadding
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.column.FavoriteGroupsColumn
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.CreateNewFavGroupButton
 import kotlinx.coroutines.launch
@@ -36,6 +40,7 @@ fun AddToFavGroupContent(
     viewModel: AddToFavGroupViewModel = koinViewModel(),
 ) {
     val snackbarHostState = LocalSnackbarHostState.current
+    val bottomSheetNavigator = LocalBottomSheetNavigator.current
     val scope = rememberCoroutineScope()
     val post = viewModel.post
 
@@ -43,7 +48,7 @@ fun AddToFavGroupContent(
         modifier = Modifier
             .fillMaxWidth()
             .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
-            .padding(top = 16.dp),
+            .bottomSheetContentPadding(),
     ) {
         PostHeader(
             title = stringResource(id = R.string.add_to_favorite_group),
@@ -54,53 +59,65 @@ fun AddToFavGroupContent(
 
         Divider()
 
-        when {
-            viewModel.isLoading && viewModel.items.isEmpty() -> {
-                // Loading indicator
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp),
-                    content = {
-                        CircularProgressIndicator()
-                    },
-                )
-            }
+        Box(
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .thenIf(viewModel.allowAnimation) {
+                    animateContentSize()
+                }
+        ) {
+            when {
+                viewModel.isLoading && viewModel.items == null || (!bottomSheetNavigator.isVisible && !viewModel.hasCache) -> {
+                    // Loading indicator
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 16.dp),
+                        content = {
+                            CircularProgressIndicator()
+                        },
+                    )
+                }
 
-            viewModel.items.isEmpty() -> {
-                // Item empty label
-                Text(
-                    text = stringResource(id = R.string.no_favorite_groups),
-                    color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            vertical = 32.dp,
-                            horizontal = 16.dp,
-                        ),
-                )
-            }
+                viewModel.items?.isEmpty() == true -> {
+                    // Item empty label
+                    Text(
+                        text = stringResource(id = R.string.no_favorite_groups),
+                        color = LocalContentColor.current.copy(alpha = ContentAlpha.medium),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = 32.dp,
+                                horizontal = 16.dp,
+                            ),
+                    )
+                }
 
-            else -> {
-                FavoriteGroupsColumn(
-                    items = viewModel.items,
-                    enabled = !viewModel.isLoading && !viewModel.isRemoving,
-                    onAddClick = { item ->
-                        scope.launch {
-                            onDismiss()
-                            viewModel.addPostToFavoriteGroup(
-                                item = item,
-                                onShowMessage = { message, duration ->
-                                    snackbarHostState.showSnackbar(message = message, duration = duration)
+                else -> {
+                    viewModel.items?.let {
+                        FavoriteGroupsColumn(
+                            items = it,
+                            enabled = !viewModel.isLoading && !viewModel.isRemoving,
+                            onAddClick = { item ->
+                                scope.launch {
+                                    onDismiss()
+                                    viewModel.addPostToFavoriteGroup(
+                                        item = item,
+                                        onShowMessage = { message, duration ->
+                                            snackbarHostState.showSnackbar(
+                                                message = message,
+                                                duration = duration
+                                            )
+                                        }
+                                    )
                                 }
-                            )
-                        }
-                    },
-                    onRemoveClick = viewModel::removePostFromFavoriteGroup,
-                    modifier = Modifier.weight(1f, fill = false),
-                )
+                            },
+                            onRemoveClick = viewModel::removePostFromFavoriteGroup,
+                        )
+                    }
+                }
             }
         }
 

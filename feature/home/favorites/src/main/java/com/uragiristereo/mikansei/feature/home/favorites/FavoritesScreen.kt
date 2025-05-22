@@ -37,7 +37,6 @@ import com.uragiristereo.mikansei.core.ui.composable.Banner
 import com.uragiristereo.mikansei.core.ui.composable.Scaffold2
 import com.uragiristereo.mikansei.core.ui.extension.horizontalOnly
 import com.uragiristereo.mikansei.core.ui.extension.verticalOnly
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
 import com.uragiristereo.mikansei.feature.home.favorites.core.FavoritesTopAppBar
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingIndicator
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
@@ -77,8 +76,6 @@ fun FavoritesScreen(
             }
         }
     }
-
-    InterceptBackGestureForBottomSheetNavigator()
 
     Scaffold2(
         scaffoldState = scaffoldState,

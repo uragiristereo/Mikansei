@@ -1,6 +1,8 @@
 package com.uragiristereo.mikansei.core.ui.composable
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.uragiristereo.mikansei.core.ui.extension.thenIfNotNull
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ClickableSection(
     title: String,
@@ -32,14 +38,32 @@ fun ClickableSection(
     padStart: Boolean = true,
     verticalPadding: Dp = 12.dp,
     horizontalPadding: Dp = 16.dp,
+    onLongClick: (() -> Unit)? = null,
 ) {
+    val hapticFeedback = LocalHapticFeedback.current
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .clickable(
-                onClick = onClick,
-                enabled = enabled,
+            .thenIfNotNull(
+                element = onLongClick,
+                ifTrue = {
+                    combinedClickable(
+                        onClick = onClick,
+                        onLongClick = {
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                            it()
+                        },
+                        enabled = enabled,
+                    )
+                },
+                ifFalse = {
+                    clickable(
+                        onClick = onClick,
+                        enabled = enabled,
+                    )
+                },
             )
             .padding(
                 horizontal = horizontalPadding,
@@ -111,6 +135,7 @@ fun ClickableSection(
     padStart: Boolean = true,
     verticalPadding: Dp = 12.dp,
     horizontalPadding: Dp = 16.dp,
+    onLongClick: (() -> Unit)? = null,
 ) {
     ClickableSection(
         title = title,
@@ -121,5 +146,6 @@ fun ClickableSection(
         padStart = padStart,
         verticalPadding = verticalPadding,
         horizontalPadding = horizontalPadding,
+        onLongClick = onLongClick,
     )
 }

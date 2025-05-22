@@ -73,7 +73,7 @@ fun PostHeader(
             AsyncImage(
                 model = previewUrl,
                 contentDescription = null,
-                contentScale = ContentScale.FillWidth,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .height(72.dp)
                     .aspectRatio(aspectRatio)

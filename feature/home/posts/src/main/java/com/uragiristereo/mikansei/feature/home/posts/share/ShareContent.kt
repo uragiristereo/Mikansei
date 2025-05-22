@@ -24,6 +24,8 @@ import com.uragiristereo.mikansei.core.model.danbooru.ShareOption
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
 import com.uragiristereo.mikansei.core.ui.composable.PostHeader
+import com.uragiristereo.mikansei.core.ui.extension.copyToClipboard
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheetContentPadding
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -39,15 +41,14 @@ fun ShareContent(
     val scope = rememberCoroutineScope()
     val post = viewModel.navArgs.post
     val showThumbnail = viewModel.navArgs.showThumbnail
+    val source = post.source
 
     Column(
         modifier = modifier
             .fillMaxWidth()
             .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
-            .padding(
-                top = 16.dp,
-                bottom = 8.dp,
-            ),
+            .bottomSheetContentPadding()
+            .padding(bottom = 8.dp),
     ) {
         PostHeader(
             title = stringResource(id = R.string.share_post),
@@ -96,7 +97,54 @@ fun ShareContent(
                     context.startActivity(shareIntent)
                 }
             },
+            onLongClick = {
+                context.copyToClipboard(
+                    text = viewModel.postLink,
+                    message = "Post link copied to clipboard!",
+                )
+            },
         )
+
+        if (source != null) {
+            val isSourceLink = source.startsWith("http")
+
+            ClickableSection(
+                title = when {
+                    isSourceLink -> "Source link"
+                    else -> "Source"
+                },
+                subtitle = source,
+                icon = painterResource(
+                    id = when {
+                        isSourceLink -> R.drawable.link
+                        else -> R.drawable.description
+                    },
+                ),
+                onClick = {
+                    scope.launch {
+                        onDismiss()
+
+                        val intent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, source)
+                            type = "text/plain"
+                        }
+
+                        val shareIntent = Intent.createChooser(intent, null)
+                        context.startActivity(shareIntent)
+                    }
+                },
+                onLongClick = {
+                    context.copyToClipboard(
+                        text = source,
+                        message = when {
+                            isSourceLink -> "Source link copied to clipboard!"
+                            else -> "Source copied to clipboard!"
+                        },
+                    )
+                },
+            )
+        }
 
         post.medias.scaled?.let {
             it.apply {

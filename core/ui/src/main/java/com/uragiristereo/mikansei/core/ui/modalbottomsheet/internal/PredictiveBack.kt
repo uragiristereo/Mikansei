@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-package com.uragiristereo.mikansei.core.ui.modalbottomsheet
+package com.uragiristereo.mikansei.core.ui.modalbottomsheet.internal
 
-import androidx.compose.material.SwipeableDefaults
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.Easing
 
-fun resistanceConfig(
-    anchors: Set<Float>,
-    factorAtMin: Float = SwipeableDefaults.StandardResistanceFactor,
-    factorAtMax: Float = SwipeableDefaults.StandardResistanceFactor
-): ResistanceConfig? {
-    return if (anchors.size <= 1) {
-        null
-    } else {
-        val basis = anchors.maxOrNull()!! - anchors.minOrNull()!!
-        ResistanceConfig(basis, factorAtMin, factorAtMax)
-    }
+private val PredictiveBackEasing: Easing = CubicBezierEasing(0.1f, 0.1f, 0f, 1f)
+
+internal object PredictiveBack {
+    internal fun transform(progress: Float) = PredictiveBackEasing.transform(progress)
 }
+

@@ -28,6 +28,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
 import com.uragiristereo.mikansei.core.ui.composable.PostHeader
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheetContentPadding
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -48,10 +49,8 @@ fun FavGroupMoreContent(
         modifier = Modifier
             .fillMaxWidth()
             .windowInsetsPadding(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
-            .padding(
-                top = 16.dp,
-                bottom = 8.dp,
-            ),
+            .bottomSheetContentPadding()
+            .padding(bottom = 8.dp),
     ) {
         PostHeader(
             title = stringResource(id = R.string.favorite_group),

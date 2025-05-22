@@ -18,7 +18,6 @@ import com.uragiristereo.mikansei.feature.home.posts.core.postsRoute
 
 fun NavGraphBuilder.homeGraph(
     navController: NavHostController,
-    onNavigatedBackByGesture: (Boolean) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
 ) {
     navigation<MainRoute.Home>(
@@ -57,7 +56,6 @@ fun NavGraphBuilder.homeGraph(
     ) {
         postsRoute(
             mainNavController = navController,
-            onNavigatedBackByGesture = onNavigatedBackByGesture,
             onCurrentTagsChange = onCurrentTagsChange,
         )
 

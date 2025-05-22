@@ -6,6 +6,7 @@ import com.uragiristereo.mikansei.core.model.danbooru.Rating
 
 fun DanbooruPost.toPost(): Post {
     val original = mediaAsset.variants!!.first { it.type == "original" }
+    val preview = mediaAsset.variants.firstOrNull { it.type == "720x720" }?.toPostMedia()
 
     return Post(
         id = id!!,
@@ -13,6 +14,7 @@ fun DanbooruPost.toPost(): Post {
         uploaderId = uploaderId,
         source = when {
             pixivId != null -> "https://pixiv.net/artworks/$pixivId"
+            source?.isEmpty() == true -> null
             else -> source
         },
         rating = when (rating) {
@@ -39,18 +41,26 @@ fun DanbooruPost.toPost(): Post {
         downScore = downScore,
         favorites = favCount,
         type = when (original.fileExt) {
-            in listOf("jpg", "jpeg", "png") -> Post.Type.IMAGE
+            in listOf("jpg", "jpeg", "png", "avif", "webp") -> Post.Type.IMAGE
             "gif" -> Post.Type.ANIMATED_GIF
             in listOf("mp4", "webm") -> Post.Type.VIDEO
             "zip" -> Post.Type.UGOIRA
-            else -> Post.Type.IMAGE
+            "swf" -> Post.Type.FLASH
+            else -> Post.Type.UNSUPPORTED
         },
         medias = Post.Medias(
             original = original.toPostMedia(),
             scaled = mediaAsset.variants.firstOrNull { it.type == "sample" }?.toPostMedia(),
-            preview = mediaAsset.variants.first { it.type == "720x720" }.toPostMedia(),
+            preview = when {
+                preview != null -> preview
+                original.fileExt == "swf" -> flashPreviewPostMedia
+                else -> throw UnsupportedOperationException("Unsupported post type, got: ${original.fileExt}")
+            },
         ),
-        aspectRatio = UnitConverter.coerceAspectRatio(imageWidth, imageHeight),
+        aspectRatio = when {
+            original.fileExt == "swf" -> 528f / 720f
+            else -> UnitConverter.coerceAspectRatio(imageWidth, imageHeight)
+        },
         tags = tagString.split(' '),
     )
 }
@@ -73,3 +83,10 @@ fun DanbooruVariant.toPostMedia(): Post.Media {
         fileType = fileExt,
     )
 }
+
+private val flashPreviewPostMedia = Post.Media(
+    url = "https://danbooru.donmai.us/images/flash-preview.png",
+    width = 528,
+    height = 720,
+    fileType = "swf",
+)

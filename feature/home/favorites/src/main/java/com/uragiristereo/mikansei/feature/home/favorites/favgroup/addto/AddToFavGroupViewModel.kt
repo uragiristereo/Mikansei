@@ -10,12 +10,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
+import com.uragiristereo.mikansei.core.domain.usecase.GetCachedFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.FavoriteGroup
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.coroutines.EmptyCoroutineContext
@@ -24,16 +26,23 @@ class AddToFavGroupViewModel(
     savedStateHandle: SavedStateHandle,
     private val danbooruRepository: DanbooruRepository,
     private val getFavoriteGroupsUseCase: GetFavoriteGroupsUseCase,
+    private val getCachedFavoriteGroupsUseCase: GetCachedFavoriteGroupsUseCase,
 ) : ViewModel() {
     val post = savedStateHandle.toRoute<HomeRoute.AddToFavGroup>(PostNavType).post
 
-    var items by mutableStateOf<List<FavoriteGroup>>(listOf())
+    var items by mutableStateOf<List<FavoriteGroup>?>(null)
         private set
 
     var isLoading by mutableStateOf(true)
         private set
 
     var isRemoving by mutableStateOf(false)
+        private set
+
+    var allowAnimation by mutableStateOf(false)
+        private set
+
+    var hasCache by mutableStateOf(false)
         private set
 
     init {
@@ -55,15 +64,25 @@ class AddToFavGroupViewModel(
         viewModelScope.launch {
             isLoading = true
 
-            val result = getFavoriteGroupsUseCase(forceRefresh = false)
+            getCachedFavoriteGroupsUseCase.invoke().collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        if (result.data.isFromCache) {
+                            hasCache = true
+                        }
 
-            when (result) {
-                is Result.Success -> {
-                    items = mapResult(result.data)
+                        allowAnimation = !result.data.isFromCache
+
+                        if (allowAnimation) {
+                            delay(timeMillis = 100)
+                        }
+
+                        items = mapResult(result.data.items)
+                    }
+
+                    is Result.Failed -> Timber.d(result.message)
+                    is Result.Error -> Timber.d(result.t.toString())
                 }
-
-                is Result.Failed -> Timber.d(result.message)
-                is Result.Error -> Timber.d(result.t.toString())
             }
 
             isLoading = false
@@ -111,7 +130,13 @@ class AddToFavGroupViewModel(
                 isLoading = true
             }
 
-            when (val result = getFavoriteGroupsUseCase(forceRefresh = true)) {
+            val result = getFavoriteGroupsUseCase.invoke(
+                forceRefresh = true,
+                forceLoadFromCache = false,
+                shouldLoadThumbnails = false,
+            )
+
+            when (result) {
                 is Result.Success -> {
                     items = mapResult(result.data)
 

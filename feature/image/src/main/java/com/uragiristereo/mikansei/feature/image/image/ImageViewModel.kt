@@ -1,13 +1,17 @@
 package com.uragiristereo.mikansei.feature.image.image
 
+import android.content.Context
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.navigation.toRoute
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
@@ -19,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 class ImageViewModel(
     savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
+    danbooruRepository: DanbooruRepository,
 ) : ViewModel() {
     val post = savedStateHandle.toRoute<MainRoute.Image>(PostNavType).post
 
@@ -33,6 +38,9 @@ class ImageViewModel(
     val isGesturesAllowed by derivedStateOf {
         currentZoom == 1f
     }
+
+    private val customTabsIntentBuilder = CustomTabsIntent.Builder()
+    private val postLink = danbooruRepository.host.parsePostLink(post.id)
 
     fun onExpandImage() {
         expandButtonVisible = false
@@ -57,5 +65,11 @@ class ImageViewModel(
 
             else -> Pair(width, height)
         }
+    }
+
+    fun openPostInBrowser(context: Context) {
+        customTabsIntentBuilder
+            .build()
+            .launchUrl(context, postLink.toUri())
     }
 }

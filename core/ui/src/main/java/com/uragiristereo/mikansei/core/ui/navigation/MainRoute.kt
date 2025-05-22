@@ -39,6 +39,16 @@ sealed interface MainRoute : NavRoute {
 
     @Serializable
     data object SavedSearches : MainRoute
+
+    @Serializable
+    data class More(
+        val post: Post,
+    ) : MainRoute
+
+    @Serializable
+    data class TagActions(
+        val tag: String,
+    ) : MainRoute
 }
 
 val NestedNavigationRoutes = listOf(

@@ -40,7 +40,10 @@ fun FavoritesGrid(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier.fillMaxSize(),
     ) {
-        items(items) { item ->
+        items(
+            items = items,
+            key = { it.id },
+        ) { item ->
             FavoriteItem(
                 item = item,
                 onClick = {
@@ -50,6 +53,7 @@ fun FavoritesGrid(
                     hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                     onFavGroupLongClick(item)
                 },
+                modifier = Modifier.animateItem(),
             )
         }
     }

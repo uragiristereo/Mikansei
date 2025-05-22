@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
@@ -27,7 +26,8 @@ import com.uragiristereo.mikansei.core.product.component.ProductNavigationBarSpa
 import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState2
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.SheetValue
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.rememberModalBottomSheetState3
 import com.uragiristereo.mikansei.feature.filters.appbars.FiltersTopAppBar
 import com.uragiristereo.mikansei.feature.filters.column.FiltersColumn
 import com.uragiristereo.mikansei.feature.filters.core.FiltersAddTagsDialog
@@ -42,7 +42,7 @@ internal fun FiltersScreen(
     viewModel: FiltersViewModel = koinViewModel(),
     onNavigateBack: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState2(initialValue = ModalBottomSheetValue.Hidden)
+    val sheetState = rememberModalBottomSheetState3()
     val scope = rememberCoroutineScope()
     val columnState = rememberLazyListState()
 
@@ -91,7 +91,7 @@ internal fun FiltersScreen(
         },
         floatingActionButton = {
             FiltersFab(
-                visible = sheetState.targetValue == ModalBottomSheetValue.Hidden,
+                visible = sheetState.targetValue == SheetValue.Hidden,
                 isDeleteButton = viewModel.selectedItems.isNotEmpty(),
                 onAdd = viewModel::showDialog,
                 onDelete = {

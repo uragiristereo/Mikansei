@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.filters.core
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.navigationBars
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,21 +16,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.uragiristereo.mikansei.core.product.component.ProductModalBottomSheet
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
-import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheetState2
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.ModalBottomSheet3
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.SheetState3
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun FiltersModalBottomSheet(
-    sheetState: ModalBottomSheetState2,
+    sheetState: SheetState3,
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ProductModalBottomSheet(
+    ModalBottomSheet3(
         sheetState = sheetState,
-        content = {
+        modifier = modifier,
+    ) { contentPadding ->
+        Column(modifier = Modifier.padding(contentPadding)) {
             Text(
                 text = stringResource(id = R.string.delete_confirmation_message),
                 style = MaterialTheme.typography.caption,
@@ -55,7 +56,6 @@ internal fun FiltersModalBottomSheet(
                         insets = WindowInsets.navigationBars.only(sides = WindowInsetsSides.Bottom),
                     ),
             )
-        },
-        modifier = modifier,
-    )
+        }
+    }
 }

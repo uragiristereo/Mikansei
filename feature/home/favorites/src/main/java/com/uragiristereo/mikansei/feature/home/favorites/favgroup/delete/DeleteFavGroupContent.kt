@@ -25,13 +25,14 @@ import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
+import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheetContentPadding
 
 @Composable
 fun DeleteFavGroupContent(
     favoriteGroup: Favorite,
     onDeleteClick: () -> Unit,
 ) {
-    Column {
+    Column(modifier = Modifier.bottomSheetContentPadding()) {
         Text(
             text = buildAnnotatedString {
                 val format = stringResource(id = R.string.delete_favorite_group_confirmation).split("%s")
@@ -54,10 +55,8 @@ fun DeleteFavGroupContent(
             color = MaterialTheme.colors.onBackground.copy(alpha = ContentAlpha.medium),
             modifier = Modifier
                 .padding(
-                    top = 24.dp,
-                    bottom = 8.dp,
-                    start = 16.dp,
-                    end = 16.dp,
+                    vertical = 8.dp,
+                    horizontal = 16.dp,
                 ),
         )
 

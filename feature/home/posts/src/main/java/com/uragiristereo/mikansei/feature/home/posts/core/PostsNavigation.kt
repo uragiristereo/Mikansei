@@ -3,7 +3,6 @@ package com.uragiristereo.mikansei.feature.home.posts.core
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
@@ -13,6 +12,7 @@ import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
+import com.uragiristereo.mikansei.core.ui.LocalSharedViewModel
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
@@ -27,12 +27,9 @@ import com.uragiristereo.mikansei.feature.home.posts.share.ShareContent
 @SuppressLint("RestrictedApi")
 fun NavGraphBuilder.postsRoute(
     mainNavController: NavHostController,
-    onNavigatedBackByGesture: (Boolean) -> Unit,
     onCurrentTagsChange: (String) -> Unit,
 ) {
     val lambdaOnNavigateImage: (Post) -> Unit = { item ->
-        onNavigatedBackByGesture(false)
-
         mainNavController.navigate(
             MainRoute.Image(post = item)
         )
@@ -62,6 +59,7 @@ fun NavGraphBuilder.postsRoute(
         },
     ) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val sharedViewModel = LocalSharedViewModel.current
 
         val isRouteFirstEntry = remember {
             // 3 from list of null, MainRoute.Home, HomeRoute.Posts
@@ -72,9 +70,8 @@ fun NavGraphBuilder.postsRoute(
 
         LaunchedEffect(key1 = args.tags) {
             onCurrentTagsChange(args.tags)
+            sharedViewModel.currentTags = args.tags
         }
-
-        InterceptBackGestureForBottomSheetNavigator()
 
         PostsScreen(
             isRouteFirstEntry = isRouteFirstEntry,
@@ -97,21 +94,17 @@ fun NavGraphBuilder.postsRoute(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
-fun NavGraphBuilder.postsBottomRoute(
-    mainNavController: NavHostController,
-    onNavigatedBackByGesture: (Boolean) -> Unit,
-) {
+fun NavGraphBuilder.postsBottomRoute(mainNavController: NavHostController) {
     composable<HomeRoute.PostMore>(PostNavType) {
         val lambdaOnDownload = LocalLambdaOnDownload.current
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
+        InterceptBackGestureForBottomSheetNavigator()
+
         PostMoreContent(
-            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            onDismiss = bottomSheetNavigator::hideSheet,
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
-                    onNavigatedBackByGesture(false)
-
                     mainNavController.navigate(
                         MainRoute.Image(post)
                     )
@@ -135,12 +128,12 @@ fun NavGraphBuilder.postsBottomRoute(
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val lambdaOnShare = LocalLambdaOnShare.current
 
+        InterceptBackGestureForBottomSheetNavigator()
+
         ShareContent(
-            onDismiss = bottomSheetNavigator.bottomSheetState::hide,
+            onDismiss = bottomSheetNavigator::hideSheet,
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
-                    onNavigatedBackByGesture(false)
-
                     mainNavController.navigate(
                         MainRoute.Image(post)
                     )
