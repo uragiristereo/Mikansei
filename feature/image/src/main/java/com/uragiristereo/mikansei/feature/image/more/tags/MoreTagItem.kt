@@ -1,8 +1,5 @@
 package com.uragiristereo.mikansei.feature.image.more.tags
 
-import android.os.Build
-import android.widget.Toast
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -18,16 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.getCategoryColor
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
+import com.uragiristereo.mikansei.core.ui.extension.copyToClipboard
 
 @Composable
 internal fun MoreTagItem(
@@ -45,7 +40,6 @@ internal fun MoreTagItem(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MoreTagItem(
     tag: Tag,
@@ -53,10 +47,8 @@ internal fun MoreTagItem(
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val clipboardManager = LocalClipboardManager.current
     val hapticFeedback = LocalHapticFeedback.current
     val context = LocalContext.current
-
     val isLight = MaterialTheme.colors.isLight
 
     val tagColor = remember(tag, isLight) {
@@ -83,14 +75,10 @@ internal fun MoreTagItem(
                     onSelectedChange(!selected)
                 },
                 onLongClick = {
-                    clipboardManager.setText(AnnotatedString(tag.name))
-                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-
-                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
-                        Toast
-                            .makeText(context, "Tag copied to the clipboard!", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                    context.copyToClipboard(
+                        text = tag.name,
+                        message = "Tag copied to clipboard!",
+                    )
                 }
             )
             .padding(

@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.search.result
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -28,7 +27,6 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Tag
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.getCategoryColor
 import com.uragiristereo.mikansei.core.resources.R
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun SearchResultItem(
     tag: Tag,

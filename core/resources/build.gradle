@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.core.resources"
+    namespace = "com.uragiristereo.mikansei.core.resources"
 }

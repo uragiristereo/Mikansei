@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.home.favorites.grid
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -27,7 +26,6 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.product.component.ProductPostPlaceholder
 import com.uragiristereo.mikansei.core.resources.R
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FavoriteItem(
     item: Favorite,

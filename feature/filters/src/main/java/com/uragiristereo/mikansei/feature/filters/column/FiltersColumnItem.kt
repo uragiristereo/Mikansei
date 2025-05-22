@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.filters.column
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -32,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun FiltersColumnItem(
     text: String,

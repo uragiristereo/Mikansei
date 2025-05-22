@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.feature.search"
+    namespace = "com.uragiristereo.mikansei.feature.search"
 
     buildFeatures {
-        compose true
+        compose = true
     }
 
     compileOptions {
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
     }
 }
 

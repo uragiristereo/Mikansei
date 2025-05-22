@@ -5,10 +5,10 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.feature.home"
+    namespace = "com.uragiristereo.mikansei.feature.home"
 
     buildFeatures {
-        compose true
+        compose = true
     }
 }
 

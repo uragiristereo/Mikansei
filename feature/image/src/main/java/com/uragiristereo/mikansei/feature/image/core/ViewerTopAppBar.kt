@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.image.core
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.extension.copyToClipboard
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ViewerTopAppBar(
     postId: Int,

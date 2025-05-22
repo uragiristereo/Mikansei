@@ -12,6 +12,7 @@ val Context.versionName: String
     get() = packageManager
         .getPackageInfo(packageName, 0)
         .versionName
+        .orEmpty()
 
 @Suppress("DEPRECATION")
 val Context.versionCode: Long
