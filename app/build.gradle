@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.uragiristereo.mikansei"
-        targetSdk 35
+        targetSdk 36
         versionName "1.0.5"
         versionCode 105
 
