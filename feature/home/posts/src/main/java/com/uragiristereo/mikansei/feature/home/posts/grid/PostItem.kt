@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.home.posts.grid
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun PostItem(
     post: Post,
