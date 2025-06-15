@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.saved_searches.list
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +18,6 @@ import com.uragiristereo.mikansei.core.ui.composable.SettingTip
 import com.uragiristereo.mikansei.core.ui.entity.ImmutableList
 import com.uragiristereo.mikansei.core.ui.extension.plus
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SavedSearchesList(
     isLoading: Boolean,

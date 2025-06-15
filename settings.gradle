@@ -7,13 +7,13 @@ pluginManagement {
 }
 
 plugins {
-    id("com.android.settings") version("8.5.2")
+    id("com.android.settings") version("8.10.1")
 }
 
 android {
-    buildToolsVersion "34.0.0"
-    compileSdk 34
-    minSdk 21
+    buildToolsVersion = "36.0.0"
+    compileSdk = 36
+    minSdk = 21
 }
 
 dependencyResolutionManagement {
@@ -22,7 +22,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://www.jitpack.io" }
+        maven { url = "https://www.jitpack.io" }
     }
 }
 

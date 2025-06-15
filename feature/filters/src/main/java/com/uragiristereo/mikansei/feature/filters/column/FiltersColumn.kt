@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.filters.column
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.composable.SettingTip
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun FiltersColumn(
     columnState: LazyListState,

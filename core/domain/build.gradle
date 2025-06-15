@@ -6,10 +6,10 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.core.domain"
+    namespace = "com.uragiristereo.mikansei.core.domain"
 
     buildFeatures {
-        compose true
+        compose = true
     }
 }
 

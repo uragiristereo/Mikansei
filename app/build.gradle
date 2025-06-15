@@ -9,18 +9,18 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei"
+    namespace = "com.uragiristereo.mikansei"
 
     defaultConfig {
         applicationId "com.uragiristereo.mikansei"
-        targetSdk 34
+        targetSdk 36
         versionName "1.0.5"
         versionCode 105
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables {
-            useSupportLibrary true
+            useSupportLibrary = true
         }
     }
 
@@ -30,8 +30,8 @@ android {
         }
 
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled = true
+            shrinkResources = true
             proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     "proguard-rules.pro",
@@ -43,15 +43,15 @@ android {
 
     productFlavors {
         oss {
-            dimension "env"
+            dimension = "env"
 
             firebaseCrashlytics {
-                mappingFileUploadEnabled false
+                mappingFileUploadEnabled = false
             }
         }
 
         play {
-            dimension "env"
+            dimension = "env"
         }
     }
 
@@ -63,12 +63,12 @@ android {
     }
 
     buildFeatures {
-        compose true
-        buildConfig true
+        compose = true
+        buildConfig = true
     }
 
     compileOptions {
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
     }
 
     packagingOptions {

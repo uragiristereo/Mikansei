@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.core.model"
+    namespace = "com.uragiristereo.mikansei.core.model"
 
     buildFeatures {
-        compose true
+        compose = true
     }
 
     compileOptions {
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
     }
 }
 

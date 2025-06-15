@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.user.manage
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -35,7 +34,6 @@ import com.uragiristereo.mikansei.core.ui.navigation.UserRoute
 import com.uragiristereo.mikansei.feature.user.manage.core.ProfileItem
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ManageUserScreen(
     onNavigate: (NavRoute) -> Unit,

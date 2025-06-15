@@ -132,7 +132,7 @@ fun NewOrEditSavedSearchScreen(
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Uri,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -150,7 +150,7 @@ fun NewOrEditSavedSearchScreen(
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Uri,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                 ),
                 modifier = Modifier
                     .fillMaxWidth()

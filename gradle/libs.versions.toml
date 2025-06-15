@@ -1,44 +1,46 @@
 [versions]
-gradle = "8.5.2"
+gradle = "8.10.1"
 
 # Kotlin
-kotlin = "2.0.20"
-ksp = "2.0.20-1.0.25"
-serialization = "1.6.3"
+kotlin = "2.1.21"
+ksp = "2.1.21-2.0.1"
+serialization = "1.8.1"
 
 # AndroidX
-lifecycle = "2.8.6"
-room = "2.6.1"
-media3 = "1.4.1"
-core = "1.13.1"
-savedstate = "1.2.1"
+lifecycle = "2.9.1"
+room = "2.7.1"
+media3 = "1.7.1"
+core = "1.16.0"
+savedstate = "1.3.0"
 splashscreen = "1.0.1"
-datastore = "1.1.1"
+datastore = "1.1.7"
 browser = "1.8.0"
-navigation = "2.8.5"
+navigation = "2.9.0"
 
 # Jetpack Compose
-compose = "1.7.3"
-accompanist = "0.36.0"
-activity = "1.9.2"
-constraintlayout = "1.0.1"
+compose = "1.8.2"
+accompanist = "0.36.0" #*
+activity = "1.10.1"
+constraintlayout = "1.1.1"
 
 # Retrofit
-okhttp = "5.0.0-alpha.11"
-retrofit = "2.11.0"
+okhttp = "5.0.0-alpha.16"
+retrofit = "3.0.0"
 
 # Firebase & Google Mobile Services (GMS)
-firebase-bom = "33.4.0"
-firebase-crashlytics = "3.0.2"
+firebase-bom = "33.15.0"
+firebase-crashlytics = "3.0.4"
 gms = "4.4.2"
 
 # Etc.
-koin = "3.5.6"
-coil = "2.7.0"
+koin = "3.5.6" #*
+coil = "2.7.0" #*
 junit = "4.13.2"
-desugar-jdk-libs = "2.1.2"
+desugar-jdk-libs = "2.1.5"
 touchimageview = "3.2.1"
 timber = "5.0.1"
+
+#* breaking changes ahead
 
 
 [plugins]

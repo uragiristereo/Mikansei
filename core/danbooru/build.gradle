@@ -5,10 +5,10 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.core.danbooru"
+    namespace = "com.uragiristereo.mikansei.core.danbooru"
 
     compileOptions {
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
     }
 }
 

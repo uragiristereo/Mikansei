@@ -313,7 +313,7 @@ class SheetState3(
             skipHiddenState: Boolean,
             skipDismissToPartiallyExpanded: Boolean,
         ) =
-            Saver<SheetState3, Array<*>>(
+            Saver<SheetState3, Array<Any>>(
                 save = { arrayOf(it.currentValue, it.shouldVisible) },
                 restore = { savedValue ->
                     val initialValue = savedValue[0] as SheetValue

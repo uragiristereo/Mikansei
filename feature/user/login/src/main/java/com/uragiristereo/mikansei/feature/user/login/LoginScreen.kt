@@ -150,7 +150,7 @@ internal fun LoginScreen(
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
-                    autoCorrect = false,
+                    autoCorrectEnabled = false,
                 ),
                 label = {
                     Text(text = "Name")

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace "com.uragiristereo.mikansei.feature.search.mock"
+    namespace = "com.uragiristereo.mikansei.feature.search.mock"
 }
 
 kotlin {
