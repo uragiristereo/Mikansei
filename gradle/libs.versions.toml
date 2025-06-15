@@ -7,7 +7,7 @@ ksp = "2.1.21-2.0.1"
 serialization = "1.8.1"
 
 # AndroidX
-lifecycle = "2.9.0"
+lifecycle = "2.9.1"
 room = "2.7.1"
 media3 = "1.7.1"
 core = "1.16.0"
@@ -24,12 +24,12 @@ activity = "1.10.1"
 constraintlayout = "1.1.1"
 
 # Retrofit
-okhttp = "5.0.0-alpha.14"
+okhttp = "5.0.0-alpha.16"
 retrofit = "3.0.0"
 
 # Firebase & Google Mobile Services (GMS)
-firebase-bom = "33.14.0"
-firebase-crashlytics = "3.0.3"
+firebase-bom = "33.15.0"
+firebase-crashlytics = "3.0.4"
 gms = "4.4.2"
 
 # Etc.
