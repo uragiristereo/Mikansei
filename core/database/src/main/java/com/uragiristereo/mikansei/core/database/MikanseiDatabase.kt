@@ -27,9 +27,10 @@ import com.uragiristereo.mikansei.core.database.user_delegation.UserDelegationRo
         SessionPostRow::class,
         TagCategoryRow::class,
     ],
-    version = 2,
+    version = 3,
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = From1To2MigrationSpec::class),
+        AutoMigration(from = 2, to = 3),
     ],
 )
 @TypeConverters(DatabaseConverters::class)

@@ -10,20 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.C
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.ui.PlayerView
 import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
@@ -31,44 +27,28 @@ import com.uragiristereo.mikansei.feature.image.video.controls.VideoControls
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 import kotlin.math.abs
 
 @Composable
-@androidx.annotation.OptIn(UnstableApi::class)
 fun VideoPost(
     areAppBarsVisible: Boolean,
+    gesturesEnabled: Boolean,
+    allowPlaying: Boolean,
+    offsetY: () -> Float,
+    onOffsetYChange: (Float) -> Unit,
     onAppBarsVisibleChange: (Boolean) -> Unit,
     onNavigateBack: (Boolean) -> Unit,
     onMoreClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: VideoViewModel = koinViewModel(),
+    viewModel: VideoViewModel,
 ) {
-    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
     val videoMuted by viewModel.videoMuted.collectAsStateWithLifecycle()
 
     val player = viewModel.exoPlayer
-
-    val playerView = remember {
-        PlayerView(context).apply {
-            this.player = player
-            useController = false
-            controllerAutoShow = false
-
-            videoSurfaceView?.isHapticFeedbackEnabled = false
-
-            player.volume = when {
-                videoMuted -> 0f
-                else -> 1f
-            }
-
-            player.prepare()
-        }
-    }
 
     DisposableEffect(key1 = lifecycleOwner) {
         var positionUpdaterJob: Job? = null
@@ -88,7 +68,7 @@ fun VideoPost(
                         )
 
                         viewModel.onPlaybackStateChange(
-                            isBuffering = lastPosition == viewModel.elapsed && viewModel.isPlaying,
+                            isBuffering = lastPosition == viewModel.elapsed && player.playWhenReady,
                         )
 
                         if (viewModel.isPlaying) {
@@ -104,7 +84,7 @@ fun VideoPost(
 
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> player.playWhenReady = false
-                Lifecycle.Event.ON_RESUME -> player.playWhenReady = viewModel.isPlaying
+                Lifecycle.Event.ON_RESUME -> player.playWhenReady = viewModel.isPlaying && allowPlaying
                 else -> {}
             }
         }
@@ -117,8 +97,8 @@ fun VideoPost(
         }
     }
 
-    LaunchedEffect(key1 = viewModel.isPlaying) {
-        player.playWhenReady = viewModel.isPlaying
+    LaunchedEffect(key1 = viewModel.isPlaying, key2 = allowPlaying) {
+        player.playWhenReady = viewModel.isPlaying && allowPlaying
     }
 
     LaunchedEffect(key1 = videoMuted) {
@@ -137,7 +117,7 @@ fun VideoPost(
                 exit = fadeOut(),
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = -abs(viewModel.offsetY.value)
+                        translationY = -abs(offsetY())
                     },
             ) {
                 VideoTopAppBar(
@@ -156,11 +136,11 @@ fun VideoPost(
                 exit = fadeOut(),
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = abs(viewModel.offsetY.value)
+                        translationY = abs(offsetY())
                     },
             ) {
                 VideoControls(
-                    isPlaying = viewModel.isPlaying,
+                    isPlaying = viewModel.isPlaying && allowPlaying,
                     sliderValue = viewModel.sliderValue,
                     elapsed = viewModel.elapsed,
                     total = viewModel.total,
@@ -187,7 +167,7 @@ fun VideoPost(
         modifier = modifier.fillMaxSize(),
         content = {
             VideoPlayer(
-                playerView = playerView,
+                exoPlayer = player,
                 isBuffering = viewModel.isBuffering,
                 onTap = {
                      onAppBarsVisibleChange(!areAppBarsVisible)
@@ -200,12 +180,13 @@ fun VideoPost(
                 },
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = viewModel.offsetY.value
+                        translationY = offsetY()
                     }
                     .background(Color.Black)
                     .verticallyDraggable(
-                        enabled = true,
-                        offsetY = viewModel.offsetY,
+                        enabled = gesturesEnabled,
+                        offsetY = offsetY,
+                        onOffsetYChange = onOffsetYChange,
                         onDragExit = {
                             onAppBarsVisibleChange(true)
                             onNavigateBack(true)

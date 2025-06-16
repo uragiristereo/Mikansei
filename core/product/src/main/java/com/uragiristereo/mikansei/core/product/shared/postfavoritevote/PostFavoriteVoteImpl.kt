@@ -29,7 +29,7 @@ open class PostFavoriteVoteImpl : ViewModel(), PostFavoriteVote, KoinComponent {
     private val activeUser: Profile
         get() = userRepository.active.value
 
-    override var post = savedStateHandle.toRoute<MainRoute.Image>(PostNavType).post
+    override var post = savedStateHandle.toRoute<MainRoute.More>(PostNavType).post
 
     private val post2 by lazy { post }
 

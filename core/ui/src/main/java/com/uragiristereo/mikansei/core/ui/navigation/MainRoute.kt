@@ -15,6 +15,8 @@ sealed interface MainRoute : NavRoute {
     @Serializable
     data class Image(
         val post: Post,
+        val targetPostId: Int,
+        val sessionId: String,
     ) : MainRoute
 
     @Serializable
@@ -49,6 +51,10 @@ sealed interface MainRoute : NavRoute {
     data class TagActions(
         val tag: String,
     ) : MainRoute
+
+    companion object {
+        val a = "aaa"
+    }
 }
 
 val NestedNavigationRoutes = listOf(

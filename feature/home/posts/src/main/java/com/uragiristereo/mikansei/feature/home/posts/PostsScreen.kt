@@ -39,6 +39,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
@@ -46,6 +47,7 @@ import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
+import com.uragiristereo.mikansei.core.ui.LocalSharedViewModel
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeVertical
 import com.uragiristereo.mikansei.core.ui.WindowSize
@@ -87,6 +89,7 @@ internal fun PostsScreen(
     val windowSizeVertical = LocalWindowSizeVertical.current
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
     val scaffoldState = LocalScaffoldState.current
+    val sharedViewModel = LocalSharedViewModel.current
 
     val scope = rememberCoroutineScope()
     val gridState = viewModel.gridState
@@ -95,6 +98,8 @@ internal fun PostsScreen(
         onRefresh = viewModel::retryGetPosts,
     )
     val activeUser by viewModel.activeUser.collectAsState()
+    val session by viewModel.session.collectAsState()
+    val scrollOffset = density.run { (-100).dp.toPx().roundToInt() }
 
     val isMoreLoadingVisible by remember {
         derivedStateOf {
@@ -118,11 +123,7 @@ internal fun PostsScreen(
 
     val shouldEnableTopAppBarScroll by remember {
         derivedStateOf {
-            when {
-                windowSizeVertical == WindowSize.COMPACT && windowSizeHorizontal == WindowSize.MEDIUM -> true
-                windowSizeVertical == WindowSize.MEDIUM && windowSizeHorizontal == WindowSize.COMPACT -> true
-                else -> false
-            }
+            windowSizeVertical == WindowSize.COMPACT || windowSizeHorizontal == WindowSize.COMPACT
         }
     }
 
@@ -136,10 +137,12 @@ internal fun PostsScreen(
         viewModel.event.collect { event ->
             when (event) {
                 is PostsViewModel.Event.OnJumpToPosition -> {
-                    gridState.scrollToItem(
-                        index = event.session.scrollIndex,
-                        scrollOffset = event.session.scrollOffset,
-                    )
+                    if (sharedViewModel.targetPostId == null) {
+                        gridState.scrollToItem(
+                            index = event.session.scrollIndex,
+                            scrollOffset = event.session.scrollOffset,
+                        )
+                    }
                 }
             }
         }
@@ -326,7 +329,7 @@ internal fun PostsScreen(
                             PostsGrid(
                                 posts = viewModel.posts,
                                 gridState = gridState,
-                                canLoadMore = viewModel.canLoadMore,
+                                canLoadMore = session.canLoadMore,
                                 contentPadding = innerPadding,
                                 onItemClick = onNavigateImage,
                                 onItemLongPress = { post ->
@@ -382,6 +385,26 @@ internal fun PostsScreen(
                                 .background(MaterialTheme.colors.background),
                         )
                     }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(
+        key1 = sharedViewModel.targetPostId,
+        key2 = gridState.layoutInfo.visibleItemsInfo,
+    ) {
+        val targetPostId = sharedViewModel.targetPostId
+
+        if (targetPostId != null) {
+            val visibleItemsKeys = gridState.layoutInfo.visibleItemsInfo.map { it.key }
+
+            if (visibleItemsKeys.isNotEmpty() && targetPostId !in visibleItemsKeys) {
+                val targetIndex = viewModel.getIndexFromPostId(targetPostId)
+
+                if (targetIndex != null) {
+                    gridState.scrollToItem(index = targetIndex, scrollOffset = scrollOffset)
+                    sharedViewModel.targetPostId = null
                 }
             }
         }

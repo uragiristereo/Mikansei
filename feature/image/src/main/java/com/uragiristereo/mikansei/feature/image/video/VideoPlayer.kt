@@ -18,13 +18,16 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.media3.ui.PlayerView
+import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import com.uragiristereo.mikansei.feature.image.databinding.LayoutVideoPlayerBinding
 
+@androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun VideoPlayer(
-    playerView: PlayerView,
+    exoPlayer: ExoPlayer,
     isBuffering: Boolean,
     onTap: () -> Unit,
     onDoubleTap: () -> Unit,
@@ -35,8 +38,19 @@ fun VideoPlayer(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize(),
     ) {
-        AndroidView(
-            factory = { playerView },
+        AndroidViewBinding(
+            factory = { inflater, parent, attachToParent ->
+                LayoutVideoPlayerBinding.inflate(inflater, parent, attachToParent).apply {
+                    playerView.apply {
+                        useController = false
+                        controllerShowTimeoutMs = 0
+                        controllerAutoShow = false
+                        videoSurfaceView?.isHapticFeedbackEnabled = false
+                        player = exoPlayer
+                        exoPlayer.prepare()
+                    }
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
         )
 

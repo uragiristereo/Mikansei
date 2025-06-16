@@ -9,7 +9,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalSharedViewModel
@@ -21,20 +20,16 @@ import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchesRoute
 import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
+import com.uragiristereo.mikansei.feature.home.posts.PostsViewModel
 import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreContent
 import com.uragiristereo.mikansei.feature.home.posts.share.ShareContent
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("RestrictedApi")
 fun NavGraphBuilder.postsRoute(
     mainNavController: NavHostController,
     onCurrentTagsChange: (String) -> Unit,
 ) {
-    val lambdaOnNavigateImage: (Post) -> Unit = { item ->
-        mainNavController.navigate(
-            MainRoute.Image(post = item)
-        )
-    }
-
     composable<HomeRoute.Posts>(
         enterTransition = {
             when (initialState.destination.id) {
@@ -60,6 +55,7 @@ fun NavGraphBuilder.postsRoute(
     ) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val sharedViewModel = LocalSharedViewModel.current
+        val viewModel = koinViewModel<PostsViewModel>()
 
         val isRouteFirstEntry = remember {
             // 3 from list of null, MainRoute.Home, HomeRoute.Posts
@@ -76,7 +72,15 @@ fun NavGraphBuilder.postsRoute(
         PostsScreen(
             isRouteFirstEntry = isRouteFirstEntry,
             onNavigateBack = mainNavController::navigateUp,
-            onNavigateImage = lambdaOnNavigateImage,
+            onNavigateImage = { item ->
+                mainNavController.navigate(
+                    MainRoute.Image(
+                        post = item,
+                        targetPostId = item.id,
+                        sessionId = viewModel.sessionId,
+                    )
+                )
+            },
             onNavigateMore = { post ->
                 bottomSheetNavigator.navigate {
                     it.navigate(HomeRoute.PostMore(post))
@@ -106,7 +110,11 @@ fun NavGraphBuilder.postsBottomRoute(mainNavController: NavHostController) {
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
                     mainNavController.navigate(
-                        MainRoute.Image(post)
+                        MainRoute.Image(
+                            post = post,
+                            targetPostId = post.id,
+                            sessionId = "",
+                        )
                     )
                 }
             },
@@ -135,7 +143,11 @@ fun NavGraphBuilder.postsBottomRoute(mainNavController: NavHostController) {
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
                     mainNavController.navigate(
-                        MainRoute.Image(post)
+                        MainRoute.Image(
+                            post = post,
+                            targetPostId = post.id,
+                            sessionId = "",
+                        )
                     )
                 }
             },

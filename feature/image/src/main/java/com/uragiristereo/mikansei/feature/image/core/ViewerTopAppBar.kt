@@ -33,10 +33,10 @@ import com.uragiristereo.mikansei.core.ui.extension.copyToClipboard
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun ViewerTopAppBar(
-    postId: Int,
+    postId: Int?,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    actions: @Composable RowScope.() -> Unit,
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     val context = LocalContext.current
     val hapticFeedback = LocalHapticFeedback.current
@@ -46,22 +46,24 @@ internal fun ViewerTopAppBar(
         backgroundColor = Color.Transparent,
         contentColor = Color.White,
         title = {
-            Text(
-                text = "#$postId",
-                color = Color.White,
-                modifier = Modifier.combinedClickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onLongClick = {
-                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                        context.copyToClipboard(
-                            text = postId.toString(),
-                            message = "Post ID copied to clipboard!",
-                        )
-                    },
-                    onClick = {},
-                ),
-            )
+            if (postId != null) {
+                Text(
+                    text = "#$postId",
+                    color = Color.White,
+                    modifier = Modifier.combinedClickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onLongClick = {
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                            context.copyToClipboard(
+                                text = postId.toString(),
+                                message = "Post ID copied to clipboard!",
+                            )
+                        },
+                        onClick = {},
+                    ),
+                )
+            }
         },
         navigationIcon = {
             IconButton(

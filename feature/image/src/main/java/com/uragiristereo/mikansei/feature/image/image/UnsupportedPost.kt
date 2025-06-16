@@ -37,16 +37,18 @@ import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageBottomAppBar
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageTopAppBar
-import org.koin.androidx.compose.koinViewModel
 import kotlin.math.abs
 
 @Composable
 internal fun UnsupportedPost(
+    gesturesEnabled: Boolean,
+    offsetY: () -> Float,
+    onOffsetYChange: (Float) -> Unit,
     onNavigateBack: (Boolean) -> Unit,
     onMoreClick: () -> Unit,
     onShareClick: () -> Unit,
+    viewModel: ImageViewModel,
     modifier: Modifier = Modifier,
-    viewModel: ImageViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
@@ -61,7 +63,7 @@ internal fun UnsupportedPost(
                 exit = fadeOut(),
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = -abs(viewModel.offsetY.value)
+                        translationY = -abs(offsetY())
                     },
             ) {
                 ImageTopAppBar(
@@ -85,7 +87,7 @@ internal fun UnsupportedPost(
                 exit = fadeOut(),
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = abs(viewModel.offsetY.value)
+                        translationY = abs(offsetY())
                     },
             ) {
                 ImageBottomAppBar(
@@ -108,7 +110,7 @@ internal fun UnsupportedPost(
                 .fillMaxSize()
                 .background(Color.Black)
                 .graphicsLayer {
-                    translationY = viewModel.offsetY.value
+                    translationY = offsetY()
                 }
                 .pointerInput(key1 = Unit) {
                     detectTapGestures(
@@ -118,8 +120,9 @@ internal fun UnsupportedPost(
                     )
                 }
                 .verticallyDraggable(
-                    enabled = true,
-                    offsetY = viewModel.offsetY,
+                    enabled = gesturesEnabled,
+                    offsetY = offsetY,
+                    onOffsetYChange = onOffsetYChange,
                     onDragExit = {
                         onNavigateBack(true)
                     },

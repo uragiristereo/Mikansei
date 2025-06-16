@@ -2,6 +2,7 @@ package com.uragiristereo.mikansei.feature.image.image
 
 import android.graphics.drawable.Animatable
 import android.os.Build
+import android.os.Parcelable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -9,9 +10,14 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.decode.GifDecoder
@@ -31,19 +37,23 @@ import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageBottomAppBar
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageTopAppBar
 import com.uragiristereo.mikansei.feature.image.image.core.ImageLoadingState
-import org.koin.androidx.compose.koinViewModel
 import timber.log.Timber
 import kotlin.math.abs
 
 @Composable
 internal fun ImagePost(
+    areAppBarsVisible: Boolean,
+    gesturesEnabled: Boolean,
+    offsetY: () -> Float,
+    onOffsetYChange: (Float) -> Unit,
     onNavigateBack: (Boolean) -> Unit,
     onMoreClick: () -> Unit,
     onShareClick: () -> Unit,
-    areAppBarsVisible: Boolean,
     onAppBarsVisibleChange: (Boolean) -> Unit,
+    onZoomChange: (Float) -> Unit,
+    onPinchGestureChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ImageViewModel = koinViewModel(),
+    viewModel: ImageViewModel,
 ) {
     val context = LocalContext.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
@@ -51,9 +61,19 @@ internal fun ImagePost(
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
     val post = remember { viewModel.post }
-    val imageView = remember(viewModel) { TouchImageView(context) }
+    var imageViewState by rememberSaveable {
+        mutableStateOf<Parcelable?>(null)
+    }
+
+    val imageView = remember(viewModel) {
+        TouchImageView(context).apply {
+            imageViewState?.let(::onRestoreInstanceState)
+        }
+    }
+
     var imageDisposable: Disposable? = remember(viewModel) { null }
-    val expandLoadingVisible = viewModel.loadingState == ImageLoadingState.FROM_EXPAND && post.medias.hasScaled
+    val expandLoadingVisible =
+        viewModel.loadingState == ImageLoadingState.FROM_EXPAND && post.medias.hasScaled
 
     val imageRequestBuilder = remember(viewModel) {
         val resizedImageSize = viewModel.resizeImage(
@@ -149,7 +169,7 @@ internal fun ImagePost(
             setOnTouchImageViewListener(
                 object : OnTouchImageViewListener {
                     override fun onMove() {
-                        viewModel.currentZoom = imageView.currentZoom
+                        onZoomChange(imageView.currentZoom)
                     }
                 }
             )
@@ -157,6 +177,7 @@ internal fun ImagePost(
 
         onDispose {
             imageDisposable?.dispose()
+            imageViewState = imageView.onSaveInstanceState()
         }
     }
 
@@ -175,7 +196,7 @@ internal fun ImagePost(
                 exit = fadeOut(),
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = -abs(viewModel.offsetY.value)
+                        translationY = -abs(offsetY())
                     },
             ) {
                 ImageTopAppBar(
@@ -199,7 +220,7 @@ internal fun ImagePost(
                 exit = fadeOut(),
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = abs(viewModel.offsetY.value)
+                        translationY = abs(offsetY())
                     },
             ) {
                 ImageBottomAppBar(
@@ -224,11 +245,21 @@ internal fun ImagePost(
             onLongPress = onMoreClick,
             modifier = Modifier
                 .graphicsLayer {
-                    translationY = viewModel.offsetY.value
+                    translationY = offsetY()
+                }
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            val event = awaitPointerEvent()
+                            val activePointers = event.changes.count { it.pressed }
+                            onPinchGestureChange(activePointers >= 2)
+                        }
+                    }
                 }
                 .verticallyDraggable(
-                    enabled = viewModel.isGesturesAllowed,
-                    offsetY = viewModel.offsetY,
+                    enabled = gesturesEnabled,
+                    offsetY = offsetY,
+                    onOffsetYChange = onOffsetYChange,
                     onDragExit = {
                         onAppBarsVisibleChange(true)
                         onNavigateBack(true)

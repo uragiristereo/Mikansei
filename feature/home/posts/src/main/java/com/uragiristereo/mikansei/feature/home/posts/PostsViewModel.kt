@@ -4,15 +4,12 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
-import androidx.lifecycle.viewmodel.compose.saveable
 import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
@@ -42,7 +39,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.UUID
 
-@OptIn(SavedStateHandleSaveableApi::class)
 class PostsViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
@@ -61,12 +57,7 @@ class PostsViewModel(
     var posts by mutableStateOf<ImmutableList<Post>>(immutableListOf())
         private set
 
-    private var page by savedStateHandle.saveable { mutableIntStateOf(1) }
-
     var loading by mutableStateOf(PostsLoadingState.FROM_LOAD)
-
-    var canLoadMore by savedStateHandle.saveable { mutableStateOf(false) }
-        private set
 
     var errorMessage by mutableStateOf<String?>(null)
 
@@ -90,15 +81,19 @@ class PostsViewModel(
     val gridState = LazyStaggeredGridState()
 
     // session
-    private val sessionId = savedStateHandle.get<String>(Constants.STATE_KEY_POSTS_SESSION_ID).run {
+    val sessionId = savedStateHandle.get<String>(Constants.STATE_KEY_POSTS_SESSION_ID).run {
         this ?: UUID.randomUUID().toString()
     }
 
-    private val session = sessionRepository.getSession(sessionId)
+    val session = sessionRepository.getSession(sessionId)
+        .filterNotNull()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = null,
+            initialValue = Session(
+                id = sessionId,
+                tags = tags,
+            ),
         )
 
     private val isLoadFromSession = savedStateHandle["IS_LOAD_FROM_SESSION"] ?: false
@@ -132,14 +127,14 @@ class PostsViewModel(
         postsJob?.cancel()
 
         postsJob = viewModelScope.launch {
-            when {
-                refresh -> page = 1
-                else -> page += 1
+            val newPage = when {
+                refresh -> 1
+                else -> session.value.page + 1
             }
 
             loading = when {
                 posts.value.isNotEmpty() && refresh -> PostsLoadingState.FROM_REFRESH
-                posts.value.isNotEmpty() && page > 1 -> PostsLoadingState.FROM_LOAD_MORE
+                posts.value.isNotEmpty() && newPage > 1 -> PostsLoadingState.FROM_LOAD_MORE
                 else -> PostsLoadingState.FROM_LOAD
             }
 
@@ -148,7 +143,7 @@ class PostsViewModel(
             val result = getPostsUseCase(
                 sessionId = sessionId,
                 tags = tags,
-                page = page,
+                page = newPage,
             )
 
             when (result) {
@@ -163,7 +158,10 @@ class PostsViewModel(
                         shouldRetryGettingPosts = false
                         getPosts(refresh = true)
                     } else {
-                        canLoadMore = result.data.canLoadMore
+                        updateSessionResult(
+                            page = newPage,
+                            canLoadMore = result.data.canLoadMore,
+                        )
                         errorMessage = null
                         shouldRetryGettingPosts = false
                         firstLoad = false
@@ -214,13 +212,28 @@ class PostsViewModel(
     }
 
     fun updateSessionPosition(index: Int, offset: Int) {
-        session.value?.let {
-            viewModelScope.launch {
-                savedStateHandle["IS_LOAD_FROM_SESSION"] = true
-                sessionRepository.updateSession(
-                    it.copy(scrollIndex = index, scrollOffset = offset)
-                )
-            }
+        viewModelScope.launch {
+            savedStateHandle["IS_LOAD_FROM_SESSION"] = true
+            sessionRepository.updateSession(
+                session.value.copy(scrollIndex = index, scrollOffset = offset)
+            )
+        }
+    }
+
+    private suspend fun updateSessionResult(page: Int, canLoadMore: Boolean) {
+        sessionRepository.updateSession(
+            session.value.copy(
+                page = page,
+                canLoadMore = canLoadMore,
+            )
+        )
+    }
+
+    fun getIndexFromPostId(postId: Int): Int? {
+        val index = posts.value.indexOfFirst { it.id == postId }.takeIf { it != -1 }
+        return when {
+            index != null -> index + 1
+            else -> null
         }
     }
 

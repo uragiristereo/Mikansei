@@ -42,6 +42,7 @@ fun NavGraphBuilder.imageRoute(
         },
     ) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val sharedViewModel = LocalSharedViewModel.current
 
         ImageScreen(
             onNavigateBack = { navigatedBackByGesture ->
@@ -53,6 +54,9 @@ fun NavGraphBuilder.imageRoute(
                 bottomSheetNavigator.navigate {
                     it.navigate(MainRoute.More(post))
                 }
+            },
+            onTargetPostChange = { postId ->
+                sharedViewModel.targetPostId = postId
             },
         )
     }

@@ -7,4 +7,6 @@ import androidx.lifecycle.ViewModel
 
 class SharedViewModel : ViewModel() {
     var currentTags by mutableStateOf("")
+
+    var targetPostId by mutableStateOf<Int?>(null)
 }
