@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.image.video
 
+import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -18,13 +18,18 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.media3.ui.PlayerView
+import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.feature.image.databinding.LayoutVideoPlayerBinding
 
+@androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun VideoPlayer(
-    playerView: PlayerView,
+    player: ExoPlayer,
+    postType: Post.Type,
     isBuffering: Boolean,
     onTap: () -> Unit,
     onDoubleTap: () -> Unit,
@@ -35,10 +40,16 @@ fun VideoPlayer(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize(),
     ) {
-        AndroidView(
-            factory = { playerView },
-            modifier = Modifier.fillMaxWidth(),
-        )
+        AndroidViewBinding(LayoutVideoPlayerBinding::inflate) {
+            val playerView = when (postType) {
+                Post.Type.UGOIRA -> playerViewGl
+                else -> playerViewNative
+            }
+            playerView.visibility = View.VISIBLE
+            playerView.player = player
+            playerView.videoSurfaceView?.isHapticFeedbackEnabled = false
+            player.prepare()
+        }
 
         Box(
             modifier = Modifier
