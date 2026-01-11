@@ -7,6 +7,10 @@ plugins {
 android {
     namespace = "com.uragiristereo.mikansei.feature.image"
 
+    defaultConfig {
+        consumerProguardFile("vp9-decoder-rules.pro")
+    }
+
     buildFeatures {
         compose = true
     }
