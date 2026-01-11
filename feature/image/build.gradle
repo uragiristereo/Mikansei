@@ -13,6 +13,7 @@ android {
 
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 
     compileOptions {
@@ -37,6 +38,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
     implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.compose.ui.viewbinding)
     implementation(libs.bundles.koin)
     implementation(libs.bundles.coil)
     implementation(libs.coil.gif)
