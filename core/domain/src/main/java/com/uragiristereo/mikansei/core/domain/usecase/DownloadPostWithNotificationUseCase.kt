@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.ContentValues
 import android.content.Context
@@ -29,6 +30,7 @@ class DownloadPostWithNotificationUseCase(
 ) {
     private val resolver = context.contentResolver
 
+    @SuppressLint("MissingPermission")
     suspend operator fun invoke(post: Post) {
         val notificationId = downloadRepository.incrementNotificationCounter()
         val notificationManager = NotificationManagerCompat.from(context)
@@ -59,12 +61,11 @@ class DownloadPostWithNotificationUseCase(
                 cancelDownloadPendingIntent,
             )
 
-        val file = File(
-            when (post.type) {
-                Post.Type.UGOIRA -> post.medias.scaled!!.url
-                else -> post.medias.original.url
-            }
-        )
+        val url = when (post.type) {
+            Post.Type.UGOIRA -> post.medias.scaled!!.url
+            else -> post.medias.original.url
+        }
+        val file = File(url)
 
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
         val tempFileUri = File(FileUtil.getTempDir(context), file.name).toUri()
@@ -112,7 +113,7 @@ class DownloadPostWithNotificationUseCase(
 
         downloadRepository.download(
             postId = post.id,
-            url = post.medias.original.url,
+            url = url,
             uri = tempFileUri,
             sample = 1200L,
         )

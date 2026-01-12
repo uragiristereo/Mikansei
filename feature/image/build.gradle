@@ -7,8 +7,13 @@ plugins {
 android {
     namespace = "com.uragiristereo.mikansei.feature.image"
 
+    defaultConfig {
+        consumerProguardFile("vp9-decoder-rules.pro")
+    }
+
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 
     compileOptions {
@@ -33,6 +38,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.androidx.compose)
     implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.compose.ui.viewbinding)
     implementation(libs.bundles.koin)
     implementation(libs.bundles.coil)
     implementation(libs.coil.gif)

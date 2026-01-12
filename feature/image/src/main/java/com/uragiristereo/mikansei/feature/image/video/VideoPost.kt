@@ -10,12 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -23,7 +21,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.C
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.ui.PlayerView
 import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
@@ -46,29 +43,11 @@ fun VideoPost(
     modifier: Modifier = Modifier,
     viewModel: VideoViewModel = koinViewModel(),
 ) {
-    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
     val videoMuted by viewModel.videoMuted.collectAsStateWithLifecycle()
 
     val player = viewModel.exoPlayer
-
-    val playerView = remember {
-        PlayerView(context).apply {
-            this.player = player
-            useController = false
-            controllerAutoShow = false
-
-            videoSurfaceView?.isHapticFeedbackEnabled = false
-
-            player.volume = when {
-                videoMuted -> 0f
-                else -> 1f
-            }
-
-            player.prepare()
-        }
-    }
 
     DisposableEffect(key1 = lifecycleOwner) {
         var positionUpdaterJob: Job? = null
@@ -114,6 +93,7 @@ fun VideoPost(
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
             positionUpdaterJob?.cancel()
+            player.release()
         }
     }
 
@@ -187,7 +167,8 @@ fun VideoPost(
         modifier = modifier.fillMaxSize(),
         content = {
             VideoPlayer(
-                playerView = playerView,
+                player = player,
+                postType = viewModel.post.type,
                 isBuffering = viewModel.isBuffering,
                 onTap = {
                      onAppBarsVisibleChange(!areAppBarsVisible)
