@@ -18,4 +18,10 @@ data class SessionRow(
 
     @ColumnInfo(name = "scroll_offset", defaultValue = "0")
     val scrollOffset: Int = 0,
+
+    @ColumnInfo(name = "page", defaultValue = "1")
+    val page: Int = 1,
+
+    @ColumnInfo(name = "canLoadMore", defaultValue = "0")
+    val canLoadMore: Boolean = false,
 )

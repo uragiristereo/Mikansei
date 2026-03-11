@@ -5,6 +5,10 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import kotlinx.coroutines.flow.Flow
 
 class PostRepositoryImpl(private val postDao: PostDao) : PostRepository {
+    override fun getPost(postId: Int): Flow<Post?> {
+        return postDao.getPost(postId)
+    }
+
     override fun getUploaderName(postId: Int): Flow<String?> {
         return postDao.getUploaderName(postId)
     }
