@@ -26,6 +26,7 @@ import com.uragiristereo.mikansei.core.database.user_delegation.UserDelegationRo
         PostRow::class,
         SessionPostRow::class,
         TagCategoryRow::class,
+        MemberRow::class,
     ],
     version = 2,
     autoMigrations = [
@@ -45,4 +46,6 @@ abstract class MikanseiDatabase : RoomDatabase() {
     abstract fun sessionPostDao(): SessionPostDao
 
     abstract fun tagCategoryDao(): TagCategoryDao
+
+    abstract fun memberDao(): MemberDao
 }
