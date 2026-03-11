@@ -5,4 +5,6 @@ data class Session(
     val tags: String,
     val scrollIndex: Int = 0,
     val scrollOffset: Int = 0,
+    val page: Int = 1,
+    val canLoadMore: Boolean = false,
 )

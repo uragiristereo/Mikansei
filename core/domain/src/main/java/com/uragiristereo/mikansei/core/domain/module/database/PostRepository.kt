@@ -4,6 +4,8 @@ import com.uragiristereo.mikansei.core.model.danbooru.Post
 import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
+    fun getPost(postId: Int): Flow<Post?>
+
     fun getUploaderName(postId: Int): Flow<String?>
 
     suspend fun update(post: Post)
