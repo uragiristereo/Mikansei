@@ -4,9 +4,13 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.uragiristereo.mikansei.core.database.member.MemberDao
+import com.uragiristereo.mikansei.core.database.member.MemberRow
 import com.uragiristereo.mikansei.core.database.migration.From1To2MigrationSpec
 import com.uragiristereo.mikansei.core.database.post.PostDao
 import com.uragiristereo.mikansei.core.database.post.PostRow
+import com.uragiristereo.mikansei.core.database.post_favorite_vote.PostFavoriteVoteDao
+import com.uragiristereo.mikansei.core.database.post_favorite_vote.PostFavoriteVoteRow
 import com.uragiristereo.mikansei.core.database.session.SessionDao
 import com.uragiristereo.mikansei.core.database.session.SessionRow
 import com.uragiristereo.mikansei.core.database.session_post.SessionPostDao
@@ -29,9 +33,10 @@ import com.uragiristereo.mikansei.core.database.user_delegation.UserDelegationRo
         PostFavoriteVoteRow::class,
         MemberRow::class,
     ],
-    version = 2,
+    version = 3,
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = From1To2MigrationSpec::class),
+        AutoMigration(from = 2, to = 3),
     ],
 )
 @TypeConverters(DatabaseConverters::class)
