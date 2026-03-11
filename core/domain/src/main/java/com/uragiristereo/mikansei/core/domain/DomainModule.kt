@@ -11,6 +11,7 @@ import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetMemberUseCase
+import com.uragiristereo.mikansei.core.domain.usecase.GetPostWithFavoriteVoteUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsAutoCompleteUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetTagsUseCase
@@ -37,5 +38,6 @@ val domainModule = module {
         factoryOf(::FilterPostsUseCase)
         factoryOf(::GenerateChipsFromTagsUseCase)
         factoryOf(::GetCachedFavoriteGroupsUseCase)
+        factoryOf(::GetPostWithFavoriteVoteUseCase)
         factoryOf(::GetMemberUseCase)
     }
