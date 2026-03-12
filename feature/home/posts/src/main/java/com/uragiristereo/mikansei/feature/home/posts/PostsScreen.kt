@@ -97,6 +97,8 @@ internal fun PostsScreen(
         onRefresh = viewModel::retryGetPosts,
     )
     val activeUser by viewModel.activeUser.collectAsState()
+    val session by viewModel.session.collectAsState()
+    val scrollOffset = density.run { (-100).dp.toPx().roundToInt() }
 
     val isMoreLoadingVisible by remember {
         derivedStateOf {
@@ -134,10 +136,12 @@ internal fun PostsScreen(
         viewModel.event.collect { event ->
             when (event) {
                 is PostsViewModel.Event.OnJumpToPosition -> {
-                    gridState.scrollToItem(
-                        index = event.session.scrollIndex,
-                        scrollOffset = event.session.scrollOffset,
-                    )
+                    if (sharedViewModel.targetPostId == null) {
+                        gridState.scrollToItem(
+                            index = event.session.scrollIndex,
+                            scrollOffset = event.session.scrollOffset,
+                        )
+                    }
                 }
             }
         }
@@ -324,7 +328,7 @@ internal fun PostsScreen(
                             PostsGrid(
                                 posts = viewModel.posts,
                                 gridState = gridState,
-                                canLoadMore = viewModel.canLoadMore,
+                                canLoadMore = session?.canLoadMore ?: false,
                                 contentPadding = innerPadding,
                                 onItemClick = onNavigateImage,
                                 onItemLongPress = { postId ->
@@ -380,6 +384,31 @@ internal fun PostsScreen(
                                 .background(MaterialTheme.colors.background),
                         )
                     }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(
+        key1 = sharedViewModel.targetPostId,
+        key2 = gridState.layoutInfo.visibleItemsInfo,
+        key3 = viewModel.posts,
+    ) {
+        val targetPostId = sharedViewModel.targetPostId
+
+        if (targetPostId != null) {
+            val visibleItemsKeys = gridState.layoutInfo.visibleItemsInfo.map { it.key }
+
+            if (visibleItemsKeys.isNotEmpty()) {
+                if (targetPostId !in visibleItemsKeys) {
+                    val targetIndex = viewModel.getIndexFromPostId(targetPostId)
+
+                    if (targetIndex != null) {
+                        gridState.scrollToItem(index = targetIndex, scrollOffset = scrollOffset)
+                        sharedViewModel.targetPostId = null
+                    }
+                } else {
+                    sharedViewModel.targetPostId = null
                 }
             }
         }
