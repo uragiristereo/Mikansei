@@ -8,6 +8,9 @@
     <string name="share_label">Share to</string>
     <string name="name">Name</string>
 
+    <!--suppress CheckTagEmptyBody -->
+    <string name="empty"></string>
+
     <!-- Auth -->
     <string name="please_login">Please login to use this feature</string>
 
