@@ -9,7 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.uragiristereo.mikansei.core.model.danbooru.Post
+import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.postFavoriteVoteViewModel
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnShare
 import com.uragiristereo.mikansei.core.ui.LocalSharedViewModel
@@ -21,20 +21,16 @@ import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import com.uragiristereo.mikansei.core.ui.navigation.SavedSearchesRoute
 import com.uragiristereo.mikansei.core.ui.navigation.routeOf
 import com.uragiristereo.mikansei.feature.home.posts.PostsScreen
+import com.uragiristereo.mikansei.feature.home.posts.PostsViewModel
 import com.uragiristereo.mikansei.feature.home.posts.more.PostMoreContent
 import com.uragiristereo.mikansei.feature.home.posts.share.ShareContent
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("RestrictedApi")
 fun NavGraphBuilder.postsRoute(
     mainNavController: NavHostController,
     onCurrentTagsChange: (String) -> Unit,
 ) {
-    val lambdaOnNavigateImage: (Post) -> Unit = { item ->
-        mainNavController.navigate(
-            MainRoute.Image(post = item)
-        )
-    }
-
     composable<HomeRoute.Posts>(
         enterTransition = {
             when (initialState.destination.id) {
@@ -60,6 +56,7 @@ fun NavGraphBuilder.postsRoute(
     ) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val sharedViewModel = LocalSharedViewModel.current
+        val viewModel = koinViewModel<PostsViewModel>()
 
         val isRouteFirstEntry = remember {
             // 3 from list of null, MainRoute.Home, HomeRoute.Posts
@@ -76,10 +73,22 @@ fun NavGraphBuilder.postsRoute(
         PostsScreen(
             isRouteFirstEntry = isRouteFirstEntry,
             onNavigateBack = mainNavController::navigateUp,
-            onNavigateImage = lambdaOnNavigateImage,
-            onNavigateMore = { post ->
+            onNavigateImage = { postId ->
+                mainNavController.navigate(
+                    MainRoute.Image(
+                        targetPostId = postId,
+                        sessionId = viewModel.sessionId,
+                    )
+                )
+            },
+            onNavigateMore = { postId ->
                 bottomSheetNavigator.navigate {
-                    it.navigate(HomeRoute.PostMore(post))
+                    it.navigate(
+                        HomeRoute.PostMore(
+                            postId = postId,
+                            sessionId = viewModel.sessionId,
+                        )
+                    )
                 }
             },
             onNavigateNewSavedSearch = { tags ->
@@ -95,7 +104,8 @@ fun NavGraphBuilder.postsRoute(
 }
 
 fun NavGraphBuilder.postsBottomRoute(mainNavController: NavHostController) {
-    composable<HomeRoute.PostMore>(PostNavType) {
+    composable<HomeRoute.PostMore> { entry ->
+        val route = entry.toRoute<HomeRoute.PostMore>()
         val lambdaOnDownload = LocalLambdaOnDownload.current
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
@@ -106,14 +116,22 @@ fun NavGraphBuilder.postsBottomRoute(mainNavController: NavHostController) {
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
                     mainNavController.navigate(
-                        MainRoute.Image(post)
+                        MainRoute.Image(
+                            targetPostId = post.id,
+                            sessionId = route.sessionId,
+                        )
                     )
                 }
             },
             onDownloadClick = lambdaOnDownload,
             onShareClick = { post ->
                 bottomSheetNavigator.navigate {
-                    it.navigate(HomeRoute.Share(post))
+                    it.navigate(
+                        HomeRoute.Share(
+                            post = post,
+                            sessionId = route.sessionId,
+                        )
+                    )
                 }
             },
             onAddToFavoriteGroupClick = { post ->
@@ -121,12 +139,14 @@ fun NavGraphBuilder.postsBottomRoute(mainNavController: NavHostController) {
                     it.navigate(HomeRoute.AddToFavGroup(post))
                 }
             },
+            postFavoriteVoteViewModel = route.postFavoriteVoteViewModel(),
         )
     }
 
-    composable<HomeRoute.Share>(PostNavType) {
+    composable<HomeRoute.Share>(PostNavType) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val lambdaOnShare = LocalLambdaOnShare.current
+        val route = entry.toRoute<HomeRoute.Share>()
 
         InterceptBackGestureForBottomSheetNavigator()
 
@@ -135,7 +155,10 @@ fun NavGraphBuilder.postsBottomRoute(mainNavController: NavHostController) {
             onPostClick = { post ->
                 bottomSheetNavigator.runHiding {
                     mainNavController.navigate(
-                        MainRoute.Image(post)
+                        MainRoute.Image(
+                            targetPostId = post.id,
+                            sessionId = route.sessionId.orEmpty(),
+                        )
                     )
                 }
             },

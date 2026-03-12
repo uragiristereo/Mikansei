@@ -39,13 +39,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.Constants
-import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalMainScaffoldPadding
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.core.ui.LocalScrollToTopChannel
+import com.uragiristereo.mikansei.core.ui.LocalSharedViewModel
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.LocalWindowSizeVertical
 import com.uragiristereo.mikansei.core.ui.WindowSize
@@ -75,8 +76,8 @@ import kotlin.math.roundToInt
 internal fun PostsScreen(
     isRouteFirstEntry: Boolean,
     onNavigateBack: () -> Unit,
-    onNavigateImage: (Post) -> Unit,
-    onNavigateMore: (Post) -> Unit,
+    onNavigateImage: (Int) -> Unit,
+    onNavigateMore: (Int) -> Unit,
     onNavigateNewSavedSearch: (String) -> Unit,
     viewModel: PostsViewModel = koinViewModel(),
 ) {
@@ -87,6 +88,7 @@ internal fun PostsScreen(
     val windowSizeVertical = LocalWindowSizeVertical.current
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
     val scaffoldState = LocalScaffoldState.current
+    val sharedViewModel = LocalSharedViewModel.current
 
     val scope = rememberCoroutineScope()
     val gridState = viewModel.gridState
@@ -118,11 +120,7 @@ internal fun PostsScreen(
 
     val shouldEnableTopAppBarScroll by remember {
         derivedStateOf {
-            when {
-                windowSizeVertical == WindowSize.COMPACT && windowSizeHorizontal == WindowSize.MEDIUM -> true
-                windowSizeVertical == WindowSize.MEDIUM && windowSizeHorizontal == WindowSize.COMPACT -> true
-                else -> false
-            }
+            windowSizeVertical == WindowSize.COMPACT || windowSizeHorizontal == WindowSize.COMPACT
         }
     }
 
@@ -329,8 +327,8 @@ internal fun PostsScreen(
                                 canLoadMore = viewModel.canLoadMore,
                                 contentPadding = innerPadding,
                                 onItemClick = onNavigateImage,
-                                onItemLongPress = { post ->
-                                    onNavigateMore(post)
+                                onItemLongPress = { postId ->
+                                    onNavigateMore(postId)
                                     hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                                 },
                             )

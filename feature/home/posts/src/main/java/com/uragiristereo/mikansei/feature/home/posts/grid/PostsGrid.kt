@@ -34,8 +34,8 @@ internal fun PostsGrid(
     gridState: LazyStaggeredGridState,
     canLoadMore: Boolean,
     contentPadding: PaddingValues,
-    onItemClick: (Post) -> Unit,
-    onItemLongPress: (Post) -> Unit,
+    onItemClick: (Int) -> Unit,
+    onItemLongPress: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
@@ -80,15 +80,16 @@ internal fun PostsGrid(
         items(
             items = posts.value,
             key = { it.id },
+            contentType = { "PostItem" },
         ) { item ->
             PostItem(
                 post = item,
                 maxWidth = maxWidth,
                 onClick = {
-                    onItemClick(item)
+                    onItemClick(item.id)
                 },
                 onLongPress = {
-                    onItemLongPress(item)
+                    onItemLongPress(item.id)
                 },
                 modifier = Modifier.animateItem(),
             )
