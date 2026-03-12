@@ -15,6 +15,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.core.ScoreChips
 import com.uragiristereo.mikansei.core.resources.R
+import com.uragiristereo.mikansei.core.ui.composable.AnimatedTextCounter
 import com.uragiristereo.mikansei.core.ui.composable.Chips
 import com.uragiristereo.mikansei.core.ui.composable.SidesGradient
 import com.uragiristereo.mikansei.core.ui.extension.backgroundElevation
@@ -27,11 +28,11 @@ internal fun MoreActionsRow(
     onExpandClick: () -> Unit,
     onOpenInExternalClick: () -> Unit,
     onAddToClick: () -> Unit,
-    favoriteCount: Int,
+    favoriteCount: Int?,
     isOnFavorite: Boolean,
     onToggleFavorite: (Boolean) -> Unit,
     favoriteButtonEnabled: Boolean,
-    score: Int,
+    score: Int?,
     scoreState: PostVote.Status,
     voteButtonEnabled: Boolean,
     onVoteChange: (PostVote.Status) -> Unit,
@@ -55,14 +56,15 @@ internal fun MoreActionsRow(
             item {
                 Chips(
                     selected = isOnFavorite,
-                    text = "$favoriteCount",
                     enabled = favoriteButtonEnabled,
                     selectedIcon = painterResource(id = R.drawable.favorite_fill),
                     unselectedIcon = painterResource(id = R.drawable.favorite),
                     elevation = 0.dp,
                     onSelectedChange = onToggleFavorite,
                     modifier = Modifier.padding(end = 8.dp),
-                )
+                ) {
+                    AnimatedTextCounter(favoriteCount)
+                }
             }
 
             item {

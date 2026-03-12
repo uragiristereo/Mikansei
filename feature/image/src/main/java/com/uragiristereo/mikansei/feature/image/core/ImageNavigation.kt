@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.postFavoriteVoteViewModel
 import com.uragiristereo.mikansei.core.ui.LocalSharedViewModel
 import com.uragiristereo.mikansei.core.ui.animation.translateYFadeIn
 import com.uragiristereo.mikansei.core.ui.animation.translateYFadeOut
@@ -41,7 +42,9 @@ fun NavGraphBuilder.imageRoute(
             }
         },
     ) { entry ->
+        val route = entry.toRoute<MainRoute.Image>()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
+        val sharedViewModel = LocalSharedViewModel.current
 
         ImageScreen(
             onNavigateBack = { navigatedBackByGesture ->
@@ -51,21 +54,31 @@ fun NavGraphBuilder.imageRoute(
             },
             onNavigateToMore = { post ->
                 bottomSheetNavigator.navigate {
-                    it.navigate(MainRoute.More(post))
+                    it.navigate(
+                        MainRoute.More(
+                            postId = post.id,
+                            sessionId = route.sessionId,
+                        )
+                    )
                 }
+            },
+            onTargetPostChange = { postId ->
+                sharedViewModel.targetPostId = postId
             },
         )
     }
 }
 
 fun NavGraphBuilder.imageBottomRoute(navController: NavHostController) {
-    composable<MainRoute.More>(PostNavType) {
+    composable<MainRoute.More>(PostNavType) { entry ->
+        val route = entry.toRoute<MainRoute.More>()
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
 
         InterceptBackGestureForBottomSheetNavigator()
 
         MoreBottomSheet(
             showExpandButton = false,
+            isBottomSheetVisible = bottomSheetNavigator.isVisible,
             onDismiss = bottomSheetNavigator::hideSheet,
             onExpandClick = {},
             onAddToClick = { post ->
@@ -83,6 +96,7 @@ fun NavGraphBuilder.imageBottomRoute(navController: NavHostController) {
                     it.navigate(MainRoute.TagActions(tag = tag))
                 }
             },
+            postFavoriteVoteViewModel = route.postFavoriteVoteViewModel(),
         )
     }
 

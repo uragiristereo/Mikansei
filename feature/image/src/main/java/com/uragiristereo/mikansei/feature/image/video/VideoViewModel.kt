@@ -1,12 +1,10 @@
 package com.uragiristereo.mikansei.feature.image.video
 
 import android.content.Context
-import androidx.compose.animation.core.Animatable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.AudioAttributes
@@ -17,12 +15,9 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
-import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
-import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -31,12 +26,11 @@ import kotlin.math.floor
 
 @androidx.annotation.OptIn(UnstableApi::class)
 class VideoViewModel(
-    savedStateHandle: SavedStateHandle,
     private val networkRepository: NetworkRepository,
     private val preferencesRepository: PreferencesRepository,
     private val applicationContext: Context,
+    val post: Post,
 ) : ViewModel() {
-    val post = savedStateHandle.toRoute<MainRoute.Image>(PostNavType).post
     val noSound = post.tags.none { it == "sound" }
 
     val exoPlayer = buildExoPlayer()
@@ -50,8 +44,6 @@ class VideoViewModel(
     val sliderValueFmt by derivedStateOf { formatTime(sliderValue.toLong()) }
     val elapsedFmt by derivedStateOf { formatTime(elapsed) }
     val totalFmt by derivedStateOf { formatTime(total) }
-
-    val offsetY = Animatable(initialValue = 0f)
 
     val videoMuted = preferencesRepository.data
         .map { it.videoMuted }

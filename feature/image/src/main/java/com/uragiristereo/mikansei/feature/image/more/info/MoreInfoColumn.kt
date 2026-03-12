@@ -18,7 +18,7 @@ import com.uragiristereo.mikansei.core.resources.R
 
 @Composable
 internal fun MoreInfoColumn(
-    post: Post,
+    post: Post?,
     scaledImageFileSizeStr: String,
     originalImageFileSizeStr: String,
     expanded: Boolean,
@@ -37,11 +37,12 @@ internal fun MoreInfoColumn(
         MoreInfo(
             title = stringResource(id = R.string.image_status),
             subtitle = stringResource(
-                id = when (post.status) {
+                id = when (post?.status) {
                     Post.Status.ACTIVE -> R.string.image_status_active
                     Post.Status.PENDING -> R.string.image_status_pending
                     Post.Status.DELETED -> R.string.image_status_deleted
                     Post.Status.BANNED -> R.string.image_status__banned
+                    else -> R.string.empty
                 },
             ),
             modifier = Modifier.padding(bottom = 8.dp),
@@ -51,11 +52,12 @@ internal fun MoreInfoColumn(
             MoreInfo(
                 title = stringResource(id = R.string.image_rating),
                 subtitle = stringResource(
-                    id = when (post.rating) {
+                    id = when (post?.rating) {
                         Rating.GENERAL -> R.string.image_rating_general
                         Rating.SENSITIVE -> R.string.image_rating_sensitive
                         Rating.QUESTIONABLE -> R.string.image_rating_questionable
                         Rating.EXPLICIT -> R.string.image_rating_explicit
+                        else -> R.string.empty
                     },
                 ),
                 modifier = Modifier.padding(bottom = 8.dp),
@@ -80,7 +82,7 @@ internal fun MoreInfoColumn(
                 when {
                     stateExpanded -> {
                         Column {
-                            post.medias.scaled?.let {
+                            post?.medias?.scaled?.let {
                                 it.apply {
                                     MoreInfo(
                                         title = stringResource(id = R.string.image_compressed),
@@ -90,13 +92,20 @@ internal fun MoreInfoColumn(
                                 }
                             }
 
-                            post.medias.original.apply {
-                                MoreInfo(
-                                    title = stringResource(id = R.string.image_original),
-                                    subtitle = "$width x $height\n$originalImageFileSizeStr・$fileType",
-                                    modifier = Modifier.padding(bottom = 16.dp),
-                                )
+                            val subtitle = when {
+                                post?.medias?.original != null -> {
+                                    val media = post.medias.original
+                                    "${media.width} x ${media.height}\n$originalImageFileSizeStr・${media.fileType}"
+                                }
+
+                                else -> ""
                             }
+
+                            MoreInfo(
+                                title = stringResource(id = R.string.image_original),
+                                subtitle = subtitle,
+                                modifier = Modifier.padding(bottom = 16.dp),
+                            )
                         }
                     }
 

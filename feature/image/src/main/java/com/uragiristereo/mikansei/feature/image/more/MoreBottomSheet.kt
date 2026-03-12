@@ -30,9 +30,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.PostVote
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
-import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVote
+import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVoteViewModel
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
@@ -40,6 +41,7 @@ import com.uragiristereo.mikansei.core.ui.LocalWindowSizeHorizontal
 import com.uragiristereo.mikansei.core.ui.WindowSize
 import com.uragiristereo.mikansei.core.ui.composable.OverlappingLayout
 import com.uragiristereo.mikansei.core.ui.composable.SetSystemBarsColors
+import com.uragiristereo.mikansei.core.ui.extension.thenIf
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetContentPadding
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheetContentPadding
 import com.uragiristereo.mikansei.feature.image.more.core.MoreActionsRow
@@ -57,12 +59,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun MoreBottomSheet(
     showExpandButton: Boolean,
+    isBottomSheetVisible: Boolean,
     onDismiss: suspend () -> Unit,
     onExpandClick: () -> Unit,
     onAddToClick: (Post) -> Unit,
     onShareClick: (Post) -> Unit,
     onTagClick: (String) -> Unit,
     viewModel: MoreBottomSheetViewModel = koinViewModel(),
+    postFavoriteVoteViewModel: PostFavoriteVoteViewModel,
 ) {
     val context = LocalContext.current
     val lambdaOnDownload = LocalLambdaOnDownload.current
@@ -71,8 +75,18 @@ internal fun MoreBottomSheet(
     val scope = rememberCoroutineScope()
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
 
-    val tagsCount = remember(viewModel.post) { viewModel.post.tags.size }
     val activeUser by viewModel.activeUser.collectAsState()
+    val postState by viewModel.post.collectAsState()
+    val uploaderName by viewModel.uploaderName.collectAsState()
+    val post = postState
+
+    val tagsCount = remember(post) {
+        post?.tags?.size ?: 0
+    }
+
+    val postFavoriteVote by postFavoriteVoteViewModel.favoriteVote.collectAsState()
+    val favoriteCount by postFavoriteVoteViewModel.favoriteCount.collectAsState()
+    val voteCount by postFavoriteVoteViewModel.voteCount.collectAsState()
 
     val closeButtonVisible by remember {
         derivedStateOf {
@@ -85,16 +99,10 @@ internal fun MoreBottomSheet(
     }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.postFavoriteSnackbarEvent.collect { event ->
+        postFavoriteVoteViewModel.notLoggedInEvent.collect {
+            onDismiss()
             launch(SupervisorJob()) {
-                when (event) {
-                    PostFavoriteVote.Event.LOGIN_REQUIRED -> {
-                        onDismiss()
-                        snackbarHostState.showSnackbar(
-                            message = context.getString(R.string.please_login)
-                        )
-                    }
-                }
+                snackbarHostState.showSnackbar(message = context.getString(R.string.please_login))
             }
         }
     }
@@ -118,7 +126,9 @@ internal fun MoreBottomSheet(
                 },
             )
         },
-        modifier = Modifier.animateContentSize(),
+        modifier = Modifier.thenIf(predicate = post != null && isBottomSheetVisible) {
+            animateContentSize()
+        },
     ) { closeButtonPadding ->
         Column(
             modifier = Modifier
@@ -131,11 +141,15 @@ internal fun MoreBottomSheet(
                 onDownloadClick = {
                     scope.launch {
                         onDismiss()
-                        lambdaOnDownload(viewModel.post)
+                        if (post != null) {
+                            lambdaOnDownload(post)
+                        }
                     }
                 },
                 onShareClick = {
-                    onShareClick(viewModel.post)
+                    if (post != null) {
+                        onShareClick(post)
+                    }
                 },
                 onExpandClick = {
                     scope.launch {
@@ -144,12 +158,14 @@ internal fun MoreBottomSheet(
                     }
                 },
                 onOpenInExternalClick = {
-                    viewModel.launchUrl(context, viewModel.postLink)
+                    viewModel.launchUrl(context, viewModel.generatePostLink())
                 },
                 onAddToClick = {
                     scope.launch(SupervisorJob()) {
                         if (viewModel.activeUser.value.isNotAnonymous()) {
-                            onAddToClick(viewModel.post)
+                            if (post != null) {
+                                onAddToClick(post)
+                            }
                         } else {
                             onDismiss()
                             snackbarHostState.showSnackbar(
@@ -158,14 +174,14 @@ internal fun MoreBottomSheet(
                         }
                     }
                 },
-                favoriteCount = viewModel.favoriteCount,
-                isOnFavorite = viewModel.isPostInFavorites,
-                onToggleFavorite = viewModel::toggleFavorite,
-                favoriteButtonEnabled = viewModel.favoriteButtonEnabled && viewModel.isPostUpdated,
-                score = viewModel.score,
-                scoreState = viewModel.scoreState,
-                voteButtonEnabled = viewModel.voteButtonEnabled && viewModel.isPostUpdated,
-                onVoteChange = viewModel::onVoteChange,
+                favoriteCount = favoriteCount,
+                isOnFavorite = postFavoriteVote?.isInFavorites ?: false,
+                onToggleFavorite = postFavoriteVoteViewModel::onFavoriteChange,
+                favoriteButtonEnabled = true,
+                score = voteCount,
+                scoreState = postFavoriteVote?.voteStatus ?: PostVote.Status.NONE,
+                voteButtonEnabled = true,
+                onVoteChange = postFavoriteVoteViewModel::onVoteChange,
                 modifier = Modifier.padding(bottom = 8.dp),
             )
 
@@ -185,10 +201,10 @@ internal fun MoreBottomSheet(
                     ),
             )
 
-            MoreDate(date = viewModel.post.createdAt)
+            MoreDate(date = post?.createdAt)
 
             MoreSource(
-                source = viewModel.post.source,
+                source = post?.source,
                 onClick = { source ->
                     viewModel.launchUrl(context, source)
                 },
@@ -198,11 +214,11 @@ internal fun MoreBottomSheet(
             )
 
             MoreInfoColumn(
-                post = viewModel.post,
+                post = post,
                 scaledImageFileSizeStr = viewModel.scaledImageFileSizeStr,
                 originalImageFileSizeStr = viewModel.originalImageFileSizeStr,
                 expanded = viewModel.infoExpanded,
-                uploaderName = viewModel.uploaderName,
+                uploaderName = uploaderName ?: "user_${post?.uploaderId}",
                 shouldShowRating = !isInSafeMode,
                 onMoreClick = {
                     viewModel.infoExpanded = true

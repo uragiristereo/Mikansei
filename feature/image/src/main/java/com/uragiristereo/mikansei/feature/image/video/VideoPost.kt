@@ -20,7 +20,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.C
-import androidx.media3.common.util.UnstableApi
 import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
@@ -28,20 +27,22 @@ import com.uragiristereo.mikansei.feature.image.video.controls.VideoControls
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 import kotlin.math.abs
 
 @Composable
-@androidx.annotation.OptIn(UnstableApi::class)
 fun VideoPost(
     areAppBarsVisible: Boolean,
+    gesturesEnabled: Boolean,
+    allowPlaying: Boolean,
+    offsetY: () -> Float,
+    onOffsetYChange: (Float) -> Unit,
     onAppBarsVisibleChange: (Boolean) -> Unit,
     onNavigateBack: (Boolean) -> Unit,
     onMoreClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: VideoViewModel = koinViewModel(),
+    viewModel: VideoViewModel,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
@@ -67,7 +68,7 @@ fun VideoPost(
                         )
 
                         viewModel.onPlaybackStateChange(
-                            isBuffering = lastPosition == viewModel.elapsed && viewModel.isPlaying,
+                            isBuffering = lastPosition == viewModel.elapsed && player.playWhenReady,
                         )
 
                         if (viewModel.isPlaying) {
@@ -83,7 +84,7 @@ fun VideoPost(
 
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> player.playWhenReady = false
-                Lifecycle.Event.ON_RESUME -> player.playWhenReady = viewModel.isPlaying
+                Lifecycle.Event.ON_RESUME -> player.playWhenReady = viewModel.isPlaying && allowPlaying
                 else -> {}
             }
         }
@@ -97,8 +98,8 @@ fun VideoPost(
         }
     }
 
-    LaunchedEffect(key1 = viewModel.isPlaying) {
-        player.playWhenReady = viewModel.isPlaying
+    LaunchedEffect(key1 = viewModel.isPlaying, key2 = allowPlaying) {
+        player.playWhenReady = viewModel.isPlaying && allowPlaying
     }
 
     LaunchedEffect(key1 = videoMuted) {
@@ -117,7 +118,7 @@ fun VideoPost(
                 exit = fadeOut(),
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = -abs(viewModel.offsetY.value)
+                        translationY = -abs(offsetY())
                     },
             ) {
                 VideoTopAppBar(
@@ -136,11 +137,11 @@ fun VideoPost(
                 exit = fadeOut(),
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = abs(viewModel.offsetY.value)
+                        translationY = abs(offsetY())
                     },
             ) {
                 VideoControls(
-                    isPlaying = viewModel.isPlaying,
+                    isPlaying = viewModel.isPlaying && allowPlaying,
                     sliderValue = viewModel.sliderValue,
                     elapsed = viewModel.elapsed,
                     total = viewModel.total,
@@ -181,12 +182,13 @@ fun VideoPost(
                 },
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = viewModel.offsetY.value
+                        translationY = offsetY()
                     }
                     .background(Color.Black)
                     .verticallyDraggable(
-                        enabled = true,
-                        offsetY = viewModel.offsetY,
+                        enabled = gesturesEnabled,
+                        offsetY = offsetY,
+                        onOffsetYChange = onOffsetYChange,
                         onDragExit = {
                             onAppBarsVisibleChange(true)
                             onNavigateBack(true)
