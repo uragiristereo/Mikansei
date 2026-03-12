@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.core.ui.navigation
 
-import com.uragiristereo.mikansei.core.model.danbooru.Post
 import kotlinx.serialization.Serializable
 
 sealed interface MainRoute : NavRoute {
@@ -14,7 +13,8 @@ sealed interface MainRoute : NavRoute {
 
     @Serializable
     data class Image(
-        val post: Post,
+        val targetPostId: Int,
+        val sessionId: String,
     ) : MainRoute
 
     @Serializable
@@ -42,8 +42,9 @@ sealed interface MainRoute : NavRoute {
 
     @Serializable
     data class More(
-        val post: Post,
-    ) : MainRoute
+        override val postId: Int,
+        val sessionId: String,
+    ) : MainRoute, SharedRoute.PostId
 
     @Serializable
     data class TagActions(

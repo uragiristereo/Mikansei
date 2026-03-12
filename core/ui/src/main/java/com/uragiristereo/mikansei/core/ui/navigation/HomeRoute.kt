@@ -18,8 +18,9 @@ sealed interface HomeRoute : NavRoute {
 
     @Serializable
     data class PostMore(
-        val post: Post,
-    ) : HomeRoute
+        override val postId: Int,
+        val sessionId: String,
+    ) : HomeRoute, SharedRoute.PostId
 
     @Serializable
     data class AddToFavGroup(
@@ -30,6 +31,7 @@ sealed interface HomeRoute : NavRoute {
     data class Share(
         val post: Post,
         val showThumbnail: Boolean = true,
+        val sessionId: String? = null,
     ) : HomeRoute
 
     @Serializable
