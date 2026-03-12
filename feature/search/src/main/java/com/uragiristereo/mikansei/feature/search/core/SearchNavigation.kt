@@ -5,6 +5,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.uragiristereo.mikansei.core.ui.LocalSharedViewModel
 import com.uragiristereo.mikansei.core.ui.animation.holdIn
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoutesString
@@ -34,9 +35,12 @@ fun NavGraphBuilder.searchRoute(
             }
         }
     ) {
+        val sharedViewModel = LocalSharedViewModel.current
+
         SearchScreen(
             onNavigateBack = navController::navigateUp,
             onSearchSubmit = { tags ->
+                sharedViewModel.targetPostId = null
                 navController.navigate(route = HomeRoute.Posts(tags)) {
                     popUpTo(navController.graph.findStartDestination().id)
                 }
