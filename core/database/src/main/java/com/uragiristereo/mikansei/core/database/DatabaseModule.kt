@@ -3,11 +3,15 @@ package com.uragiristereo.mikansei.core.database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.uragiristereo.mikansei.core.database.member.MemberRepositoryImpl
 import com.uragiristereo.mikansei.core.database.post.PostRepositoryImpl
+import com.uragiristereo.mikansei.core.database.post_favorite_vote.PostFavoriteVoteRepositoryImpl
 import com.uragiristereo.mikansei.core.database.session.SessionRepositoryImpl
 import com.uragiristereo.mikansei.core.database.tag_category.TagCategoryRepositoryImpl
 import com.uragiristereo.mikansei.core.database.user.UserRepositoryImpl
 import com.uragiristereo.mikansei.core.database.user_delegation.UserDelegationRepositoryImpl
+import com.uragiristereo.mikansei.core.domain.module.database.MemberRepository
+import com.uragiristereo.mikansei.core.domain.module.database.PostFavoriteVoteRepository
 import com.uragiristereo.mikansei.core.domain.module.database.PostRepository
 import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.TagCategoryRepository
@@ -31,12 +35,16 @@ fun databaseModule() = module {
     single { get<MikanseiDatabase>().postDao() }
     single { get<MikanseiDatabase>().sessionPostDao() }
     single { get<MikanseiDatabase>().tagCategoryDao() }
+    single { get<MikanseiDatabase>().postFavoriteVoteDao() }
+    single { get<MikanseiDatabase>().memberDao() }
 
     singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
     singleOf(::UserDelegationRepositoryImpl) bind UserDelegationRepository::class
     singleOf(::PostRepositoryImpl) bind PostRepository::class
     singleOf(::SessionRepositoryImpl) bind SessionRepository::class
     singleOf(::TagCategoryRepositoryImpl) bind TagCategoryRepository::class
+    singleOf(::PostFavoriteVoteRepositoryImpl) bind PostFavoriteVoteRepository::class
+    singleOf(::MemberRepositoryImpl) bind MemberRepository::class
 }
 
 private fun Scope.provideDatabase(): MikanseiDatabase {

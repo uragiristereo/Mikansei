@@ -3,7 +3,8 @@ package com.uragiristereo.mikansei.core.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 
 enum class WindowSize {
@@ -17,8 +18,9 @@ val LocalWindowSizeVertical = compositionLocalOf<WindowSize> { error("no LocalWi
 
 @Composable
 fun rememberWindowSizeHorizontal(): WindowSize {
-    val configuration = LocalConfiguration.current
-    val screenWidthDp = configuration.screenWidthDp.dp
+    val density = LocalDensity.current
+    val windowInfo = LocalWindowInfo.current
+    val screenWidthDp = density.run { windowInfo.containerSize.width.toDp() }
 
     return remember(screenWidthDp) {
         when {
@@ -31,8 +33,9 @@ fun rememberWindowSizeHorizontal(): WindowSize {
 
 @Composable
 fun rememberWindowSizeVertical(): WindowSize {
-    val configuration = LocalConfiguration.current
-    val screenHeightDp = configuration.screenHeightDp.dp
+    val density = LocalDensity.current
+    val windowInfo = LocalWindowInfo.current
+    val screenHeightDp = density.run { windowInfo.containerSize.height.toDp() }
 
     return remember(screenHeightDp) {
         when {

@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -148,5 +150,90 @@ fun Chips(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.animateContentSize(),
         )
+    }
+}
+
+@Composable
+fun Chips(
+    onSelectedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    elevation: Dp = 2.dp,
+    selectedIcon: Painter? = null,
+    unselectedIcon: Painter? = null,
+    selected: Boolean = false,
+    content: @Composable () -> Unit,
+) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(percent = 50))
+            .border(
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = when {
+                        selected -> Color.Transparent
+                        else -> MaterialTheme.colors.primary.copy(alpha = ContentAlpha.disabled)
+                    },
+                ),
+                shape = RoundedCornerShape(percent = 50),
+            )
+            .background(
+                color = when {
+                    selected -> MaterialTheme.colors.primary
+                    else -> MaterialTheme.colors.background.backgroundElevation(elevation)
+                }.copy(
+                    alpha = when {
+                        enabled -> ContentAlpha.high
+                        else -> ContentAlpha.disabled
+                    },
+                ),
+            )
+            .clickable(
+                onClick = {
+                    onSelectedChange(!selected)
+                },
+            )
+            .padding(
+                vertical = 6.dp,
+                horizontal = 10.dp,
+            )
+            .widthIn(48.dp)
+    ) {
+        val contentColor = when {
+            selected -> MaterialTheme.colors.background
+            else -> MaterialTheme.colors.primary
+        }.copy(
+            alpha = when {
+                enabled -> ContentAlpha.high
+                else -> ContentAlpha.disabled
+            },
+        )
+
+        val icon = when {
+            selected -> selectedIcon
+            else -> unselectedIcon
+        }
+
+        icon?.let {
+            Icon(
+                painter = it,
+                contentDescription = null,
+                tint = contentColor,
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(20.dp),
+            )
+        }
+
+        val textStyle = MaterialTheme.typography.caption.copy(
+            color = contentColor,
+            fontWeight = FontWeight.Bold,
+        )
+
+        CompositionLocalProvider(LocalTextStyle provides textStyle) {
+            content()
+        }
     }
 }

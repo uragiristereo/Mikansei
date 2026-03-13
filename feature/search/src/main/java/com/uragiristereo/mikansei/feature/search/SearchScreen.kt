@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.search
 
+import android.os.Build
 import android.text.InputType
 import android.util.TypedValue
 import android.view.ViewGroup
@@ -72,7 +73,10 @@ internal fun SearchScreen(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT,
             )
-            imeOptions = EditorInfo.IME_ACTION_SEARCH or EditorInfo.IME_FLAG_NO_FULLSCREEN
+            imeOptions = when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> EditorInfo.IME_ACTION_SEARCH or EditorInfo.IME_FLAG_NO_FULLSCREEN or EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING
+                else -> EditorInfo.IME_ACTION_SEARCH or EditorInfo.IME_FLAG_NO_FULLSCREEN
+            }
             inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             isSingleLine = true
             setBackgroundResource(android.R.color.transparent)

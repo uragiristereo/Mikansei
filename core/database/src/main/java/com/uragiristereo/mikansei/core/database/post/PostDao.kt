@@ -10,6 +10,9 @@ import java.time.OffsetDateTime
 
 @Dao
 interface PostDao {
+    @Query("select data from posts where post_id = :postId limit 1")
+    fun getPost(postId: Int): Flow<Post?>
+
     @Query("select data from posts")
     suspend fun getPosts(): List<Post>
 

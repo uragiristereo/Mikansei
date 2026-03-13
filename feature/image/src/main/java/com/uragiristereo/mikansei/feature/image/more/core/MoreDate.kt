@@ -15,15 +15,19 @@ import java.time.format.FormatStyle
 
 @Composable
 fun MoreDate(
-    date: OffsetDateTime,
+    date: OffsetDateTime?,
     modifier: Modifier = Modifier,
 ) {
     val formatted = remember(date) {
-        val zonedDateTime = date.atZoneSameInstant(ZoneId.systemDefault())
+        if (date != null) {
+            val zonedDateTime = date.atZoneSameInstant(ZoneId.systemDefault())
 
-        DateTimeFormatter
-            .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.MEDIUM)
-            .format(zonedDateTime)
+            DateTimeFormatter
+                .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.MEDIUM)
+                .format(zonedDateTime)
+        } else {
+            ""
+        }
     }
 
     Text(

@@ -13,6 +13,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.danbooru.Post
-import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVote
+import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVoteViewModel
 import com.uragiristereo.mikansei.core.resources.R
 import com.uragiristereo.mikansei.core.ui.LocalSnackbarHostState
 import com.uragiristereo.mikansei.core.ui.composable.ClickableSection
@@ -30,7 +32,6 @@ import com.uragiristereo.mikansei.feature.home.posts.more.core.FavoriteSection
 import com.uragiristereo.mikansei.feature.home.posts.more.core.ScoreSection
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun PostMoreContent(
@@ -39,24 +40,23 @@ internal fun PostMoreContent(
     onDownloadClick: (Post) -> Unit,
     onShareClick: (Post) -> Unit,
     onAddToFavoriteGroupClick: (Post) -> Unit,
-    viewModel: PostMoreViewModel = koinViewModel(),
+    postFavoriteVoteViewModel: PostFavoriteVoteViewModel,
 ) {
     val context = LocalContext.current
     val snackbarHostState = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
-    val post = viewModel.post
+
+    val postState by postFavoriteVoteViewModel.post.collectAsState()
+    val postFavoriteVoteState by postFavoriteVoteViewModel.favoriteVote.collectAsState()
+    val favoriteCount by postFavoriteVoteViewModel.favoriteCount.collectAsState()
+    val voteCount by postFavoriteVoteViewModel.voteCount.collectAsState()
+    val post = postState
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.postFavoriteSnackbarEvent.collect { event ->
+        postFavoriteVoteViewModel.notLoggedInEvent.collect {
+            onDismiss()
             launch(SupervisorJob()) {
-                when (event) {
-                    PostFavoriteVote.Event.LOGIN_REQUIRED -> {
-                        onDismiss()
-                        snackbarHostState.showSnackbar(
-                            message = context.getString(R.string.please_login),
-                        )
-                    }
-                }
+                snackbarHostState.showSnackbar(message = context.getString(R.string.please_login))
             }
         }
     }
@@ -68,11 +68,13 @@ internal fun PostMoreContent(
             .bottomSheetContentPadding(),
     ) {
         PostHeader(
-            title = "#${post.id}",
-            previewUrl = post.medias.preview.url,
-            aspectRatio = post.aspectRatio,
+            title = "#${post?.id ?: 0}",
+            previewUrl = post?.medias?.preview?.url,
+            aspectRatio = post?.aspectRatio,
             onClick = {
-                onPostClick(post)
+                if (post != null) {
+                    onPostClick(post)
+                }
             },
         )
 
@@ -84,25 +86,28 @@ internal fun PostMoreContent(
                 .padding(vertical = 8.dp),
         ) {
             FavoriteSection(
-                checked = viewModel.isPostInFavorites,
-                onCheckedChange = viewModel::toggleFavorite,
-                count = viewModel.favoriteCount,
-                enabled = viewModel.favoriteButtonEnabled && viewModel.isPostUpdated,
+                checked = postFavoriteVoteState?.isInFavorites,
+                onCheckedChange = postFavoriteVoteViewModel::onFavoriteChange,
+                count = favoriteCount,
+                enabled = true,
             )
 
             ScoreSection(
-                score = viewModel.score,
-                state = viewModel.scoreState,
-                enabled = viewModel.voteButtonEnabled && viewModel.isPostUpdated,
-                onVoteChange = viewModel::onVoteChange,
+                score = voteCount,
+                state = postFavoriteVoteState?.voteStatus,
+                enabled = true,
+                onVoteChange = postFavoriteVoteViewModel::onVoteChange,
             )
 
             ClickableSection(
                 title = stringResource(id = R.string.add_to_action),
                 onClick = {
                     scope.launch(SupervisorJob()) {
-                        if (viewModel.activeUser.value.isNotAnonymous()) {
-                            onAddToFavoriteGroupClick(post)
+                        val activeUser = postFavoriteVoteViewModel.activeUser
+                        if (activeUser.isNotAnonymous()) {
+                            if (post != null) {
+                                onAddToFavoriteGroupClick(post)
+                            }
                         } else {
                             onDismiss()
                             snackbarHostState.showSnackbar(
@@ -121,7 +126,10 @@ internal fun PostMoreContent(
                 onClick = {
                     scope.launch {
                         onDismiss()
-                        onDownloadClick(post)
+
+                        if (post != null) {
+                            onDownloadClick(post)
+                        }
                     }
                 },
                 icon = painterResource(id = R.drawable.download),
@@ -130,7 +138,9 @@ internal fun PostMoreContent(
             ClickableSection(
                 title = stringResource(id = R.string.share_action),
                 onClick = {
-                    onShareClick(post)
+                    if (post != null) {
+                        onShareClick(post)
+                    }
                 },
                 icon = painterResource(id = R.drawable.share),
             )

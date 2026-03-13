@@ -18,8 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
@@ -34,33 +33,30 @@ internal fun PostsGrid(
     gridState: LazyStaggeredGridState,
     canLoadMore: Boolean,
     contentPadding: PaddingValues,
-    onItemClick: (Post) -> Unit,
-    onItemLongPress: (Post) -> Unit,
+    onItemClick: (Int) -> Unit,
+    onItemLongPress: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
-    val configuration = LocalConfiguration.current
-    val density = LocalDensity.current
+    val windowInfo = LocalWindowInfo.current
 
-    val columnSize = when (windowSizeHorizontal) {
-        WindowSize.COMPACT -> 2
-        WindowSize.MEDIUM -> 4
-        WindowSize.EXPANDED -> 5
-    }
+    val screenWidthPx = windowInfo.containerSize.width
 
-    val screenWidthPx = remember(configuration.screenWidthDp) {
-        density.run {
-            configuration.screenWidthDp.dp.toPx()
+    val maxWidth = remember(screenWidthPx, windowSizeHorizontal) {
+        when (windowSizeHorizontal) {
+            WindowSize.COMPACT -> screenWidthPx / 2
+            WindowSize.MEDIUM -> screenWidthPx / 4
+            WindowSize.EXPANDED -> 720
         }
-    }
-
-    val maxWidth = remember(screenWidthPx, columnSize) {
-        (screenWidthPx / columnSize).toInt()
     }
 
     LazyVerticalStaggeredGrid(
         state = gridState,
-        columns = StaggeredGridCells.Fixed(columnSize),
+        columns = when (windowSizeHorizontal) {
+            WindowSize.COMPACT -> StaggeredGridCells.Fixed(count = 2)
+            WindowSize.MEDIUM -> StaggeredGridCells.Fixed(count = 4)
+            WindowSize.EXPANDED -> StaggeredGridCells.Adaptive(minSize = 160.dp)
+        },
         contentPadding = contentPadding + PaddingValues(
             start = 8.dp,
             end = 8.dp,
@@ -80,15 +76,16 @@ internal fun PostsGrid(
         items(
             items = posts.value,
             key = { it.id },
+            contentType = { "PostItem" },
         ) { item ->
             PostItem(
                 post = item,
                 maxWidth = maxWidth,
                 onClick = {
-                    onItemClick(item)
+                    onItemClick(item.id)
                 },
                 onLongPress = {
-                    onItemLongPress(item)
+                    onItemLongPress(item.id)
                 },
                 modifier = Modifier.animateItem(),
             )

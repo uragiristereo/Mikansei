@@ -8,6 +8,8 @@ fun SessionRow.toSession(): Session {
         tags = tags,
         scrollIndex = scrollIndex,
         scrollOffset = scrollOffset,
+        page = page,
+        canLoadMore = canLoadMore,
     )
 }
 
@@ -17,5 +19,7 @@ fun Session.toSessionRow(): SessionRow {
         tags = tags,
         scrollIndex = scrollIndex,
         scrollOffset = scrollOffset,
+        page = page,
+        canLoadMore = canLoadMore,
     )
 }
