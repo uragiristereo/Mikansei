@@ -11,9 +11,9 @@ import com.uragiristereo.mikansei.core.ui.navigation.NavRoute
 @Stable
 enum class MainNavigationItems(
     val route: NavRoute,
-    @StringRes val label: Int,
-    @DrawableRes val unselectedIcon: Int,
-    @DrawableRes val selectedIcon: Int = unselectedIcon,
+    @param:StringRes val label: Int,
+    @param:DrawableRes val unselectedIcon: Int,
+    @param:DrawableRes val selectedIcon: Int = unselectedIcon,
 ) {
     Posts(
         route = HomeRoute.Posts(),
