@@ -263,7 +263,6 @@ class DanbooruRepositoryImpl(
                 score = when (score) {
                     PostVote.Status.UPVOTED -> 1
                     PostVote.Status.DOWNVOTED -> -1
-                    else -> 0
                 },
             )
         }

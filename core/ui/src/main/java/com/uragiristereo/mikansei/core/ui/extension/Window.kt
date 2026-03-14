@@ -12,7 +12,7 @@ fun Window.showSystemBars() {
 
 fun Window.hideSystemBars() {
     WindowCompat.getInsetsController(this, decorView).apply {
-        systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+        systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE
         hide(WindowInsetsCompat.Type.systemBars())
     }
 }

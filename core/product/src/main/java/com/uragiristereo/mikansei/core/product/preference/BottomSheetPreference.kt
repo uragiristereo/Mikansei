@@ -79,7 +79,7 @@ fun BottomSheetPreference(
 
 @Parcelize
 data class BottomSheetPreferenceData<T : Preference>(
-    @StringRes val preferenceTextResId: Int = R.string.app_name,
+    @param:StringRes val preferenceTextResId: Int = R.string.app_name,
     val items: @RawValue List<T> = listOf(),
     val selectedItem: @RawValue T? = null,
 ) : Parcelable
