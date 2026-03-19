@@ -5,17 +5,8 @@
     android:layout_height="match_parent">
 
     <androidx.media3.ui.PlayerView
-        android:id="@+id/playerViewGl"
+        android:id="@+id/playerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        app:surface_type="video_decoder_gl_surface_view"
-        app:use_controller="false" />
-
-    <androidx.media3.ui.PlayerView
-        android:id="@+id/playerViewNative"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
         app:use_controller="false" />
 </FrameLayout>

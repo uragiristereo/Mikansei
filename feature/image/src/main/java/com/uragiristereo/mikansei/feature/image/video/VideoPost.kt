@@ -94,7 +94,6 @@ fun VideoPost(
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
             positionUpdaterJob?.cancel()
-            player.release()
         }
     }
 
@@ -169,7 +168,6 @@ fun VideoPost(
         content = {
             VideoPlayer(
                 player = player,
-                postType = viewModel.post.type,
                 isBuffering = viewModel.isBuffering,
                 onTap = {
                      onAppBarsVisibleChange(!areAppBarsVisible)

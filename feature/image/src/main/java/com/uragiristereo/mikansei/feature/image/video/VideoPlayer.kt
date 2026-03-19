@@ -1,6 +1,5 @@
 package com.uragiristereo.mikansei.feature.image.video
 
-import android.view.View
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -21,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.feature.image.databinding.LayoutVideoPlayerBinding
 
 @androidx.annotation.OptIn(UnstableApi::class)
@@ -29,7 +27,6 @@ import com.uragiristereo.mikansei.feature.image.databinding.LayoutVideoPlayerBin
 @Composable
 fun VideoPlayer(
     player: ExoPlayer,
-    postType: Post.Type,
     isBuffering: Boolean,
     onTap: () -> Unit,
     onDoubleTap: () -> Unit,
@@ -41,11 +38,6 @@ fun VideoPlayer(
         modifier = modifier.fillMaxSize(),
     ) {
         AndroidViewBinding(LayoutVideoPlayerBinding::inflate) {
-            val playerView = when (postType) {
-                Post.Type.UGOIRA -> playerViewGl
-                else -> playerViewNative
-            }
-            playerView.visibility = View.VISIBLE
             playerView.player = player
             playerView.videoSurfaceView?.isHapticFeedbackEnabled = false
             player.prepare()
