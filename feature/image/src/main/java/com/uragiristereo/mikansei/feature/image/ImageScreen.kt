@@ -11,8 +11,12 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.retain.RetainedEffect
+import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -20,6 +24,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.ExoPlayer
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVoteViewModel
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
@@ -33,9 +42,11 @@ import com.uragiristereo.mikansei.feature.image.core.LoadingPost
 import com.uragiristereo.mikansei.feature.image.image.ImagePost
 import com.uragiristereo.mikansei.feature.image.image.UnsupportedPost
 import com.uragiristereo.mikansei.feature.image.video.VideoPost
+import com.uragiristereo.mikansei.feature.image.video.retainVideoPlayerPool
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
+@androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun ImageScreen(
@@ -54,6 +65,21 @@ internal fun ImageScreen(
     val targetPostId by viewModel.targetPostId.collectAsStateWithLifecycle()
     val session by viewModel.session.collectAsStateWithLifecycle()
 
+    val videoPlayerPool = retainVideoPlayerPool {
+        ExoPlayer.Builder(context.applicationContext)
+            .setMediaSourceFactory(viewModel.getMediaSourceFactory())
+            .setLoadControl(
+                DefaultLoadControl.Builder()
+                    .setBufferDurationsMs(
+                        /* minBufferMs = */ 10_000,
+                        /* maxBufferMs = */ 20_000,
+                        DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
+                        DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS,
+                    )
+                    .build()
+            )
+    }
+
     val targetPost = remember(posts, targetPostId) {
         posts.firstOrNull { it.id == targetPostId }
     }
@@ -67,6 +93,12 @@ internal fun ImageScreen(
         when {
             viewModel.areAppBarsVisible -> window.showSystemBars()
             else -> window.hideSystemBars()
+        }
+    }
+
+    RetainedEffect(Unit) {
+        onRetire {
+            videoPlayerPool.releaseAll()
         }
     }
 
@@ -166,7 +198,41 @@ internal fun ImageScreen(
                         }
 
                         Post.Type.VIDEO, Post.Type.UGOIRA -> {
+                            var player by retain { mutableStateOf<ExoPlayer?>(null) }
+
+                            LaunchedEffect(key1 = pagerState.settledPage) {
+                                val isPostVideo =
+                                    post.type in listOf(Post.Type.VIDEO, Post.Type.UGOIRA)
+                                val isPagePooled =
+                                    pagerState.settledPage in (index - 1)..(index + 1)
+
+                                val newPlayer = when {
+                                    isPostVideo && isPagePooled -> videoPlayerPool.getPlayer(index)
+                                        .apply {
+                                            setAudioAttributes(
+                                                AudioAttributes.Builder()
+                                                    .setUsage(C.USAGE_MEDIA)
+                                                    .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
+                                                    .build(),
+                                                "sound" in post.tags && pagerState.settledPage == index,
+                                            )
+                                        }
+
+                                    else -> null
+                                }
+
+                                val previousPlayer = player
+                                if (previousPlayer != null && newPlayer == null) {
+                                    previousPlayer.stop()
+                                    previousPlayer.clearMediaItems()
+                                }
+
+                                player = newPlayer
+                            }
+
                             VideoPost(
+                                player = player,
+                                isPlaying = viewModel.isVideoPlaying,
                                 areAppBarsVisible = viewModel.areAppBarsVisible,
                                 gesturesEnabled = gesturesEnabled,
                                 offsetY = viewModel.offsetY::floatValue,
@@ -178,6 +244,7 @@ internal fun ImageScreen(
                                     lambdaOnDownload(post)
                                 },
                                 onShareClick = lambdaOnShareClick,
+                                onPlayPauseToggle = viewModel::onPlayPauseToggle,
                                 allowPlaying = pagerState.settledPage == index,
                                 viewModel = koinViewModel(
                                     key = "VideoViewModel_${post.id}",

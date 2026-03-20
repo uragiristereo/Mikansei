@@ -1,20 +1,13 @@
 package com.uragiristereo.mikansei.feature.image.video
 
-import android.content.Context
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.media3.common.AudioAttributes
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,16 +18,18 @@ import kotlin.math.floor
 
 @androidx.annotation.OptIn(UnstableApi::class)
 class VideoViewModel(
-    private val networkRepository: NetworkRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val applicationContext: Context,
     val post: Post,
 ) : ViewModel() {
     val noSound = post.tags.none { it == "sound" }
 
-    val exoPlayer = buildExoPlayer()
+    val mediaItem = MediaItem.fromUri(
+        when {
+            post.type == Post.Type.UGOIRA -> post.medias.scaled!!.url
+            else -> post.medias.original.url
+        }
+    )
 
-    var isPlaying by mutableStateOf(true); private set
     var isBuffering by mutableStateOf(true); private set
     var sliderValue by mutableStateOf(0f); private set
     var elapsed by mutableStateOf(0L); private set
@@ -52,12 +47,6 @@ class VideoViewModel(
             initialValue = preferencesRepository.data.value.videoMuted,
         )
 
-    override fun onCleared() {
-        super.onCleared()
-
-        exoPlayer.release()
-    }
-
     fun updatePosition(position: Long, total: Long) {
         elapsed = position
         this.total = total
@@ -71,10 +60,6 @@ class VideoViewModel(
         elapsed = sliderValue.toLong()
     }
 
-    fun onPlayPauseToggle(isPlaying: Boolean) {
-        this.isPlaying = isPlaying
-    }
-
     fun onPlaybackStateChange(isBuffering: Boolean) {
         this.isBuffering = isBuffering
     }
@@ -85,40 +70,6 @@ class VideoViewModel(
                 it.copy(videoMuted = !it.videoMuted)
             }
         }
-    }
-
-    private fun buildExoPlayer(): ExoPlayer {
-        return ExoPlayer.Builder(applicationContext)
-            .apply {
-                if (!noSound) {
-                    setAudioAttributes(
-                        AudioAttributes.Builder()
-                            .setUsage(C.USAGE_MEDIA)
-                            .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
-                            .build(),
-                        true,
-                    )
-                }
-            }
-            .build()
-            .apply {
-                val mediaItem = MediaItem.fromUri(
-                    when {
-                        post.type == Post.Type.UGOIRA -> post.medias.scaled!!.url
-                        else -> post.medias.original.url
-                    }
-                )
-
-                setMediaItem(mediaItem)
-                setMediaSource(
-                    ProgressiveMediaSource
-                        .Factory(networkRepository.exoPlayerCacheFactory)
-                        .createMediaSource(mediaItem)
-                )
-
-                repeatMode = Player.REPEAT_MODE_ONE
-                playWhenReady = true
-            }
     }
 
     private fun formatTime(value: Long): String {
