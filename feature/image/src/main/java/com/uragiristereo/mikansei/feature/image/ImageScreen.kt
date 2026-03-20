@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.product.shared.postfavoritevote.PostFavoriteVoteViewModel
@@ -41,9 +42,11 @@ import com.uragiristereo.mikansei.feature.image.core.LoadingPost
 import com.uragiristereo.mikansei.feature.image.image.ImagePost
 import com.uragiristereo.mikansei.feature.image.image.UnsupportedPost
 import com.uragiristereo.mikansei.feature.image.video.VideoPost
+import com.uragiristereo.mikansei.feature.image.video.retainVideoPlayerPool
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
+@androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun ImageScreen(
@@ -65,6 +68,16 @@ internal fun ImageScreen(
     val videoPlayerPool = retainVideoPlayerPool {
         ExoPlayer.Builder(context.applicationContext)
             .setMediaSourceFactory(viewModel.getMediaSourceFactory())
+            .setLoadControl(
+                DefaultLoadControl.Builder()
+                    .setBufferDurationsMs(
+                        /* minBufferMs = */ 10_000,
+                        /* maxBufferMs = */ 20_000,
+                        DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
+                        DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS,
+                    )
+                    .build()
+            )
     }
 
     val targetPost = remember(posts, targetPostId) {
@@ -219,6 +232,7 @@ internal fun ImageScreen(
 
                             VideoPost(
                                 player = player,
+                                isPlaying = viewModel.isVideoPlaying,
                                 areAppBarsVisible = viewModel.areAppBarsVisible,
                                 gesturesEnabled = gesturesEnabled,
                                 offsetY = viewModel.offsetY::floatValue,

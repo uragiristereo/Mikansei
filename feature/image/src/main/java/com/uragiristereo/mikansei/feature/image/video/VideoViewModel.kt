@@ -30,7 +30,6 @@ class VideoViewModel(
         }
     )
 
-    var isPlaying by mutableStateOf(true); private set
     var isBuffering by mutableStateOf(true); private set
     var sliderValue by mutableStateOf(0f); private set
     var elapsed by mutableStateOf(0L); private set
@@ -59,10 +58,6 @@ class VideoViewModel(
 
     fun onJump() {
         elapsed = sliderValue.toLong()
-    }
-
-    fun onPlayPauseToggle(isPlaying: Boolean) {
-        this.isPlaying = isPlaying
     }
 
     fun onPlaybackStateChange(isBuffering: Boolean) {

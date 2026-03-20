@@ -80,6 +80,8 @@ class ViewerViewModel(
     var areAppBarsVisible by mutableStateOf(true)
         private set
 
+    var isVideoPlaying by mutableStateOf(true); private set
+
     fun setAppBarsVisible(value: Boolean) {
         areAppBarsVisible = value
     }
@@ -127,6 +129,10 @@ class ViewerViewModel(
                 postsLoading = false
             }
         }
+    }
+
+    fun onPlayPauseToggle(isVideoPlaying: Boolean) {
+        this.isVideoPlaying = isVideoPlaying
     }
 
     @OptIn(UnstableApi::class)

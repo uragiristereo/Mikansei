@@ -36,6 +36,7 @@ import kotlin.math.abs
 @Composable
 fun VideoPost(
     player: ExoPlayer?,
+    isPlaying: Boolean,
     areAppBarsVisible: Boolean,
     gesturesEnabled: Boolean,
     allowPlaying: Boolean,
@@ -46,6 +47,7 @@ fun VideoPost(
     onMoreClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onShareClick: () -> Unit,
+    onPlayPauseToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: VideoViewModel,
 ) {
@@ -85,7 +87,7 @@ fun VideoPost(
                             isBuffering = lastPosition == viewModel.elapsed && player.playWhenReady,
                         )
 
-                        if (viewModel.isPlaying) {
+                        if (isPlaying) {
                             lastPosition = viewModel.elapsed
                         }
 
@@ -97,8 +99,12 @@ fun VideoPost(
             }
 
             when (event) {
-                Lifecycle.Event.ON_PAUSE -> player.playWhenReady = false
-                Lifecycle.Event.ON_RESUME -> player.playWhenReady = viewModel.isPlaying && allowPlaying
+                Lifecycle.Event.ON_STOP -> {
+                    val activity = (context as? ComponentActivity)
+                    player.playWhenReady = activity?.isChangingConfigurations == true && allowPlaying
+                }
+
+                Lifecycle.Event.ON_RESUME -> player.playWhenReady = isPlaying && allowPlaying
                 else -> {}
             }
         }
@@ -111,8 +117,8 @@ fun VideoPost(
         }
     }
 
-    LaunchedEffect(key1 = viewModel.isPlaying, key2 = allowPlaying) {
-        player.playWhenReady = viewModel.isPlaying && allowPlaying
+    LaunchedEffect(key1 = isPlaying, key2 = allowPlaying) {
+        player?.playWhenReady = isPlaying && allowPlaying
     }
 
     LaunchedEffect(key1 = videoMuted, key2 = player) {
@@ -154,7 +160,7 @@ fun VideoPost(
                     },
             ) {
                 VideoControls(
-                    isPlaying = viewModel.isPlaying && allowPlaying,
+                    isPlaying = isPlaying && allowPlaying,
                     sliderValue = viewModel.sliderValue,
                     elapsed = viewModel.elapsed,
                     total = viewModel.total,
@@ -165,10 +171,10 @@ fun VideoPost(
                     muted = videoMuted,
                     onSeek = viewModel::onSeek,
                     onJump = {
-                        player.seekTo(viewModel.sliderValue.toLong())
+                        player?.seekTo(viewModel.sliderValue.toLong())
                         viewModel.onJump()
                     },
-                    onPlayingChange = viewModel::onPlayPauseToggle,
+                    onPlayingChange = onPlayPauseToggle,
                     onDownloadClick = onDownloadClick,
                     onShareClick = onShareClick,
                     onToggleMuted = viewModel::onToggleVideoMuted,
@@ -187,7 +193,7 @@ fun VideoPost(
                      onAppBarsVisibleChange(!areAppBarsVisible)
                 },
                 onDoubleTap = {
-                    viewModel.onPlayPauseToggle(!viewModel.isPlaying)
+                   onPlayPauseToggle(!isPlaying)
                 },
                 onLongPress = {
                     onMoreClick()
