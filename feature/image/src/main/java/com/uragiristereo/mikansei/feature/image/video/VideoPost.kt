@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.image.video
 
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -14,12 +15,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.C
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import com.google.accompanist.insets.ui.Scaffold
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
 import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
@@ -31,6 +35,7 @@ import kotlin.math.abs
 
 @Composable
 fun VideoPost(
+    player: ExoPlayer?,
     areAppBarsVisible: Boolean,
     gesturesEnabled: Boolean,
     allowPlaying: Boolean,
@@ -44,13 +49,22 @@ fun VideoPost(
     modifier: Modifier = Modifier,
     viewModel: VideoViewModel,
 ) {
+    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
     val videoMuted by viewModel.videoMuted.collectAsStateWithLifecycle()
 
-    val player = viewModel.exoPlayer
+    DisposableEffect(key1 = lifecycleOwner, key2 = player) {
+        if (player == null) {
+            return@DisposableEffect onDispose { }
+        }
 
-    DisposableEffect(key1 = lifecycleOwner) {
+        if (player.currentMediaItem != viewModel.mediaItem) {
+            player.setMediaItem(viewModel.mediaItem, viewModel.elapsed)
+        }
+
+        player.repeatMode = Player.REPEAT_MODE_ALL
+
         var positionUpdaterJob: Job? = null
 
         val observer = LifecycleEventObserver { _, event ->
@@ -101,8 +115,8 @@ fun VideoPost(
         player.playWhenReady = viewModel.isPlaying && allowPlaying
     }
 
-    LaunchedEffect(key1 = videoMuted) {
-        player.volume = when {
+    LaunchedEffect(key1 = videoMuted, key2 = player) {
+        player?.volume = when {
             videoMuted -> 0f
             else -> 1f
         }

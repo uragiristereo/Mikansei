@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidViewBinding
@@ -26,21 +27,25 @@ import com.uragiristereo.mikansei.feature.image.databinding.LayoutVideoPlayerBin
 @OptIn(ExperimentalLayoutApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun VideoPlayer(
-    player: ExoPlayer,
+    player: ExoPlayer?,
     isBuffering: Boolean,
     onTap: () -> Unit,
     onDoubleTap: () -> Unit,
     onLongPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    LaunchedEffect(player) {
+        player?.prepare()
+    }
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize(),
     ) {
         AndroidViewBinding(LayoutVideoPlayerBinding::inflate) {
             playerView.player = player
+            playerView.isHapticFeedbackEnabled = false
             playerView.videoSurfaceView?.isHapticFeedbackEnabled = false
-            player.prepare()
         }
 
         Box(

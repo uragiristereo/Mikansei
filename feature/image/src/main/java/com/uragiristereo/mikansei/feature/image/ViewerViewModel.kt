@@ -1,5 +1,6 @@
 package com.uragiristereo.mikansei.feature.image
 
+import androidx.annotation.OptIn
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -8,10 +9,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.source.MediaSource
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.database.entity.Session
+import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
@@ -26,6 +31,7 @@ class ViewerViewModel(
     private val savedStateHandle: SavedStateHandle,
     userRepository: UserRepository,
     private val sessionRepository: SessionRepository,
+    private val networkRepository: NetworkRepository,
     private val getPostsUseCase: GetPostsUseCase,
 ) : ViewModel() {
     private val args = savedStateHandle.toRoute<MainRoute.Image>(PostNavType)
@@ -121,6 +127,11 @@ class ViewerViewModel(
                 postsLoading = false
             }
         }
+    }
+
+    @OptIn(UnstableApi::class)
+    fun getMediaSourceFactory(): MediaSource.Factory {
+        return ProgressiveMediaSource.Factory(networkRepository.exoPlayerCacheFactory)
     }
 
     private suspend fun updateSessionResult(page: Int, canLoadMore: Boolean) {

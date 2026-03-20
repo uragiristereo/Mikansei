@@ -16,7 +16,7 @@ object ImageModule {
         viewModelOf(::MoreBottomSheetViewModel)
         viewModelOf(::ViewerViewModel)
         viewModel { parameters ->
-            VideoViewModel(get(), get(), get(), parameters.get())
+            VideoViewModel(get(), parameters.get())
         }
     }
 }
