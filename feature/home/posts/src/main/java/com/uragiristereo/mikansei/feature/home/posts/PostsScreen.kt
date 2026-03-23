@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
 import com.uragiristereo.mikansei.core.resources.R
@@ -190,6 +191,18 @@ internal fun PostsScreen(
                     offset = gridState.firstVisibleItemScrollOffset,
                 )
             }
+    }
+
+    LifecycleResumeEffect(key1 = Unit) {
+        val job = scope.launch {
+            viewModel.filteredPosts.collect {
+                viewModel.posts = it
+            }
+        }
+
+        onPauseOrDispose {
+            job.cancel()
+        }
     }
 
     SetSystemBarsColors(Color.Transparent)
