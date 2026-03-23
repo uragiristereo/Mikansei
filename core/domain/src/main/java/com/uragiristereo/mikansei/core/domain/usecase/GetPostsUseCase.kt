@@ -13,7 +13,6 @@ class GetPostsUseCase(
     private val danbooruRepository: DanbooruRepository,
     private val postRepository: PostRepository,
     private val sessionRepository: SessionRepository,
-    private val filterPostsUseCase: FilterPostsUseCase,
 ) {
     suspend operator fun invoke(
         sessionId: String,
@@ -26,30 +25,23 @@ class GetPostsUseCase(
 
                 // if page == 1, it means refreshing and existing posts should be cleared
                 val existingPosts = when {
-                    page > 1 -> {
-                        filterPostsUseCase(
-                            posts = sessionRepository.getPosts(sessionId).first(),
-                            tags = tags,
-                        )
-                    }
-
+                    page > 1 -> sessionRepository.getPosts(sessionId).first()
                     else -> emptyList()
                 }
-                val newPosts = filterPostsUseCase(postsResult.posts, tags)
                 var canLoadMore = postsResult.canLoadMore
 
-                if (canLoadMore && newPosts.isEmpty()) {
+                if (canLoadMore && postsResult.posts.isEmpty()) {
                     canLoadMore = false
                 }
 
                 postRepository.update(postsResult.posts)
                 sessionRepository.updatePosts(
                     sessionId = sessionId,
-                    posts = existingPosts + newPosts,
+                    posts = existingPosts + postsResult.posts,
                 )
 
                 PostsResult(
-                    posts = existingPosts + newPosts,
+                    posts = existingPosts + postsResult.posts,
                     isEmpty = postsResult.posts.isEmpty(),
                     canLoadMore = canLoadMore,
                 )
