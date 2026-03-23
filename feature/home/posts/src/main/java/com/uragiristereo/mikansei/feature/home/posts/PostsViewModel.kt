@@ -15,6 +15,7 @@ import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.database.entity.Session
+import com.uragiristereo.mikansei.core.domain.usecase.FilterPostsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.model.danbooru.Post
@@ -31,8 +32,10 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -44,6 +47,7 @@ class PostsViewModel(
     private val userRepository: UserRepository,
     private val sessionRepository: SessionRepository,
     private val getPostsUseCase: GetPostsUseCase,
+    private val filterPostsUseCase: FilterPostsUseCase,
 ) : ViewModel() {
     val tags = savedStateHandle.toRoute<HomeRoute.Posts>().tags
 
@@ -53,15 +57,47 @@ class PostsViewModel(
     var topAppBarHeight by mutableStateOf(0.dp)
     val offsetY = Animatable(initialValue = 0f)
 
+    // session
+    val sessionId = savedStateHandle.get<String>(Constants.STATE_KEY_POSTS_SESSION_ID).run {
+        this ?: UUID.randomUUID().toString()
+    }
+
+    val session = sessionRepository.getSession(sessionId)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = null,
+        )
+
+    private val isLoadFromSession = savedStateHandle["IS_LOAD_FROM_SESSION"] ?: false
+
     // posts
     var posts by mutableStateOf<ImmutableList<Post>>(immutableListOf())
-        private set
+
+    val filteredPosts = combine(
+        sessionRepository.getPosts(sessionId),
+        userRepository.active,
+    ) { sessionPosts, _ ->
+        filterPostsUseCase(sessionPosts, tags)
+    }.map { filteredPosts ->
+        immutableListOf(filteredPosts).also { filteredPosts ->
+            if (firstLoadFromSession) {
+                firstLoadFromSession = false
+                posts = filteredPosts
+            }
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000L),
+        initialValue = immutableListOf(),
+    )
 
     var loading by mutableStateOf(PostsLoadingState.FROM_LOAD)
 
     var errorMessage by mutableStateOf<String?>(null)
 
     private var firstLoad by mutableStateOf(true)
+    private var firstLoadFromSession by mutableStateOf(true)
 
     val contentState by derivedStateOf {
         val loadingDisabled =
@@ -81,20 +117,6 @@ class PostsViewModel(
     private var postsJob: Job? = null
     val gridState = LazyStaggeredGridState()
 
-    // session
-    val sessionId = savedStateHandle.get<String>(Constants.STATE_KEY_POSTS_SESSION_ID).run {
-        this ?: UUID.randomUUID().toString()
-    }
-
-    val session = sessionRepository.getSession(sessionId)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = null,
-        )
-
-    private val isLoadFromSession = savedStateHandle["IS_LOAD_FROM_SESSION"] ?: false
-
     // saved searches
     val activeUser: StateFlow<Profile>
         get() = userRepository.active
@@ -110,16 +132,6 @@ class PostsViewModel(
             } else {
                 sessionRepository.updateSession(Session(sessionId, tags))
                 getPosts()
-            }
-        }
-
-        viewModelScope.launch {
-            sessionRepository.getPosts(sessionId).collect {
-                posts = immutableListOf(it)
-
-                if (firstLoad && it.isNotEmpty()) {
-                    firstLoad = false
-                }
             }
         }
     }
