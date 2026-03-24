@@ -69,7 +69,7 @@ class PostsViewModel(
             initialValue = null,
         )
 
-    private val isLoadFromSession = savedStateHandle["IS_LOAD_FROM_SESSION"] ?: false
+    private val isLoadFromSession = savedStateHandle[STATE_KEY_IS_LOAD_FROM_SESSION] ?: false
 
     // posts
     var posts by mutableStateOf<ImmutableList<Post>>(immutableListOf())
@@ -231,7 +231,7 @@ class PostsViewModel(
     fun updateSessionPosition(index: Int, offset: Int) {
         viewModelScope.launch {
             val session = session.value ?: return@launch
-            savedStateHandle["IS_LOAD_FROM_SESSION"] = true
+            savedStateHandle[STATE_KEY_IS_LOAD_FROM_SESSION] = true
             sessionRepository.updateSession(
                 session.copy(scrollIndex = index, scrollOffset = offset)
             )
@@ -262,6 +262,10 @@ class PostsViewModel(
         viewModelScope.launch(SupervisorJob()) {
             sessionRepository.delete(sessionId)
         }
+    }
+
+    companion object {
+        private const val STATE_KEY_IS_LOAD_FROM_SESSION = "IS_LOAD_FROM_SESSION"
     }
 
     sealed interface Event {
