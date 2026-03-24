@@ -4,7 +4,6 @@ import com.uragiristereo.mikansei.core.danbooru.annotation.NoSafeHost
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.Environment
 import com.uragiristereo.mikansei.core.model.danbooru.DanbooruHost
-import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 import com.uragiristereo.mikansei.core.preferences.PreferencesRepository
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
@@ -29,7 +28,7 @@ class DanbooruHostInterceptor(
     private val isInSafeMode: Boolean
         get() {
             val activeUser = userRepository.active.value
-            return environment.safeMode || activeUser.danbooru.safeMode || activeUser.mikansei.postsRatingFilter == RatingPreference.GENERAL_ONLY
+            return environment.safeMode || activeUser.danbooru.safeMode
         }
 
     override fun intercept(chain: Interceptor.Chain): Response {

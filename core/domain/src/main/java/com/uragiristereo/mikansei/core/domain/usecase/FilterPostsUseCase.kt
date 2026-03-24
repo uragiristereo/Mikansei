@@ -3,11 +3,16 @@ package com.uragiristereo.mikansei.core.domain.usecase
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.danbooru.Post
 import com.uragiristereo.mikansei.core.model.danbooru.Rating
+import com.uragiristereo.mikansei.core.model.preferences.user.RatingPreference
 
 class FilterPostsUseCase(private val userRepository: UserRepository) {
     operator fun invoke(posts: List<Post>, tags: String): List<Post> {
         val profile = userRepository.active.value
-        val ratingFilters = profile.mikansei.postsRatingFilter.getFilteredRatings()
+        val safeMode = userRepository.active.value.danbooru.safeMode
+        val ratingFilters = when {
+            safeMode -> RatingPreference.GENERAL_ONLY.getFilteredRatings()
+            else -> profile.mikansei.postsRatingFilter.getFilteredRatings()
+        }
         val showDeletedPosts = when {
             profile.danbooru.showDeletedPosts
                 .or(tags.contains("status:any"))
