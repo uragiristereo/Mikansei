@@ -48,6 +48,14 @@ class AddToFavGroupViewModel(
         loadFavoriteGroups()
     }
 
+    private fun mapResult(items: List<Favorite.Group>): List<Favorite.Group> {
+        return items.map { favoriteGroup ->
+            favoriteGroup.copy(
+                isPostAlreadyExits = post.id in favoriteGroup.postIds,
+            )
+        }.sortedByDescending(Favorite.Group::isPostAlreadyExits)
+    }
+
     private fun loadFavoriteGroups() {
         viewModelScope.launch {
             isLoading = true
@@ -65,7 +73,7 @@ class AddToFavGroupViewModel(
                             delay(timeMillis = 100)
                         }
 
-                        items = result.data.items.sortedByDescending(Favorite.Group::isPostAlreadyExits)
+                        items = mapResult(result.data.items)
                     }
 
                     is Result.Failed -> Timber.d(result.message)
@@ -126,7 +134,7 @@ class AddToFavGroupViewModel(
 
             when (result) {
                 is Result.Success -> {
-                    items = result.data.sortedByDescending(Favorite.Group::isPostAlreadyExits)
+                    items = mapResult(result.data)
 
                     Timber.d("updateAndCacheFavoriteGroups success")
                 }
