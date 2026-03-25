@@ -78,10 +78,10 @@ class PostsViewModel(
         sessionRepository.getPosts(sessionId),
         userRepository.active,
     ) { sessionPosts, _ ->
-        filterPostsUseCase(sessionPosts, tags)
+        filterPostsUseCase.invoke(sessionPosts, tags)
     }.map { filteredPosts ->
         immutableListOf(filteredPosts).also { filteredPosts ->
-            if (firstLoadFromSession) {
+            if (firstLoadFromSession || isLoadFromSession) {
                 firstLoadFromSession = false
                 posts = filteredPosts
             }

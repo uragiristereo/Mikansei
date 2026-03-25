@@ -39,7 +39,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.uragiristereo.mikansei.core.model.Constants
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
@@ -99,7 +98,6 @@ internal fun PostsScreen(
     )
     val activeUser by viewModel.activeUser.collectAsState()
     val session by viewModel.session.collectAsState()
-    val scrollOffset = density.run { (-100).dp.toPx().roundToInt() }
 
     val isMoreLoadingVisible by remember {
         derivedStateOf {
@@ -417,6 +415,9 @@ internal fun PostsScreen(
                     val targetIndex = viewModel.getIndexFromPostId(targetPostId)
 
                     if (targetIndex != null) {
+                        val scrollOffset = density.run {
+                            viewModel.topAppBarHeight.toPx().roundToInt().unaryMinus()
+                        }
                         gridState.scrollToItem(index = targetIndex, scrollOffset = scrollOffset)
                         sharedViewModel.targetPostId = null
                     }
