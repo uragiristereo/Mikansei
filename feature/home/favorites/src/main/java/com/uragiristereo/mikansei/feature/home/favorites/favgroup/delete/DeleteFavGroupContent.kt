@@ -29,7 +29,7 @@ import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.bottomSheet
 
 @Composable
 fun DeleteFavGroupContent(
-    favoriteGroup: Favorite,
+    favoriteGroup: Favorite.Group,
     onDeleteClick: () -> Unit,
 ) {
     Column(modifier = Modifier.bottomSheetContentPadding()) {

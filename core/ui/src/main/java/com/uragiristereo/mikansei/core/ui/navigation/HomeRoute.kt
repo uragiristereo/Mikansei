@@ -37,19 +37,19 @@ sealed interface HomeRoute : NavRoute {
     @Serializable
     data class FavoriteGroupMore(
         @Serializable
-        val favoriteGroup: Favorite,
+        val favoriteGroup: Favorite.Group,
     ) : HomeRoute
 
     @Serializable
     data class EditFavoriteGroup(
         @Serializable
-        val favoriteGroup: Favorite,
+        val favoriteGroup: Favorite.Group,
     ) : HomeRoute
 
     @Serializable
     data class DeleteFavoriteGroup(
         @Serializable
-        val favoriteGroup: Favorite,
+        val favoriteGroup: Favorite.Group,
     ) : HomeRoute
 }
 
@@ -60,4 +60,4 @@ val HomeRoutesString = listOf(
 )
 
 val PostNavType = navTypeMapOf<Post>()
-val FavoriteNavType = navTypeMapOf<Favorite>()
+val FavoriteGroupNavType = navTypeMapOf<Favorite.Group>()

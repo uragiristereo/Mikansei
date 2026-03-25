@@ -6,14 +6,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.FavoriteGroup
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 
 @Composable
 fun FavoriteGroupsColumn(
-    items: List<FavoriteGroup>,
+    items: List<Favorite.Group>,
     enabled: Boolean,
-    onAddClick: (FavoriteGroup) -> Unit,
-    onRemoveClick: (FavoriteGroup) -> Unit,
+    onAddClick: (Favorite.Group) -> Unit,
+    onRemoveClick: (Favorite.Group) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(

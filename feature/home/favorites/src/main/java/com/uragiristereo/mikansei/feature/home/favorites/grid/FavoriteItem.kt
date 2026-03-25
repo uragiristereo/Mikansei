@@ -1,5 +1,9 @@
 package com.uragiristereo.mikansei.feature.home.favorites.grid
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -32,10 +36,24 @@ import com.uragiristereo.mikansei.core.resources.R
 fun FavoriteItem(
     item: Favorite,
     onClick: () -> Unit,
-    onLongClick: () -> Unit,
+    onLongClick: (Favorite.Group) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+
+    val thumbnailPost = remember(item) {
+        when (item) {
+            is Favorite.Regular -> item.preferredThumbnailPostId?.let { preferredThumbnailPostId ->
+                item.posts.firstOrNull { post ->
+                    post.id == preferredThumbnailPostId
+                } ?: item.posts.firstOrNull()
+            }
+
+            is Favorite.Group -> item.thumbnailPost
+        }
+    }
+
+    val thumbnailUrl = thumbnailPost?.medias?.preview?.url
 
     Column(modifier = modifier) {
         Box(
@@ -43,16 +61,18 @@ fun FavoriteItem(
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(size = 8.dp))
                 .let {
-                    if (item.id == 0) {
-                        it.clickable(
+                    when (item) {
+                        is Favorite.Regular -> it.clickable(
                             onClick = onClick,
                             interactionSource = remember { MutableInteractionSource() },
                             indication = ripple(color = Color.Black),
                         )
-                    } else {
-                        it.combinedClickable(
+
+                        is Favorite.Group -> it.combinedClickable(
                             onClick = onClick,
-                            onLongClick = onLongClick,
+                            onLongClick = {
+                                onLongClick(item.copy(thumbnailUrl = thumbnailUrl))
+                            },
                             interactionSource = remember { MutableInteractionSource() },
                             indication = ripple(color = Color.Black),
                         )
@@ -61,17 +81,25 @@ fun FavoriteItem(
         ) {
             ProductPostPlaceholder()
 
-            AsyncImage(
-                model = remember(item.thumbnailUrl) {
-                    ImageRequest.Builder(context)
-                        .data(item.thumbnailUrl)
-                        .crossfade(durationMillis = 170)
-                        .build()
+            AnimatedContent(
+                targetState = thumbnailUrl,
+                transitionSpec = {
+                    fadeIn() togetherWith fadeOut()
                 },
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
-            )
+                label = "thumbnail",
+            ) { thumbnailUrl ->
+                AsyncImage(
+                    model = remember(thumbnailUrl) {
+                        ImageRequest.Builder(context)
+                            .data(thumbnailUrl)
+                            .crossfade(durationMillis = 170)
+                            .build()
+                    },
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
 
         Text(

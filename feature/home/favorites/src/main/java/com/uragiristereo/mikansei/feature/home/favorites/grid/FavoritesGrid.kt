@@ -21,7 +21,7 @@ fun FavoritesGrid(
     items: List<Favorite>,
     contentPadding: PaddingValues,
     onFavoriteClick: (Int) -> Unit,
-    onFavGroupLongClick: (Favorite) -> Unit,
+    onFavGroupLongClick: (Favorite.Group) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
@@ -51,7 +51,7 @@ fun FavoritesGrid(
                 },
                 onLongClick = {
                     hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                    onFavGroupLongClick(item)
+                    onFavGroupLongClick(it)
                 },
                 modifier = Modifier.animateItem(),
             )

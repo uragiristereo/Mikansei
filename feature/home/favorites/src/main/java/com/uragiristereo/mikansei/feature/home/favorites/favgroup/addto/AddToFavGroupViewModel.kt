@@ -15,7 +15,6 @@ import com.uragiristereo.mikansei.core.domain.usecase.GetFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
-import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.FavoriteGroup
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -30,7 +29,7 @@ class AddToFavGroupViewModel(
 ) : ViewModel() {
     val post = savedStateHandle.toRoute<HomeRoute.AddToFavGroup>(PostNavType).post
 
-    var items by mutableStateOf<List<FavoriteGroup>?>(null)
+    var items by mutableStateOf<List<Favorite.Group>?>(null)
         private set
 
     var isLoading by mutableStateOf(true)
@@ -47,17 +46,6 @@ class AddToFavGroupViewModel(
 
     init {
         loadFavoriteGroups()
-    }
-
-    private fun mapResult(items: List<Favorite>): List<FavoriteGroup> {
-        return items.map { favorite ->
-            FavoriteGroup(
-                id = favorite.id,
-                name = favorite.name,
-                thumbnailUrl = favorite.thumbnailUrl,
-                isPostAlreadyExits = favorite.postIds.any { it == post.id },
-            )
-        }.sortedByDescending(FavoriteGroup::isPostAlreadyExits)
     }
 
     private fun loadFavoriteGroups() {
@@ -77,7 +65,7 @@ class AddToFavGroupViewModel(
                             delay(timeMillis = 100)
                         }
 
-                        items = mapResult(result.data.items)
+                        items = result.data.items.sortedByDescending(Favorite.Group::isPostAlreadyExits)
                     }
 
                     is Result.Failed -> Timber.d(result.message)
@@ -90,7 +78,7 @@ class AddToFavGroupViewModel(
     }
 
     fun addPostToFavoriteGroup(
-        item: FavoriteGroup,
+        item: Favorite.Group,
         onShowMessage: suspend (message: String, length: SnackbarDuration) -> Unit,
     ) {
         viewModelScope.launch(SupervisorJob()) {
@@ -138,7 +126,7 @@ class AddToFavGroupViewModel(
 
             when (result) {
                 is Result.Success -> {
-                    items = mapResult(result.data)
+                    items = result.data.sortedByDescending(Favorite.Group::isPostAlreadyExits)
 
                     Timber.d("updateAndCacheFavoriteGroups success")
                 }
@@ -153,7 +141,7 @@ class AddToFavGroupViewModel(
         }
     }
 
-    fun removePostFromFavoriteGroup(item: FavoriteGroup) {
+    fun removePostFromFavoriteGroup(item: Favorite.Group) {
         viewModelScope.launch {
             isRemoving = true
 

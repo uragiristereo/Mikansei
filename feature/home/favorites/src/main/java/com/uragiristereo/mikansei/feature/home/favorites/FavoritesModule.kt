@@ -10,7 +10,7 @@ import androidx.navigation.toRoute
 import com.uragiristereo.mikansei.core.ui.extension.rememberParentNavBackStackEntry
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.InterceptBackGestureForBottomSheetNavigator
 import com.uragiristereo.mikansei.core.ui.modalbottomsheet.navigator.LocalBottomSheetNavigator
-import com.uragiristereo.mikansei.core.ui.navigation.FavoriteNavType
+import com.uragiristereo.mikansei.core.ui.navigation.FavoriteGroupNavType
 import com.uragiristereo.mikansei.core.ui.navigation.HomeRoute
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
@@ -74,7 +74,7 @@ fun NavGraphBuilder.favoritesRoute(navController: NavHostController) {
         )
     }
 
-    composable<HomeRoute.EditFavoriteGroup>(FavoriteNavType) {
+    composable<HomeRoute.EditFavoriteGroup>(FavoriteGroupNavType) {
         val homeViewModelStoreOwner = navController.rememberParentNavBackStackEntry()
         val favoritesViewModel: FavoritesViewModel = koinViewModel(viewModelStoreOwner = homeViewModelStoreOwner)
 
@@ -101,7 +101,7 @@ fun NavGraphBuilder.favoritesBottomRoute(navController: NavHostController) {
         )
     }
 
-    composable<HomeRoute.FavoriteGroupMore>(FavoriteNavType) { entry ->
+    composable<HomeRoute.FavoriteGroupMore>(FavoriteGroupNavType) { entry ->
         val args = entry.toRoute<HomeRoute.FavoriteGroupMore>()
 
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
@@ -134,7 +134,7 @@ fun NavGraphBuilder.favoritesBottomRoute(navController: NavHostController) {
         )
     }
 
-    composable<HomeRoute.DeleteFavoriteGroup>(FavoriteNavType) { entry ->
+    composable<HomeRoute.DeleteFavoriteGroup>(FavoriteGroupNavType) { entry ->
         val bottomSheetNavigator = LocalBottomSheetNavigator.current
         val args = entry.toRoute<HomeRoute.DeleteFavoriteGroup>()
         val homeViewModelStoreOwner = navController.rememberParentNavBackStackEntry()

@@ -21,12 +21,14 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.product.component.ProductPullRefreshIndicator
 import com.uragiristereo.mikansei.core.product.component.ProductStatusBarSpacer
@@ -49,12 +51,13 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun FavoritesScreen(
     onFavoriteClick: (id: Int, username: String) -> Unit,
-    onFavGroupLongClick: (Favorite) -> Unit,
+    onFavGroupLongClick: (Favorite.Group) -> Unit,
     onAddClick: () -> Unit,
     viewModel: FavoritesViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val scaffoldState = LocalScaffoldState.current
+    val scope = rememberCoroutineScope()
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = viewModel.loadingState == LoadingState.FROM_REFRESH,
@@ -74,6 +77,18 @@ fun FavoritesScreen(
                     }
                 }
             }
+        }
+    }
+
+    LifecycleResumeEffect(key1 = Unit) {
+        val job = scope.launch {
+            viewModel.filteredPostsFavorites.collect {
+                viewModel.favorites = it
+            }
+        }
+
+        onPauseOrDispose {
+            job.cancel()
         }
     }
 
