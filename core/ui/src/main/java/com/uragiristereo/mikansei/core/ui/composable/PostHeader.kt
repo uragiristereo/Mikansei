@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -79,6 +80,8 @@ fun PostHeader(
                     .aspectRatio(aspectRatio)
                     .clip(RoundedCornerShape(size = 4.dp)),
             )
+        } else {
+            Spacer(modifier = Modifier.height(72.dp))
         }
     }
 }
