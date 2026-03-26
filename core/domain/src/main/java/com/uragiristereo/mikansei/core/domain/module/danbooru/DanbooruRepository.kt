@@ -38,9 +38,9 @@ interface DanbooruRepository {
 
     suspend fun updateUserSettings(id: Int, field: ProfileSettingsField): Result<Unit>
 
-    suspend fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean, forceLoadFromCache: Boolean): Result<List<Favorite>>
+    suspend fun getFavoriteGroups(creatorId: Int, forceRefresh: Boolean, forceLoadFromCache: Boolean): Result<List<Favorite.Group>>
 
-    suspend fun getPostsByIds(ids: List<Int>, forceCache: Boolean, forceRefresh: Boolean): Result<List<Post>>
+    suspend fun getPostsByIds(ids: List<Int>, extraTags: String, forceCache: Boolean, forceRefresh: Boolean): Result<List<Post>>
 
     suspend fun addToFavorites(postId: Int): Result<Unit>
 
@@ -54,7 +54,7 @@ interface DanbooruRepository {
 
     suspend fun removePostFromFavoriteGroup(favoriteGroupId: Int, postId: Int): Result<Unit>
 
-    suspend fun createNewFavoriteGroup(name: String, postIds: List<Int>): Result<Favorite>
+    suspend fun createNewFavoriteGroup(name: String, postIds: List<Int>): Result<Favorite.Group>
 
     suspend fun editFavoriteGroup(favoriteGroupId: Int, name: String, postIds: List<Int>): Result<Unit>
 

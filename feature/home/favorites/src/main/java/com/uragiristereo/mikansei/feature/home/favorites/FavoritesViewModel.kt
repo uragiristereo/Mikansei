@@ -8,17 +8,24 @@ import androidx.lifecycle.viewModelScope
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
+import com.uragiristereo.mikansei.core.domain.usecase.FilterPostsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetFavoritesAndFavoriteGroupsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.feature.home.favorites.core.LoadingState
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel(
     private val userRepository: UserRepository,
     private val danbooruRepository: DanbooruRepository,
     private val getFavoritesAndFavoriteGroupsUseCase: GetFavoritesAndFavoriteGroupsUseCase,
+    private val filterPostsUseCase: FilterPostsUseCase,
 ) : ViewModel() {
     private val channel = Channel<Event>()
     val event = channel.receiveAsFlow()
@@ -29,8 +36,39 @@ class FavoritesViewModel(
     var loadingState by mutableStateOf(LoadingState.FROM_LOAD)
         private set
 
+    private var shouldShowImmediately = true
+
     var favorites by mutableStateOf(listOf<Favorite>())
-        private set
+
+    private val unfilteredFavorites = MutableStateFlow(listOf<Favorite>())
+
+    val filteredPostsFavorites = combine(
+        unfilteredFavorites,
+        userRepository.active,
+    ) { unfilteredFavorites, _ ->
+        unfilteredFavorites.map { unfilteredFavorite ->
+            when (unfilteredFavorite) {
+                is Favorite.Regular -> unfilteredFavorite.copy(
+                    posts = filterPostsUseCase.invoke(unfilteredFavorite.posts, tags = "")
+                )
+
+                is Favorite.Group -> unfilteredFavorite.copy(
+                    thumbnailPost = unfilteredFavorite.thumbnailPost?.let { post ->
+                        filterPostsUseCase.invoke(posts = listOf(post), tags = "").firstOrNull()
+                    }
+                )
+            }
+        }
+    }.onEach { filteredPostsFavorites ->
+        if (shouldShowImmediately) {
+            shouldShowImmediately = false
+            favorites = filteredPostsFavorites
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = emptyList(),
+    )
 
     init {
         viewModelScope.launch {
@@ -60,7 +98,11 @@ class FavoritesViewModel(
                 }
 
                 when (val result = getFavoritesAndFavoriteGroupsUseCase()) {
-                    is Result.Success -> favorites = result.data
+                    is Result.Success -> {
+                        shouldShowImmediately = true
+                        unfilteredFavorites.value = result.data
+                    }
+
                     is Result.Failed -> channel.send(Event.OnError(result.message))
                     is Result.Error -> channel.send(Event.OnError(result.t.toString()))
                 }
@@ -70,7 +112,7 @@ class FavoritesViewModel(
         }
     }
 
-    fun deleteFavoriteGroup(favoriteGroup: Favorite) {
+    fun deleteFavoriteGroup(favoriteGroup: Favorite.Group) {
         loadingState = LoadingState.FROM_REFRESH
 
         viewModelScope.launch {

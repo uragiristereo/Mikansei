@@ -15,14 +15,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.uragiristereo.mikansei.feature.home.favorites.favgroup.addto.core.FavoriteGroup
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
 
 @Composable
 fun FavoriteGroupItem(
-    item: FavoriteGroup,
+    item: Favorite.Group,
     enabled: Boolean,
-    onAddClick: (FavoriteGroup) -> Unit,
-    onRemoveClick: (FavoriteGroup) -> Unit,
+    onAddClick: (Favorite.Group) -> Unit,
+    onRemoveClick: (Favorite.Group) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }

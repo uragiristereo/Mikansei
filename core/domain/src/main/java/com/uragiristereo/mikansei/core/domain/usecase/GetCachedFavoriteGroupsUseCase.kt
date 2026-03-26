@@ -1,6 +1,6 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
-import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.FavoriteResult
+import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.FavoriteGroupResult
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +10,7 @@ import timber.log.Timber
 class GetCachedFavoriteGroupsUseCase(
     private val getFavoriteGroupsUseCase: GetFavoriteGroupsUseCase,
 ) {
-    operator fun invoke(): Flow<Result<FavoriteResult>> {
+    operator fun invoke(): Flow<Result<FavoriteGroupResult>> {
         return flow {
             Timber.d("loading from cache...")
             val cachedResult = getFavoriteGroupsUseCase.invoke(
@@ -18,7 +18,7 @@ class GetCachedFavoriteGroupsUseCase(
                 forceLoadFromCache = true,
                 shouldLoadThumbnails = false,
             ).mapSuccess { items ->
-                FavoriteResult(
+                FavoriteGroupResult(
                     isFromCache = true,
                     items = items,
                 )
@@ -39,7 +39,7 @@ class GetCachedFavoriteGroupsUseCase(
                 forceLoadFromCache = false,
                 shouldLoadThumbnails = false,
             ).mapSuccess { items ->
-                FavoriteResult(
+                FavoriteGroupResult(
                     isFromCache = false,
                     items = items,
                 )

@@ -109,6 +109,7 @@ fun NavGraphBuilder.imageBottomRoute(navController: NavHostController) {
 
         fun navigateWithTags(tags: String, searchImmediately: Boolean) {
             if (searchImmediately) {
+                sharedViewModel.targetPostId = null
                 navController.navigate(HomeRoute.Posts(tags)) {
                     popUpTo<HomeRoute.Posts>()
                 }

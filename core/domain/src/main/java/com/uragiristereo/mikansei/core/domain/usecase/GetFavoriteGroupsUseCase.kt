@@ -2,23 +2,19 @@ package com.uragiristereo.mikansei.core.domain.usecase
 
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
-import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
-import java.util.UUID
 
 class GetFavoriteGroupsUseCase(
     private val danbooruRepository: DanbooruRepository,
-    private val sessionRepository: SessionRepository,
     private val userRepository: UserRepository,
-    private val getPostsUseCase: GetPostsUseCase,
 ) {
     suspend operator fun invoke(
         forceRefresh: Boolean,
         forceLoadFromCache: Boolean,
         shouldLoadThumbnails: Boolean,
-    ): Result<List<Favorite>> {
+    ): Result<List<Favorite.Group>> {
         val activeUser = userRepository.active.value
 
         val result = danbooruRepository.getFavoriteGroups(
@@ -39,29 +35,23 @@ class GetFavoriteGroupsUseCase(
                     it.postIds.maxOrNull()
                 }
 
-                val sessionId = UUID.randomUUID().toString()
-                val separatedIds = thumbnailPostIds.joinToString(separator = ",")
-
-                return getPostsUseCase.invoke(
-                    sessionId = sessionId,
-                    tags = "id:$separatedIds status:any",
-                    page = 1,
+                return danbooruRepository.getPostsByIds(
+                    ids = thumbnailPostIds,
+                    extraTags = "status:any",
+                    forceCache = false,
+                    forceRefresh = true,
                 ).mapSuccess { postsResult ->
-                    val posts = postsResult.posts
-
                     favoriteGroups.map { favoriteGroup ->
                         val thumbnailPostId = favoriteGroup.postIds.maxOrNull()
 
-                        val post = posts.firstOrNull {
+                        val post = postsResult.firstOrNull {
                             it.id == thumbnailPostId
                         }
 
                         favoriteGroup.copy(
-                            thumbnailUrl = post?.medias?.preview?.url,
+                            thumbnailPost = post,
                         )
                     }
-                }.also {
-                    sessionRepository.delete(sessionId)
                 }
             }
 

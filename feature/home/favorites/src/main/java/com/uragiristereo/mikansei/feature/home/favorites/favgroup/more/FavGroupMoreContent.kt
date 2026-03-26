@@ -35,7 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun FavGroupMoreContent(
     onDismiss: suspend () -> Unit,
-    favoriteGroup: Favorite,
+    favoriteGroup: Favorite.Group,
     onFavGroupClick: () -> Unit,
     onEditFavGroupClick: () -> Unit,
     onDeleteFavGroupClick: () -> Unit,

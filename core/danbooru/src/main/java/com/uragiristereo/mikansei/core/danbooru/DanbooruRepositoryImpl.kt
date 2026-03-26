@@ -7,8 +7,8 @@ import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceCacheResponseIn
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceLoadFromCacheInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceRefreshInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.UserDelegationInterceptor
-import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavorite
-import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavoriteList
+import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavoriteGroup
+import com.uragiristereo.mikansei.core.danbooru.model.favorite.toFavoriteGroupList
 import com.uragiristereo.mikansei.core.danbooru.model.post.DanbooruPost
 import com.uragiristereo.mikansei.core.danbooru.model.post.toPost
 import com.uragiristereo.mikansei.core.danbooru.model.post.toPostList
@@ -214,25 +214,26 @@ class DanbooruRepositoryImpl(
         creatorId: Int,
         forceRefresh: Boolean,
         forceLoadFromCache: Boolean,
-    ): Result<List<Favorite>> = resultOf {
+    ): Result<List<Favorite.Group>> = resultOf {
         client.getFavoriteGroups(
             creatorId = creatorId,
             forceRefresh = forceRefresh,
             forceLoadFromCache = forceLoadFromCache,
         )
     }.mapSuccess { favoriteGroups ->
-        favoriteGroups.sortedByDescending { it.updatedAt }.toFavoriteList()
+        favoriteGroups.sortedByDescending { it.updatedAt }.toFavoriteGroupList()
     }
 
     override suspend fun getPostsByIds(
         ids: List<Int>,
+        extraTags: String,
         forceCache: Boolean,
         forceRefresh: Boolean,
     ): Result<List<Post>> = resultOf {
         val separated = ids.joinToString(separator = ",")
 
         client.getPosts(
-            tags = "id:$separated",
+            tags = "id:$separated $extraTags",
             pageId = 1,
             forceCache = forceCache,
             forceRefresh = forceRefresh,
@@ -285,10 +286,10 @@ class DanbooruRepositoryImpl(
     override suspend fun createNewFavoriteGroup(
         name: String,
         postIds: List<Int>,
-    ): Result<Favorite> = resultOf {
+    ): Result<Favorite.Group> = resultOf {
         client.createNewFavoriteGroup(name, postIds.joinToString(separator = " "))
     }.mapSuccess {
-        it.toFavorite()
+        it.toFavoriteGroup()
     }
 
     override suspend fun editFavoriteGroup(

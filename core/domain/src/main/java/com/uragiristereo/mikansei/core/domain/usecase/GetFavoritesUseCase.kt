@@ -1,45 +1,29 @@
 package com.uragiristereo.mikansei.core.domain.usecase
 
+import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Favorite
-import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.model.result.mapSuccess
-import java.util.UUID
 
 class GetFavoritesUseCase(
     private val userRepository: UserRepository,
-    private val sessionRepository: SessionRepository,
-    private val getPostsUseCase: GetPostsUseCase,
+    private val danbooruRepository: DanbooruRepository,
 ) {
-    suspend operator fun invoke(): Result<Favorite> {
+    suspend operator fun invoke(): Result<Favorite.Regular> {
         val activeUser = userRepository.active.value
-        val sessionId = UUID.randomUUID().toString()
 
-        return getPostsUseCase(
+        return danbooruRepository.getPosts(
             tags = "ordfav:${activeUser.name}",
             page = 1,
-            sessionId = sessionId,
         ).mapSuccess { postsResult ->
             val posts = postsResult.posts
 
-            val thumbnailUrl = when {
-                posts.isNotEmpty() -> {
-                    val firstPost = posts.first()
-
-                    firstPost.medias.preview.url
-                }
-
-                else -> null
-            }
-
-            sessionRepository.delete(sessionId)
-
-            Favorite(
+            Favorite.Regular(
                 id = 0,
                 name = "My favorites",
-                thumbnailUrl = thumbnailUrl,
-                postIds = posts.map { it.id },
+                posts = posts,
+                preferredThumbnailPostId = posts.firstOrNull()?.id,
             )
         }
     }
