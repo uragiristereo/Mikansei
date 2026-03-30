@@ -17,11 +17,13 @@ import com.uragiristereo.mikansei.core.domain.module.database.SessionRepository
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
 import com.uragiristereo.mikansei.core.domain.module.database.entity.Session
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
+import com.uragiristereo.mikansei.core.domain.usecase.FilterPostsUseCase
 import com.uragiristereo.mikansei.core.domain.usecase.GetPostsUseCase
 import com.uragiristereo.mikansei.core.model.result.Result
 import com.uragiristereo.mikansei.core.ui.navigation.MainRoute
 import com.uragiristereo.mikansei.core.ui.navigation.PostNavType
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -33,6 +35,7 @@ class ViewerViewModel(
     private val sessionRepository: SessionRepository,
     private val networkRepository: NetworkRepository,
     private val getPostsUseCase: GetPostsUseCase,
+    private val filterPostsUseCase: FilterPostsUseCase,
 ) : ViewModel() {
     private val args = savedStateHandle.toRoute<MainRoute.Image>(PostNavType)
     private val sessionId = args.sessionId
@@ -53,13 +56,19 @@ class ViewerViewModel(
             ),
         )
 
-    val posts = sessionRepository
-        .getPosts(sessionId)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000L),
-            initialValue = emptyList(),
-        )
+    val activeUser = userRepository.active
+
+    val posts = combine(
+        session,
+        sessionRepository.getPosts(sessionId),
+        activeUser,
+    ) { session, posts, _ ->
+        filterPostsUseCase(posts, session.tags)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000L),
+        initialValue = emptyList(),
+    )
 
     var currentZoom by mutableFloatStateOf(1f)
     var pinchGesture by mutableStateOf(false)
@@ -74,8 +83,6 @@ class ViewerViewModel(
     }
 
     private var postsLoading by mutableStateOf(false)
-
-    val activeUser = userRepository.active
 
     var areAppBarsVisible by mutableStateOf(true)
         private set
