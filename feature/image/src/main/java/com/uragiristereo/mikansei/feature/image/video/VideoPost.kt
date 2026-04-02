@@ -12,6 +12,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -55,6 +56,8 @@ fun VideoPost(
     val lifecycleOwner = LocalLifecycleOwner.current
     val scope = rememberCoroutineScope()
     val videoMuted by viewModel.videoMuted.collectAsStateWithLifecycle()
+
+    val isPlaying by rememberUpdatedState(isPlaying)
 
     DisposableEffect(key1 = lifecycleOwner, key2 = player) {
         if (player == null) {
