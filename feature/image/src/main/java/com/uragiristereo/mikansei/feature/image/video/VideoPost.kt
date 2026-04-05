@@ -58,6 +58,7 @@ fun VideoPost(
     val videoMuted by viewModel.videoMuted.collectAsStateWithLifecycle()
 
     val isPlaying by rememberUpdatedState(isPlaying)
+    val allowPlaying by rememberUpdatedState(allowPlaying)
 
     DisposableEffect(key1 = lifecycleOwner, key2 = player) {
         if (player == null) {
