@@ -1,11 +1,14 @@
 # 🍊 Mikansei
 
 [![Discord](https://img.shields.io/discord/1084015982198145065?logo=discord&logoColor=white&label=discord)](https://discord.gg/YMyVNsFvpC)
-[![Downloads](https://img.shields.io/github/downloads/uragiristereo/Mikansei/total)](https://github.com/uragiristereo/Mikansei/releases)
+[![GitHub Release](https://img.shields.io/github/v/release/uragiristereo/Mikansei?display_name=release)](https://github.com/uragiristereo/Mikansei/releases)
+[![Downloads](https://img.shields.io/github/downloads/uragiristereo/Mikansei/total)](#download)
 
 **Mikansei 未完成** _(lit. unfinished)_ is a [Danbooru](https://safebooru.donmai.us/posts) client for Android. Made with Jetpack Compose 🚀.
 
 **Danbooru** is an image board website for anime-style artworks with tagging system that makes organizing easier. You can easily browse your favorite characters or real artists here.
+
+[<img alt="Get it on GitHub" height="80" src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png">](https://github.com/uragiristereo/Mikansei/releases/download/107-1.1.1/Mikansei_v1.1.1_107-oss.apk)
 
 ## Screenshots
 
