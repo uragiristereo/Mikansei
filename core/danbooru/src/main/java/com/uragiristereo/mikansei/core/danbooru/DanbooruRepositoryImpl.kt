@@ -88,6 +88,7 @@ class DanbooruRepositoryImpl(
         .addInterceptor(authInterceptor)
         .addInterceptor(userDelegationInterceptor)
         .addInterceptor(userAgentInterceptor)
+        .addInterceptor(ForceCacheRequestInterceptor)
         .addNetworkInterceptor(ForceCacheResponseInterceptor)
         .addInterceptor(ForceRefreshInterceptor)
         .addInterceptor(forceLoadFromCacheInterceptor)
