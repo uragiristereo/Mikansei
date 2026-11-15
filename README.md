@@ -49,11 +49,11 @@
 
 ## Download
 
-- Version: **1.1.1** (107)
-- Updated at: 2026-04-05
+- Version: **1.1.2** (108)
+- Updated at: 2026-11-15
 - Min. Android version: Android 6.0 Marshmallow (API level 23)
-- Download: [APK](https://github.com/uragiristereo/Mikansei/releases/download/107-1.1.1/Mikansei_v1.1.1_107-oss.apk)
-- Changelogs: [here](https://github.com/uragiristereo/Mikansei/releases/tag/107-1.1.1)
+- Download: [APK](https://github.com/uragiristereo/Mikansei/releases/download/108-1.1.2/Mikansei_v1.1.2_108-oss.apk)
+- Changelogs: [here](https://github.com/uragiristereo/Mikansei/releases/tag/108-1.1.2)
 
 ## Tech Stacks
 
