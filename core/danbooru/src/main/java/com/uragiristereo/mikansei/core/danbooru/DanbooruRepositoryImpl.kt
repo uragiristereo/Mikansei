@@ -3,6 +3,8 @@ package com.uragiristereo.mikansei.core.danbooru
 import android.content.Context
 import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruAuthInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruHostInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.DanbooruUserAgentInterceptor
+import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceCacheRequestInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceCacheResponseInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceLoadFromCacheInterceptor
 import com.uragiristereo.mikansei.core.danbooru.interceptor.ForceRefreshInterceptor
@@ -59,6 +61,7 @@ class DanbooruRepositoryImpl(
     networkRepository: NetworkRepository,
     authInterceptor: DanbooruAuthInterceptor,
     userDelegationInterceptor: UserDelegationInterceptor,
+    userAgentInterceptor: DanbooruUserAgentInterceptor,
     private val hostInterceptor: DanbooruHostInterceptor,
     forceLoadFromCacheInterceptor: ForceLoadFromCacheInterceptor,
 ) : DanbooruRepository {
@@ -82,8 +85,10 @@ class DanbooruRepositoryImpl(
     private val okHttpClient = networkRepository.okHttpClient.newBuilder()
         .cache(cache)
         .addInterceptor(hostInterceptor)
-        .addNetworkInterceptor(authInterceptor)
-        .addNetworkInterceptor(userDelegationInterceptor)
+        .addInterceptor(authInterceptor)
+        .addInterceptor(userDelegationInterceptor)
+        .addInterceptor(userAgentInterceptor)
+        .addInterceptor(ForceCacheRequestInterceptor)
         .addNetworkInterceptor(ForceCacheResponseInterceptor)
         .addInterceptor(ForceRefreshInterceptor)
         .addInterceptor(forceLoadFromCacheInterceptor)
