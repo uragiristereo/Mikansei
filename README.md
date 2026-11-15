@@ -8,7 +8,7 @@
 
 **Danbooru** is an image board website for anime-style artworks with tagging system that makes organizing easier. You can easily browse your favorite characters or real artists here.
 
-[<img alt="Get it on GitHub" height="80" src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png">](https://github.com/uragiristereo/Mikansei/releases/download/107-1.1.1/Mikansei_v1.1.1_107-oss.apk)
+[<img alt="Get it on GitHub" height="80" src="https://raw.githubusercontent.com/rubenpgrady/get-it-on-github/refs/heads/main/get-it-on-github.png">](https://github.com/uragiristereo/Mikansei/releases/download/108-1.1.2/Mikansei_v1.1.2_108-oss.apk)
 
 ## Screenshots
 
