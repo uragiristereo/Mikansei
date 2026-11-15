@@ -44,6 +44,7 @@ class UserDelegationInterceptor(
                         val newRequest = request.newBuilder()
                             .removeHeader(name = "Authorization")
                             .addHeader(name = "Authorization", value = delegatedCredentials)
+                            .addHeader(name = "delegated-to", value = "${delegatedUser.id}")
                             .build()
 
                         Timber.d("search delegated to user = ${delegatedUser.name}")
