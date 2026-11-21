@@ -62,9 +62,6 @@ data class DanbooruUser(
     @SerialName("appeal_count")
     val appealCount: Int,
 
-    @SerialName("flag_count")
-    val flagCount: Int,
-
     @SerialName("positive_feedback_count")
     val positiveFeedbackCount: Int,
 
