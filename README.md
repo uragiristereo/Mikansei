@@ -64,6 +64,7 @@
 - Local Database: [Room](https://developer.android.com/training/data-storage/room)
 - Networking: [OkHttp](https://square.github.io/okhttp) & [Retrofit](https://square.github.io/retrofit)
 - Image Loading: [Coil](https://coil-kt.github.io)
+- Image Viewer: [Telephoto](https://github.com/uraigiristereo/telephoto)
 - Video Loading: [Media3](https://developer.android.com/media/media3)
 
 ## Resources Used
@@ -78,7 +79,22 @@
 To build this project, you need the latest stable of [Android Studio](https://developer.android.com/studio).
 
 1. Clone the project and open in Android Studio.
-2. Sync project with Gradle then Run `app`.
+2. Set up the GitHub Packages credentials (see below).
+3. Sync project with Gradle then Run `app`.
+
+### GitHub Packages credentials
+
+Mikansei uses a [fork of Telephoto](https://github.com/uragiristereo/telephoto) (`com.github.uragiristereo.telephoto`) that is hosted on GitHub Packages. GitHub Packages requires authentication to download packages, even public ones.
+
+1. Create a [personal access token (classic)](https://github.com/settings/tokens) with the `read:packages` scope.
+2. Add your GitHub username and the token to `local.properties` in the project root:
+
+    ```properties
+    githubPackages.user=<your GitHub username>
+    githubPackages.token=<your personal access token>
+    ```
+
+    `local.properties` is ignored by Git, so the token won't be committed.
 
 **Notes:**
 
