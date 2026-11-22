@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import coil.disk.DiskCache
 import com.uragiristereo.mikansei.core.domain.module.network.NetworkRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -38,8 +39,13 @@ class MikanseiApp : Application(), ImageLoaderFactory, KoinComponent {
 
     override fun newImageLoader(): ImageLoader {
         return ImageLoader.Builder(context = this)
-            .diskCache(null)
-            .respectCacheHeaders(enable = false)
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(cacheDir.resolve("coil_image_cache"))
+                    .maxSizeBytes(256L * 1024 * 1024)
+                    .build()
+            }
+            .respectCacheHeaders(enable = true)
             .okHttpClient(networkRepository.okHttpClientImage)
             .build()
     }
