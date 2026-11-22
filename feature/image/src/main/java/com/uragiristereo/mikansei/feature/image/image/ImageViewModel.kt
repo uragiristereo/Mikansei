@@ -39,26 +39,6 @@ class ImageViewModel(
         loadingState = ImageLoadingState.FROM_EXPAND
     }
 
-    fun resizeImage(width: Int, height: Int): Pair<Int, Int> {
-        val maxSize = 4096f
-
-        return when {
-            width > maxSize || height > maxSize -> {
-                val scale = when {
-                    width > height -> maxSize.div(width)
-                    else -> maxSize.div(height)
-                }
-
-                val scaledWidth = width * scale
-                val scaledHeight = height * scale
-
-                Pair(scaledWidth.toInt(), scaledHeight.toInt())
-            }
-
-            else -> Pair(width, height)
-        }
-    }
-
     fun openPostInBrowser(context: Context) {
         customTabsIntentBuilder
             .build()

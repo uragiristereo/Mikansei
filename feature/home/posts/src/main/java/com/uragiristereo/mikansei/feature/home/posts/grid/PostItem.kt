@@ -54,6 +54,7 @@ internal fun PostItem(
                         height = (maxWidth * post.aspectRatio).toInt(),
                     )
                     .crossfade(durationMillis = 170)
+                    .memoryCacheKey("preview#${post.id}")
                     .build()
             },
             contentDescription = null,

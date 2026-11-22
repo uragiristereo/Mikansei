@@ -37,7 +37,7 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(libs.bundles.coil)
     implementation(libs.coil.gif)
-    implementation(libs.touchimageview)
+    implementation(libs.telephoto.zoomable.image.coil)
     implementation(libs.bundles.core)
     implementation(libs.bundles.media3)
     coreLibraryDesugaring(libs.desugar.jdk.libs)

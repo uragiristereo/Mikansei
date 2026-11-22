@@ -124,6 +124,17 @@ internal fun ImageScreen(
         val gesturesEnabled =
             pagerState.currentPageOffsetFraction == 0f && viewModel.gesturesEnabled
 
+        // The pager can now be swiped away from a zoomed image. Only image pages report their zoom,
+        // so forget the previous image's zoom when landing on any other kind of page.
+        LaunchedEffect(key1 = pagerState.settledPage) {
+            val settledPost = posts.getOrNull(pagerState.settledPage)
+
+            if (settledPost?.type !in listOf(Post.Type.IMAGE, Post.Type.ANIMATED_GIF)) {
+                viewModel.zoomFraction = 0f
+                viewModel.isAtHorizontalEdge = true
+            }
+        }
+
         HorizontalPager(
             state = pagerState,
             beyondViewportPageCount = 1,
@@ -176,6 +187,7 @@ internal fun ImageScreen(
                             ImagePost(
                                 areAppBarsVisible = viewModel.areAppBarsVisible,
                                 gesturesEnabled = gesturesEnabled,
+                                isActivePage = pagerState.settledPage == index,
                                 offsetY = viewModel.offsetY::floatValue,
                                 onOffsetYChange = viewModel.offsetY.component2(),
                                 onNavigateBack = onNavigateBack,
@@ -183,7 +195,10 @@ internal fun ImageScreen(
                                 onShareClick = lambdaOnShareClick,
                                 onAppBarsVisibleChange = viewModel::setAppBarsVisible,
                                 onZoomChange = {
-                                    viewModel.currentZoom = it
+                                    viewModel.zoomFraction = it
+                                },
+                                onHorizontalEdgeChange = {
+                                    viewModel.isAtHorizontalEdge = it
                                 },
                                 onPinchGestureChange = {
                                     viewModel.pinchGesture = it

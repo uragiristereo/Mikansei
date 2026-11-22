@@ -16,13 +16,34 @@ android {
     minSdk = 23
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = new File(settingsDir, "local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { localProperties.load(it) }
+}
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 
     repositories {
         google()
         mavenCentral()
-        maven { url = "https://www.jitpack.io" }
+        // Telephoto fork (uragiristereo/telephoto), hosted on GitHub Packages.
+        maven {
+            url = "https://maven.pkg.github.com/uragiristereo/telephoto"
+            credentials {
+                def user = localProperties.getProperty("githubPackages.user", null)
+                def token = localProperties.getProperty("githubPackages.token", null)
+
+                if (user != null && token != null) {
+                    username = user
+                    password = token
+                } else {
+                    throw new Exception("Missing GitHub Packages credentials, see README")
+                }
+            }
+            content { includeGroup("com.github.uragiristereo.telephoto") }
+        }
     }
 }
 
