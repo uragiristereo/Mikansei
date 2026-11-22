@@ -176,6 +176,7 @@ internal fun ImageScreen(
                             ImagePost(
                                 areAppBarsVisible = viewModel.areAppBarsVisible,
                                 gesturesEnabled = gesturesEnabled,
+                                isActivePage = pagerState.settledPage == index,
                                 offsetY = viewModel.offsetY::floatValue,
                                 onOffsetYChange = viewModel.offsetY.component2(),
                                 onNavigateBack = onNavigateBack,
@@ -183,7 +184,7 @@ internal fun ImageScreen(
                                 onShareClick = lambdaOnShareClick,
                                 onAppBarsVisibleChange = viewModel::setAppBarsVisible,
                                 onZoomChange = {
-                                    viewModel.currentZoom = it
+                                    viewModel.zoomFraction = it
                                 },
                                 onPinchGestureChange = {
                                     viewModel.pinchGesture = it

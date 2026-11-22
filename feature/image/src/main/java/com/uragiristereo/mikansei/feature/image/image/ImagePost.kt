@@ -1,20 +1,19 @@
 package com.uragiristereo.mikansei.feature.image.image
 
-import android.graphics.drawable.Animatable
 import android.os.Build
-import android.os.Parcelable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -22,12 +21,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
-import coil.imageLoader
-import coil.request.Disposable
 import coil.request.ImageRequest
 import com.google.accompanist.insets.ui.Scaffold
-import com.ortiz.touchview.OnTouchImageViewListener
-import com.ortiz.touchview.TouchImageView
 import com.uragiristereo.mikansei.core.model.preferences.user.DetailSizePreference
 import com.uragiristereo.mikansei.core.ui.LocalLambdaOnDownload
 import com.uragiristereo.mikansei.core.ui.LocalScaffoldState
@@ -37,6 +32,11 @@ import com.uragiristereo.mikansei.feature.image.core.verticallyDraggable
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageBottomAppBar
 import com.uragiristereo.mikansei.feature.image.image.appbars.ImageTopAppBar
 import com.uragiristereo.mikansei.feature.image.image.core.ImageLoadingState
+import com.uragiristereo.mikansei.feature.image.image.core.rememberImageDoubleClickListener
+import com.uragiristereo.mikansei.feature.image.image.core.rememberImageZoomSpec
+import kotlinx.coroutines.flow.first
+import me.saket.telephoto.zoomable.rememberZoomableImageState
+import me.saket.telephoto.zoomable.rememberZoomableState
 import timber.log.Timber
 import kotlin.math.abs
 
@@ -44,6 +44,7 @@ import kotlin.math.abs
 internal fun ImagePost(
     areAppBarsVisible: Boolean,
     gesturesEnabled: Boolean,
+    isActivePage: Boolean,
     offsetY: () -> Float,
     onOffsetYChange: (Float) -> Unit,
     onNavigateBack: (Boolean) -> Unit,
@@ -59,53 +60,52 @@ internal fun ImagePost(
     val lambdaOnDownload = LocalLambdaOnDownload.current
 
     val windowSizeHorizontal = LocalWindowSizeHorizontal.current
+    val activeUser by viewModel.activeUser.collectAsState()
 
     val post = remember { viewModel.post }
-    var imageViewState by rememberSaveable {
-        mutableStateOf<Parcelable?>(null)
-    }
 
-    val imageView = remember(Unit) {
-        TouchImageView(context).apply {
-            imageViewState?.let(::onRestoreInstanceState)
-        }
-    }
+    val areAppBarsVisible by rememberUpdatedState(areAppBarsVisible)
+    val onAppBarsVisibleChange by rememberUpdatedState(onAppBarsVisibleChange)
+    val onMoreClick by rememberUpdatedState(onMoreClick)
 
-    var imageDisposable: Disposable? = remember(viewModel) { null }
+    val zoomableState = rememberZoomableState(zoomSpec = rememberImageZoomSpec())
+    val zoomableImageState = rememberZoomableImageState(zoomableState)
+    val onDoubleClick = rememberImageDoubleClickListener()
+
     val expandLoadingVisible =
         viewModel.loadingState == ImageLoadingState.FROM_EXPAND && post.medias.hasScaled
 
-    val imageRequestBuilder = remember(viewModel) {
-        val resizedImageSize = viewModel.resizeImage(
-            width = post.medias.original.width,
-            height = post.medias.original.height
-        )
+    var previewLoaded by remember { mutableStateOf(false) }
+    var previewDisplayed by remember { mutableStateOf(false) }
+    var expandRequested by remember { mutableStateOf(false) }
 
+    LaunchedEffect(key1 = zoomableImageState, key2 = previewLoaded) {
+        if (previewLoaded) {
+            snapshotFlow { zoomableImageState.isImageDisplayed }.first { it }
+
+            previewDisplayed = true
+        }
+    }
+
+    val imageRequestBuilder = remember(viewModel) {
         ImageRequest.Builder(context)
-            .size(
-                width = resizedImageSize.first,
-                height = resizedImageSize.second,
-            )
             .decoderFactory(
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.P -> ImageDecoderDecoder.Factory()
                     else -> GifDecoder.Factory()
                 }
             )
-            .target(
-                onSuccess = { drawable ->
-                    Timber.d("success loading image")
-                    imageView.setImageDrawable(drawable)
-
-                    val animatable = drawable as? Animatable
-                    animatable?.start()
-                },
-            )
     }
 
     val originalImageRequest = remember(viewModel) {
         imageRequestBuilder
             .data(post.medias.original.url)
+            .placeholderMemoryCacheKey(
+                when (activeUser.danbooru.defaultImageSize) {
+                    DetailSizePreference.ORIGINAL -> "preview#${post.id}"
+                    DetailSizePreference.COMPRESSED -> "scaled#${post.id}"
+                }
+            )
             .listener(
                 onStart = {
                     viewModel.onExpandImage()
@@ -122,6 +122,8 @@ internal fun ImagePost(
     val scaledImageRequest = remember(viewModel) {
         imageRequestBuilder
             .data(post.medias.scaled?.url)
+            .placeholderMemoryCacheKey("preview#${post.id}")
+            .memoryCacheKey("scaled#${post.id}")
             .listener(
                 onSuccess = { _, _ ->
                     Timber.d("scaled image loaded")
@@ -133,57 +135,34 @@ internal fun ImagePost(
     val previewImageRequest = remember(viewModel) {
         imageRequestBuilder
             .data(post.medias.preview.url)
+            .memoryCacheKey("preview#${post.id}")
             .listener(
                 onSuccess = { _, _ ->
                     viewModel.loadingState = ImageLoadingState.DISABLED
 
-                    imageDisposable = context.imageLoader.enqueue(
-                        request = when {
-                            post.medias.hasScaled && viewModel.activeUser.value.danbooru.defaultImageSize == DetailSizePreference.ORIGINAL -> originalImageRequest
-                            post.medias.hasScaled -> scaledImageRequest
-                            else -> originalImageRequest
-                        }
-                    )
+                    previewLoaded = true
                 },
             )
             .build()
     }
 
+    val model = when {
+        !previewDisplayed -> previewImageRequest
+        expandRequested -> originalImageRequest
+        post.medias.hasScaled && activeUser.danbooru.defaultImageSize == DetailSizePreference.ORIGINAL -> originalImageRequest
+        post.medias.hasScaled -> scaledImageRequest
+        else -> originalImageRequest
+    }
+
     val lambdaOnExpandClick: () -> Unit = {
-        imageDisposable?.dispose()
-        imageDisposable = context.imageLoader.enqueue(originalImageRequest)
+        expandRequested = true
     }
 
-    DisposableEffect(key1 = viewModel) {
-        context.imageLoader.enqueue(previewImageRequest)
-
-        imageView.apply {
-            maxZoom = 5f
-            doubleTapScale = 2f
-
-            setOnLongClickListener {
-                onMoreClick()
-                false
+    LaunchedEffect(key1 = zoomableState, key2 = isActivePage) {
+        if (isActivePage) {
+            snapshotFlow { zoomableState.zoomFraction }.collect { zoomFraction ->
+                onZoomChange(zoomFraction ?: 0f)
             }
-
-            setOnTouchImageViewListener(
-                object : OnTouchImageViewListener {
-                    override fun onMove() {
-                        onZoomChange(imageView.currentZoom)
-                    }
-                }
-            )
-        }
-
-        onDispose {
-            imageDisposable?.dispose()
-            imageViewState = imageView.onSaveInstanceState()
-        }
-    }
-
-    LaunchedEffect(key1 = areAppBarsVisible) {
-        imageView.setOnClickListener {
-            onAppBarsVisibleChange(!areAppBarsVisible)
         }
     }
 
@@ -237,7 +216,9 @@ internal fun ImagePost(
         modifier = modifier,
     ) {
         ImageViewer(
-            imageView = imageView,
+            model = model,
+            state = zoomableImageState,
+            onDoubleClick = onDoubleClick,
             loadingVisible = viewModel.loadingState == ImageLoadingState.FROM_LOAD,
             onTap = {
                 onAppBarsVisibleChange(!areAppBarsVisible)

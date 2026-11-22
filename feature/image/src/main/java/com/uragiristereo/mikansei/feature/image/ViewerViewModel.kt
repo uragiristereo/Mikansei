@@ -70,12 +70,12 @@ class ViewerViewModel(
         initialValue = emptyList(),
     )
 
-    var currentZoom by mutableFloatStateOf(1f)
+    var zoomFraction by mutableFloatStateOf(0f)
     var pinchGesture by mutableStateOf(false)
     val offsetY = mutableFloatStateOf(0f)
 
     val gesturesEnabled by derivedStateOf {
-        currentZoom == 1f && !pinchGesture
+        zoomFraction == 0f && !pinchGesture
     }
 
     val pagerSwipeEnabled by derivedStateOf {
