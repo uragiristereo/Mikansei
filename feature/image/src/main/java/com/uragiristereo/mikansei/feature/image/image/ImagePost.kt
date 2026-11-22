@@ -35,8 +35,13 @@ import com.uragiristereo.mikansei.feature.image.image.core.ImageLoadingState
 import com.uragiristereo.mikansei.feature.image.image.core.rememberImageDoubleClickListener
 import com.uragiristereo.mikansei.feature.image.image.core.rememberImageZoomSpec
 import kotlinx.coroutines.flow.first
+import me.saket.telephoto.ExperimentalTelephotoApi
+import me.saket.telephoto.zoomable.Viewport
+import me.saket.telephoto.zoomable.ZoomableState
 import me.saket.telephoto.zoomable.rememberZoomableImageState
 import me.saket.telephoto.zoomable.rememberZoomableState
+import me.saket.telephoto.zoomable.spatial.CoordinateSpace
+import me.saket.telephoto.zoomable.spatial.isUnspecified
 import timber.log.Timber
 import kotlin.math.abs
 
@@ -52,6 +57,7 @@ internal fun ImagePost(
     onShareClick: () -> Unit,
     onAppBarsVisibleChange: (Boolean) -> Unit,
     onZoomChange: (Float) -> Unit,
+    onHorizontalEdgeChange: (Boolean) -> Unit,
     onPinchGestureChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ImageViewModel,
@@ -166,6 +172,15 @@ internal fun ImagePost(
         }
     }
 
+    // Telephoto keeps the whole gesture once it starts panning, so a pan that reaches the edge stops
+    // there. Pans toward an edge the image already touches aren't consumed at all, so enabling the
+    // pager then lets the next swipe in that direction turn the page without zooming out first.
+    LaunchedEffect(key1 = zoomableState, key2 = isActivePage) {
+        if (isActivePage) {
+            snapshotFlow { zoomableState.isAtHorizontalEdge() }.collect(onHorizontalEdgeChange)
+        }
+    }
+
     Scaffold(
         scaffoldState = LocalScaffoldState.current,
         topBar = {
@@ -247,5 +262,26 @@ internal fun ImagePost(
                     },
                 ),
         )
+    }
+}
+
+/** Allows for rounding in the offset telephoto settles on, which can leave the image a hair short. */
+private const val EDGE_TOLERANCE_PX = 1f
+
+@OptIn(ExperimentalTelephotoApi::class)
+private fun ZoomableState.isAtHorizontalEdge(): Boolean {
+    return with(coordinateSystem) {
+        val bounds = contentBounds(clipToViewport = false)
+
+        when {
+            bounds.isUnspecified || viewportSize.width == 0f -> true
+
+            else -> {
+                val rect = bounds.rectIn(CoordinateSpace.Viewport)
+
+                rect.left >= -EDGE_TOLERANCE_PX ||
+                        rect.right <= viewportSize.width + EDGE_TOLERANCE_PX
+            }
+        }
     }
 }

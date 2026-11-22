@@ -78,8 +78,10 @@ class ViewerViewModel(
         zoomFraction == 0f && !pinchGesture
     }
 
+    var isAtHorizontalEdge by mutableStateOf(true)
+
     val pagerSwipeEnabled by derivedStateOf {
-        gesturesEnabled && offsetY.floatValue == 0f
+        (gesturesEnabled || (isAtHorizontalEdge && !pinchGesture)) && offsetY.floatValue == 0f
     }
 
     private var postsLoading by mutableStateOf(false)
