@@ -11,7 +11,7 @@ import org.koin.dsl.module
 object ImageModule {
     operator fun invoke(): Module = module {
         viewModel { parameters ->
-            ImageViewModel(get(), get(), parameters.get())
+            ImageViewModel(get(), get(), get(), parameters.get())
         }
         viewModelOf(::MoreBottomSheetViewModel)
         viewModelOf(::ViewerViewModel)

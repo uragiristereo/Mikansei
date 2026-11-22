@@ -9,10 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -81,15 +79,11 @@ internal fun ImagePost(
     val expandLoadingVisible =
         viewModel.loadingState == ImageLoadingState.FROM_EXPAND && post.medias.hasScaled
 
-    var previewLoaded by remember { mutableStateOf(false) }
-    var previewDisplayed by remember { mutableStateOf(false) }
-    var expandRequested by remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = zoomableImageState, key2 = previewLoaded) {
-        if (previewLoaded) {
+    LaunchedEffect(key1 = zoomableImageState, key2 = viewModel.previewLoaded) {
+        if (viewModel.previewLoaded) {
             snapshotFlow { zoomableImageState.isImageDisplayed }.first { it }
 
-            previewDisplayed = true
+            viewModel.previewDisplayed = true
         }
     }
 
@@ -146,22 +140,22 @@ internal fun ImagePost(
                 onSuccess = { _, _ ->
                     viewModel.loadingState = ImageLoadingState.DISABLED
 
-                    previewLoaded = true
+                    viewModel.previewLoaded = true
                 },
             )
             .build()
     }
 
     val model = when {
-        !previewDisplayed -> previewImageRequest
-        expandRequested -> originalImageRequest
+        !viewModel.previewDisplayed -> previewImageRequest
+        viewModel.expandRequested -> originalImageRequest
         post.medias.hasScaled && activeUser.danbooru.defaultImageSize == DetailSizePreference.ORIGINAL -> originalImageRequest
         post.medias.hasScaled -> scaledImageRequest
         else -> originalImageRequest
     }
 
     val lambdaOnExpandClick: () -> Unit = {
-        expandRequested = true
+        viewModel.expandRequested = true
     }
 
     LaunchedEffect(key1 = zoomableState, key2 = isActivePage) {

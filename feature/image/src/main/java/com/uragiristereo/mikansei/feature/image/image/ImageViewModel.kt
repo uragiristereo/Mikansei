@@ -6,7 +6,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
+import androidx.lifecycle.viewmodel.compose.saveable
 import com.uragiristereo.mikansei.core.domain.module.danbooru.DanbooruRepository
 import com.uragiristereo.mikansei.core.domain.module.danbooru.entity.Profile
 import com.uragiristereo.mikansei.core.domain.module.database.UserRepository
@@ -16,9 +19,11 @@ import com.uragiristereo.mikansei.feature.image.image.core.ImageLoadingState
 import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
+@OptIn(SavedStateHandleSaveableApi::class)
 class ImageViewModel(
     private val userRepository: UserRepository,
     danbooruRepository: DanbooruRepository,
+    savedStateHandle: SavedStateHandle,
     val post: Post,
 ) : ViewModel() {
     val activeUser: StateFlow<Profile>
@@ -26,6 +31,10 @@ class ImageViewModel(
 
     var loadingState by mutableStateOf(ImageLoadingState.FROM_LOAD)
     var expandButtonVisible by mutableStateOf(post.medias.hasScaled && activeUser.value.danbooru.defaultImageSize == DetailSizePreference.COMPRESSED)
+
+    var previewLoaded by savedStateHandle.saveable { mutableStateOf(false) }
+    var previewDisplayed by savedStateHandle.saveable { mutableStateOf(false) }
+    var expandRequested by savedStateHandle.saveable { mutableStateOf(false) }
 
     private val customTabsIntentBuilder = CustomTabsIntent.Builder()
     private val postLink = danbooruRepository.host.parsePostLink(post.id)
