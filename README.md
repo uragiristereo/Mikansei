@@ -64,7 +64,7 @@
 - Local Database: [Room](https://developer.android.com/training/data-storage/room)
 - Networking: [OkHttp](https://square.github.io/okhttp) & [Retrofit](https://square.github.io/retrofit)
 - Image Loading: [Coil](https://coil-kt.github.io)
-- Image Viewer: [Telephoto](https://github.com/uraigiristereo/telephoto)
+- Image Viewer: [Telephoto](https://github.com/uragiristereo/telephoto)
 - Video Loading: [Media3](https://developer.android.com/media/media3)
 
 ## Resources Used
